@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="hexo, hexo theme, A-RSnippet, responsive, bootstrap">
-    <link rel="canonical" href="https://ddyss100.github.io/angelteng.github.io/angelteng.github.io/2018/11/16/Flask项目组织/">
+    <link rel="canonical" href="https://ddyss100.github.io/angelteng.github.io/angelteng.github.io/2018/11/13/flask-使用/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        Flask项目组织｜An A-RSnippet Hexo Theme
+        flask 使用｜An A-RSnippet Hexo Theme
         
     </title>
 
@@ -128,12 +128,12 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>Flask项目组织</h1>
+                        <h1>flask 使用</h1>
                         
                         
                           <span class="meta">
                                <span class="meta-item">博主: Angel Teng</span>
-                               <span class="meta-item">创建于: Nov 16, 2018</span>
+                               <span class="meta-item">创建于: Nov 13, 2018</span>
                                
                                  <span class="meta-item">更新于: Nov 16, 2018</span>
                                
@@ -162,18 +162,20 @@
           
           
           <ol>
-<li>一个基于 WSGI 的 Python web 应用必须有一个实现实际的应用的中心调用对象。在 Flask 中，中心调用对象是一个 Flask类的实例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br></pre></td></tr></table></figure>
-</li>
+<li>开启debug模式</li>
 </ol>
 <ul>
-<li>保证实例的唯一性 </li>
-<li>当进行单元测试的时候，创建一个最小应用用于测试特定的功能，会用到多应用</li>
-<li>使用显式对象时，可以继承基类Flask， 以便于修改特定的功能</li>
-<li>Flask 需要包的名称。当你创建一个 Flask 实例时， 通常会传递 ___name___ 作为包的名称。 Flask 根据包的名称来载入也模块相关的正确资源。</li>
-<li>“显式比隐式更好”<br>[Flask设计思路]（<a href="https://dormousehole.readthedocs.io/en/latest/design.html）" target="_blank" rel="noopener">https://dormousehole.readthedocs.io/en/latest/design.html）</a></li>
+<li><p>使用uswgi</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from werkzeug.debug import DebuggedApplication</span><br><span class="line">app.wsgi_app = DebuggedApplication( app.wsgi_app, True )</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不使用uswgi</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; export FLASK_DEBUG=1 &amp;&amp; flask run</span><br><span class="line">&gt;&gt;&gt;  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br><span class="line">Nginx 改为反向代理到127.0.0.1:5000</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <ol start="2">
-<li>使用<a href="http://docs.jinkan.org/docs/flask/blueprints.html" target="_blank" rel="noopener">蓝图</a>进行模块化组织<br>Flask 用 蓝图（blueprints） 的概念来在一个应用中或跨应用制作应用组件和支持通用的模式。蓝图很好地简化了大型应用工作的方式，并提供给 Flask 扩展在应用上注册操作的核心方法。<br>例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># routes/identify.py</span><br><span class="line">from flask import Blueprint</span><br><span class="line"></span><br><span class="line">identify = Blueprint(&apos;identify&apos;, __name__)</span><br><span class="line"></span><br><span class="line">@identify.route(&apos;/check-pics-quality&apos;,methods=[&apos;POST&apos;, &apos;GET&apos;])</span><br><span class="line">def check_pics_quality():</span><br><span class="line">    pass;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># routes/__init__.py</span><br><span class="line">from .identify import identify</span><br><span class="line">def init_app(app):</span><br><span class="line">    app.register_blueprint(identify, url_prefix=&apos;/identify&apos;)</span><br></pre></td></tr></table></figure>
+<li><p>目录结构<br><img src="https://upload-images.jianshu.io/upload_images/14827444-5160a07159aed804.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="目录"><br><a href="https://lepture.com/en/2018/structure-of-a-flask-project" target="_blank" rel="noopener">作者参考</a><br><a href="https://www.v2ex.com/t/467423" target="_blank" rel="noopener">论坛参考</a><br>图灵《 Flask Web 开发》董伟明《 Flask Web 开发实战》</p>
+</li>
+<li><p>绝对路径 ‘./‘<br>相对路径 ‘../‘</p>
 </li>
 </ol>
 
@@ -181,9 +183,13 @@
           <hr>
           <ul class="pager">
               
+              <li class="previous">
+                  <a href="/angelteng.github.io/2018/11/14/Python项目相关路径配置/" data-toggle="tooltip" data-placement="left" title="Python项目相关路径配置">&larr; 上一篇</a>
+              </li>
+              
               
               <li class="next">
-                  <a href="/angelteng.github.io/2018/11/15/Flask中并发优化jMeter测试/" data-toggle="tooltip" data-placement="top" title="Flask中并发优化jMeter测试">下一篇&rarr;</a>
+                  <a href="/angelteng.github.io/2018/11/12/Flask安装配置/" data-toggle="tooltip" data-placement="top" title="Flask安装配置">下一篇&rarr;</a>
               </li>
               
           </ul>

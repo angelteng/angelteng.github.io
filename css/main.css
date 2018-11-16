@@ -160,7 +160,7 @@ legend {
 .header-navbar{
   background-color: transparent;
   box-shadow: 0 0 10px rgba(14, 14, 14, .26);
-  height: 55px;
+  height: 70px;
   border: none;
   top: 0;
   left: 0;
@@ -173,7 +173,7 @@ legend {
 .header-navbar .brand-logo {
     font-family: cursive, -apple-system,  "PingFang SC","Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
     display: fixed;
-    color: red;
+    color: #336ab7;
     margin-top: 5px;
     padding-left: 5px;
     font-size: 55px;
@@ -182,7 +182,7 @@ legend {
 .header-navbar .nav li a {
     text-transform: uppercase;
     font-size: 12px;
-    line-height: 20px;
+    line-height: 46px;
     font-weight: 800;
     letter-spacing: 1px;
     text-shadow: 0 0 1px rgba(0,0,0,.1);
@@ -210,7 +210,7 @@ legend {
     }
     .header-navbar .navbar-brand {
         padding: 20px;
-        line-height: 17px;
+        line-height: 28px;
     }
 
     .header-navbar .nav li
@@ -252,7 +252,7 @@ legend {
 .intro-header {
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #808080;
+    background-color: #efefef;
     background-attachment: scroll;
     background-size: cover;
     height: 300px;
