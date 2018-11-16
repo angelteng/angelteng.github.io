@@ -132,17 +132,17 @@
                         
                         
                           <span class="meta">
-                               <span class="meta-item">博主: Angel Teng</span>
-                               <span class="meta-item">创建于: Nov 16, 2018</span>
+                               <span class="meta-item">Author: Angel Teng</span>
+                               <span class="meta-item">Date: Nov 16, 2018</span>
                                
-                                 <span class="meta-item">更新于: Nov 16, 2018</span>
+                                 <span class="meta-item">Updated On: Nov 16, 2018</span>
                                
                           </span>
                           <!-- <div class="tags text-center">
-                              分类: 
+                              Categories: 
                           </div>
                           <div class="tags text-center">
-                              标签: 
+                              Tags: 
                           </div> -->
                         
                     </div>
@@ -173,19 +173,14 @@
 <li>“显式比隐式更好”<br>[Flask设计思路]（<a href="https://dormousehole.readthedocs.io/en/latest/design.html）" target="_blank" rel="noopener">https://dormousehole.readthedocs.io/en/latest/design.html）</a></li>
 </ul>
 <ol start="2">
-<li>使用<a href="http://docs.jinkan.org/docs/flask/blueprints.html" target="_blank" rel="noopener">蓝图</a>进行模块化组织<br>Flask 用 蓝图（blueprints） 的概念来在一个应用中或跨应用制作应用组件和支持通用的模式。蓝图很好地简化了大型应用工作的方式，并提供给 Flask 扩展在应用上注册操作的核心方法。<br>例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># routes/identify.py</span><br><span class="line">from flask import Blueprint</span><br><span class="line"></span><br><span class="line">identify = Blueprint(&apos;identify&apos;, __name__)</span><br><span class="line"></span><br><span class="line">@identify.route(&apos;/check-pics-quality&apos;,methods=[&apos;POST&apos;, &apos;GET&apos;])</span><br><span class="line">def check_pics_quality():</span><br><span class="line">    pass;</span><br></pre></td></tr></table></figure>
+<li>使用<a href="http://docs.jinkan.org/docs/flask/blueprints.html" target="_blank" rel="noopener">蓝图</a>进行模块化组织<br>Flask 用 蓝图（blueprints） 的概念来在一个应用中或跨应用制作应用组件和支持通用的模式。蓝图很好地简化了大型应用工作的方式，并提供给 Flask 扩展在应用上注册操作的核心方法。<br>例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># routes/identify.py</span><br><span class="line">from flask import Blueprint</span><br><span class="line"></span><br><span class="line">identify = Blueprint(&apos;identify&apos;, __name__)</span><br><span class="line"></span><br><span class="line">@identify.route(&apos;/check-pics-quality&apos;,methods=[&apos;POST&apos;, &apos;GET&apos;])</span><br><span class="line">def check_pics_quality():</span><br><span class="line">    pass;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># routes/__init__.py</span><br><span class="line">from .identify import identify</span><br><span class="line">def init_app(app):</span><br><span class="line">    app.register_blueprint(identify, url_prefix=&apos;/identify&apos;)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># routes/__init__.py</span><br><span class="line">from .identify import identify</span><br><span class="line">def init_app(app):</span><br><span class="line">    app.register_blueprint(identify, url_prefix=&apos;/identify&apos;)</span><br></pre></td></tr></table></figure>
 
           
           <hr>
           <ul class="pager">
               
-              
-              <li class="next">
-                  <a href="/angelteng.github.io/2018/11/16/hello-world/" data-toggle="tooltip" data-placement="top" title="Hello World">下一篇&rarr;</a>
-              </li>
               
           </ul>
         
@@ -199,7 +194,7 @@
         
   <div class="hidden-xs col-sm-3 toc-col">
     <div class="toc-wrap">
-        目录
+        Table of Contents
         
           
         
@@ -242,13 +237,13 @@
             Angel Teng
         <br>
           
-              由 <a target="_blank" href="https://hexo.io">Hexo</a> 强力驱动
+              Powered by <a target="_blank" href="https://hexo.io">Hexo</a>
           
           
             |
           
           
-              主题 - <a href="https://github.com/huyingjie/hexo-theme-A-RSnippet" target="_blank">A-RSnippet</a> v0.1.0
+              Theme - <a href="https://github.com/huyingjie/hexo-theme-A-RSnippet" target="_blank">A-RSnippet</a> v0.1.0
           
           
       </div>
