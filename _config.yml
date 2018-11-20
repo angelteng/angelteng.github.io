@@ -19,8 +19,8 @@ favicon: # your favicon png
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://ddyss100.github.io/angelteng.github.io/
-root: /angelteng.github.io/
+url: https://angelteng.github.io/blog/
+root: /blog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
@@ -155,7 +155,7 @@ content_after_post:
 
 # default cover image
 # example: animated gif as header
-cover_default_img: /angelteng.github.io/img/cover.jpg
+cover_default_img: /blog/img/cover.jpg
 
 
 # Table Of Contents in the Sidebar
@@ -261,7 +261,7 @@ version: 0.1.0
 
 deploy:
   type: git
-  repo: git@github.com:ddyss100/angelteng.github.io.git  
+  repo: git@github.com:angelteng/blog.git
   branch: gh-pages
   name: ddyss100
   email: 241545509@qq.com
