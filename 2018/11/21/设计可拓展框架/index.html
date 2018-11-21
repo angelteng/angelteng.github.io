@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/19/Flask视图装饰器/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/21/设计可拓展框架/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        Flask视图装饰器｜Code war of Angel
+        设计可拓展框架｜Code war of Angel
         
     </title>
 
@@ -128,23 +128,26 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>Flask视图装饰器</h1>
+                        <h1>设计可拓展框架</h1>
                         
                         
                           <span class="meta">
                                <span class="meta-item">Author: Angel Teng</span>
-                               <span class="meta-item">Date: Nov 19, 2018</span>
+                               <span class="meta-item">Date: Nov 21, 2018</span>
                                
                                  <span class="meta-item">Updated On: Nov 21, 2018</span>
                                
                           </span>
                           <!-- <div class="tags text-center">
                               Categories: 
+                              <a class="tag" href="/blog/categories/#架构设计"
+                                 title="架构设计">架构设计</a>
+                              
                           </div>
                           <div class="tags text-center">
                               Tags: 
-                              <a class="tag" href="/blog/tags/#Flask, Python"
-                                 title="Flask, Python">Flask, Python</a>
+                              <a class="tag" href="/blog/tags/#架构设计"
+                                 title="架构设计">架构设计</a>
                               
                           </div> -->
                         
@@ -164,21 +167,34 @@
       <div class="col-lg-8 col-lg-offset-1 col-sm-9">
           
           
-          <p>框架已有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 路由装饰器</span><br><span class="line">@app.route</span><br><span class="line"></span><br><span class="line"># 登陆装饰器</span><br><span class="line">from flask_login import login_required, current_user</span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">@login_required</span><br><span class="line">def account():</span><br><span class="line">    pass</span><br><span class="line"></span><br><span class="line"># 缓存装饰器</span><br><span class="line">from flask_cache import Cache</span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">@cache.cached(timeout=60)</span><br><span class="line">def index():</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure></p>
-<p>自定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># 定义一个装饰器</span><br><span class="line">def check_expired(func):</span><br><span class="line">    @wraps(func)</span><br><span class="line">    def decorated_function(*args, **kwargs):</span><br><span class="line">        # 一些逻辑</span><br><span class="line">        return func(*args, **kwargs)</span><br><span class="line">    return decorated_function</span><br><span class="line"></span><br><span class="line"># 使用</span><br><span class="line">@check_expired</span><br><span class="line">def get_something():</span><br><span class="line">    pass;</span><br><span class="line"></span><br><span class="line"># 定义一个类装饰器</span><br><span class="line">class Timeit(object):</span><br><span class="line">    def __init__(self, func):</span><br><span class="line">        self.func = func</span><br><span class="line">    def __call__(self, *args, **kwargs):</span><br><span class="line">        print(&quot;invoking Timer&quot;)</span><br><span class="line">    def __get__(self, instance, owner):</span><br><span class="line">        return lambda *args, **kwargs: self.func(instance, *args, **kwargs)</span><br><span class="line"></span><br><span class="line"># 使用</span><br><span class="line">class A(object):</span><br><span class="line">    @Timeit</span><br><span class="line">    def func(self):</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        return &quot;invoking method func&quot;</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://spacewander.github.io/explore-flask-zh/6-advanced_patterns_for_views_and_routing.html" target="_blank" rel="noopener">参考</a></p>
+          <p>可拓展框架基本模式</p>
+<ol>
+<li>面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能）<br> 比如MVC分层</li>
+<li>面向服务拆分：SOA（服务＋ESB） 、微服务</li>
+<li>面向功能拆分：微内核架构</li>
+</ol>
+<p>微服务的基础设施：</p>
+<ol>
+<li>自动化测试</li>
+<li>自动化部署</li>
+<li>配置中心</li>
+<li>接口框架</li>
+<li>api网关</li>
+<li>服务发现</li>
+<li>服务路由</li>
+<li>服务容错</li>
+<li>服务监控</li>
+<li>服务跟踪</li>
+<li>服务安全</li>
+</ol>
 
           
           <hr>
           <ul class="pager">
               
-              <li class="previous">
-                  <a href="/blog/2018/11/20/利用hexo搭建个人blog/" data-toggle="tooltip" data-placement="left" title="利用hexo搭建个人blog">&larr; Previous Post</a>
-              </li>
-              
               
               <li class="next">
-                  <a href="/blog/2018/11/16/Flask项目组织/" data-toggle="tooltip" data-placement="top" title="Flask项目组织">Next Post&rarr;</a>
+                  <a href="/blog/2018/11/21/PHP项目中并发处理/" data-toggle="tooltip" data-placement="top" title="PHP项目中并发处理">Next Post&rarr;</a>
               </li>
               
           </ul>

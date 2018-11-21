@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/21/Http2改造实践/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/design/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        HTTP2改造实践｜Code war of Angel
+        架构设计｜Code war of Angel
         
     </title>
 
@@ -88,7 +88,7 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <header>
-  <nav class="navbar navbar-default header-navbar" id="nav-top" data-ispost="true" data-istags="false" data-ishome="false">
+  <nav class="navbar navbar-default header-navbar" id="nav-top" data-ispost="false" data-istags="false" data-ishome="false">
     <div class="container-fluid">
       <div class="navbar-header page-scroll">
         <button type="button" class="navbar-toggle" data-toggle="collapse" aria-expanded="false" data-target="#website_navbar">
@@ -128,22 +128,8 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>HTTP2改造实践</h1>
+                        <h1>架构设计</h1>
                         
-                        
-                          <span class="meta">
-                               <span class="meta-item">Author: Angel Teng</span>
-                               <span class="meta-item">Date: Nov 21, 2018</span>
-                               
-                                 <span class="meta-item">Updated On: Nov 21, 2018</span>
-                               
-                          </span>
-                          <!-- <div class="tags text-center">
-                              Categories: 
-                          </div>
-                          <div class="tags text-center">
-                              Tags: 
-                          </div> -->
                         
                     </div>
                 </div>
@@ -161,54 +147,10 @@
       <div class="col-lg-8 col-lg-offset-1 col-sm-9">
           
           
-          <p>HTTP2特点：</p>
-<ol>
-<li>新的二进制格式：HTTP1.x的解析是基于文本，HTTP2.0的协议解析决定采用二进制格式</li>
-<li>多路复用</li>
-</ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-a9336eb314e24f99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<ol start="3">
-<li>header压缩</li>
-<li>服务端推送</li>
-<li>HTTP2.0其实可以支持非HTTPS的，但是现在主流的浏览器像chrome，firefox表示还是只支持基于 TLS 部署的HTTP2.0协议，所以要想升级成HTTP2.0还是先升级HTTPS为好</li>
-</ol>
-<p>http1.1问题：</p>
-<ol>
-<li>链接安全性</li>
-<li>建立链接消耗</li>
-<li>header内容过大</li>
-<li>keep－alive（与http2区别：线头阻塞）浪费</li>
-</ol>
-<p><a href="https://imququ.com/post/http2-and-wpo-2.html" target="_blank" rel="noopener">参考</a></p>
-<p>实践：<br>为了升级图片域域名到HTTP2新域名，可选方案要不就统一后端接口处理匹配替换，要不就前端拿到数据后匹配替换。<br>由于考虑到后端接口分布比较零散，本次采用前端替换方案。</p>
-<p>步骤：</p>
-<ol>
-<li>需要获取所有接口数据后，替换图片域名：扩展了jquery的ajax，ajaxsetting.dataFilter处理返回是json的数据，ajaxsetting.beforeSend重写callback方法，先处理图片域名，再执行用户callback</li>
-<li>增加了dns-prefetch属性，预解析图片域dns</li>
-<li>增加了图片容错处理，MutationObserve监听dom结构</li>
-</ol>
-
+          
           
           <hr>
-          <ul class="pager">
-              
-              <li class="previous">
-                  <a href="/blog/2018/11/21/PHP项目中并发处理/" data-toggle="tooltip" data-placement="left" title="PHP项目中并发处理">&larr; Previous Post</a>
-              </li>
-              
-              
-              <li class="next">
-                  <a href="/blog/2018/11/21/V8垃圾回收/" data-toggle="tooltip" data-placement="top" title="V8垃圾回收">Next Post&rarr;</a>
-              </li>
-              
-          </ul>
         
-  <br>
-  
-
-  
-  
-
 
         
 

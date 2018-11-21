@@ -42,14 +42,12 @@ function isPages(attr){
         3 height when acctivated (optional. default: the height of the DOM)
 */
 function scrollCheck(scrollTarget, toggleClass, scrollHeight){
-    if(!!scrollTarget){
     document.addEventListener('scroll',function(){
     var currentTop = window.pageYOffset;
         currentTop > (scrollHeight||scrollTarget.clientHeight)
         ?scrollTarget.classList.add(toggleClass)
         :scrollTarget.classList.remove(toggleClass)
     })
-    }
 }
 
 

@@ -147,6 +147,69 @@
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
+    <a href="/blog/2018/11/21/设计可拓展框架/">
+        <h2 class="post-title">
+            设计可拓展框架
+        </h2>
+        
+        <div class="post-meta">
+          <span>Nov 21, 2018</span>
+          
+        </div>
+        <div class="post-content-preview">
+            <p>
+                可拓展框架基本模式
+
+面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能） 比如MVC分层
+面向服务拆分：SOA（服务＋ESB） 、微服务
+面向功能拆分：微内核架构
+
+微服务的基础设施：
+
+自动化测试
+自动化部署
+配置中心
+接口框架
+api网关
+服务发现
+服务路由
+服务容..
+            </p>
+        </div>
+    </a>
+</div>
+<hr>
+
+          
+            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
+    <a href="/blog/2018/11/21/PHP项目中并发处理/">
+        <h2 class="post-title">
+            PHP项目中并发处理
+        </h2>
+        
+        <div class="post-meta">
+          <span>Nov 21, 2018</span>
+          
+        </div>
+        <div class="post-content-preview">
+            <p>
+                总结一下PHP项目中并发处理：
+高并发业务处理的重点在于原子操作，常见操作：
+redis-&gt;incr 
+如果redis是单机，可以使用watch方案WATCH mykey
+ val = GET mykey
+ val = val + 1
+ MULTI
+ SET mykey $val
+ EXE..
+            </p>
+        </div>
+    </a>
+</div>
+<hr>
+
+          
+            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
     <a href="/blog/2018/11/21/Http2改造实践/">
         <h2 class="post-title">
             HTTP2改造实践
@@ -295,56 +358,6 @@ dns负载均衡**
         <div class="post-content-preview">
             <p>
                 框架已有：12345678910111213141516# 路由装饰器@app.route# 登陆装饰器from flask_login import login_required, current_user@app.route(&apos;/&apos;)@login_requireddef ..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/16/Flask项目组织/">
-        <h2 class="post-title">
-            Flask项目组织
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 16, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-一个基于 WSGI 的 Python web 应用必须有一个实现实际的应用的中心调用对象。在 Flask 中，中心调用对象是一个 Flask类的实例1app = Flask(__name__)
-
-
-
-保证实例的唯一性 
-当进行单元测试的时候，创建一个最小应用用于测试特定的功能，会用到多应用
-使..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/15/Flask中并发优化jMeter测试/">
-        <h2 class="post-title">
-            Flask中并发优化jMeter测试
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 15, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-Queue的使用参考in Python3.x should use ‘pip install q’in Python2.x should use ‘pip install queue’
-
-关于模块：除了包含函数定义外，模块也可以包含可执行语句。这些语句一般用来初始化模块。他们仅在 第一次 被导..
             </p>
         </div>
     </a>
