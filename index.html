@@ -147,6 +147,91 @@
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
+    <a href="/blog/2018/11/21/V8垃圾回收/">
+        <h2 class="post-title">
+            V8垃圾回收
+        </h2>
+        
+        <div class="post-meta">
+          <span>Nov 21, 2018</span>
+          
+        </div>
+        <div class="post-content-preview">
+            <p>
+                
+引用计数垃圾回收：一个对象会被认为可以被垃圾回收当没有被引用到时。如果存在循环引用，就会发生问题。
+标记清除法［主要］：判断一个对象是否可以被使用。
+（离开某个函数环境时？）垃圾回收器将会给全局变量一个列表
+然后将所有全局变量以及它们引用的变量标志成“active”    
+回收所有没有被标记..
+            </p>
+        </div>
+    </a>
+</div>
+<hr>
+
+          
+            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
+    <a href="/blog/2018/11/21/JS中的引用类型/">
+        <h2 class="post-title">
+            JS中的引用类型
+        </h2>
+        
+        <div class="post-meta">
+          <span>Nov 21, 2018</span>
+          
+        </div>
+        <div class="post-content-preview">
+            <p>
+                JS 引用类型变量的值是一个指针，指向堆内存中的实际对象。
+
+基本类型是传值调用
+引用类型传共享调用
+
+####传值调用（Pass by value）        在传值调用中，传递给函数参数是函数被调用时所传实参的拷贝。在传值调用中实际参数被求值，其值被绑定到函数中对应的变量上（通常是把值复..
+            </p>
+        </div>
+    </a>
+</div>
+<hr>
+
+          
+            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
+    <a href="/blog/2018/11/21/浏览器相关流程及优化/">
+        <h2 class="post-title">
+            浏览器相关流程及优化
+        </h2>
+        
+        <div class="post-meta">
+          <span>Nov 21, 2018</span>
+          
+        </div>
+        <div class="post-content-preview">
+            <p>
+                ####组成
+
+####渲染引擎:Trident, Gecko, Presto, Webkit, Blink
+####流程
+
+**DNS解析(迭代查询）######优化：
+
+
+减少dns请求
+dns预解析 
+httpdns防劫持
+dns负载均衡**
+
+
+
+浏览器以一个随机端口进入到网卡，进入TC..
+            </p>
+        </div>
+    </a>
+</div>
+<hr>
+
+          
+            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
     <a href="/blog/2018/11/20/利用hexo搭建个人blog/">
         <h2 class="post-title">
             利用hexo搭建个人blog
@@ -253,81 +338,6 @@ Queue的使用参考in Python3.x should use ‘pip install q’in Python2.x shou
                 在flask中使用1234import asyncio..... loop = asyncio.get_event_loop()....
 发现报错RuntimeError: There is no current event loop in thread ‘Thread-2’.
 修改为12345..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/14/Python项目相关路径配置/">
-        <h2 class="post-title">
-            Python项目相关路径配置
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 14, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-python相关环境变量
-
-
-PYTHONPATH : PYTHONPATH是Python搜索路径，默认我们import的模块都会从PYTHONPATH里面寻找。
-PYTHONSTARTUP: Python启动后，先寻找PYTHONSTARTUP环境变量，然后执行此变量指定的文件中的代码。
-P..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/13/flask-使用/">
-        <h2 class="post-title">
-            flask 使用
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 13, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-开启debug模式
-
-
-使用uswgi
-12345from werkzeug.debug import DebuggedApplicationapp.wsgi_app = DebuggedApplication( app.wsgi_app, True )if __name__ == &apos..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/12/Flask安装配置/">
-        <h2 class="post-title">
-            Flask安装配置
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 12, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-安装
-12pip install uwsgipip install flask
-
-uwsgi WSGI（Web Server Gateway Interface），定义了web服务器（nginx、apache、iis等）和 web应用（或者将web框架，flask、django等）之间的接口规..
             </p>
         </div>
     </a>

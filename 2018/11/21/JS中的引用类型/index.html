@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/20/利用hexo搭建个人blog/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/21/JS中的引用类型/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        利用hexo搭建个人blog｜Code war of Angel
+        JS中的引用类型｜Code war of Angel
         
     </title>
 
@@ -128,14 +128,14 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>利用hexo搭建个人blog</h1>
+                        <h1>JS中的引用类型</h1>
                         
                         
                           <span class="meta">
                                <span class="meta-item">Author: Angel Teng</span>
-                               <span class="meta-item">Date: Nov 20, 2018</span>
+                               <span class="meta-item">Date: Nov 21, 2018</span>
                                
-                                 <span class="meta-item">Updated On: Nov 20, 2018</span>
+                                 <span class="meta-item">Updated On: Nov 21, 2018</span>
                                
                           </span>
                           <!-- <div class="tags text-center">
@@ -161,37 +161,26 @@
       <div class="col-lg-8 col-lg-offset-1 col-sm-9">
           
           
-          <ol>
-<li><p>安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; npm install -g hexo</span><br><span class="line">&gt;&gt;&gt; cd /blog-project</span><br><span class="line">&gt;&gt;&gt; hexo init</span><br><span class="line">&gt;&gt;&gt; npm install</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo server #启动一个本地服务器</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#修改 _config.yml</span><br><span class="line">....</span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://angelteng.github.io/blog/  # git仓库地址</span><br><span class="line">root: /blog/   #根目录</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br><span class="line">.....</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:angelteng/blog.git</span><br><span class="line">  branch: gh-pages #发布分支</span><br><span class="line">  name: </span><br><span class="line">  email:</span><br><span class="line"></span><br><span class="line">server:</span><br><span class="line">  port: 8080  #本地服务器端口</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>去git新增一个仓库<br>修改git page选项<br><img src="https://upload-images.jianshu.io/upload_images/14827444-02b3b58647e2bac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git page"><br>新增一个ssh key</p>
-</li>
-<li><p>管理：建议源代码根目录 git init 之后放在master分支，发布代码放在gh-pages分支</p>
-</li>
-<li><p>新增及发布</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 新增 </span><br><span class="line">&gt;&gt;&gt; hexo new post &quot;blog title&quot;</span><br><span class="line"># 发布</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo d</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>静态资源引用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将图片放在 /source/_post/blogTitle 文件夹下</span><br><span class="line">&#123;% asset_img hexoLocal.png 图片描述 %&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><a href="https://www.jianshu.com/p/1519f22aff24" target="_blank" rel="noopener">参考</a></p>
+          <p>JS 引用类型变量的值是一个指针，指向堆内存中的实际对象。</p>
+<ul>
+<li>基本类型是传值调用</li>
+<li>引用类型<strong>传共享调用</strong></li>
+</ul>
+<p>####传值调用（Pass by value）<br>        在传值调用中，传递给函数参数是函数被调用时所传实参的拷贝。在传值调用中实际参数被求值，其值被绑定到函数中对应的变量上（通常是把值复制到新内存区域）。</p>
+<p>####传引用调用（Pass by reference）<br>        在传引用调用调用中，传递给函数的是它的实际参数的隐式引用而不是实参的拷贝。通常函数能够修改这些参数（比如赋值），而且改变对于调用者是可见的。</p>
+<p>####传共享调用（Call by sharing）<br>        传共享调用和传引用调用的不同之处是，该求值策略传递给函数的参数是对象的引用的拷贝，即对象变量指针的拷贝。</p>
 
           
           <hr>
           <ul class="pager">
               
               <li class="previous">
-                  <a href="/blog/2018/11/21/浏览器相关流程及优化/" data-toggle="tooltip" data-placement="left" title="浏览器相关流程及优化">&larr; Previous Post</a>
+                  <a href="/blog/2018/11/21/V8垃圾回收/" data-toggle="tooltip" data-placement="left" title="V8垃圾回收">&larr; Previous Post</a>
               </li>
               
               
               <li class="next">
-                  <a href="/blog/2018/11/19/Flask视图装饰器/" data-toggle="tooltip" data-placement="top" title="Flask视图装饰器">Next Post&rarr;</a>
+                  <a href="/blog/2018/11/21/浏览器相关流程及优化/" data-toggle="tooltip" data-placement="top" title="浏览器相关流程及优化">Next Post&rarr;</a>
               </li>
               
           </ul>

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/20/利用hexo搭建个人blog/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/21/V8垃圾回收/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        利用hexo搭建个人blog｜Code war of Angel
+        V8垃圾回收｜Code war of Angel
         
     </title>
 
@@ -128,14 +128,14 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>利用hexo搭建个人blog</h1>
+                        <h1>V8垃圾回收</h1>
                         
                         
                           <span class="meta">
                                <span class="meta-item">Author: Angel Teng</span>
-                               <span class="meta-item">Date: Nov 20, 2018</span>
+                               <span class="meta-item">Date: Nov 21, 2018</span>
                                
-                                 <span class="meta-item">Updated On: Nov 20, 2018</span>
+                                 <span class="meta-item">Updated On: Nov 21, 2018</span>
                                
                           </span>
                           <!-- <div class="tags text-center">
@@ -162,36 +162,30 @@
           
           
           <ol>
-<li><p>安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; npm install -g hexo</span><br><span class="line">&gt;&gt;&gt; cd /blog-project</span><br><span class="line">&gt;&gt;&gt; hexo init</span><br><span class="line">&gt;&gt;&gt; npm install</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo server #启动一个本地服务器</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#修改 _config.yml</span><br><span class="line">....</span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://angelteng.github.io/blog/  # git仓库地址</span><br><span class="line">root: /blog/   #根目录</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br><span class="line">.....</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:angelteng/blog.git</span><br><span class="line">  branch: gh-pages #发布分支</span><br><span class="line">  name: </span><br><span class="line">  email:</span><br><span class="line"></span><br><span class="line">server:</span><br><span class="line">  port: 8080  #本地服务器端口</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>去git新增一个仓库<br>修改git page选项<br><img src="https://upload-images.jianshu.io/upload_images/14827444-02b3b58647e2bac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git page"><br>新增一个ssh key</p>
-</li>
-<li><p>管理：建议源代码根目录 git init 之后放在master分支，发布代码放在gh-pages分支</p>
-</li>
-<li><p>新增及发布</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 新增 </span><br><span class="line">&gt;&gt;&gt; hexo new post &quot;blog title&quot;</span><br><span class="line"># 发布</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo d</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>静态资源引用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将图片放在 /source/_post/blogTitle 文件夹下</span><br><span class="line">&#123;% asset_img hexoLocal.png 图片描述 %&#125;</span><br></pre></td></tr></table></figure>
+<li>引用计数垃圾回收：一个对象会被认为可以被垃圾回收当没有被引用到时。如果存在循环引用，就会发生问题。</li>
+<li>标记清除法［主要］：判断一个对象是否可以被使用。<ol>
+<li>（离开某个函数环境时？）垃圾回收器将会给全局变量一个列表</li>
+<li>然后将所有全局变量以及它们引用的变量标志成“active”    </li>
+<li>回收所有没有被标记成active的对象内存</li>
+</ol>
 </li>
 </ol>
-<p><a href="https://www.jianshu.com/p/1519f22aff24" target="_blank" rel="noopener">参考</a></p>
+<p>垃圾回收是不可预测的。</p>
+<p>####内存泄漏：不需要的内存没有被回收</p>
+<ol>
+<li>给未声明的变量赋值时（没有用var）／错误的使用this，会隐式声明一个全局变量</li>
+<li>监听器引用的对象，现代浏览器发现dom节点无法引用的时候也会移除监听器，但ie6不会</li>
+<li>闭包</li>
+<li>对表格单一单元格的引用会使整个表格被保存在内存中</li>
+</ol>
 
           
           <hr>
           <ul class="pager">
               
-              <li class="previous">
-                  <a href="/blog/2018/11/21/浏览器相关流程及优化/" data-toggle="tooltip" data-placement="left" title="浏览器相关流程及优化">&larr; Previous Post</a>
-              </li>
-              
               
               <li class="next">
-                  <a href="/blog/2018/11/19/Flask视图装饰器/" data-toggle="tooltip" data-placement="top" title="Flask视图装饰器">Next Post&rarr;</a>
+                  <a href="/blog/2018/11/21/JS中的引用类型/" data-toggle="tooltip" data-placement="top" title="JS中的引用类型">Next Post&rarr;</a>
               </li>
               
           </ul>

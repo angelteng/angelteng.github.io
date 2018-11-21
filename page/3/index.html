@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/page/2/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/page/3/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -147,24 +147,26 @@
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/14/Python项目相关路径配置/">
+    <a href="/blog/2018/11/06/Python协程优化/">
         <h2 class="post-title">
-            Python项目相关路径配置
+            Python协程优化
         </h2>
         
         <div class="post-meta">
-          <span>Nov 14, 2018</span>
+          <span>Nov 6, 2018</span>
           
         </div>
         <div class="post-content-preview">
             <p>
                 
-python相关环境变量
+协程增加超时处理 ：https://www.jianshu.com/p/0efdc952e8ca
+报错信息1aiohttp.client_exceptions.ServerDisconnectedError
 
 
-PYTHONPATH : PYTHONPATH是Python搜索路径，默认我们import的模块都会从PYTHONPATH里面寻找。
-PYTHONSTARTUP: Python启动后，先寻找PYTHONSTARTUP环境变量，然后执行此变量指定的文件中的代码。
-P..
+
+
+
+处理12345678import async_timeout# The ev..
             </p>
         </div>
     </a>
@@ -173,23 +175,22 @@ P..
 
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/13/flask-使用/">
+    <a href="/blog/2018/11/05/Python数据结构/">
         <h2 class="post-title">
-            flask 使用
+            Python数据结构
         </h2>
         
         <div class="post-meta">
-          <span>Nov 13, 2018</span>
+          <span>Nov 5, 2018</span>
           
         </div>
         <div class="post-content-preview">
             <p>
                 
-开启debug模式
-
-
-使用uswgi
-12345from werkzeug.debug import DebuggedApplicationapp.wsgi_app = DebuggedApplication( app.wsgi_app, True )if __name__ == &apos..
+Python手册： https://docs.python.org/3/reference/index.html#reference-index
+数据结构：列表[]、元组()、集合{}、字典{k:v}
+循环技巧：
+123456789101112# 列表循环技巧：for index, value..
             </p>
         </div>
     </a>
@@ -198,149 +199,22 @@ P..
 
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/12/Flask安装配置/">
+    <a href="/blog/2018/11/02/可乐项目/">
         <h2 class="post-title">
-            Flask安装配置
+            可乐项目
         </h2>
         
         <div class="post-meta">
-          <span>Nov 12, 2018</span>
+          <span>Nov 2, 2018</span>
           
         </div>
         <div class="post-content-preview">
             <p>
                 
-安装
-12pip install uwsgipip install flask
-
-uwsgi WSGI（Web Server Gateway Interface），定义了web服务器（nginx、apache、iis等）和 web应用（或者将web框架，flask、django等）之间的接口规..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/09/Python虚拟环境/">
-        <h2 class="post-title">
-            Python虚拟环境
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 9, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-函数 str() 用于将值转化为适于人阅读的形式 repr() 转化为供解释器读取的形式（如果没有等价的语法，则会发生SyntaxError异常）
-
-虚拟环境
-123456# 创建虚拟环境virtualenv --no-site-package venv# 启用source ./venv/bi..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/09/Python标准库/">
-        <h2 class="post-title">
-            Python标准库
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 9, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                参考
-
-正则 ：re
-测试
-
-
-doctest
-unittest
-
-
-日志：logging
-打印错误信息：sys.exc_info()
-
-
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/08/搭建Discuz论坛/">
-        <h2 class="post-title">
-            搭建Discuz论坛
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 8, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-下载包文件：Discuz论坛
-解压文件，实际代码目录为 /upload
-配置Nginx
-12345678910111213141516server &#123;    charset utf-8;    client_max_body_size 128M;    listen 80;     ..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/07/Python的类/">
-        <h2 class="post-title">
-            Python的类
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 7, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                
-作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置
-example
-123456789101112class MyClass:    i = 12345    # 类的实例化操作会自动为新创建的类实例调用 __init__() 方法    de..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/07/Python的模块与包/">
-        <h2 class="post-title">
-            Python的模块与包
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 7, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                Python模块
-
-引入模块
-1234567# 方式一import modulemodule.function(&apos;xxx&apos;)# 方式二from module import *  #导入所有除了以下划线( _ )开头的命名# from module import functio..
+* 用于展开/收集元组， ** 用于展开/收集字典
+request类库：http://docs.python-requests.org/zh_CN/latest/
+计算图片MD5，如果MD5一致，判断为同一张图片
+1234567def calMD5(url):  r = requests.ge..
             </p>
         </div>
     </a>
@@ -350,10 +224,8 @@ example
           
           <ul class="pager">
     
-        <li class="previous"><a href="/blog/">&larr;  Newer Posts</a></li>
+        <li class="previous"><a href="/blog/page/2/">&larr;  Newer Posts</a></li>
     
-    
-        <li class="next"><a href="/blog/page/3/">Previous Posts  &rarr;</a></li>
     
 </ul>
 

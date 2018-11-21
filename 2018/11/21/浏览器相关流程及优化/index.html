@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/20/利用hexo搭建个人blog/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/21/浏览器相关流程及优化/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        利用hexo搭建个人blog｜Code war of Angel
+        浏览器相关流程及优化｜Code war of Angel
         
     </title>
 
@@ -128,14 +128,14 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>利用hexo搭建个人blog</h1>
+                        <h1>浏览器相关流程及优化</h1>
                         
                         
                           <span class="meta">
                                <span class="meta-item">Author: Angel Teng</span>
-                               <span class="meta-item">Date: Nov 20, 2018</span>
+                               <span class="meta-item">Date: Nov 21, 2018</span>
                                
-                                 <span class="meta-item">Updated On: Nov 20, 2018</span>
+                                 <span class="meta-item">Updated On: Nov 21, 2018</span>
                                
                           </span>
                           <!-- <div class="tags text-center">
@@ -161,37 +161,77 @@
       <div class="col-lg-8 col-lg-offset-1 col-sm-9">
           
           
-          <ol>
-<li><p>安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; npm install -g hexo</span><br><span class="line">&gt;&gt;&gt; cd /blog-project</span><br><span class="line">&gt;&gt;&gt; hexo init</span><br><span class="line">&gt;&gt;&gt; npm install</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo server #启动一个本地服务器</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#修改 _config.yml</span><br><span class="line">....</span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://angelteng.github.io/blog/  # git仓库地址</span><br><span class="line">root: /blog/   #根目录</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br><span class="line">.....</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:angelteng/blog.git</span><br><span class="line">  branch: gh-pages #发布分支</span><br><span class="line">  name: </span><br><span class="line">  email:</span><br><span class="line"></span><br><span class="line">server:</span><br><span class="line">  port: 8080  #本地服务器端口</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>去git新增一个仓库<br>修改git page选项<br><img src="https://upload-images.jianshu.io/upload_images/14827444-02b3b58647e2bac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git page"><br>新增一个ssh key</p>
-</li>
-<li><p>管理：建议源代码根目录 git init 之后放在master分支，发布代码放在gh-pages分支</p>
-</li>
-<li><p>新增及发布</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 新增 </span><br><span class="line">&gt;&gt;&gt; hexo new post &quot;blog title&quot;</span><br><span class="line"># 发布</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo d</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>静态资源引用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将图片放在 /source/_post/blogTitle 文件夹下</span><br><span class="line">&#123;% asset_img hexoLocal.png 图片描述 %&#125;</span><br></pre></td></tr></table></figure>
-</li>
+          <p>####组成</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/14827444-830d8d2d96523c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器"></p>
+<p>####渲染引擎:<br>Trident, Gecko, Presto, Webkit, Blink</p>
+<p>####流程</p>
+<ol>
+<li>**DNS解析(迭代查询）<br>######优化：</li>
 </ol>
-<p><a href="https://www.jianshu.com/p/1519f22aff24" target="_blank" rel="noopener">参考</a></p>
+<ul>
+<li>减少dns请求</li>
+<li>dns预解析 </li>
+<li>httpdns防劫持</li>
+<li>dns负载均衡**</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/14827444-d187ee2ebfb4688a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="DNS"></p>
+<ol start="2">
+<li><strong>浏览器以一个随机端口进入到网卡，进入TCP／IP协议栈，然后可能经过防火墙过滤，</strong></li>
+<li><strong>建立TCP链接：<br>######优化：<br>用https／http2</strong><br><img src="https://upload-images.jianshu.io/upload_images/14827444-23655dd1db374e25.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
+</ol>
+<ul>
+<li>第一次握手：客户端A将标志位SYN置为1,随机产生一个值为seq=J（J的取值范围为=1234567）的数据包到服务器，客户端A进入SYN_SENT状态，等待服务端B确认；</li>
+<li>第二次握手：服务端B收到数据包后由标志位SYN=1知道客户端A请求建立连接，服务端B将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给客户端A以确认连接请求，服务端B进入SYN_RCVD状态。</li>
+<li>第三次握手：客户端A收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给服务端B，服务端B检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，客户端A和服务端B进入ESTABLISHED状态，完成三次握手，随后客户端A与服务端B之间可以开始传输数据了<br><img src="https://upload-images.jianshu.io/upload_images/14827444-adc0940f024c5b4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
+</ul>
+<ol start="3">
+<li><strong>发送HTTP请求（**</strong>GET<strong> </strong>或者<strong> </strong>POST<strong> </strong>等，不常用的还有<strong> </strong>PUT<strong> </strong>和<strong> </strong>DELETE<strong> </strong>、<strong><strong>HEAD</strong></strong>、<strong><strong>OPTION</strong></strong>以及<strong> </strong>TRACE<strong> </strong>）：静态资源缓存，can，服务器负载均衡，服务器缓存，**</li>
+<li><strong>服务器给浏览器响应一个**</strong>301<strong>**永久重定向响应</strong></li>
+<li><strong>浏览器跟踪重定向地址</strong></li>
+<li><strong>服务器处理请求：nginx-&gt;应用服务器</strong></li>
+<li><strong>服务器返回一个http响应</strong></li>
+<li><strong>客户端渲染：jscss位置，减少体积</strong>，</li>
+</ol>
+<p>####渲染流程</p>
+<ol>
+<li>加载HTML内容，处理HTML标记，构建DOM树</li>
+<li>加载css，处理css标记，构建CSSOM树</li>
+<li>将DOM和CSSOM合并成一个渲染树</li>
+<li>Layout：CPU根据渲染树来布局，计算及节点几何信息</li>
+<li>Paint：GPU根据每个Layer位置绘制点，以渲染层缓存</li>
+<li>Composition：处理多层渲染层Layers之间的关系，合成一个页面<br>其中：</li>
+<li>CSS 被视为阻塞渲染的资源，这意味着浏览器将不会渲染任何已处理的内容，直至 CSSOM 构建完毕。存在阻塞的 CSS 资源时，浏览器会延迟 JavaScript 的执行和 DOM 构建。</li>
+<li>当浏览器遇到一个 script 标记时，DOM 构建将暂停，直至脚本完成执行</li>
+</ol>
+<p>####css优化：</p>
+<ol>
+<li><link href="print.css" rel="stylesheet" media="print">设置了媒体类型，会加载但不会阻塞<br>####js优化：</li>
+<li>async 与 defer 属性对于 inline-script 都是无效的</li>
+<li>defer 属性：载入 JavaScript 文件时不阻塞 HTML 的解析，执行阶段被放到 HTML 标签解析完成之后。</li>
+<li>async属性：表示异步执行引入的 JavaScript，如果已经加载好，就会开始执行，加载的 JavaScript 依然会阻塞 load 事件。多个 async-script 的执行顺序是不确定的</li>
+<li>使用 document.createElement 创建的 script 默认是异步async的<br>####dns优化</li>
+<li>减少 DNS 请求</li>
+<li>缩短 DNS 解析路径</li>
+<li>dns预解析 dns－prefetch</li>
+<li>localDns：缓存挟持，转发</li>
+<li>HttpDns：<br>客户端直接访问HttpDNS接口，获取业务在域名配置管理系统上配置的访问延迟最优的IP。客户端向获取到的IP后就向直接往此IP发送业务协议请求。<br>####CDN功能：</li>
+<li>调度分配主机；负载均衡，根据 IP，网络流量情况分配最靠近，网络最通畅的 CDN 节点实现加速</li>
+<li>反向代理</li>
+<li>静态缓存；缓存静态资源（html，图片，音乐，视频等）</li>
+<li>防止 DDOS 攻击</li>
+</ol>
 
           
           <hr>
           <ul class="pager">
               
               <li class="previous">
-                  <a href="/blog/2018/11/21/浏览器相关流程及优化/" data-toggle="tooltip" data-placement="left" title="浏览器相关流程及优化">&larr; Previous Post</a>
+                  <a href="/blog/2018/11/21/JS中的引用类型/" data-toggle="tooltip" data-placement="left" title="JS中的引用类型">&larr; Previous Post</a>
               </li>
               
               
               <li class="next">
-                  <a href="/blog/2018/11/19/Flask视图装饰器/" data-toggle="tooltip" data-placement="top" title="Flask视图装饰器">Next Post&rarr;</a>
+                  <a href="/blog/2018/11/20/利用hexo搭建个人blog/" data-toggle="tooltip" data-placement="top" title="利用hexo搭建个人blog">Next Post&rarr;</a>
               </li>
               
           </ul>
