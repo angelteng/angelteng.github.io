@@ -77,7 +77,7 @@
 
     <!-- user customization -->
     <link rel="stylesheet" href="/blog/css/arsnippet.css">
-    <script src="/blog/js/arsnippet.css.js"></script>
+    <!-- <script src="/blog/js/arsnippet.css.js"></script> -->
 </head>
 
 <style>
@@ -145,6 +145,28 @@
 <div class="container homepage">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+          
+            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
+    <a href="/blog/2018/11/14/asyncio报错/">
+        <h2 class="post-title">
+            asyncio报错
+        </h2>
+        
+        <div class="post-meta">
+          <span>Nov 14, 2018</span>
+          
+        </div>
+        <div class="post-content-preview">
+            <p>
+                在flask中使用1234import asyncio..... loop = asyncio.get_event_loop()....
+发现报错RuntimeError: There is no current event loop in thread ‘Thread-2’.
+修改为12345..
+            </p>
+        </div>
+    </a>
+</div>
+<hr>
+
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
     <a href="/blog/2018/11/14/Python项目相关路径配置/">
@@ -318,29 +340,6 @@ unittest
 作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置
 example
 123456789101112class MyClass:    i = 12345    # 类的实例化操作会自动为新创建的类实例调用 __init__() 方法    de..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/07/Python的模块与包/">
-        <h2 class="post-title">
-            Python的模块与包
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 7, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                Python模块
-
-引入模块
-1234567# 方式一import modulemodule.function(&apos;xxx&apos;)# 方式二from module import *  #导入所有除了以下划线( _ )开头的命名# from module import functio..
             </p>
         </div>
     </a>

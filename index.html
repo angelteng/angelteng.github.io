@@ -77,7 +77,7 @@
 
     <!-- user customization -->
     <link rel="stylesheet" href="/blog/css/arsnippet.css">
-    <script src="/blog/js/arsnippet.css.js"></script>
+    <!-- <script src="/blog/js/arsnippet.css.js"></script> -->
 </head>
 
 <style>
@@ -145,6 +145,35 @@
 <div class="container homepage">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+          
+            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
+    <a href="/blog/2018/11/21/Http2改造实践/">
+        <h2 class="post-title">
+            HTTP2改造实践
+        </h2>
+        
+        <div class="post-meta">
+          <span>Nov 21, 2018</span>
+          
+        </div>
+        <div class="post-content-preview">
+            <p>
+                HTTP2特点：
+
+新的二进制格式：HTTP1.x的解析是基于文本，HTTP2.0的协议解析决定采用二进制格式
+多路复用
+
+
+
+header压缩
+服务端推送
+HTTP2.0其实可以支持非HTTPS的，但是现在主流的浏览器像chrome，firefox表示还是只支持基于 TLS 部署的HTTP2...
+            </p>
+        </div>
+    </a>
+</div>
+<hr>
+
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
     <a href="/blog/2018/11/21/V8垃圾回收/">
@@ -316,28 +345,6 @@ dns负载均衡**
 Queue的使用参考in Python3.x should use ‘pip install q’in Python2.x should use ‘pip install queue’
 
 关于模块：除了包含函数定义外，模块也可以包含可执行语句。这些语句一般用来初始化模块。他们仅在 第一次 被导..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/14/asyncio报错/">
-        <h2 class="post-title">
-            asyncio报错
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 14, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                在flask中使用1234import asyncio..... loop = asyncio.get_event_loop()....
-发现报错RuntimeError: There is no current event loop in thread ‘Thread-2’.
-修改为12345..
             </p>
         </div>
     </a>
