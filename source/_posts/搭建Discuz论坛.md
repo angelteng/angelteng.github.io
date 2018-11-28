@@ -1,7 +1,7 @@
 ---
 title: 搭建Discuz论坛
 date: 2018-11-8 17:17:20
-tags: sPython
+tags: Python
 ---
 1. 下载包文件：[Discuz论坛](http://www.discuz.net/forum-2-1.html)
 ![选择UTF版本](https://upload-images.jianshu.io/upload_images/14827444-8c3726d4057def02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
