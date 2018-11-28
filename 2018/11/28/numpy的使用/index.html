@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/14/Python项目相关路径配置/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/28/numpy的使用/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        Python项目相关路径配置｜Code war of Angel
+        numpy的使用｜Code war of Angel
         
     </title>
 
@@ -128,14 +128,14 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>Python项目相关路径配置</h1>
+                        <h1>numpy的使用</h1>
                         
                         
                           <span class="meta">
                                <span class="meta-item">Author: Angel Teng</span>
-                               <span class="meta-item">Date: Nov 14, 2018</span>
+                               <span class="meta-item">Date: Nov 28, 2018</span>
                                
-                                 <span class="meta-item">Updated On: Nov 19, 2018</span>
+                                 <span class="meta-item">Updated On: Nov 28, 2018</span>
                                
                           </span>
                           <!-- <div class="tags text-center">
@@ -164,34 +164,15 @@
       <div class="col-lg-8 col-lg-offset-1 col-sm-9">
           
           
-          <ol>
-<li>python相关环境变量</li>
-</ol>
-<ul>
-<li>PYTHONPATH : PYTHONPATH是Python搜索路径，默认我们import的模块都会从PYTHONPATH里面寻找。</li>
-<li>PYTHONSTARTUP: Python启动后，先寻找PYTHONSTARTUP环境变量，然后执行此变量指定的文件中的代码。</li>
-<li>PYTHONCASEOK: 加入PYTHONCASEOK的环境变量, 就会使python导入模块的时候不区分大小写.</li>
-<li>PYTHONHOME: 另一种模块搜索路径。它通常内嵌于的PYTHONSTARTUP或PYTHONPATH目录中，使得两个模块库更容易切换。</li>
-</ul>
-<ol start="2">
-<li><p>配置LD_LIBRARY_PATH<br><a href="https://www.cnblogs.com/icxy/p/7943996.html" target="_blank" rel="noopener">LD_LIBRARY_PATH is used by your program to search for directories containing the libraries after it has been successfully compiled and linked.</a><br>执行二进制文件时的动态库搜索路径</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; vim  ~/.bashrc</span><br><span class="line">......</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib</span><br><span class="line">&gt;&gt;&gt; source ~/.bashrc</span><br><span class="line">&gt;&gt;&gt; 重启进程</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置PYTHONPATH<br>Python模块路径</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; vim /etc/profile</span><br><span class="line">.......</span><br><span class="line">source /apps/sh/flask_local_com.sh</span><br><span class="line">&gt;&gt;&gt; vim /apps/sh/flask_local_com.sh</span><br><span class="line">.......</span><br><span class="line">export FLASK_DEBUG=1;</span><br><span class="line">export PYTHONPATH=/vagrant/project/libs:$PYTHONPATH;</span><br><span class="line">&gt;&gt;&gt; source /etc/profile</span><br></pre></td></tr></table></figure></li>
-</ol>
+          <p>向量、矩阵<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"># 创建矩阵</span><br><span class="line">matrix = np.array([[1, 4],</span><br><span class="line">                   [2, 5]])</span><br><span class="line"># 矩阵变形</span><br><span class="line">matrix.reshape(1,4)   </span><br><span class="line"># 矩阵的逆</span><br><span class="line">np.linalg.inv(matrix)</span><br><span class="line"># 返回对角线元素</span><br><span class="line">matrix.diagonal()</span><br><span class="line"># 创建矩阵的迹</span><br><span class="line">matrix.diagonal().sum()</span><br><span class="line"># 展开矩阵</span><br><span class="line">matrix.flatten()</span><br><span class="line"># 返回矩阵的秩</span><br><span class="line">np.linalg.matrix_rank(matrix)</span><br><span class="line"># 返回最大元素</span><br><span class="line">np.max(matrix)</span><br><span class="line"># 返回最小元素</span><br><span class="line">np.min(matrix)</span><br><span class="line"># 寻找每列的最大元素</span><br><span class="line">np.max(matrix, axis=0)</span><br><span class="line"># 查看行和列数</span><br><span class="line">matrix.shape</span><br><span class="line"># 查看元素数（行乘列）</span><br><span class="line">matrix.size</span><br><span class="line"># 查看维数</span><br><span class="line">matrix.ndim</span><br><span class="line"># 返回均值</span><br><span class="line">np.mean(matrix)</span><br><span class="line"># 返回方差</span><br><span class="line">np.var(matrix)</span><br><span class="line"># 返回标准差</span><br><span class="line">np.std(matrix)</span><br><span class="line"></span><br><span class="line">#将字典转换为矩阵</span><br><span class="line">from sklearn.feature_extraction import DictVectorizer</span><br><span class="line">data_dict = [&#123;&apos;Red&apos;: 2, &apos;Blue&apos;: 4&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 4, &apos;Blue&apos;: 3&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 1, &apos;Yellow&apos;: 2&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 2, &apos;Yellow&apos;: 2&#125;]</span><br><span class="line"></span><br><span class="line"># 创建 DictVectorizer 对象</span><br><span class="line">dictvectorizer = DictVectorizer(sparse=False)</span><br><span class="line"># 将字典转换为特征矩阵</span><br><span class="line">features = dictvectorizer.fit_transform(data_dict)</span><br><span class="line"># 查看特征矩阵的列名</span><br><span class="line">dictvectorizer.get_feature_names()</span><br></pre></td></tr></table></figure></p>
 
           
           <hr>
           <ul class="pager">
               
-              <li class="previous">
-                  <a href="/blog/2018/11/14/asyncio报错/" data-toggle="tooltip" data-placement="left" title="asyncio报错">&larr; Previous Post</a>
-              </li>
-              
               
               <li class="next">
-                  <a href="/blog/2018/11/13/flask-使用/" data-toggle="tooltip" data-placement="top" title="flask 使用">Next Post&rarr;</a>
+                  <a href="/blog/2018/11/22/Redis原理/" data-toggle="tooltip" data-placement="top" title="Redis原理">Next Post&rarr;</a>
               </li>
               
           </ul>
