@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/page/4/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -147,205 +147,22 @@
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
           
             <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/30/ubuntu下安装配置mysql/">
+    <a href="/blog/2018/11/02/可乐项目/">
         <h2 class="post-title">
-            ubuntu下安装配置mysql
+            可乐项目
         </h2>
         
         <div class="post-meta">
-          <span>Nov 30, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                以下为Ubuntu 16.04环境12345678910111213141516171819202122# 安装mysqlsudo apt-get install mysql-serversudo apt install mysql-clientsudo apt install libmysql..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/28/numpy的使用/">
-        <h2 class="post-title">
-            numpy的使用
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 28, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                向量、矩阵123456789101112131415161718192021222324252627282930313233343536373839404142434445464748import numpy as np# 创建矩阵matrix = np.array([[1, 4],      ..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/22/Redis原理/">
-        <h2 class="post-title">
-            Redis原理
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 22, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                数据结构字符串简单动态字符串（SDS），比起 C 字符串， SDS 具有以下优点：
-
-常数复杂度O1获取字符串长度。
-杜绝缓冲区溢出。
-减少修改字符串长度时所需的内存重分配次数：空间预分配未使用空间，SDS修改后，长度少于1m酒会分配跟len相同大小的未使用空间，大于1m分配1m的未使用空间。
-..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/21/设计可拓展框架/">
-        <h2 class="post-title">
-            设计可拓展框架
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 21, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                可拓展框架基本模式
-
-面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能） 比如MVC分层
-面向服务拆分：SOA（服务＋ESB） 、微服务
-面向功能拆分：微内核架构
-
-微服务的基础设施：
-
-自动化测试
-自动化部署
-配置中心
-接口框架
-api网关
-服务发现
-服务路由
-服务容..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/21/PHP项目中并发处理/">
-        <h2 class="post-title">
-            PHP项目中并发处理
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 21, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                总结一下PHP项目中并发处理：
-高并发业务处理的重点在于原子操作，常见操作：
-redis-&gt;incr 
-如果redis是单机，可以使用watch方案WATCH mykey
- val = GET mykey
- val = val + 1
- MULTI
- SET mykey $val
- EXE..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/21/Http2改造实践/">
-        <h2 class="post-title">
-            HTTP2改造实践
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 21, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                HTTP2特点：
-
-新的二进制格式：HTTP1.x的解析是基于文本，HTTP2.0的协议解析决定采用二进制格式
-多路复用
-
-
-
-header压缩
-服务端推送
-HTTP2.0其实可以支持非HTTPS的，但是现在主流的浏览器像chrome，firefox表示还是只支持基于 TLS 部署的HTTP2...
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/21/V8垃圾回收/">
-        <h2 class="post-title">
-            V8垃圾回收
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 21, 2018</span>
+          <span>Nov 2, 2018</span>
           
         </div>
         <div class="post-content-preview">
             <p>
                 
-引用计数垃圾回收：一个对象会被认为可以被垃圾回收当没有被引用到时。如果存在循环引用，就会发生问题。
-标记清除法［主要］：判断一个对象是否可以被使用。
-（离开某个函数环境时？）垃圾回收器将会给全局变量一个列表
-然后将所有全局变量以及它们引用的变量标志成“active”    
-回收所有没有被标记..
-            </p>
-        </div>
-    </a>
-</div>
-<hr>
-
-          
-            <div class="post-preview " style="background-image: url('/blog/img/cover.jpg')">
-    <a href="/blog/2018/11/21/JS中的引用类型/">
-        <h2 class="post-title">
-            JS中的引用类型
-        </h2>
-        
-        <div class="post-meta">
-          <span>Nov 21, 2018</span>
-          
-        </div>
-        <div class="post-content-preview">
-            <p>
-                JS 引用类型变量的值是一个指针，指向堆内存中的实际对象。
-
-基本类型是传值调用
-引用类型传共享调用
-
-####传值调用（Pass by value）        在传值调用中，传递给函数参数是函数被调用时所传实参的拷贝。在传值调用中实际参数被求值，其值被绑定到函数中对应的变量上（通常是把值复..
+* 用于展开/收集元组， ** 用于展开/收集字典
+request类库：http://docs.python-requests.org/zh_CN/latest/
+计算图片MD5，如果MD5一致，判断为同一张图片
+1234567def calMD5(url):  r = requests.ge..
             </p>
         </div>
     </a>
@@ -355,8 +172,8 @@ HTTP2.0其实可以支持非HTTPS的，但是现在主流的浏览器像chrome�
           
           <ul class="pager">
     
+        <li class="previous"><a href="/blog/page/3/">&larr;  Newer Posts</a></li>
     
-        <li class="next"><a href="/blog/page/2/">Previous Posts  &rarr;</a></li>
     
 </ul>
 
