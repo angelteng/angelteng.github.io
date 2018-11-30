@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Angel Teng">
     <meta name="keyword" content="angel.teng, blog">
-    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/14/Python项目相关路径配置/">
+    <link rel="canonical" href="https://angelteng.github.io/blog/blog/2018/11/30/Centos系统docker的坑/">
     <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
     <link rel="alternate" type="application/atom+xml" title="Code war of Angel" href="/atom.xml">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -21,7 +21,7 @@
 
     <title>
         
-        Python项目相关路径配置｜Code war of Angel
+        Centos系统docker的坑｜Code war of Angel
         
     </title>
 
@@ -128,14 +128,14 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                     <div class="site-heading">
-                        <h1>Python项目相关路径配置</h1>
+                        <h1>Centos系统docker的坑</h1>
                         
                         
                           <span class="meta">
                                <span class="meta-item">Author: Angel Teng</span>
-                               <span class="meta-item">Date: Nov 14, 2018</span>
+                               <span class="meta-item">Date: Nov 30, 2018</span>
                                
-                                 <span class="meta-item">Updated On: Nov 19, 2018</span>
+                                 <span class="meta-item">Updated On: Nov 30, 2018</span>
                                
                           </span>
                           <!-- <div class="tags text-center">
@@ -143,8 +143,8 @@
                           </div>
                           <div class="tags text-center">
                               Tags: 
-                              <a class="tag" href="/blog/tags/#Python"
-                                 title="Python">Python</a>
+                              <a class="tag" href="/blog/tags/#docker"
+                                 title="docker">docker</a>
                               
                           </div> -->
                         
@@ -164,34 +164,20 @@
       <div class="col-lg-8 col-lg-offset-1 col-sm-9">
           
           
-          <ol>
-<li>python相关环境变量</li>
-</ol>
-<ul>
-<li>PYTHONPATH : PYTHONPATH是Python搜索路径，默认我们import的模块都会从PYTHONPATH里面寻找。</li>
-<li>PYTHONSTARTUP: Python启动后，先寻找PYTHONSTARTUP环境变量，然后执行此变量指定的文件中的代码。</li>
-<li>PYTHONCASEOK: 加入PYTHONCASEOK的环境变量, 就会使python导入模块的时候不区分大小写.</li>
-<li>PYTHONHOME: 另一种模块搜索路径。它通常内嵌于的PYTHONSTARTUP或PYTHONPATH目录中，使得两个模块库更容易切换。</li>
-</ul>
-<ol start="2">
-<li><p>配置LD_LIBRARY_PATH<br><a href="https://www.cnblogs.com/icxy/p/7943996.html" target="_blank" rel="noopener">LD_LIBRARY_PATH is used by your program to search for directories containing the libraries after it has been successfully compiled and linked.</a><br>执行二进制文件时的动态库搜索路径</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; vim  ~/.bashrc</span><br><span class="line">......</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib</span><br><span class="line">&gt;&gt;&gt; source ~/.bashrc</span><br><span class="line">&gt;&gt;&gt; 重启进程</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置PYTHONPATH<br>Python模块路径</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; vim /etc/profile</span><br><span class="line">.......</span><br><span class="line">source /apps/sh/flask_local_com.sh</span><br><span class="line">&gt;&gt;&gt; vim /apps/sh/flask_local_com.sh</span><br><span class="line">.......</span><br><span class="line">export FLASK_DEBUG=1;</span><br><span class="line">export PYTHONPATH=/vagrant/project/libs:$PYTHONPATH;</span><br><span class="line">&gt;&gt;&gt; source /etc/profile</span><br></pre></td></tr></table></figure></li>
-</ol>
+          <p>环境：CentOS Linux release 7.1.1503 (Core)<br>dockerfiles 中有<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RUN mv /app/docker/localtime /etc/localtime</span><br><span class="line">......</span><br><span class="line">RUM rm /app/docker</span><br></pre></td></tr></table></figure></p>
+<p>docker build 过程中发现报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv: can&apos;t rename &apos;/app/docker/localtime&apos;: Invalid argument</span><br><span class="line">The command &apos;/bin/sh -c mv /app/docker/localtime /etc/localtime&apos; returned a non-zero code: 1</span><br></pre></td></tr></table></figure></p>
+<p>而同样的脚本在另外一个Ubuntu系统下没有这样的报错<br>从 docker info中可以看到<br><img src="https://upload-images.jianshu.io/upload_images/14827444-4a17653f35165366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="不正常系统"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-a3433e310cc982f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="正常系统"><br>可以看到报错信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WARNING: overlay: the backing xfs filesystem is formatted without d_type support, which leads to incorrect behavior.</span><br><span class="line">         Reformat the filesystem with ftype=1 to enable d_type support.</span><br><span class="line">         Running without d_type support will not be supported in future releases.</span><br></pre></td></tr></table></figure></p>
+<p>Centos7 发行版默认的Kernel版本是3.10，但是Overlay2存储驱动需要4.0以上的kernel版本支持，所以默认使用overlay 并且不支持d_type， 才导致这个报错。<br><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/7.2_release_notes/technology-preview-file_systems" target="_blank" rel="noopener">具体</a><br>解决方法：<br>格式化 XFS 系统，添加ftype=1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 查看当前系统xfs</span><br><span class="line">xfs_info /</span><br><span class="line">如果 ftype =0 表示不支持d_type</span><br></pre></td></tr></table></figure>
+<p><a href="http://blog.51cto.com/foxhound/1841487" target="_blank" rel="noopener">参考</a><br><a href="https://www.jianshu.com/p/00ffd8df6010" target="_blank" rel="noopener">参考</a></p>
 
           
           <hr>
           <ul class="pager">
               
-              <li class="previous">
-                  <a href="/blog/2018/11/14/asyncio报错/" data-toggle="tooltip" data-placement="left" title="asyncio报错">&larr; Previous Post</a>
-              </li>
-              
               
               <li class="next">
-                  <a href="/blog/2018/11/13/flask-使用/" data-toggle="tooltip" data-placement="top" title="flask 使用">Next Post&rarr;</a>
+                  <a href="/blog/2018/11/30/ubuntu下安装配置mysql/" data-toggle="tooltip" data-placement="top" title="ubuntu下安装配置mysql、Redis">Next Post&rarr;</a>
               </li>
               
           </ul>
