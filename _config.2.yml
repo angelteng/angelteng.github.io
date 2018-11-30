@@ -1,0 +1,270 @@
+# ---------------------------------------------------------------
+# Site Information Settings
+# ---------------------------------------------------------------
+# title can include HTML code.
+title: Code war of Angel
+subtitle:
+description:
+keywords:
+author: Angel Teng
+language:
+timezone:
+
+# custom Site settings
+SEOTitle: Code war of Angel
+keyword: "angel.teng, blog" # seo key words
+
+favicon: # your favicon png
+# custom end
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: https://angelteng.github.io/blog/
+root: /blog/
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+
+footer:
+# Specify the date when the site was setup.
+# If not defined, current year will be used.
+  since: 2018
+
+  # Icon between year and copyright info.
+  # From: http://fontawesome.io/
+  # Example: user
+  icon: heart
+
+  # If not defined, will be used `author` from Hexo main config.
+  copyright:
+  # -------------------------------------------------------------
+  # Hexo link (Powered by Hexo).
+  powered: true
+  # Theme & scheme info link (Theme - A-RSnippet).
+  theme: true
+
+  # -------------------------------------------------------------
+  # Any custom text can be defined here.
+  # custom_text: Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a>
+
+# ---------------------------------------------------------------
+# Menu Settings
+# ---------------------------------------------------------------
+menu:
+  home: /
+  # 架构设计: /design/
+  # LeetCode-category: /leetcode-category/
+  # LeetCode-tag: /leetcode-tag/
+  # archives: /archives/
+  # tags: /tags/
+  # projects: /portfolio-slim/
+  # support: /support/
+  # RSS: /atom.xml
+
+# ---------------------------------------------------------------
+# SNS settings
+# ---------------------------------------------------------------
+# Set rss to false to disable feed link.
+# Leave url as empty to use site's feed link.
+# Set url to specific value if you have burned your feed already.
+rss:
+  enable: false
+  url:                    # if empty, use default url, root_path/atom.xml
+
+# email: xxx@gmail.com
+# weibo_username:
+# zhihu_username:
+# github_username: huyingjie
+# twitter_username: yingjieYJH
+# facebook_username:
+# linkedin_username:
+# ---------------------------------------------------------------
+# Sidebar settings
+# ---------------------------------------------------------------
+sidebar: true
+sidebar-about-description: full stack learner
+sidebar-avatar-url: https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg
+sidebar-description-after-icons: tell me if you like this blog
+
+# ---------------------------------------------------------------
+# Hexo official settings
+# ---------------------------------------------------------------
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing: Defined by Hexo
+new_post_name: :title.md                  # File name of new posts
+default_layout: post
+titlecase: false                          # Transform title into titlecase
+external_link: true                       # Open external links in new tab
+filename_case: 0
+render_drafts: false
+post_asset_folder: true
+relative_link: false
+future: true
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: false
+  tab_replace:
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: MMM D, YYYY
+time_format: HH:mm:ss
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 8
+pagination_dir: page
+
+## Themes: https://hexo.io/themes/
+theme: a-rsnippet
+
+# ---------------------------------------------------------------
+# Layout settings: homepage
+# ---------------------------------------------------------------
+# If enable, update date will show on the cover photo.
+index_update_date_enable: false
+
+# ---------------------------------------------------------------
+# Layout settings: post layout & leetcode layout
+# ---------------------------------------------------------------
+# If enable, update date will show in the header.
+post_update_date_enable: true
+
+# Can contain HTML
+# Appear at the begginning of the post
+content_before_post: 
+# Can contain HTML
+# Appear at the end of the post
+content_after_post: 
+
+# default cover image
+# example: animated gif as header
+cover_default_img: /blog/img/cover.jpg
+
+
+# Table Of Contents in the Sidebar
+toc:
+  enable: false
+  # Automatically add list number to toc.
+  number: false
+
+# ---------------------------------------------------------------
+# Layout settings: page layout
+# ---------------------------------------------------------------
+
+# ---------------------------------------------------------------
+# Layout settings: arhive layout
+# ---------------------------------------------------------------
+# archive page title
+archive:
+    title: Archives
+    subtitle: Cool?
+
+# ---------------------------------------------------------------
+# Layout settings: poem layout
+# ---------------------------------------------------------------
+
+# ---------------------------------------------------------------
+# Layout settings: portfolio-slim layout
+# ---------------------------------------------------------------
+
+# ---------------------------------------------------------------
+# Layout settings: archive layout
+# ---------------------------------------------------------------
+
+# ---------------------------------------------------------------
+# Layout settings: 404 layout
+# ---------------------------------------------------------------
+
+# ---------------------------------------------------------------
+# Layout settings: list-category-leetcode layout
+# ---------------------------------------------------------------
+
+# ---------------------------------------------------------------
+# Layout settings: list-tag-leetcode layout
+# ---------------------------------------------------------------
+
+# ---------------------------------------------------------------
+# Layout settings: 404 layout
+# ---------------------------------------------------------------
+
+#################################################################
+# ---------------------------------------------------------------
+# Third Party Services Settings
+# ---------------------------------------------------------------
+#################################################################
+# MathJax Support
+mathjax:
+  enable: true
+  #per_page: true
+  cdn: //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+# ---------------------------------------------------------------
+# Comment settings
+# ---------------------------------------------------------------
+# Disqus settings
+# disqus_shortname: hexo-a-rsnippet
+
+# Use livere
+# use_livere: false
+# livere_uid: MTAyMC8zMz
+
+# ---------------------------------------------------------------
+# Analytics settings
+# ---------------------------------------------------------------
+# Baidu Analytics
+# baidu_analytics:
+# Google Analytics
+# google_analytics: UA-38355881-1            # Format: UA-xxxxxx-xx
+# Google Webmaster tools verification setting
+# See: https://www.google.com/webmasters/
+# Click "Alternative methods" => Select "HTML tag" => copy the string in the "content" property of "meta" element
+# <meta name="google-site-verification" content="xxxxxx" />
+# Input xxxxxx below
+# google_site_verification: wtCjI-zcpr2FYwWS3sI4OWzMK9e7VomDrZyxpVUUIng
+
+# bing_site_verification:
+# yandex_site_verification:
+
+# ---------------------------------------------------------------
+# Share
+# ---------------------------------------------------------------
+add_this_id: 
+# ra-5272bc2a7b3c1ddc
+# Enable/Disable Update date
+
+# ---------------------------------------------------------------
+# Search
+# ---------------------------------------------------------------
+# search api , set your custom key
+# It is not working now. It is a feature in the future.
+# swiftype_key:
+
+# Theme version
+version: 0.1.0
+
+deploy:
+  type: git
+  repo: git@github.com:angelteng/blog.git
+  branch: gh-pages
+  name: ddyss100
+  email: 241545509@qq.com
+
+server:
+  port: 8080  

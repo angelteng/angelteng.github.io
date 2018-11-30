@@ -1,7 +1,9 @@
 ---
 title: Python的模块与包
 date: 2018-11-7 10:18:29
-tags: Python
+tags: 
+- Python
+categories: Python
 ---
 Python模块
 1. 引入模块

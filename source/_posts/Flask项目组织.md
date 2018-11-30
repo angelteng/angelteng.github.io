@@ -1,7 +1,10 @@
 ---
 title: Flask项目组织
 date: 2018-11-16 16:42:57
-tags: Python
+tags: 
+- Python
+- Flask
+categories: Python
 ---
 1. 一个基于 WSGI 的 Python web 应用必须有一个实现实际的应用的中心调用对象。在 Flask 中，中心调用对象是一个 Flask类的实例
 ```

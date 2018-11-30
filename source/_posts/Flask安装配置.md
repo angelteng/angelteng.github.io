@@ -1,7 +1,10 @@
 ---
 title: Flask安装配置
 date: 2018-11-12 17:15:50
-tags: Python
+tags: 
+- Python
+- Flask
+categories: Python
 ---
 1. 安装
 ```

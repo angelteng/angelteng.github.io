@@ -1,7 +1,10 @@
 ---
 title: Flask视图装饰器
 date: 2018-11-19 15:13:13
-tags: Flask, Python
+tags: 
+- Python
+- Flask
+categories: Python
 ---
 框架已有：
 ```

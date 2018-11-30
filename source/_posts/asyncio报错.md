@@ -1,7 +1,9 @@
 ---
 title: asyncio报错
 date: 2018-11-14 17:13:57
-tags: Python
+tags: 
+- Python
+categories: Python
 ---
 在flask中使用
 ```

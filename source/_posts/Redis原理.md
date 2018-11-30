@@ -2,6 +2,8 @@
 title: Redis原理
 date: 2018-11-22 10:16:51
 tags:
+- Redis
+categories: 后端
 ---
 # 数据结构
 #### 字符串

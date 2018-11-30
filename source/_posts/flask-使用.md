@@ -1,7 +1,10 @@
 ---
 title: flask 使用
 date: 2018-11-13 17:15:19
-tags: Python
+tags: 
+- Python
+- Flask
+categories: Python
 ---
 1. 开启debug模式
 - 使用uswgi

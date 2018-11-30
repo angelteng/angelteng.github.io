@@ -1,7 +1,10 @@
 ---
 title: Flask中并发优化jMeter测试
 date: 2018-11-15 17:13:18
-tags: Python
+tags: 
+- Python
+- Flask
+categories: Python
 ---
 1. Queue的使用
 [参考](http://www.cnblogs.com/itogo/p/5635629.html)

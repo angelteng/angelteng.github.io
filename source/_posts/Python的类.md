@@ -1,7 +1,9 @@
 ---
 title: Python的类
 date: 2018-11-7 17:18:02
-tags: Python
+tags: 
+- Python
+categories: Python
 ---
 1. 作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置
 2. example

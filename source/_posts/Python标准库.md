@@ -1,7 +1,9 @@
 ---
 title: Python标准库
 date: 2018-11-9 10:16:50
-tags: Python
+tags: 
+- Python
+categories: Python
 ---
 [参考](http://www.pythondoc.com/pythontutorial3/stdlib.html)
 1. 正则 ：[re](https://docs.python.org/3/library/re.html#module-re)

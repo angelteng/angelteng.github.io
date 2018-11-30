@@ -1,7 +1,9 @@
 ---
 title: Python协程优化
 date: 2018-11-06 17:19:45
-tags: Python
+tags: 
+- Python
+categories: Python
 ---
 1. 协程增加超时处理 ：https://www.jianshu.com/p/0efdc952e8ca
  - 报错信息

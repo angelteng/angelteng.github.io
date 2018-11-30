@@ -1,7 +1,9 @@
 ---
 title: Python数据结构
 date: 2018-11-05 17:20:10
-tags: Python
+tags: 
+- Python
+categories: Python
 ---
 1. Python手册： https://docs.python.org/3/reference/index.html#reference-index
 2. 数据结构：列表[]、元组()、集合{}、字典{k:v}

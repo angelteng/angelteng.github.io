@@ -1,7 +1,9 @@
 ---
 title: 'Python项目相关路径配置'
 date: 2018-11-14 09:14:37
-tags: Python
+tags: 
+- Python
+categories: Python
 ---
 1. python相关环境变量
 - PYTHONPATH : PYTHONPATH是Python搜索路径，默认我们import的模块都会从PYTHONPATH里面寻找。
