@@ -327,7 +327,7 @@
 <li>copay-dash is a popular bitcoin platform which includes event-stream as a dependency.<br>copay-dash 是一个很流行的比特币平台，它使用了event-stream作为依赖包。</li>
 <li>For about a week in September, event-stream included flatmap-stream as a dependency, as it was passed along to a new maintainer who added the dependency and removed it a week later.<br>九月份的时候，event-stream 使用了flatmap-stream作为依赖报，它传给了一个新的维护者，这个维护者加上了这个依赖包，一周之后又删掉了。</li>
 <li>flatmap-stream had some code hiding at the end of its minified built output which attempts to decode and execute strings from its packaged test/data.js file, using the description of the top-level package as the AES256 key.<br>flatmap-steam 隐藏了一些代码在压缩代码的最后，它尝试使用顶级包的描述中的AES256 key去decode并且运行在test/data.js的字符串.</li>
-<li>For any other package, this produces a silently handled error (as the package description/decryption key is wrong). But for copay-dash, this produces some valid JavaScript which runs another round of decryption and executes a malicious script that steals your bitcoin wallet.<br>对于其他包，这些产生了轻微的错误，但是对于copay-dash， 它产生了有效的JavaScript代码，运行另一轮解密并执行了偷取比特币的恶意脚本。</li>
+<li>For any other package, this produces a silently handled error (as the package description/decryption key is wrong). But for copay-dash, this produces some valid JavaScript which runs another round of decryption and executes a malicious script that steals your bitcoin wallet.<br>对于其他包，这些产生了轻微的错误(被try catch了)，但是对于copay-dash， 它产生了有效的JavaScript代码，运行另一轮解密并执行了偷取比特币的恶意脚本。</li>
 </ol>
 <p>What now?</p>
 <ol>
