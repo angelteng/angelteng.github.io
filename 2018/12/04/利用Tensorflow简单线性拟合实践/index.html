@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,">
+  <meta name="keywords" content="Python,Tensorflow,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置 example 123456789101112class MyClass:    i = 12345    # 类的实例化操作会自动为新创建的类实例调用 __init__() 方法    def __init__(self,realpart, imagpart):        self.dat">
-<meta name="keywords" content="Python">
+<meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647import tensorflow as tfimport numpy as npfrom sklearn import datasetsfrom sklearn.model_selection import train_test">
+<meta name="keywords" content="Python,Tensorflow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python的类">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/07/Python的类/index.html">
+<meta property="og:title" content="利用Tensorflow简单线性拟合实践">
+<meta property="og:url" content="https://angelteng.github.io/blog/2018/12/04/利用Tensorflow简单线性拟合实践/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置 example 123456789101112class MyClass:    i = 12345    # 类的实例化操作会自动为新创建的类实例调用 __init__() 方法    def __init__(self,realpart, imagpart):        self.dat">
+<meta property="og:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647import tensorflow as tfimport numpy as npfrom sklearn import datasetsfrom sklearn.model_selection import train_test">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-30T09:07:30.000Z">
+<meta property="og:updated_time" content="2018-12-04T03:41:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python的类">
-<meta name="twitter:description" content="作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置 example 123456789101112class MyClass:    i = 12345    # 类的实例化操作会自动为新创建的类实例调用 __init__() 方法    def __init__(self,realpart, imagpart):        self.dat">
+<meta name="twitter:title" content="利用Tensorflow简单线性拟合实践">
+<meta name="twitter:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647import tensorflow as tfimport numpy as npfrom sklearn import datasetsfrom sklearn.model_selection import train_test">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/07/Python的类/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2018/12/04/利用Tensorflow简单线性拟合实践/">
 
 
 
 
 
-  <title>Python的类 | Code war of Angel</title>
+  <title>利用Tensorflow简单线性拟合实践 | Code war of Angel</title>
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/07/Python的类/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/04/利用Tensorflow简单线性拟合实践/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python的类</h1>
+          <h1 class="post-title" itemprop="name headline">利用Tensorflow简单线性拟合实践</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T17:18:02+08:00">
-                2018-11-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T11:39:14+08:00">
+                2018-12-04
               </time>
             
 
@@ -322,29 +322,7 @@
       
 
       
-        <ol>
-<li>作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置</li>
-<li><p>example</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    i = 12345</span><br><span class="line">    # 类的实例化操作会自动为新创建的类实例调用 __init__() 方法</span><br><span class="line">    def __init__(self,realpart, imagpart):</span><br><span class="line">        self.data = []</span><br><span class="line">        self.r = real part</span><br><span class="line">        self.im = imagpart</span><br><span class="line">    # 一般方法的第一个参数被命名为 self,这仅仅是一个约定</span><br><span class="line">    def f(self):</span><br><span class="line">        return &apos;hello world&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; x = MyClass(&apos;realpart&apos;,&apos;imagpart&apos;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>继承</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class DerivedClassName(BaseClassName):</span><br><span class="line">    pass</span><br><span class="line">class DerivedClassName(modname.BaseClassName):</span><br><span class="line">    pass</span><br><span class="line"></span><br><span class="line"># 多继承</span><br><span class="line">class DerivedClassName(Base1, Base2, Base3):</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<ul>
-<li>派生类可能会覆盖其基类的方法。因为方法调用同一个对象中的其它方法时没有特权，基类的方法调用同一个基类的方法时，可能实际上最终调用了派生类中的覆盖方法。</li>
-<li>检查继承类型：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 函数 isinstance()用于检查实例类型</span><br><span class="line">isinstance(obj, int)</span><br><span class="line"># 函数 issubclass()用于检查类继承</span><br><span class="line">issubclass(bool, int)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ol start="4">
-<li><p>public: name<br> protect : _name<br> private: __name</p>
-</li>
-<li><p>迭代器：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Reverse:</span><br><span class="line">  # 定义一个 __iter__()方法，使其返回一个带有 __next__()方法的对象。</span><br><span class="line">    &quot;&quot;&quot;Iterator for looping over a sequence backwards.&quot;&quot;&quot;</span><br><span class="line">    def __init__(self, data):</span><br><span class="line">        self.data = data</span><br><span class="line">        self.index = len(data)</span><br><span class="line">    def __iter__(self):</span><br><span class="line">        return self</span><br><span class="line">    def __next__(self):</span><br><span class="line">        if self.index == 0:</span><br><span class="line">            raise StopIteration</span><br><span class="line">        self.index = self.index - 1</span><br><span class="line">        return self.data[self.index]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>生成器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def reverse(data):</span><br><span class="line">    for index in range(len(data)-1, -1, -1):</span><br><span class="line">        yield data[index]</span><br><span class="line">for char in reverse(&apos;golf&apos;):</span><br><span class="line">     print(char)</span><br><span class="line">`</span><br></pre></td></tr></table></figure></li>
-</ol>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line">from sklearn import datasets</span><br><span class="line">from sklearn.model_selection import train_test_split </span><br><span class="line"></span><br><span class="line">print(tf.__version__)</span><br><span class="line"></span><br><span class="line">iris = datasets.load_iris() # sk自带了的鸢尾花数据集（含有三种鸢尾花，有四种特征数据）</span><br><span class="line"></span><br><span class="line"># 载入数据，划分训练/测试集（20%）</span><br><span class="line">train_X, test_X, train_y, test_y = train_test_split(iris.data, iris.target, test_size = 0.2, random_state = 0)</span><br><span class="line"></span><br><span class="line"># 所有特征都是实数值</span><br><span class="line"># shape是特征值数量</span><br><span class="line">feature_name = &quot;flower_features&quot;</span><br><span class="line">feature_columns = [tf.feature_column.numeric_column(feature_name, </span><br><span class="line">                                                    shape=[4])]</span><br><span class="line"></span><br><span class="line">classifier = tf.estimator.LinearClassifier(</span><br><span class="line">    feature_columns=feature_columns,</span><br><span class="line">    n_classes=3,</span><br><span class="line">    model_dir=&quot;/tmp/iris_model&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 输入函数，讲导入的数据转换为TensorFlow数据类型</span><br><span class="line">def input_fn(set_split=&apos;train&apos;):</span><br><span class="line">    def _fn():</span><br><span class="line">        if set_split == &quot;test&quot;:</span><br><span class="line">            features = &#123;feature_name: tf.constant(test_X)&#125;</span><br><span class="line">            label = tf.constant(test_y)</span><br><span class="line">        else:</span><br><span class="line">            features = &#123;feature_name: tf.constant(train_X)&#125;</span><br><span class="line">            label = tf.constant(train_y)</span><br><span class="line">        return features, label</span><br><span class="line">    return _fn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 训练（拟合）模型</span><br><span class="line">classifier.train(input_fn=input_fn(),</span><br><span class="line">                 steps=1000)</span><br><span class="line">print(&apos;fit done&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 评估准确率</span><br><span class="line">accuracy_score = classifier.evaluate(input_fn=input_fn(&apos;test&apos;), </span><br><span class="line">                                     steps=100)[&quot;accuracy&quot;]</span><br><span class="line">print(&apos;\nAccuracy: &#123;0:f&#125;&apos;.format(accuracy_score))</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -364,6 +342,8 @@
           
             <a href="/blog/tags/Python/" rel="tag"># Python</a>
           
+            <a href="/blog/tags/Tensorflow/" rel="tag"># Tensorflow</a>
+          
         </div>
       
 
@@ -375,8 +355,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/11/07/Python的模块与包/" rel="next" title="Python的模块与包">
-                <i class="fa fa-chevron-left"></i> Python的模块与包
+              <a href="/blog/2018/12/03/嘿！有人在偷你的比特币！/" rel="next" title="Hey! JavaScript Developer, someone is stealing your bitcoin!">
+                <i class="fa fa-chevron-left"></i> Hey! JavaScript Developer, someone is stealing your bitcoin!
               </a>
             
           </div>
@@ -384,10 +364,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/11/08/搭建Discuz论坛/" rel="prev" title="搭建Discuz论坛">
-                搭建Discuz论坛 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

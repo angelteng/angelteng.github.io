@@ -229,6 +229,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/04/利用Tensorflow简单线性拟合实践/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/12/04/利用Tensorflow简单线性拟合实践/" itemprop="url">利用Tensorflow简单线性拟合实践</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T11:39:14+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line">from sklearn import datasets</span><br><span class="line">from sklearn.model_selection import train_test_split </span><br><span class="line"></span><br><span class="line">print(tf.__version__)</span><br><span class="line"></span><br><span class="line">iris = datasets.load_iris() # sk自带了的鸢尾花数据集（含有三种鸢尾花，有四种特征数据）</span><br><span class="line"></span><br><span class="line"># 载入数据，划分训练/测试集（20%）</span><br><span class="line">train_X, test_X, train_y, test_y = train_test_split(iris.data, iris.target, test_size = 0.2, random_state = 0)</span><br><span class="line"></span><br><span class="line"># 所有特征都是实数值</span><br><span class="line"># shape是特征值数量</span><br><span class="line">feature_name = &quot;flower_features&quot;</span><br><span class="line">feature_columns = [tf.feature_column.numeric_column(feature_name, </span><br><span class="line">                                                    shape=[4])]</span><br><span class="line"></span><br><span class="line">classifier = tf.estimator.LinearClassifier(</span><br><span class="line">    feature_columns=feature_columns,</span><br><span class="line">    n_classes=3,</span><br><span class="line">    model_dir=&quot;/tmp/iris_model&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 输入函数，讲导入的数据转换为TensorFlow数据类型</span><br><span class="line">def input_fn(set_split=&apos;train&apos;):</span><br><span class="line">    def _fn():</span><br><span class="line">        if set_split == &quot;test&quot;:</span><br><span class="line">            features = &#123;feature_name: tf.constant(test_X)&#125;</span><br><span class="line">            label = tf.constant(test_y)</span><br><span class="line">        else:</span><br><span class="line">            features = &#123;feature_name: tf.constant(train_X)&#125;</span><br><span class="line">            label = tf.constant(train_y)</span><br><span class="line">        return features, label</span><br><span class="line">    return _fn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 训练（拟合）模型</span><br><span class="line">classifier.train(input_fn=input_fn(),</span><br><span class="line">                 steps=1000)</span><br><span class="line">print(&apos;fit done&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 评估准确率</span><br><span class="line">accuracy_score = classifier.evaluate(input_fn=input_fn(&apos;test&apos;), </span><br><span class="line">                                     steps=100)[&quot;accuracy&quot;]</span><br><span class="line">print(&apos;\nAccuracy: &#123;0:f&#125;&apos;.format(accuracy_score))</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/03/嘿！有人在偷你的比特币！/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1758,155 +1900,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/21/JS中的引用类型/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/21/JS中的引用类型/" itemprop="url">JS中的引用类型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:47:37+08:00">
-                2018-11-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>JS 引用类型变量的值是一个指针，指向堆内存中的实际对象。</p>
-<ul>
-<li>基本类型是传值调用</li>
-<li>引用类型<strong>传共享调用</strong></li>
-</ul>
-<p>####传值调用（Pass by value）<br>        在传值调用中，传递给函数参数是函数被调用时所传实参的拷贝。在传值调用中实际参数被求值，其值被绑定到函数中对应的变量上（通常是把值复制到新内存区域）。</p>
-<p>####传引用调用（Pass by reference）<br>        在传引用调用调用中，传递给函数的是它的实际参数的隐式引用而不是实参的拷贝。通常函数能够修改这些参数（比如赋值），而且改变对于调用者是可见的。</p>
-<p>####传共享调用（Call by sharing）<br>        传共享调用和传引用调用的不同之处是，该求值策略传递给函数的参数是对象的引用的拷贝，即对象变量指针的拷贝。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1959,7 +1952,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1981,7 +1974,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
