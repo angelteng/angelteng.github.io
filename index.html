@@ -229,6 +229,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/10/数据结构与算法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/12/10/数据结构与算法/" itemprop="url">数据结构与算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-10T11:14:50+08:00">
+                2018-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://upload-images.jianshu.io/upload_images/14827444-6906a9b4cb031ff0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据结构与算法"></p>
+<h4 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h4><ul>
+<li>大O表示法：指代码执行时间随数据规模增长的变化趋势，所以，也叫作渐进时间复杂度，简称时间复杂度。</li>
+<li>空间复杂度：空间复杂度全称就是渐进空间复杂度，表示算法的存储空间与数据规模之间的增长关系。</li>
+<li>平均时间复杂度：即加权平均时间复杂度或者期望时间复杂度。</li>
+<li>均摊时间复杂度：就是一种特殊的平均时间复杂度，看是否能将较高时间复杂度那次操作的耗时，平摊到其他那些时间复杂度低的情况上。</li>
+</ul>
+<h4 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h4><ol>
+<li>只关注循环执行次数最多的一段代码</li>
+<li>加法法则：总复杂度等于量级最大的那段代码的复杂度</li>
+<li>乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积</li>
+</ol>
+<h4 id="书单"><a href="#书单" class="headerlink" title="书单"></a>书单</h4><p>入门</p>
+<ul>
+<li>《大话数据结构》</li>
+<li>《算法图解》<br>不同编程语言</li>
+<li>《数据结构与算法分析：JavaScript(/Python/..)语言描述》<br>经典</li>
+<li>《算法》</li>
+<li>《算法导论》<br>殿堂级</li>
+<li>《计算机程序设计艺术》<br>面试</li>
+<li>《编程之美》</li>
+<li>《剑指offer》</li>
+<li>《编程珠玑》<br>闲暇</li>
+<li>《数学之美》</li>
+<li>《算法之美》</li>
+<li>《算法帝国》</li>
+</ul>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><p>数组（Array）是一种线性表数据结构。它用一组连续的内存空间，来存储一组具有相同类型的数据。<br>最大的特点就是支持随机访问，但插入、删除操作也因此变得比较低效，平均情况时间复杂度为 O(n)，根据下标随机访问的时间复杂度为 O(1)。</p>
+<h4 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h4><p>链表不需要一块连续的内存空间，它通过“指针”将一组零散的内存块串联起来使用。其中，把内存块成为“结点”</p>
+<ul>
+<li>单链表：每个链表的结点除了存储数据之外，还需要记录链上的下一个结点的的地址（即后续指针 next）<br><img src="https://upload-images.jianshu.io/upload_images/14827444-6108ebed0ec40b0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="单链表"><br>头结点记录了链表的基地址，尾节点的指针指向Null空地址。</li>
+<li>循环链表：与单链表区别是，尾节点的指针指向头节点。</li>
+<li>双向链表：每个结点不止有一个后继指针 next 指向后面的结点，还有一个前驱指针prev指向前一个节点。</li>
+</ul>
+<h5 id="链表数组性能对比"><a href="#链表数组性能对比" class="headerlink" title="链表数组性能对比"></a>链表数组性能对比</h5><p><img src="https://upload-images.jianshu.io/upload_images/14827444-9c3def9175edd5fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="链表数组性能对比"></p>
+<ul>
+<li>数组使用连续内存空间，可以借助cpu缓存机制，进行预读。<br>[CPU缓存机制]CPU在从内存读取数据的时候，会先把读取到的数据加载到CPU的缓存中。而CPU每次从内存读取数据并不是只读取那个特定要访问的地址，而是读取一个数据块(这个大小我不太确定。。)并保存到CPU缓存中，然后下次访问内存数据的时候就会先从CPU缓存开始查找，如果找到就不需要再从内存中取。这样就实现了比内存访问速度更快的机制，也就是CPU缓存存在的意义:为了弥补内存访问速度过慢与CPU执行速度快之间的差异而引入。</li>
+<li>数据缺点是大小固定，而链表天然支持动态扩容。</li>
+</ul>
+<h5 id="基于链表LRU缓存淘汰策略"><a href="#基于链表LRU缓存淘汰策略" class="headerlink" title="基于链表LRU缓存淘汰策略"></a>基于链表LRU缓存淘汰策略</h5><ul>
+<li>维护一个有序单链表，越靠近尾部节点是越早之前访问</li>
+<li>插入数据（新增），缓存未满，将数据插入链表头部</li>
+<li>插入数据（已有），缓存未满，将改数据从原来节点迁移到头部节点</li>
+<li>插入数据（新增），缓存已满，删除尾节点数据，将新数据插入链表头部</li>
+</ul>
+<h4 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h4><p>后进者先出，先进者后出。（比如垒起来的盘子）</p>
+<ul>
+<li>动态扩容：均摊复杂度O(1)</li>
+<li>函数调用栈：操作系统给每个线程分配了一块独立的内存空间，这块内存被组织成“栈”的结构，用来存储函数调用时的临时变量。每进入一个函数，就会讲临时变量作为一个栈帧进入栈，当被调用函数执行完成，返回之后，将这个函数对应的栈帧出栈。<br>应用：</li>
+<li>表达式求值：编译器就是通过两个栈来实现的。其中一个保存操作数的栈，另一个是保存运算符的栈。我们从左向右遍历表达式，当遇到数字，我们就直接压入操作数栈；当遇到运算符，就与运算符栈的栈顶元素进行比较。如果比运算符栈顶元素的优先级高，就将当前运算符压入栈；如果比运算符栈顶元素的优先级低或者相同，从运算符栈中取栈顶运算符，从操作数栈的栈顶取2个操作数，然后进行计算，再把计算完的结果压入操作数栈，继续比较。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-b3a444fa7620c278.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="表达式求值"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">function calculate(val)&#123;</span><br><span class="line">    var cal = val.split(&apos; &apos;);</span><br><span class="line">    var numAry = [];</span><br><span class="line">    var utilAry = [];</span><br><span class="line">    var level = &#123;</span><br><span class="line">        &apos;+&apos;:1,</span><br><span class="line">        &apos;-&apos;:1,</span><br><span class="line">        &apos;*&apos;:2,</span><br><span class="line">        &apos;/&apos;:2</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    var toCalNow = function ()&#123;</span><br><span class="line">        var sum = null;</span><br><span class="line">        console.log(&apos;calnow&apos;,numAry,utilAry);</span><br><span class="line">        for(var n=0,j=0;n&lt;numAry.length,j&lt;utilAry.length;n++,j++)&#123;</span><br><span class="line">            var num1 = numAry[n+1];</span><br><span class="line">            if(n == 0)&#123;</span><br><span class="line">                var num2 = numAry[n];</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                var num2 = sum;</span><br><span class="line">            &#125;</span><br><span class="line">            var handler = utilAry[j]</span><br><span class="line">            num2 = parseInt(num2);</span><br><span class="line">            num1 = parseInt(num1);</span><br><span class="line">            switch (handler)&#123;</span><br><span class="line">                case &apos;+&apos;:</span><br><span class="line">                    sum = num1 + num2;</span><br><span class="line">                    break;</span><br><span class="line">                case &apos;-&apos;:</span><br><span class="line">                    sum = num1 - num2;</span><br><span class="line">                    break;</span><br><span class="line">                case &apos;*&apos;:</span><br><span class="line">                    sum = num1 * num2;</span><br><span class="line">                    break;</span><br><span class="line">                case &apos;/&apos;:</span><br><span class="line">                    sum = num1 / num2;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        console.log(&apos;sum&apos;,sum);</span><br><span class="line">        numAry = [sum];</span><br><span class="line">        utilAry = [];</span><br><span class="line">    &#125;</span><br><span class="line">    cal.forEach(v =&gt; &#123;</span><br><span class="line">        if(v == &apos;+&apos; || v == &apos;-&apos; || v == &apos;*&apos; || v == &apos;/&apos;)&#123;</span><br><span class="line">            util = utilAry[0]</span><br><span class="line">            if(!!util &amp; level[v] &lt; level[util])&#123;</span><br><span class="line">                toCalNow();</span><br><span class="line">            &#125;</span><br><span class="line">            utilAry.unshift(v)</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            numAry.unshift(v)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    toCalNow();</span><br><span class="line">    return numAry[0];</span><br><span class="line">&#125;</span><br><span class="line">&gt;&gt;&gt; console.log(calculate(&apos;12 + 2 * 2 - 1 * 2 / 2&apos;))</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/06/hmac加密算法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -322,8 +514,9 @@
       
         
           
-            <p>Hmac算法：Keyed-Hashing for Message Authentication。<br>它通过一个标准算法，在计算哈希的过程中，把key混入计算过程中。<br>使用hmac算法比标准hash算法更安全，因为针对相同的message，不同的key会产生不同的hash。</p>
-<p>使用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import hmac</span><br><span class="line"># 传入的key和message都是bytes类型</span><br><span class="line">message = b&apos;Hello, world!&apos;</span><br><span class="line">key = b&apos;secret&apos;</span><br><span class="line">h = hmac.new(key, message, digestmod=&apos;MD5&apos;)</span><br><span class="line"># 如果消息很长，可以多次调用h.update(msg)</span><br><span class="line">h.hexdigest()</span><br><span class="line"># output: &apos;fa4ee7d173f2d97ee79022d1a7355bcf&apos;</span><br></pre></td></tr></table></figure></p>
+            <p>密钥散列消息认证码(Keyed-hash message authentication code)<br>它是一种通过特别计算方式之后产生的消息认证码（MAC），使用密码散列函数，同时结合一个加密密钥。它可以用来保证数据的完整性，同时可以用来作某个消息的身份验证。</p>
+<p>使用方法（Python)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import hmac</span><br><span class="line"># 传入的key和message都是bytes类型</span><br><span class="line">message = b&apos;Hello, world!&apos;</span><br><span class="line">key = b&apos;secret&apos;</span><br><span class="line">h = hmac.new(key, message, digestmod=&apos;MD5&apos;)</span><br><span class="line"># 如果消息很长，可以多次调用h.update(msg)</span><br><span class="line">h.hexdigest()</span><br><span class="line"># output: &apos;fa4ee7d173f2d97ee79022d1a7355bcf&apos;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://pythoncaff.com/docs/pymotw/hmac-cryptographic-message-signing-and-verification/134" target="_blank" rel="noopener">参考</a></p>
 
           
         
@@ -1762,151 +1955,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/21/Http2改造实践/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/21/Http2改造实践/" itemprop="url">HTTP2改造实践</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:59:37+08:00">
-                2018-11-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>HTTP2特点：</p>
-<ol>
-<li>新的二进制格式：HTTP1.x的解析是基于文本，HTTP2.0的协议解析决定采用二进制格式</li>
-<li>多路复用</li>
-</ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-a9336eb314e24f99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<ol start="3">
-<li>header压缩</li>
-<li>服务端推送</li>
-<li>HTTP2.0其实可以支持非HTTPS的，但是现在主流的浏览器像chrome，firefox表示还是只支持基于 TLS 部署的HTTP2.0协议，所以要想升级成HTTP2.0还是先升级HTTPS为好</li>
-</ol>
-<p>http1.1问题：</p>
-<ol>
-<li>链接安全性</li>
-<li>建立链接消耗</li>
-<li>header内容过大</li>
-<li>keep－alive（与http2区别：线头阻塞）浪费</li>
-</ol>
-<p><a href="https://imququ.com/post/http2-and-wpo-2.html" target="_blank" rel="noopener">参考</a></p>
-<p>实践：<br>为了升级图片域域名到HTTP2新域名，可选方案要不就统一后端接口处理匹配替换，要不就前端拿到数据后匹配替换。<br>由于考虑到后端接口分布比较零散，本次采用前端替换方案。</p>
-<p>步骤：</p>
-<ol>
-<li>需要获取所有接口数据后，替换图片域名：扩展了jquery的ajax，ajaxsetting.dataFilter处理返回是json的数据，ajaxsetting.beforeSend重写callback方法，先处理图片域名，再执行用户callback</li>
-<li>增加了dns-prefetch属性，预解析图片域dns</li>
-<li>增加了图片容错处理，MutationObserve监听dom结构</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1959,7 +2007,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1981,7 +2029,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
