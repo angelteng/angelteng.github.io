@@ -391,6 +391,46 @@
 <ul>
 <li>并发队列<br>加锁</li>
 </ul>
+<h4 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h4><ul>
+<li>关键：找到如何将大问题分解为小问题的规律，并且基于此写出递归公式，然后在推敲出终止条件，最后将递归公式跟终止条件翻译成代码。</li>
+<li>警惕堆栈溢出：函数调用的时候，系统栈/虚拟机调用栈空间一般不大，如果递归求解规模很大，调用层次很深，就有可能造成堆栈溢出。</li>
+<li>警惕重复计算：可以通过一个数据结构（如散列表）记录已经求过值f(k)数据，以避免重复计算。</li>
+<li>警惕死循环：检查环的存在。</li>
+<li>空间复杂度高</li>
+</ul>
+<h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><p><img src="https://upload-images.jianshu.io/upload_images/14827444-336e59b7ec3dcad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="排序算法比较"></p>
+<ul>
+<li>内存消耗</li>
+<li>稳定性：稳定排序算法可以保持金额相同的两个对象，在排序之后的前后顺序保持不变。</li>
+</ul>
+<h5 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h5><p>冒泡排序只会操作相邻的两个数据。每次冒泡操作都会对相邻的两个元素进行比较，看是否满足大小关系要求。如果不满足就让它俩互换。</p>
+<ul>
+<li>原地排序算法</li>
+<li>稳定排序算法</li>
+<li>时间复杂度：最好O(n)，最差O(n^2)，平均O(n^2)<br><img src="https://upload-images.jianshu.io/upload_images/14827444-422a654258579fb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="冒泡排序"></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 冒泡排序，a 表示数组</span><br><span class="line">function bubbleSort($a)&#123;</span><br><span class="line">    var $n = $a.length;</span><br><span class="line">    if($n&lt;=1) return;</span><br><span class="line">    for($i=0; $i&lt;$n; $i++)&#123;</span><br><span class="line">        var $flag = false;</span><br><span class="line">        for ($j=0; $j&lt;$n-$i-1; $j++)&#123;</span><br><span class="line">            // 交换</span><br><span class="line">            if($a[$j] &gt; $a[$j+1])&#123; </span><br><span class="line">                var $tmp = $a[$j];</span><br><span class="line">                $a[$j] = $a[$j+1];</span><br><span class="line">                $a[$j+1] = $tmp;</span><br><span class="line">                // 有数据交换，可能可以继续交换</span><br><span class="line">                $flag = true;</span><br><span class="line">            &#125;</span><br><span class="line">            // 如果没有交换</span><br><span class="line">            if(!$flag) break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return $a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h5><p><img src="https://upload-images.jianshu.io/upload_images/14827444-ffe00a26c6c852cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入排序"></p>
+<ul>
+<li>将数组中数据分为已排序空间、未排序空间，初始已排序空间只有数组第一个元素。插入排序核心算法就是取未排序空间元素，在已排序空间中找到合适的位置插入，并保证已排序空间一直有序，重复这个过程，直到未排序空间为空。</li>
+<li>原地排序算法</li>
+<li>稳定排序算法</li>
+<li>时间复杂度：最好O(n)，最坏O(n^2)，平均O(n^2)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 插入排序 $a表示数组</span><br><span class="line">function insertionSort($a)&#123;</span><br><span class="line">    if($a.length&lt;=1) return;</span><br><span class="line">    for(var i=1;i&lt;$a.length;i++)&#123;</span><br><span class="line">        var value = $a[i];</span><br><span class="line">        var j = i-1;</span><br><span class="line">        for(;j&gt;=0;j--)&#123;</span><br><span class="line">            if(value &lt; $a[j])&#123;</span><br><span class="line">                $a[j+1] = $a[j] // 数据移动</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        $a[j+1] = value //移动完再插入数据到位置</span><br><span class="line">    &#125;</span><br><span class="line">    return $a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h5><p><img src="https://upload-images.jianshu.io/upload_images/14827444-04400e2ef9f3539b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="选择排序"></p>
+<ul>
+<li>类似插入排序，有已排序空间、未排序空间，但是每次会从未排序空间选择最小的元素，插入到已排序空间的的末尾。</li>
+<li>原地排序算法</li>
+<li>不稳定排序算法</li>
+<li>时间复杂度：最好O(n^2)，最坏O(n^2),平均O(n^2)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 选择排序 $a表示数组</span><br><span class="line">function selectionSort($a)&#123;</span><br><span class="line">    if($a.length&lt;=1) return;</span><br><span class="line">    for(var i=0;i&lt;$a.length;i++)&#123;</span><br><span class="line">        value = i;</span><br><span class="line">        for(var j=i;j&lt;$a.length;j++)&#123;</span><br><span class="line">            if($a[j]&lt; $a[value])&#123; //找出最小的元素</span><br><span class="line">                value = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        tmp = $a[value];</span><br><span class="line">        $a.splice(value,1);  </span><br><span class="line">        $a.splice(i,0,tmp);  //把最小的元素迁移到已排序的末尾</span><br><span class="line">    &#125;</span><br><span class="line">    return $a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="优选插入排序"><a href="#优选插入排序" class="headerlink" title="优选插入排序"></a>优选插入排序</h5><ul>
+<li>与冒泡排序对比：插入排序赋值操作更少，所以性能更优</li>
+<li>与选择排序对比：插入排序是稳定性排序算法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 冒泡排序</span><br><span class="line">var $tmp = $a[$j];</span><br><span class="line">$a[$j] = $a[$j+1];</span><br><span class="line">$a[$j+1] = $tmp;</span><br><span class="line"></span><br><span class="line">// 插入排序</span><br><span class="line">$a[j+1] = $a[j] // 数据移动</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
           
         
