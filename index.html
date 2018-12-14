@@ -480,6 +480,85 @@
 <li>递归过深的堆栈溢出：限制递归深度；在堆上模拟实现函数调用栈，手动模拟递归压栈、出栈过程。</li>
 <li>对于小规模数据（百级），O(n^2) 的排序算法并不一定比 O(nlogn) 排序算法执行时间长，可以选择简单、不需要递归的插入排序。</li>
 </ol>
+<h4 id="二分查找-O-logn"><a href="#二分查找-O-logn" class="headerlink" title="二分查找 O(logn)"></a>二分查找 O(logn)</h4><ol>
+<li>每次都跟区间中的中间元素对比，将待查找的区间缩小一半，直到找到要找对元素，或者区间缩小为零。</li>
+<li>时间复杂度：O(logn)</li>
+<li><p>非递归实现（当数据中不存在重复数据时）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function bsearch(a,value)&#123;</span><br><span class="line">    var low = 0;</span><br><span class="line">    var high = a.length -1;</span><br><span class="line">    // 如果low和high比较大，容易造成溢出，可以使用位运算 low+((high-low)&gt;&gt;1)</span><br><span class="line">    var mid = parseInt(low +(high-low) /2); </span><br><span class="line">    // 注意循环退出条件有相等对情况</span><br><span class="line">    while (low&lt;=high)&#123;</span><br><span class="line">        if(a[mid] == value)&#123;</span><br><span class="line">            return mid;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(a[mid] &lt; value)&#123;</span><br><span class="line">            low = mid+1;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            high = mid-1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>递归实现（当数据中不存在重复数据时）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function bsearch(a,value)&#123;</span><br><span class="line">    return bsearchInternally(a,0,a.length-1,value);</span><br><span class="line">&#125;</span><br><span class="line">function bsearchInternally(a,low,high,value)&#123;</span><br><span class="line">    if(low&gt;high) return -1;</span><br><span class="line">    var mid = low+((high-low)&gt;&gt;1);</span><br><span class="line">    if(a[mid] == value)&#123;</span><br><span class="line">        return mid;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(a[mid] &lt; value)&#123;</span><br><span class="line">        return bsearchInternally(a,mid+1,high,value);</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        return bsearchInternally(a,low,mid-1,value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>局限性</p>
+</li>
+</ol>
+<ul>
+<li>依赖顺序表结构（数组），因为数组根据下标查找是O(1)，链表是O(n)。</li>
+<li>依赖有序数据，只适合用在一次排序，多次查找对场景。</li>
+<li>数据量太少不适合，顺序遍历更快。但是如果数据间比较操作比较耗时，不管数据量太少，推荐使用二分查找。</li>
+<li>数据量太大不合适，因为内存不足以存储这个数组。</li>
+</ul>
+<h5 id="二分查找变形"><a href="#二分查找变形" class="headerlink" title="二分查找变形"></a>二分查找变形</h5><ol>
+<li><p>查找第一个值等于给定值对元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">function bsearch(a,value)&#123;</span><br><span class="line">    var low = 0;</span><br><span class="line">    var high = a.length -1;</span><br><span class="line">    while(low&lt;=high)&#123;</span><br><span class="line">        var mid = parseInt((low+high)/2);</span><br><span class="line">        if(a[mid]&lt;value)&#123;</span><br><span class="line">            low = mid+1;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(a[mid]&gt;value)&#123;</span><br><span class="line">            high = mid-1;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            // 如果是第一个元素或者前一个元素不等于value</span><br><span class="line">            if(mid == 0 || a[mid-1] != value)&#123;</span><br><span class="line">                return mid</span><br><span class="line">            &#125;</span><br><span class="line">            // 否则要找到的元素还在[low,high-1]区间</span><br><span class="line">            else&#123;</span><br><span class="line">                high = mid -1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查找最后一个等于给定值的元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function bsearch(a,value)&#123;</span><br><span class="line">    var low = 0;</span><br><span class="line">    var high = a.length -1;</span><br><span class="line">    while(low&lt;=high)&#123;</span><br><span class="line">        var mid = parseInt((low+high)/2);</span><br><span class="line">        if(a[mid]&lt;value)&#123;</span><br><span class="line">            low = mid+1;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(a[mid]&gt;value)&#123;</span><br><span class="line">            high = mid-1;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            if(mid == a.length-1 || a[mid+1] != value)&#123;</span><br><span class="line">                return mid</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                low = mid + 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查找第一个大于等于给定值的元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function bsearch(a,value)&#123;</span><br><span class="line">    var low = 0;</span><br><span class="line">    var high = a.length -1;</span><br><span class="line">    while(low&lt;=high)&#123;</span><br><span class="line">        var mid = parseInt((low+high)/2);</span><br><span class="line">        if(a[mid]&lt;value)&#123;</span><br><span class="line">            low = mid+1;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            if(mid == 0 || a[mid-1] &lt; value)&#123;</span><br><span class="line">                return mid</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                high = mid - 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查找最后一个小于等于给定值的元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function bsearch(a,value)&#123;</span><br><span class="line">    var low = 0;</span><br><span class="line">    var high = a.length -1;</span><br><span class="line">    while(low&lt;=high)&#123;</span><br><span class="line">        var mid = parseInt((low+high)/2);</span><br><span class="line">        if(a[mid]&gt;value)&#123;</span><br><span class="line">            high = mid-1;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            if(mid == a.length-1 || a[mid+1] &gt; value)&#123;</span><br><span class="line">                return mid</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                low = low + 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="跳表SkipList-O-logn"><a href="#跳表SkipList-O-logn" class="headerlink" title="跳表SkipList O(logn)"></a>跳表SkipList O(logn)</h4><ol>
+<li>链表加多重索引的结构，就是跳表。空间换时间的设计思路。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-4b05c91c11f00e72.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跳表"></li>
+<li>时间复杂度：O(logn)</li>
+<li>空间复杂度：O(n)</li>
+<li>不更新索引的情况下，动态插入、删除时间复杂度也是O(logn)</li>
+<li>更新索引：通过一个随机函数，来决定这个结点插入到哪几级索引中，比如随机函数生成K，将这个结点插入到第一级到第K级这K级索引中。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-3b90ef5d60989f90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="更新索引"></li>
+<li>Redis中使用跳表实现有序集合，相比于红黑树，“根据区间[100,990]查到元素”的操作跳表可以做到O(logn)的时间复杂度定位区间起点，然后在起点往后遍历就可以了，效率比较高。实现比较简单。</li>
+</ol>
+<h4 id="散列表HashTable-O-k"><a href="#散列表HashTable-O-k" class="headerlink" title="散列表HashTable O(k)"></a>散列表HashTable O(k)</h4><p><img src="https://upload-images.jianshu.io/upload_images/14827444-af0c1327413522f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="散列表"></p>
+<ol>
+<li>散列表用的就是数组支持按照下标随机访问的时候，时间复杂度是O(1)的特性。通过散列函数将元素的键值映射为下标，将数据存储在数组中对应下标的位置。查询的时候，通过同样的散列函数将键值转为下标，根据下标在数组中取值。</li>
+<li>散列函数设计的基本要求：<ul>
+<li>散列函数计算的散列值是个非负整数。</li>
+<li>如果key1 == key2，那hash(key1) == hash(key2)</li>
+<li>如果key1 != key2，那hash(key1) != hash(key2)</li>
+</ul>
+</li>
+<li><p>散列冲突：</p>
+<ul>
+<li>开放寻址法</li>
+<li>链表法，链表长度影响了散列表查询时的时间复杂度<br><img src="https://upload-images.jianshu.io/upload_images/14827444-d3d267c87c6acecb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="链表法"></li>
+</ul>
+</li>
+<li><p>装载因子= 填入表中元素个数/散列表的长度。装载因子越大，冲突越多，性能下降越多。</p>
+</li>
+<li>JS中Object基于哈希表，JSON只是约定的字符串格式，可以转为JavaScript的object。</li>
+<li>加密中应用：哈希算法就是将任意数据转换成一定范围数据的算法，这种算法的副作用就是会产生冲突。但是在快速查找中出现的副作用，却是加密功能中的核心，因为有冲突，所以从结果就无法逆推出输入值，这样就实现了数据的单向加密。而输入数据的变化却又会影响到哈希串的值，所以我们可以用哈希串来进行数据的校验。</li>
+</ol>
+<h5 id="工业级别散列表"><a href="#工业级别散列表" class="headerlink" title="工业级别散列表"></a>工业级别散列表</h5><ol>
+<li>要求：</li>
+</ol>
+<ul>
+<li>支持快速查询、插入、删除操作；</li>
+<li>内存占用合理，不能浪费过多内存空间；</li>
+<li>性能稳定，极端情况下，散列表性能不会退化到无法接受的情况</li>
+</ul>
+<ol start="2">
+<li>设计要点：</li>
+</ol>
+<ul>
+<li>设计合适的散列函数：生成的值随机、分布均匀。</li>
+<li>定义装在因子阈值，设计动态扩容策略；<br>  避免低效（一次性）的扩容：当装载因子达到阈值时，只申请新空间，不迁移数据。当有一个新数据插入时，将新数据插入到新的散列表中，并从老数据拿出一个迁移到新散列表。迁移期间如果需要查询，先从新散列表查询，没有再从旧散列表查询。</li>
+<li>选择合适的散列冲突解决方法；<br>  开放寻址法：适合数据量小，装载因子小（&lt;1)的时候。<br>  链表法：大装在因子容忍度高，适合存储大对象（此时指针占用内存可以忽略）、大数据量。</li>
+</ul>
+<h5 id="散列表与链表结合"><a href="#散列表与链表结合" class="headerlink" title="散列表与链表结合"></a>散列表与链表结合</h5><ol>
+<li>LRU淘汰算法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-93487d1af78a5ee3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="LRU淘汰算法"></li>
+</ol>
 
           
         
