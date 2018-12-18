@@ -537,7 +537,7 @@
 </li>
 <li><p>装载因子= 填入表中元素个数/散列表的长度。装载因子越大，冲突越多，性能下降越多。</p>
 </li>
-<li>JS中Object基于哈希表，JSON只是约定的字符串格式，可以转为JavaScript的object。</li>
+<li>JS中Object基于哈希表，JSON只是约定的字符串格式，可以转为JavaScript的object。<a href="https://lz5z.com/JavaScript-Object-Hash/" target="_blank" rel="noopener">更多</a></li>
 <li>加密中应用：哈希算法就是将任意数据转换成一定范围数据的算法，这种算法的副作用就是会产生冲突。但是在快速查找中出现的副作用，却是加密功能中的核心，因为有冲突，所以从结果就无法逆推出输入值，这样就实现了数据的单向加密。而输入数据的变化却又会影响到哈希串的值，所以我们可以用哈希串来进行数据的校验。</li>
 </ol>
 <h5 id="工业级别散列表"><a href="#工业级别散列表" class="headerlink" title="工业级别散列表"></a>工业级别散列表</h5><ol>
@@ -556,8 +556,162 @@
 <li>定义装在因子阈值，设计动态扩容策略；<br>  避免低效（一次性）的扩容：当装载因子达到阈值时，只申请新空间，不迁移数据。当有一个新数据插入时，将新数据插入到新的散列表中，并从老数据拿出一个迁移到新散列表。迁移期间如果需要查询，先从新散列表查询，没有再从旧散列表查询。</li>
 <li>选择合适的散列冲突解决方法；<br>  开放寻址法：适合数据量小，装载因子小（&lt;1)的时候。<br>  链表法：大装在因子容忍度高，适合存储大对象（此时指针占用内存可以忽略）、大数据量。</li>
 </ul>
-<h5 id="散列表与链表结合"><a href="#散列表与链表结合" class="headerlink" title="散列表与链表结合"></a>散列表与链表结合</h5><ol>
+<h5 id="散列表与链表结合"><a href="#散列表与链表结合" class="headerlink" title="散列表与链表结合"></a>散列表与链表结合</h5><p>散列表支持非常高效插入、删除、查找，但是顺序是打乱的，没有办法按照某种顺序快速遍历，将链表结合使用可以解决这个问题。</p>
+<ol>
 <li>LRU淘汰算法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-93487d1af78a5ee3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="LRU淘汰算法"></li>
+</ol>
+<ul>
+<li>散列表+双向链表存储结构，时间复杂度O(1)。</li>
+<li>查找：散列表中时间复杂度接近O(1)，找到数据后，迁移到双向链表尾部。</li>
+<li>删除：借助散列表，在O(1)复杂度中找到要删除的结点，双向链表通过O(1)找到前驱结点。</li>
+<li>插入：先查找这个数据是否在缓存中，如果在，迁移到双向链表尾部，如果不在，如果缓存满了，将双向链表头部结点删除，再将数据放在双向链表尾部，如果缓存没满，直接将数据放在双向链表尾部。</li>
+</ul>
+<ol start="2">
+<li>Redis有序集合</li>
+</ol>
+<ul>
+<li>散列表+跳表</li>
+<li>按照分值将对象组织成跳表，在按键值构建一个散列表。</li>
+</ul>
+<ol start="3">
+<li>Java LinkedHashMap</li>
+</ol>
+<h5 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h5><ol>
+<li>要求：<ul>
+<li>从哈希值不能反向推导出原始数据。</li>
+<li>输入的数据不同，哈希值不同。</li>
+<li>散列冲突概率很小。</li>
+<li>执行效率要高。 </li>
+</ul>
+</li>
+<li>应用：<ul>
+<li>安全加密：MD5、SHA、DES、AES<br>  字典攻击：加盐</li>
+<li>唯一标识：从图片二进制编码取某一些字节，进行加密，使用加密值代表这样图片的唯一标识</li>
+<li>数据校验：文件切割，分别对各个文件求哈希值，用户下载完各个切割文件后，先校验哈希值是否一致，以检查文件是否被篡改/完整。</li>
+<li>散列函数</li>
+</ul>
+</li>
+<li>区块链：区块链是一块块区块组成的，每个区块分为两部分：区块头和区块体。区块头保存着[自己区块体]和[上一个区块头]的哈希值。因为这种链式关系和哈希值的唯一性，只要区块链上任意一个区块被修改过，后面所有区块保存的哈希值就不对了。区块链使用的是 SHA256 哈希算法，计算哈希值非常耗时，如果要篡改一个区块，就必须重新计算该区块后面所有的区块的哈希值，短时间内几乎不可能做到。</li>
+</ol>
+<h5 id="哈希算法在分布式系统中应用"><a href="#哈希算法在分布式系统中应用" class="headerlink" title="哈希算法在分布式系统中应用"></a>哈希算法在分布式系统中应用</h5><ol>
+<li>负载均衡<ul>
+<li>实现会话粘滞的负载均衡算法：通过哈希算法，将客户端ip/用户session id进行计算，将哈希值与服务器数量进行取模计算，得到的值就是服务器编号。</li>
+</ul>
+</li>
+<li>数据分片<ul>
+<li>数据量非常大的时候，将数据进行分片分开存储到n台服务器上，将数据进行哈希计算，取模，获得服务器编号。</li>
+</ul>
+</li>
+<li>分布式存储<ul>
+<li>分布式缓存：<a href="https://zh.wikipedia.org/wiki/一致哈希" target="_blank" rel="noopener">一致性哈希算法</a>，<a href="https://www.sohu.com/a/158141377_479559" target="_blank" rel="noopener">一致性算法图解</a><br>假设k台机器，数据范围[0~MAX]，分成m（m&gt;&gt;k)个区间，每个机器负责m/k个小区间。当有新机器加入的时候，将某几个小区间的数据从原来服务器迁移到新服务器中。</li>
+</ul>
+</li>
+</ol>
+<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><ol>
+<li>概念<br><img src="https://upload-images.jianshu.io/upload_images/14827444-ee545ef13dcf95de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树"><ul>
+<li>节点的高度：结点到叶子结点的最长路径</li>
+<li>节点的深度：根节点到这个结点所经历边的个数</li>
+<li>节点的层级：结点的深度+1</li>
+<li>树的高度：根节点的高度</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/14827444-c52ab6536ec5111d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树的类型"></p>
+<pre><code>- 满二叉树：编号2，叶子节点都在最底层，除叶子节点外，每个节点都有左右两个子节点。
+- 完全二叉树：编号3，叶子节点都在最下层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大。
+</code></pre><ol start="2">
+<li><p>存储二叉树</p>
+<ul>
+<li>链表存储法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-f1b83bcd2e607e71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="链表存储法"></li>
+<li>顺序存储法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-bd584d1f79d708c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="顺序存储法"><br>如果是完全二叉树，数组存储是最节省内存的方法。</li>
+</ul>
+</li>
+<li><p>二叉树的遍历 O(n)<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1cb04fef37e82f5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树的遍历"></p>
+<ul>
+<li>前序遍历：对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。</li>
+<li>中序遍历：对于树中的任意节点来说，先打印它的左子树，然后再打印它本身，最后打印它的右子树。</li>
+<li>后序遍历：对于树中的任意节点来说，线打印它的左子树，然后打印右子树，最后打印它本身。</li>
+<li>按层遍历<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 前序遍历</span><br><span class="line">function preOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  console.log(root.val) </span><br><span class="line">  preOrder(root-&gt;left);</span><br><span class="line">  preOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 中序遍历</span><br><span class="line">function inOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  inOrder(root-&gt;left);</span><br><span class="line">  console.log(root.val) </span><br><span class="line">  inOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 后序遍历</span><br><span class="line">function postOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  postOrder(root-&gt;left);</span><br><span class="line">  postOrder(root-&gt;right);</span><br><span class="line">  console.log(root.val) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h5 id="二叉查找树-O-logn"><a href="#二叉查找树-O-logn" class="headerlink" title="二叉查找树 O(logn)"></a>二叉查找树 O(logn)</h5><ol>
+<li>要求：对于树中任意一个节点，其左子树的值都要小与这个节点的值，右子树的值都要大于这个节点的值。<br> 平衡时间复杂度：O(logn)</li>
+<li><p>二叉查找树的查找：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function treeSearch(tree,value)&#123;</span><br><span class="line">    if(tree.value === value)&#123;</span><br><span class="line">        return tree.value;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(tree.value&lt;value &amp;&amp; tree.right)&#123;</span><br><span class="line">        return treeSearch(tree.right,value);</span><br><span class="line">    &#125;</span><br><span class="line">    else if(tree.value&gt;value &amp;&amp; tree.left)&#123;</span><br><span class="line">        return treeSearch(tree.left,value);</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二叉树插入操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 假设插入的数据在叶子节点上</span><br><span class="line">function treeInsert(tree,value)&#123;</span><br><span class="line">    var p = tree;</span><br><span class="line">    while (p!=null)&#123;</span><br><span class="line">        if(p.value === value)&#123;</span><br><span class="line">            return &apos;repeat&apos;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(p.value &lt; value)&#123;</span><br><span class="line">            if(!p.right)&#123;</span><br><span class="line">                p.right = &#123;value: value&#125;;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.right;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(p.value &gt; value)&#123;</span><br><span class="line">            if(!p.left)&#123;</span><br><span class="line">                p.left = &#123;value: value&#125;;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二叉树删除操作</p>
+<ul>
+<li>如果该节点没有子节点，删除该节点，并将父节点指向Null。</li>
+<li>如果该节点有一个子节点，删除该节点，并将父节点指向子节点。</li>
+<li>如果该节点有两个及以上子节点，删除该节点，并将右子树中最小节点替换到该位置。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">function treeDelete(tree,value)&#123;</span><br><span class="line">    var p = tree;</span><br><span class="line">    var pp = null; // 父节点</span><br><span class="line">    while (p!=null &amp;&amp; p.value!= value)&#123;</span><br><span class="line">        pp = p;</span><br><span class="line">        if(value &gt; p.value)&#123;</span><br><span class="line">            p = p.right;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if( p == null)&#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    // 没有子节点</span><br><span class="line">    if(!p.left &amp;&amp; !p.right)&#123;</span><br><span class="line">        if(pp.right == p)&#123;</span><br><span class="line">            delete pp.right;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            delete pp.left;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 有一个子节点</span><br><span class="line">    else if(!p.left || !p.right)&#123;</span><br><span class="line">        var child = p.left? p.left:p.right;</span><br><span class="line">        if(pp.right == p)&#123;</span><br><span class="line">            pp.right = child;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            pp.left = child;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 有两个及以上子节点</span><br><span class="line">    else&#123;</span><br><span class="line">        //找右子树中的最小值</span><br><span class="line">        minP = p.right; </span><br><span class="line">        minPP = p;</span><br><span class="line">        while(minP.left !=null)&#123;</span><br><span class="line">            minPP = minP;</span><br><span class="line">            minP = minP.left;</span><br><span class="line">        &#125;</span><br><span class="line">        p.value = minP.value;</span><br><span class="line">        delete minPP.left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>快速查找最大、最小节点、前驱节点、后继结点</p>
+</li>
+<li>中序遍历查找二叉树，可以输出有序的数据，时间复杂度是O(n)</li>
+<li>支持重复数据的二叉查找树：<ul>
+<li>方法一：二叉查找树每个节点不止存储一个数据，存储一个链表，或者是动态扩容的数据。</li>
+<li>方法二：每个节点只存储一个数据，如果重复，将这个值放在右子树，当作大于这个节点处理。查找时，查到值相同节点不停止查找，继续在右子树中查找，知道找到叶子节点。删除时，先找到所有节点，再按正常删除操作处理。</li>
+</ul>
+</li>
+<li>与散列表对比：<ul>
+<li>散列表数据是无序的，如需要有序的数据，先排列；二叉查找树只需要中序遍历，可以在O(n)时间复杂度内，输出有序的数据序列。</li>
+<li>散列表扩容需要耗时比较久，遇到散列冲突时，性能不稳定；平衡二叉树的性能稳定，时间复杂度在O(logn)。</li>
+<li>散列表查找操作时间时常数级，但因为哈希冲突存在，这个常量不一定比logn小，加上哈希函数的耗时。</li>
+<li>散列表的构造比二叉查找树要复杂；平衡二叉查找树只需要考虑平衡性这一个问题。</li>
+</ul>
+</li>
+</ol>
+<h5 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h5><p><img src="https://upload-images.jianshu.io/upload_images/14827444-c0b6e9ab694ca38c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="红黑树"><br>红黑树是一种性能非常稳定的平衡二叉树，它是为了解决普通二叉树在数据更新中，复杂度退化的问题产生的，红黑树的高度近似log2n，所以它是近似平衡，查找、插入、删除的时间复杂度都是O(logn)。</p>
+<ol>
+<li>要求<ul>
+<li>根节点是黑色</li>
+<li>每个叶子节点都是黑色空节点，也就是说叶子节点不存储数据</li>
+<li>任何相邻节点不同时为红色，也就是说，红色节点是被黑色节点隔开</li>
+<li>每个节点，从该节点到达其可达叶子节点所经过的所有路径，经过的黑色节点的数目相同</li>
+</ul>
+</li>
+<li><p>实现</p>
+<ul>
+<li><img src="https://upload-images.jianshu.io/upload_images/14827444-e0d2f799bf77eb78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="左旋&amp;右旋"><br>左旋：围绕某个节点的左旋<br>右旋：围绕某个节点的右旋</li>
+</ul>
+</li>
+<li><p>插入</p>
+<ul>
+<li>插入操作的平衡调整：<br>  规定：插入的节点必须是红色的，而且二叉查找树中新插入的节点都是放在叶子节点上。<ol>
+<li>如果插入节点的父节点是黑色的，那我们什么都不用做，它仍然满足红黑树的定义。</li>
+<li>如果插入的节点是根节点，那我们直接改变它的颜色，把它变成黑色就可以了。</li>
+<li>除此外的情况需要左右旋转、改变颜色来满足规定。</li>
+</ol>
+</li>
+<li>case1: 如果关注节点是 a，它的叔叔节点 d 是红色<br><img src="https://upload-images.jianshu.io/upload_images/14827444-93258d273272c9c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="case1"><ol>
+<li>将关注节点 a 的父节点 b、叔叔节点 d 的颜色都设置成黑色</li>
+<li>将关注节点 a 的祖父节点 c 的颜色设置成红色；</li>
+<li>关注节点变成 a 的祖父节点 c；</li>
+<li>跳到 CASE 2 或者 CASE 3。</li>
+</ol>
+</li>
+<li>case2: 如果关注节点是 a，它的叔叔节点 d 是黑色，关注节点 a是其父节点 b 的右子节点<br><img src="https://static001.geekbang.org/resource/image/44/ad/4480a314f9d83c343b8adbb28b6782ad.jpg" alt="case2"><ol>
+<li>关注节点变成节点 a 的父节点 b；</li>
+<li>围绕新的关注节点b 左旋；</li>
+<li>跳到case3.</li>
+</ol>
+</li>
+<li>case3: 如果关注节点是 a，它的叔叔节点d是黑色，关注节点a 是其父节点b的左子节点<br><img src="https://static001.geekbang.org/resource/image/04/12/04650d9470b1e67899f5b8b7b8e33212.jpg" alt="case3"><ol>
+<li>围绕关注节点 a 的祖父节点 c 右旋;</li>
+<li>将关注节点 a 的父节点 b、兄弟节点 c 的颜色互换。</li>
+<li>调整结束。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>删除</li>
 </ol>
 
           
