@@ -488,7 +488,7 @@
 </ul>
 </li>
 </ol>
-<h4 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h4><p>使用递归树分析时间复杂度<br><img src="https://static001.geekbang.org/resource/image/1d/a3/1d9648b7f43e430473d76d24803159a3.jpg" alt="递归树"></p>
+<h4 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h4><h5 id="使用递归树分析时间复杂度"><a href="#使用递归树分析时间复杂度" class="headerlink" title="使用递归树分析时间复杂度"></a>使用递归树分析时间复杂度</h5><p><img src="https://static001.geekbang.org/resource/image/1d/a3/1d9648b7f43e430473d76d24803159a3.jpg" alt="递归树"></p>
 <ol>
 <li><p>归并排序递归树<br><img src="https://static001.geekbang.org/resource/image/c6/d0/c66bfc3d02d3b7b8f64c208bf4c948d0.jpg" alt="归并排序递归树"></p>
 <ul>
@@ -557,7 +557,12 @@ while (k&gt;1){
 <li>动态数据：<br>  维护一个大小为K的小顶堆，当有新数据时，如果元素比堆顶大，删除堆顶元素，插入该元素。</li>
 </ul>
 </li>
-<li>利用堆求中位数</li>
+<li>利用堆求中位数<ul>
+<li>静态数据：<br>  直接数组排序</li>
+<li>动态数据：<br>  维护两个堆，一个大顶堆，一个小顶堆。大顶堆中存储前半部分数据，小顶堆存后半部分数据，且小顶堆中堆数据都大于大顶堆中堆数据。如果是奇数，大顶堆中存n/2+1个数据。中位数就是大顶堆的堆顶。</li>
+<li>求99% 响应时间：<br>  将响应时间从小到达排序后，第n<em>99%的数据就是99%响应时间。<br>  同样维护两个堆，一个大顶堆，一个小顶堆。大顶堆中存储n</em>99%的数据，小顶堆存储1%的数据，取大顶堆堆顶数据。</li>
+</ul>
+</li>
 </ol>
 
           
