@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="二叉树 概念 节点的高度：结点到叶子结点的最长路径 节点的深度：根节点到这个结点所经历边的个数 节点的层级：结点的深度+1 树的高度：根节点的高度     - 满二叉树：编号2，叶子节点都在最底层，除叶子节点外，每个节点都有左右两个子节点。 - 完全二叉树：编号3，叶子节点都在最下层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大。  存储二叉树  链表存储法 顺序存">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构与算法（二）">
+<meta property="og:url" content="https://angelteng.github.io/blog/2018/12/19/数据结构与算法（二）/index.html">
+<meta property="og:site_name" content="Code war of Angel">
+<meta property="og:description" content="二叉树 概念 节点的高度：结点到叶子结点的最长路径 节点的深度：根节点到这个结点所经历边的个数 节点的层级：结点的深度+1 树的高度：根节点的高度     - 满二叉树：编号2，叶子节点都在最底层，除叶子节点外，每个节点都有左右两个子节点。 - 完全二叉树：编号3，叶子节点都在最下层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大。  存储二叉树  链表存储法 顺序存">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-ee545ef13dcf95de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-c52ab6536ec5111d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-f1b83bcd2e607e71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-bd584d1f79d708c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-1cb04fef37e82f5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-c0b6e9ab694ca38c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-e0d2f799bf77eb78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-93258d273272c9c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/44/ad/4480a314f9d83c343b8adbb28b6782ad.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/04/12/04650d9470b1e67899f5b8b7b8e33212.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/a6/c3/a6c4c347b7cbdf57662bab399ed36cc3.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/48/4e/48e3bd2cdd66cb635f8a4df8fb8fd64e.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/b9/29/b93c1fa4de16aee5482424ddf49f3c29.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/ac/91/ac76d78c064a2486e2a5b4c4903acb91.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/ec/ec/eca118d673c607eb2b103f3476fb24ec.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/44/af/44075213100edd70315e1492422c92af.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/5f/44/5f73f61bf77a7f2bb75f168cf432ec44.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/1d/a3/1d9648b7f43e430473d76d24803159a3.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/c6/d0/c66bfc3d02d3b7b8f64c208bf4c948d0.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/44/43/44972a3531dae0b7a0ccc935bc13f243.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg">
+<meta property="og:updated_time" content="2018-12-19T02:54:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构与算法（二）">
+<meta name="twitter:description" content="二叉树 概念 节点的高度：结点到叶子结点的最长路径 节点的深度：根节点到这个结点所经历边的个数 节点的层级：结点的深度+1 树的高度：根节点的高度     - 满二叉树：编号2，叶子节点都在最底层，除叶子节点外，每个节点都有左右两个子节点。 - 完全二叉树：编号3，叶子节点都在最下层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大。  存储二叉树  链表存储法 顺序存">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-ee545ef13dcf95de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://angelteng.github.io/blog/2018/12/19/数据结构与算法（二）/">
+
+
+
+
+
+  <title>数据结构与算法（二） | Code war of Angel</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Code war of Angel</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/19/数据结构与算法（二）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构与算法（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-19T09:59:44+08:00">
+                2018-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><ol>
+<li>概念<br><img src="https://upload-images.jianshu.io/upload_images/14827444-ee545ef13dcf95de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树"><ul>
+<li>节点的高度：结点到叶子结点的最长路径</li>
+<li>节点的深度：根节点到这个结点所经历边的个数</li>
+<li>节点的层级：结点的深度+1</li>
+<li>树的高度：根节点的高度</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/14827444-c52ab6536ec5111d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树的类型"></p>
+<pre><code>- 满二叉树：编号2，叶子节点都在最底层，除叶子节点外，每个节点都有左右两个子节点。
+- 完全二叉树：编号3，叶子节点都在最下层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大。
+</code></pre><ol start="2">
+<li><p>存储二叉树</p>
+<ul>
+<li>链表存储法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-f1b83bcd2e607e71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="链表存储法"></li>
+<li>顺序存储法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-bd584d1f79d708c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="顺序存储法"><br>如果是完全二叉树，数组存储是最节省内存的方法。</li>
+</ul>
+</li>
+<li><p>二叉树的遍历 O(n)<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1cb04fef37e82f5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树的遍历"></p>
+<ul>
+<li>前序遍历：对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。</li>
+<li>中序遍历：对于树中的任意节点来说，先打印它的左子树，然后再打印它本身，最后打印它的右子树。</li>
+<li>后序遍历：对于树中的任意节点来说，线打印它的左子树，然后打印右子树，最后打印它本身。</li>
+<li>按层遍历<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 前序遍历</span><br><span class="line">function preOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  console.log(root.val) </span><br><span class="line">  preOrder(root-&gt;left);</span><br><span class="line">  preOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 中序遍历</span><br><span class="line">function inOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  inOrder(root-&gt;left);</span><br><span class="line">  console.log(root.val) </span><br><span class="line">  inOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 后序遍历</span><br><span class="line">function postOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  postOrder(root-&gt;left);</span><br><span class="line">  postOrder(root-&gt;right);</span><br><span class="line">  console.log(root.val) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h5 id="二叉查找树-O-logn"><a href="#二叉查找树-O-logn" class="headerlink" title="二叉查找树 O(logn)"></a>二叉查找树 O(logn)</h5><ol>
+<li>要求：对于树中任意一个节点，其左子树的值都要小与这个节点的值，右子树的值都要大于这个节点的值。<br> 平衡时间复杂度：O(logn)</li>
+<li><p>二叉查找树的查找：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function treeSearch(tree,value)&#123;</span><br><span class="line">    if(tree.value === value)&#123;</span><br><span class="line">        return tree.value;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(tree.value&lt;value &amp;&amp; tree.right)&#123;</span><br><span class="line">        return treeSearch(tree.right,value);</span><br><span class="line">    &#125;</span><br><span class="line">    else if(tree.value&gt;value &amp;&amp; tree.left)&#123;</span><br><span class="line">        return treeSearch(tree.left,value);</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二叉树插入操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 假设插入的数据在叶子节点上</span><br><span class="line">function treeInsert(tree,value)&#123;</span><br><span class="line">    var p = tree;</span><br><span class="line">    while (p!=null)&#123;</span><br><span class="line">        if(p.value === value)&#123;</span><br><span class="line">            return &apos;repeat&apos;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(p.value &lt; value)&#123;</span><br><span class="line">            if(!p.right)&#123;</span><br><span class="line">                p.right = &#123;value: value&#125;;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.right;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(p.value &gt; value)&#123;</span><br><span class="line">            if(!p.left)&#123;</span><br><span class="line">                p.left = &#123;value: value&#125;;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二叉树删除操作</p>
+<ul>
+<li>如果该节点没有子节点，删除该节点，并将父节点指向Null。</li>
+<li>如果该节点有一个子节点，删除该节点，并将父节点指向子节点。</li>
+<li>如果该节点有两个及以上子节点，删除该节点，并将右子树中最小节点替换到该位置。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">function treeDelete(tree,value)&#123;</span><br><span class="line">    var p = tree;</span><br><span class="line">    var pp = null; // 父节点</span><br><span class="line">    while (p!=null &amp;&amp; p.value!= value)&#123;</span><br><span class="line">        pp = p;</span><br><span class="line">        if(value &gt; p.value)&#123;</span><br><span class="line">            p = p.right;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if( p == null)&#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    // 没有子节点</span><br><span class="line">    if(!p.left &amp;&amp; !p.right)&#123;</span><br><span class="line">        if(pp.right == p)&#123;</span><br><span class="line">            delete pp.right;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            delete pp.left;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 有一个子节点</span><br><span class="line">    else if(!p.left || !p.right)&#123;</span><br><span class="line">        var child = p.left? p.left:p.right;</span><br><span class="line">        if(pp.right == p)&#123;</span><br><span class="line">            pp.right = child;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            pp.left = child;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 有两个及以上子节点</span><br><span class="line">    else&#123;</span><br><span class="line">        //找右子树中的最小值</span><br><span class="line">        minP = p.right; </span><br><span class="line">        minPP = p;</span><br><span class="line">        while(minP.left !=null)&#123;</span><br><span class="line">            minPP = minP;</span><br><span class="line">            minP = minP.left;</span><br><span class="line">        &#125;</span><br><span class="line">        p.value = minP.value;</span><br><span class="line">        delete minPP.left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>快速查找最大、最小节点、前驱节点、后继结点</p>
+</li>
+<li>中序遍历查找二叉树，可以输出有序的数据，时间复杂度是O(n)</li>
+<li>支持重复数据的二叉查找树：<ul>
+<li>方法一：二叉查找树每个节点不止存储一个数据，存储一个链表，或者是动态扩容的数据。</li>
+<li>方法二：每个节点只存储一个数据，如果重复，将这个值放在右子树，当作大于这个节点处理。查找时，查到值相同节点不停止查找，继续在右子树中查找，知道找到叶子节点。删除时，先找到所有节点，再按正常删除操作处理。</li>
+</ul>
+</li>
+<li>与散列表对比：<ul>
+<li>散列表数据是无序的，如需要有序的数据，先排列；二叉查找树只需要中序遍历，可以在O(n)时间复杂度内，输出有序的数据序列。</li>
+<li>散列表扩容需要耗时比较久，遇到散列冲突时，性能不稳定；平衡二叉树的性能稳定，时间复杂度在O(logn)。</li>
+<li>散列表查找操作时间时常数级，但因为哈希冲突存在，这个常量不一定比logn小，加上哈希函数的耗时。</li>
+<li>散列表的构造比二叉查找树要复杂；平衡二叉查找树只需要考虑平衡性这一个问题。</li>
+</ul>
+</li>
+</ol>
+<h5 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h5><p><img src="https://upload-images.jianshu.io/upload_images/14827444-c0b6e9ab694ca38c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="红黑树"><br>红黑树是一种性能非常稳定的平衡二叉树，它是为了解决普通二叉树在数据更新中，复杂度退化的问题产生的，红黑树的高度近似log2n，所以它是近似平衡，查找、插入、删除的时间复杂度都是O(logn)。</p>
+<ol>
+<li>要求<ul>
+<li>根节点是黑色</li>
+<li>每个叶子节点都是黑色空节点，也就是说叶子节点不存储数据</li>
+<li>任何相邻节点不同时为红色，也就是说，红色节点是被黑色节点隔开</li>
+<li>每个节点，从该节点到达其可达叶子节点所经过的所有路径，经过的黑色节点的数目相同</li>
+</ul>
+</li>
+<li><p>实现</p>
+<ul>
+<li><img src="https://upload-images.jianshu.io/upload_images/14827444-e0d2f799bf77eb78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="左旋&amp;右旋"><br>左旋：围绕某个节点的左旋<br>右旋：围绕某个节点的右旋</li>
+</ul>
+</li>
+<li><p>插入</p>
+<ul>
+<li>插入操作的平衡调整：<br>  规定：插入的节点必须是红色的，而且二叉查找树中新插入的节点都是放在叶子节点上。<ol>
+<li>如果插入节点的父节点是黑色的，那我们什么都不用做，它仍然满足红黑树的定义。</li>
+<li>如果插入的节点是根节点，那我们直接改变它的颜色，把它变成黑色就可以了。</li>
+<li>除此外的情况需要左右旋转、改变颜色来满足规定。</li>
+</ol>
+</li>
+<li>case1: 如果关注节点是 a，它的叔叔节点 d 是红色<br><img src="https://upload-images.jianshu.io/upload_images/14827444-93258d273272c9c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="case1"><ol>
+<li>将关注节点 a 的父节点 b、叔叔节点 d 的颜色都设置成黑色</li>
+<li>将关注节点 a 的祖父节点 c 的颜色设置成红色；</li>
+<li>关注节点变成 a 的祖父节点 c；</li>
+<li>跳到 CASE 2 或者 CASE 3。</li>
+</ol>
+</li>
+<li>case2: 如果关注节点是 a，它的叔叔节点 d 是黑色，关注节点 a是其父节点 b 的右子节点<br><img src="https://static001.geekbang.org/resource/image/44/ad/4480a314f9d83c343b8adbb28b6782ad.jpg" alt="case2"><ol>
+<li>关注节点变成节点 a 的父节点 b；</li>
+<li>围绕新的关注节点b 左旋；</li>
+<li>跳到case3.</li>
+</ol>
+</li>
+<li>case3: 如果关注节点是 a，它的叔叔节点d是黑色，关注节点a 是其父节点b的左子节点<br><img src="https://static001.geekbang.org/resource/image/04/12/04650d9470b1e67899f5b8b7b8e33212.jpg" alt="case3"><ol>
+<li>围绕关注节点 a 的祖父节点 c 右旋;</li>
+<li>将关注节点 a 的父节点 b、兄弟节点 c 的颜色互换。</li>
+<li>调整结束。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>删除<ul>
+<li>Step1: 针对删除节点初步调整，保证整个红黑树在删除这个节点后，依然满足“每个节点，从该节点到达其可达叶子节点所经过的所有路径，经过的黑色节点的数目相同”。<ol>
+<li>case1: 如果要删除的节点是 a，它只有一个子节点 b<br><img src="https://static001.geekbang.org/resource/image/a6/c3/a6c4c347b7cbdf57662bab399ed36cc3.jpg" alt="case1"><ul>
+<li>删除节点 a，并且把节点 b 替换到节点 a 的位置</li>
+<li>节点a只能是黑色，节点b只能是红色。在case1中，将节点b改成黑色。</li>
+<li>不需要二次调整</li>
+</ul>
+</li>
+<li>case2: 如果要删除的节点 a 有两个非空子节点，并且它的后继节点就是a的右子节点c<br><img src="https://static001.geekbang.org/resource/image/48/4e/48e3bd2cdd66cb635f8a4df8fb8fd64e.jpg" alt="case2"><ul>
+<li>如果节点 a 的后继节点就是右子节点 c，那右子节点 c 肯定没有左子树。我们把节点 a 删除，并且将节点 c 替换到节点a的位置。</li>
+<li>把节点c 的颜色设置为节点a的颜色</li>
+<li>如果节点c是黑色，为了不违反最后一条定义，给节点c的右子节点d增加一个黑色。</li>
+<li>此时关注节点变成d ，进行二次调整。</li>
+</ul>
+</li>
+<li>case3: 如果要删除的是节点 a，它有两个非空子节点，并且节点 a 的的后继节点不是右子节点<br><img src="https://static001.geekbang.org/resource/image/b9/29/b93c1fa4de16aee5482424ddf49f3c29.jpg" alt="case3"><ul>
+<li>找到后继节点 d，并将它删除，删除后继节点 d 的过程参照case1</li>
+<li>将节点 a 替换成后继节点 d</li>
+<li>把节点 d 的颜色设置为跟节点 a 相同的颜色</li>
+<li>如果节点 d 是黑色，为了不违反红黑树的最后一条定义，我们给节点d的右子节点c多加一个黑色</li>
+<li>此时关注节点变成c，进行二次调整。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>Step2: 二次调整，以满足“即不存在相邻的两个红色节点“<ol>
+<li>case1: 如果关注节点是 a，它的兄弟节点 c 是红色的<br><img src="https://static001.geekbang.org/resource/image/ac/91/ac76d78c064a2486e2a5b4c4903acb91.jpg" alt="case1"><ul>
+<li>围绕关注节点 a 的父节点 b 左旋</li>
+<li>关注节点 a 的父节点 b 和祖父节点 c 交换颜色</li>
+<li>关注节点不变</li>
+<li>继续从四种情况中选择适合的规则来调整</li>
+</ul>
+</li>
+<li>case2: 如果关注节点是 a，它的兄弟节点 c 是黑色的，并且节点 c的左右子节点 d、e 都是黑色的<br><img src="https://static001.geekbang.org/resource/image/ec/ec/eca118d673c607eb2b103f3476fb24ec.jpg" alt="case2"><ul>
+<li>将关注节点 a 的兄弟节点 c 的颜色变成红色</li>
+<li>从关注节点 a 中去掉一个黑色，这个时候节点 a 就是单纯的红色/黑色</li>
+<li>给关注节点 a 的父节点b增加一个黑色</li>
+<li>关注节点从 a 变成其父节点 b</li>
+<li>继续从四种情况中选择适合的规则来调整</li>
+</ul>
+</li>
+<li>case3: 如果关注节点是 a，它的兄弟节点 c 是黑色，c 的左子节点d 是红色，c的右子节点d是黑色<br><img src="https://static001.geekbang.org/resource/image/44/af/44075213100edd70315e1492422c92af.jpg" alt="case3"><ul>
+<li>围绕关注节点 a 的兄弟节点 c 右旋</li>
+<li>节点 c 和节点 d 交换颜色</li>
+<li>关注节点不变</li>
+<li>继续从四种情况中选择适合的规则来调整</li>
+</ul>
+</li>
+<li>case4: 如果关注节点 a 的兄弟节点 c 是黑色的，并且 c 的右子节点是红色<br><img src="https://static001.geekbang.org/resource/image/5f/44/5f73f61bf77a7f2bb75f168cf432ec44.jpg" alt="case4"><ul>
+<li>围绕关注节点 a 的父节点 b 左旋</li>
+<li>将关注节点 a 的兄弟节点 c 的颜色，跟关注节点 a 的父节点 b 设置成相同的颜色</li>
+<li>将关注节点 a 的父节点 b 的颜色设置为黑色</li>
+<li>从关注节点 a 中去掉一个黑色，节点 a 就变成了单纯的红色/黑色</li>
+<li>将关注节点 a 的叔叔节点 e 设置为黑色</li>
+<li>调整结束</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h4><p>使用递归树分析时间复杂度<br><img src="https://static001.geekbang.org/resource/image/1d/a3/1d9648b7f43e430473d76d24803159a3.jpg" alt="递归树"></p>
+<ol>
+<li><p>归并排序递归树<br><img src="https://static001.geekbang.org/resource/image/c6/d0/c66bfc3d02d3b7b8f64c208bf4c948d0.jpg" alt="归并排序递归树"></p>
+<ul>
+<li>每一层耗时的合并操作耗时n</li>
+<li>满二叉树的高度是logn</li>
+<li>所以时间复杂度是 O(nlogn)</li>
+</ul>
+</li>
+<li><p>快排递归树<br><img src="https://static001.geekbang.org/resource/image/44/43/44972a3531dae0b7a0ccc935bc13f243.jpg" alt="快排递归树"></p>
+<ul>
+<li>假设每次分区都是1:9</li>
+<li>每层操作数据之和为n</li>
+<li>根节点到叶子节点最短路径是log(10)n，最长路径是log(9/10)n，忽略常数，即logn</li>
+<li>所以时间复杂度是O(nlogn)</li>
+</ul>
+</li>
+<li><p>斐波那契数列的递归树</p>
+<pre><code>function feibo(n) {
+if (n == 1) return 1;
+if (n == 2) return 2;
+return feibo(n-1) + feibo(n-2);
+}
+</code></pre><p><img src="https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg" alt="斐波那契数列的递归树"></p>
+<ul>
+<li>根节点到叶子节点最长路径是n， 最短路径是n/2</li>
+<li>如果是n，总耗时就是 2^n - 1； 如果是n/2 总耗时就是 2^(n/2) -1;</li>
+<li>所以时间复杂度是O(2^n) ~ O(2^(n/2))</li>
+</ul>
+</li>
+<li><p>全排列的时间复杂度<br><img src="https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg" alt="全排列"></p>
+<ul>
+<li>总和：n + n<em>(n-1) + n</em>(n-1)<em>(n-2) +… + n</em>(n-1)<em>(n-2)</em>…<em>2</em>1 = O(n!) ~ O(n*n!)</li>
+</ul>
+</li>
+</ol>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2018/12/10/数据结构与算法/" rel="next" title="数据结构与算法">
+                <i class="fa fa-chevron-left"></i> 数据结构与算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg" alt="Angel Teng">
+            
+              <p class="site-author-name" itemprop="name">Angel Teng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/category/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">1.</span> <span class="nav-text">二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#二叉查找树-O-logn"><span class="nav-number">1.1.</span> <span class="nav-text">二叉查找树 O(logn)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#红黑树"><span class="nav-number">1.2.</span> <span class="nav-text">红黑树</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#递归树"><span class="nav-number">2.</span> <span class="nav-text">递归树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">3.</span> <span class="nav-text">堆</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

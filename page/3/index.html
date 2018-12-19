@@ -229,6 +229,163 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/14/Python项目相关路径配置/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/14/Python项目相关路径配置/" itemprop="url">Python项目相关路径配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-14T09:14:37+08:00">
+                2018-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>python相关环境变量</li>
+</ol>
+<ul>
+<li>PYTHONPATH : PYTHONPATH是Python搜索路径，默认我们import的模块都会从PYTHONPATH里面寻找。</li>
+<li>PYTHONSTARTUP: Python启动后，先寻找PYTHONSTARTUP环境变量，然后执行此变量指定的文件中的代码。</li>
+<li>PYTHONCASEOK: 加入PYTHONCASEOK的环境变量, 就会使python导入模块的时候不区分大小写.</li>
+<li>PYTHONHOME: 另一种模块搜索路径。它通常内嵌于的PYTHONSTARTUP或PYTHONPATH目录中，使得两个模块库更容易切换。</li>
+</ul>
+<ol start="2">
+<li><p>配置LD_LIBRARY_PATH<br><a href="https://www.cnblogs.com/icxy/p/7943996.html" target="_blank" rel="noopener">LD_LIBRARY_PATH is used by your program to search for directories containing the libraries after it has been successfully compiled and linked.</a><br>执行二进制文件时的动态库搜索路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; vim  ~/.bashrc</span><br><span class="line">......</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib</span><br><span class="line">&gt;&gt;&gt; source ~/.bashrc</span><br><span class="line">&gt;&gt;&gt; 重启进程</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置PYTHONPATH<br>Python模块路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; vim /etc/profile</span><br><span class="line">.......</span><br><span class="line">source /apps/sh/flask_local_com.sh</span><br><span class="line">&gt;&gt;&gt; vim /apps/sh/flask_local_com.sh</span><br><span class="line">.......</span><br><span class="line">export FLASK_DEBUG=1;</span><br><span class="line">export PYTHONPATH=/vagrant/project/libs:$PYTHONPATH;</span><br><span class="line">&gt;&gt;&gt; source /etc/profile</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/13/flask-使用/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1657,148 +1814,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/02/可乐项目/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/02/可乐项目/" itemprop="url">可乐项目</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-02T17:20:35+08:00">
-                2018-11-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>* 用于展开/收集元组， ** 用于展开/收集字典</li>
-<li>request类库：<a href="http://docs.python-requests.org/zh_CN/latest/" target="_blank" rel="noopener">http://docs.python-requests.org/zh_CN/latest/</a></li>
-<li><p>计算图片MD5，如果MD5一致，判断为同一张图片</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def calMD5(url):</span><br><span class="line">  r = requests.get(url)</span><br><span class="line">  imgBytes = r.content </span><br><span class="line">  hl = hashlib.md5()</span><br><span class="line">  hl.update(imgBytes)</span><br><span class="line">  re = hl.hexdigest()</span><br><span class="line">  return re</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>异步HTTP库aiohttp: <a href="https://hubertroy.gitbooks.io/aiohttp-chinese-documentation/content/" target="_blank" rel="noopener">https://hubertroy.gitbooks.io/aiohttp-chinese-documentation/content/</a></p>
-<ul>
-<li>配置ssl证书：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sslcontext = ssl.create_default_context(cafile=&apos;/test.crt&apos;)</span><br><span class="line">async with aiohttp.ClientSession() as session:</span><br><span class="line">    async with session.post(&apos;/&apos;,data=&apos;&apos;,ssl_context=sslcontext) as r:</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>协程：<a href="https://docs.python.org/3/library/asyncio-task.html" target="_blank" rel="noopener">https://docs.python.org/3/library/asyncio-task.html</a></p>
-<ul>
-<li>控制协程并发数量：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sema = asyncio.Semaphore(2)</span><br><span class="line">with (await sema):</span><br><span class="line">    sslcontext........</span><br><span class="line">    async ..........</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/blog/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="extend next" rel="next" href="/blog/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1846,7 +1866,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

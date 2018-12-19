@@ -115,7 +115,12 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-93258d273272c9c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/44/ad/4480a314f9d83c343b8adbb28b6782ad.jpg">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/04/12/04650d9470b1e67899f5b8b7b8e33212.jpg">
-<meta property="og:updated_time" content="2018-12-18T09:22:35.000Z">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/a6/c3/a6c4c347b7cbdf57662bab399ed36cc3.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/48/4e/48e3bd2cdd66cb635f8a4df8fb8fd64e.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/b9/29/b93c1fa4de16aee5482424ddf49f3c29.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/ac/91/ac76d78c064a2486e2a5b4c4903acb91.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/ec/ec/eca118d673c607eb2b103f3476fb24ec.jpg">
+<meta property="og:updated_time" content="2018-12-18T10:14:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构与算法">
 <meta name="twitter:description" content="名词 大O表示法：指代码执行时间随数据规模增长的变化趋势，所以，也叫作渐进时间复杂度，简称时间复杂度。 空间复杂度：空间复杂度全称就是渐进空间复杂度，表示算法的存储空间与数据规模之间的增长关系。 平均时间复杂度：即加权平均时间复杂度或者期望时间复杂度。 均摊时间复杂度：就是一种特殊的平均时间复杂度，看是否能将较高时间复杂度那次操作的耗时，平摊到其他那些时间复杂度低的情况上。  时间复杂度分析 只">
@@ -740,8 +745,54 @@
 </li>
 </ul>
 </li>
-<li>删除</li>
+<li>删除<ul>
+<li>Step1: 针对删除节点初步调整，保证整个红黑树在删除这个节点后，依然满足“每个节点，从该节点到达其可达叶子节点所经过的所有路径，经过的黑色节点的数目相同”。<ol>
+<li>case1: 如果要删除的节点是 a，它只有一个子节点 b<br><img src="https://static001.geekbang.org/resource/image/a6/c3/a6c4c347b7cbdf57662bab399ed36cc3.jpg" alt="case1"><ul>
+<li>删除节点 a，并且把节点 b 替换到节点 a 的位置</li>
+<li>节点a只能是黑色，节点b只能是红色。在case1中，将节点b改成黑色。</li>
+<li>不需要二次调整</li>
+</ul>
+</li>
+<li>case2: 如果要删除的节点 a 有两个非空子节点，并且它的后继节点就是a的右子节点c<br><img src="https://static001.geekbang.org/resource/image/48/4e/48e3bd2cdd66cb635f8a4df8fb8fd64e.jpg" alt="case2"><ul>
+<li>如果节点 a 的后继节点就是右子节点 c，那右子节点 c 肯定没有左子树。我们把节点 a 删除，并且将节点 c 替换到节点a的位置。</li>
+<li>把节点c 的颜色设置为节点a的颜色</li>
+<li>如果节点c是黑色，为了不违反最后一条定义，给节点c的右子节点d增加一个黑色。</li>
+<li>此时关注节点变成d ，进行二次调整。</li>
+</ul>
+</li>
+<li>case3: 如果要删除的是节点 a，它有两个非空子节点，并且节点 a 的的后继节点不是右子节点<br><img src="https://static001.geekbang.org/resource/image/b9/29/b93c1fa4de16aee5482424ddf49f3c29.jpg" alt="case3"><ul>
+<li>找到后继节点 d，并将它删除，删除后继节点 d 的过程参照case1</li>
+<li>将节点 a 替换成后继节点 d</li>
+<li>把节点 d 的颜色设置为跟节点 a 相同的颜色</li>
+<li>如果节点 d 是黑色，为了不违反红黑树的最后一条定义，我们给节点d的右子节点c多加一个黑色</li>
+<li>此时关注节点变成c，进行二次调整。</li>
+</ul>
+</li>
 </ol>
+</li>
+<li>Step2: 二次调整，以满足“即不存在相邻的两个红色节点“<ol>
+<li>case1: 如果关注节点是 a，它的兄弟节点 c 是红色的<br><img src="https://static001.geekbang.org/resource/image/ac/91/ac76d78c064a2486e2a5b4c4903acb91.jpg" alt="case1"><ul>
+<li>围绕关注节点 a 的父节点 b 左旋</li>
+<li>关注节点 a 的父节点 b 和祖父节点 c 交换颜色</li>
+<li>关注节点不变</li>
+<li>继续从四种情况中选择适合的规则来调整</li>
+</ul>
+</li>
+<li>case2: 如果关注节点是 a，它的兄弟节点 c 是黑色的，并且节点 c的左右子节点 d、e 都是黑色的<br><img src="https://static001.geekbang.org/resource/image/ec/ec/eca118d673c607eb2b103f3476fb24ec.jpg" alt="case2"><ul>
+<li>将关注节点 a 的兄弟节点 c 的颜色变成红色</li>
+<li>从关注节点 a 中去掉一个黑色，这个时候节点 a 就是单纯的红色/黑色</li>
+<li>给关注节点 a 的父节点b增加一个黑色</li>
+<li>关注节点从 a 变成其父节点 b</li>
+<li>继续从四种情况中选择适合的规则来调整</li>
+</ul>
+</li>
+<li>case3: </li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p>极客时间版权所有: <a href="https://time.geekbang.org/column/article/68976?code=dywldOC0YOf1iEE9qMZlHT8Yv8MdAXs9bSGuF1qs7mQ%3D" target="_blank" rel="noopener">https://time.geekbang.org/column/article/68976?code=dywldOC0YOf1iEE9qMZlHT8Yv8MdAXs9bSGuF1qs7mQ%3D</a></p>
 
       
     </div>
@@ -781,6 +832,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2018/12/19/数据结构与算法（二）/" rel="prev" title="数据结构与算法（二）">
+                数据结构与算法（二） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -859,7 +914,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
