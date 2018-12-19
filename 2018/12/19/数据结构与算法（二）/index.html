@@ -107,7 +107,13 @@
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/1d/a3/1d9648b7f43e430473d76d24803159a3.jpg">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/c6/d0/c66bfc3d02d3b7b8f64c208bf4c948d0.jpg">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/44/43/44972a3531dae0b7a0ccc935bc13f243.jpg">
-<meta property="og:updated_time" content="2018-12-19T10:10:29.000Z">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/4d/1e/4d349f57947df6590a2dd1364c3b0b1e.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/e3/0e/e3744661e038e4ae570316bc862b2c0e.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/11/60/110d6f442e718f86d2a1d16095513260.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/50/1e/50c1e6bc6fe68378d0a66bdccfff441e.jpg">
+<meta property="og:updated_time" content="2018-12-19T10:15:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构与算法（二）">
 <meta name="twitter:description" content="二叉树 概念 节点的高度：结点到叶子结点的最长路径 节点的深度：根节点到这个结点所经历边的个数 节点的层级：结点的深度+1 树的高度：根节点的高度     - 满二叉树：编号2，叶子节点都在最底层，除叶子节点外，每个节点都有左右两个子节点。 - 完全二叉树：编号3，叶子节点都在最下层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大。  存储二叉树  链表存储法 顺序存">
@@ -527,40 +533,44 @@
 </ul>
 </li>
 <li><p>斐波那契数列的递归树</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">function feibo(n) &#123;</span><br><span class="line">  if (n == 1) return 1;</span><br><span class="line">  if (n == 2) return 2;</span><br><span class="line">  return feibo(n-1) + feibo(n-2);</span><br><span class="line">&#125;</span><br><span class="line">```    </span><br><span class="line">![斐波那契数列的递归树](https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg)</span><br><span class="line">    - 根节点到叶子节点最长路径是n， 最短路径是n/2</span><br><span class="line">    - 如果是n，总耗时就是 2^n - 1； 如果是n/2 总耗时就是 2^(n/2) -1;</span><br><span class="line">    - 所以时间复杂度是O(2^n) ~ O(2^(n/2))</span><br><span class="line"></span><br><span class="line">4. 全排列的时间复杂度</span><br><span class="line">![全排列](https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg)</span><br><span class="line">    - 总和：n + n*(n-1) + n*(n-1)*(n-2) +... + n*(n-1)*(n-2)*...*2*1 = O(n!) ~ O(n*n!)</span><br><span class="line"></span><br><span class="line">#### 堆</span><br><span class="line">1. 定义：</span><br><span class="line">    - 堆是个完全二叉树。</span><br><span class="line">    - 堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值，称为“大顶堆”（或小顶堆）。</span><br><span class="line">2. 实现</span><br><span class="line">    - 用数组存储堆</span><br><span class="line">    ![堆](https://static001.geekbang.org/resource/image/4d/1e/4d349f57947df6590a2dd1364c3b0b1e.jpg)</span><br><span class="line">    - 插入元素</span><br><span class="line">    堆化：顺着节点所在的路径，向上或者向下，对比，然后交换。</span><br><span class="line">    ![堆化](https://static001.geekbang.org/resource/image/e3/0e/e3744661e038e4ae570316bc862b2c0e.jpg)</span><br><span class="line">    - 删除堆顶元素</span><br><span class="line">    把最后一个节点放到堆顶，然后利用父子节点对比方法，对于不满足父子节点大小关系的，互换位置，重复该过程直到满足所有大小关系。</span><br><span class="line">    ![从上往下的堆化](https://static001.geekbang.org/resource/image/11/60/110d6f442e718f86d2a1d16095513260.jpg)</span><br><span class="line"></span><br><span class="line">3. 基于堆实现排序</span><br><span class="line">    - 时间复杂度：O(nlogn)</span><br><span class="line">    - Step1: 建堆：</span><br><span class="line">    ![建堆](https://static001.geekbang.org/resource/image/50/1e/50c1e6bc6fe68378d0a66bdccfff441e.jpg)</span><br><span class="line">    从下往上的堆化</span><br></pre></td></tr></table></figure>
-<p> function buildHeap(a, n){</p>
-<pre><code>// 对于完全二叉树来说，下标从n/2 + 1 到 n的节点都是叶子节点
-for(var i = n/2;i&gt;=1; --i){
-    heapify(a,n,i)
-}
-</code></pre><p> }<br> function heapify(a,n,i){</p>
-<pre><code>while (true){
-    var maxPos = i;
-    if(i*2 &lt;= n &amp;&amp; a[i] &lt; a[i*2]){
-        maxPos = i*2
-    }
-    if(i*2+1 &lt;= n &amp;&amp; a[maxPos] &lt; a[i*2+1]){
-        maxPos = i*2+1;
-    } 
-    if(maxPos == i) break;
-    var tmp = a[i];
-    a[i] = a[maxPos];
-    a[maxPos] = tmp;
-    i = maxPos
-}
-</code></pre><p> }</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">时间复杂度：O(n)</span><br><span class="line"></span><br><span class="line">- Step2: 排序：</span><br><span class="line">每次都将最大的元素放到后面</span><br></pre></td></tr></table></figure>
-<p> function sort(a){</p>
-<pre><code>buildHeap(a, a.length);
-var k = a.length-1;
-while (k&gt;1){
-    tmp = a[k];
-    a[k] = a[1];
-    a[1] = tmp;
-    k--; //除去刚刚交换到末尾的元素，进行堆化
-    heapify(a,k,1);
-}
-</code></pre><p> }<br> <code>`</code><br> 时间复杂度：O(nlogn)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function feibo(n) &#123;</span><br><span class="line">if (n == 1) return 1;</span><br><span class="line">if (n == 2) return 2;</span><br><span class="line">return feibo(n-1) + feibo(n-2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg" alt="斐波那契数列的递归树"></p>
+<pre><code>- 根节点到叶子节点最长路径是n， 最短路径是n/2
+- 如果是n，总耗时就是 2^n - 1； 如果是n/2 总耗时就是 2^(n/2) -1;
+- 所以时间复杂度是O(2^n) ~ O(2^(n/2))
+</code></pre><ol start="4">
+<li>全排列的时间复杂度<br><img src="https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg" alt="全排列"><ul>
+<li>总和：n + n<em>(n-1) + n</em>(n-1)<em>(n-2) +… + n</em>(n-1)<em>(n-2)</em>…<em>2</em>1 = O(n!) ~ O(n*n!)</li>
+</ul>
+</li>
+</ol>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
+<li>定义：<ul>
+<li>堆是个完全二叉树。</li>
+<li>堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值，称为“大顶堆”（或小顶堆）。</li>
+</ul>
+</li>
+<li><p>实现</p>
+<ul>
+<li>用数组存储堆<br><img src="https://static001.geekbang.org/resource/image/4d/1e/4d349f57947df6590a2dd1364c3b0b1e.jpg" alt="堆"></li>
+<li>插入元素<br>堆化：顺着节点所在的路径，向上或者向下，对比，然后交换。<br><img src="https://static001.geekbang.org/resource/image/e3/0e/e3744661e038e4ae570316bc862b2c0e.jpg" alt="堆化"></li>
+<li>删除堆顶元素<br>把最后一个节点放到堆顶，然后利用父子节点对比方法，对于不满足父子节点大小关系的，互换位置，重复该过程直到满足所有大小关系。<br><img src="https://static001.geekbang.org/resource/image/11/60/110d6f442e718f86d2a1d16095513260.jpg" alt="从上往下的堆化"></li>
+</ul>
+</li>
+<li><p>基于堆实现排序</p>
+<ul>
+<li>时间复杂度：O(nlogn)</li>
+<li><p>Step1: 建堆：<br><img src="https://static001.geekbang.org/resource/image/50/1e/50c1e6bc6fe68378d0a66bdccfff441e.jpg" alt="建堆"><br>从下往上的堆化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function buildHeap(a, n)&#123;</span><br><span class="line">    // 对于完全二叉树来说，下标从n/2 + 1 到 n的节点都是叶子节点</span><br><span class="line">    for(var i = n/2;i&gt;=1; --i)&#123;</span><br><span class="line">        heapify(a,n,i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">function heapify(a,n,i)&#123;</span><br><span class="line">    while (true)&#123;</span><br><span class="line">        var maxPos = i;</span><br><span class="line">        if(i*2 &lt;= n &amp;&amp; a[i] &lt; a[i*2])&#123;</span><br><span class="line">            maxPos = i*2</span><br><span class="line">        &#125;</span><br><span class="line">        if(i*2+1 &lt;= n &amp;&amp; a[maxPos] &lt; a[i*2+1])&#123;</span><br><span class="line">            maxPos = i*2+1;</span><br><span class="line">        &#125; </span><br><span class="line">        if(maxPos == i) break;</span><br><span class="line">        var tmp = a[i];</span><br><span class="line">        a[i] = a[maxPos];</span><br><span class="line">        a[maxPos] = tmp;</span><br><span class="line">        i = maxPos</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：O(n)</p>
+</li>
+<li><p>Step2: 排序：<br>每次都将最大的元素放到后面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function sort(a)&#123;</span><br><span class="line">    buildHeap(a, a.length);</span><br><span class="line">    var k = a.length-1;</span><br><span class="line">    while (k&gt;1)&#123;</span><br><span class="line">        tmp = a[k];</span><br><span class="line">        a[k] = a[1];</span><br><span class="line">        a[1] = tmp;</span><br><span class="line">        k--; //除去刚刚交换到末尾的元素，进行堆化</span><br><span class="line">        heapify(a,k,1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：O(nlogn)</p>
+</li>
+</ul>
 </li>
 </ol>
 <h5 id="快速排序与堆排序对比"><a href="#快速排序与堆排序对比" class="headerlink" title="快速排序与堆排序对比"></a>快速排序与堆排序对比</h5><ol>
@@ -757,7 +767,7 @@ while (k&gt;1){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">1.</span> <span class="nav-text">二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#二叉查找树-O-logn"><span class="nav-number">1.1.</span> <span class="nav-text">二叉查找树 O(logn)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#红黑树"><span class="nav-number">1.2.</span> <span class="nav-text">红黑树</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#递归树"><span class="nav-number">2.</span> <span class="nav-text">递归树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用递归树分析时间复杂度"><span class="nav-number">2.1.</span> <span class="nav-text">使用递归树分析时间复杂度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#快速排序与堆排序对比"><span class="nav-number">2.2.</span> <span class="nav-text">快速排序与堆排序对比</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#堆的应用"><span class="nav-number">2.3.</span> <span class="nav-text">堆的应用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">1.</span> <span class="nav-text">二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#二叉查找树-O-logn"><span class="nav-number">1.1.</span> <span class="nav-text">二叉查找树 O(logn)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#红黑树"><span class="nav-number">1.2.</span> <span class="nav-text">红黑树</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#递归树"><span class="nav-number">2.</span> <span class="nav-text">递归树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用递归树分析时间复杂度"><span class="nav-number">2.1.</span> <span class="nav-text">使用递归树分析时间复杂度</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">3.</span> <span class="nav-text">堆</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#快速排序与堆排序对比"><span class="nav-number">3.1.</span> <span class="nav-text">快速排序与堆排序对比</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#堆的应用"><span class="nav-number">3.2.</span> <span class="nav-text">堆的应用</span></a></li></ol></li></ol></div>
             
 
           </div>
