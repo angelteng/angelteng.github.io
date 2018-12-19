@@ -506,25 +506,60 @@
 </ul>
 </li>
 <li><p>斐波那契数列的递归树</p>
-<pre><code>function feibo(n) {
-if (n == 1) return 1;
-if (n == 2) return 2;
-return feibo(n-1) + feibo(n-2);
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">function feibo(n) &#123;</span><br><span class="line">  if (n == 1) return 1;</span><br><span class="line">  if (n == 2) return 2;</span><br><span class="line">  return feibo(n-1) + feibo(n-2);</span><br><span class="line">&#125;</span><br><span class="line">```    </span><br><span class="line">![斐波那契数列的递归树](https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg)</span><br><span class="line">    - 根节点到叶子节点最长路径是n， 最短路径是n/2</span><br><span class="line">    - 如果是n，总耗时就是 2^n - 1； 如果是n/2 总耗时就是 2^(n/2) -1;</span><br><span class="line">    - 所以时间复杂度是O(2^n) ~ O(2^(n/2))</span><br><span class="line"></span><br><span class="line">4. 全排列的时间复杂度</span><br><span class="line">![全排列](https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg)</span><br><span class="line">    - 总和：n + n*(n-1) + n*(n-1)*(n-2) +... + n*(n-1)*(n-2)*...*2*1 = O(n!) ~ O(n*n!)</span><br><span class="line"></span><br><span class="line">#### 堆</span><br><span class="line">1. 定义：</span><br><span class="line">    - 堆是个完全二叉树。</span><br><span class="line">    - 堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值，称为“大顶堆”（或小顶堆）。</span><br><span class="line">2. 实现</span><br><span class="line">    - 用数组存储堆</span><br><span class="line">    ![堆](https://static001.geekbang.org/resource/image/4d/1e/4d349f57947df6590a2dd1364c3b0b1e.jpg)</span><br><span class="line">    - 插入元素</span><br><span class="line">    堆化：顺着节点所在的路径，向上或者向下，对比，然后交换。</span><br><span class="line">    ![堆化](https://static001.geekbang.org/resource/image/e3/0e/e3744661e038e4ae570316bc862b2c0e.jpg)</span><br><span class="line">    - 删除堆顶元素</span><br><span class="line">    把最后一个节点放到堆顶，然后利用父子节点对比方法，对于不满足父子节点大小关系的，互换位置，重复该过程直到满足所有大小关系。</span><br><span class="line">    ![从上往下的堆化](https://static001.geekbang.org/resource/image/11/60/110d6f442e718f86d2a1d16095513260.jpg)</span><br><span class="line"></span><br><span class="line">3. 基于堆实现排序</span><br><span class="line">    - 时间复杂度：O(nlogn)</span><br><span class="line">    - Step1: 建堆：</span><br><span class="line">    ![建堆](https://static001.geekbang.org/resource/image/50/1e/50c1e6bc6fe68378d0a66bdccfff441e.jpg)</span><br><span class="line">    从下往上的堆化</span><br></pre></td></tr></table></figure>
+<p> function buildHeap(a, n){</p>
+<pre><code>// 对于完全二叉树来说，下标从n/2 + 1 到 n的节点都是叶子节点
+for(var i = n/2;i&gt;=1; --i){
+    heapify(a,n,i)
 }
-</code></pre><p><img src="https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg" alt="斐波那契数列的递归树"></p>
-<ul>
-<li>根节点到叶子节点最长路径是n， 最短路径是n/2</li>
-<li>如果是n，总耗时就是 2^n - 1； 如果是n/2 总耗时就是 2^(n/2) -1;</li>
-<li>所以时间复杂度是O(2^n) ~ O(2^(n/2))</li>
-</ul>
-</li>
-<li><p>全排列的时间复杂度<br><img src="https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg" alt="全排列"></p>
-<ul>
-<li>总和：n + n<em>(n-1) + n</em>(n-1)<em>(n-2) +… + n</em>(n-1)<em>(n-2)</em>…<em>2</em>1 = O(n!) ~ O(n*n!)</li>
-</ul>
+</code></pre><p> }<br> function heapify(a,n,i){</p>
+<pre><code>while (true){
+    var maxPos = i;
+    if(i*2 &lt;= n &amp;&amp; a[i] &lt; a[i*2]){
+        maxPos = i*2
+    }
+    if(i*2+1 &lt;= n &amp;&amp; a[maxPos] &lt; a[i*2+1]){
+        maxPos = i*2+1;
+    } 
+    if(maxPos == i) break;
+    var tmp = a[i];
+    a[i] = a[maxPos];
+    a[maxPos] = tmp;
+    i = maxPos
+}
+</code></pre><p> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">时间复杂度：O(n)</span><br><span class="line"></span><br><span class="line">- Step2: 排序：</span><br><span class="line">每次都将最大的元素放到后面</span><br></pre></td></tr></table></figure>
+<p> function sort(a){</p>
+<pre><code>buildHeap(a, a.length);
+var k = a.length-1;
+while (k&gt;1){
+    tmp = a[k];
+    a[k] = a[1];
+    a[1] = tmp;
+    k--; //除去刚刚交换到末尾的元素，进行堆化
+    heapify(a,k,1);
+}
+</code></pre><p> }<br> <code>`</code><br> 时间复杂度：O(nlogn)</p>
 </li>
 </ol>
-<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4>
+<h5 id="快速排序与堆排序对比"><a href="#快速排序与堆排序对比" class="headerlink" title="快速排序与堆排序对比"></a>快速排序与堆排序对比</h5><ol>
+<li>堆排序数据访问没有快排友好</li>
+<li>对于同样的数据，在排序中，堆排序交换的次数多于快排</li>
+</ol>
+<h5 id="堆的应用"><a href="#堆的应用" class="headerlink" title="堆的应用"></a>堆的应用</h5><ol>
+<li>优先级队列<ul>
+<li>合并有序小文件：<br>  假设我们有 100 个小文件，每个文件的大小是 100MB，每个文件中存储的都是有序的字符串。我们希望将这些 100 个小文件合并成一个有序的大文件。我们从这 100 个文件中，各取第一个字符串，放入数组中，然后比较大小，如果每次都遍历数据找出最小的一个，显然比较慢。使用堆，小文件中取出来的字符串放入到小顶堆中，那堆顶的元素，也就是优先级队列队首的元素，就是最小的字符串。</li>
+<li>高性能定时器：<br>  按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（也就是小顶堆的堆顶）存储的是最先执行的任务。<br>  定时器拿队首任务的执行时间点，与当前时间点相减，得到一个时间间隔T。定时器就设定在T秒后，执行这个任务。<br>  这样就不用每个1s轮询一次。</li>
+</ul>
+</li>
+<li>利用堆求Top K<ul>
+<li>静态数据：<br>  维护一个大小为K的小顶堆，遍历静态数据数组n，如果元素比堆顶大，删除堆顶元素，插入该元素。</li>
+<li>动态数据：<br>  维护一个大小为K的小顶堆，当有新数据时，如果元素比堆顶大，删除堆顶元素，插入该元素。</li>
+</ul>
+</li>
+<li>利用堆求中位数</li>
+</ol>
+
           
         
       
