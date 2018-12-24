@@ -568,6 +568,43 @@
 </ul>
 </li>
 </ol>
+<h4 id="图"><a href="#图" class="headerlink" title="图"></a>图</h4><ol>
+<li>概念<ul>
+<li>无向图：<br><img src="https://static001.geekbang.org/resource/image/df/af/df85dc345a9726cab0338e68982fd1af.jpg" alt="无向图"></li>
+<li>有向图：<br><img src="https://static001.geekbang.org/resource/image/c3/96/c31759a37d8a8719841f347bd479b796.jpg" alt="有向图">   </li>
+<li>带权图：<br><img src="https://static001.geekbang.org/resource/image/55/e8/55d7e4806dc47950ae098d959b03ace8.jpg" alt="带权图">  </li>
+<li>顶点</li>
+<li>边</li>
+<li>度：跟顶点相连接的边的个数</li>
+<li>入度：多少个边指向这个顶点。出度：多少个边以这个顶点为起点。</li>
+</ul>
+</li>
+<li>存储<ul>
+<li>邻接矩阵<br><img src="https://static001.geekbang.org/resource/image/62/d2/625e7493b5470e774b5aa91fb4fdb9d2.jpg" alt="邻接矩阵"><br>简单直接，浪费空间。</li>
+<li>邻接表<br><img src="https://static001.geekbang.org/resource/image/03/94/039bc254b97bd11670cdc4bf2a8e1394.jpg" alt="邻接表"><br>节省空间，使用耗时<br>可以将链表改成平衡二叉树、红黑树提升效率。</li>
+</ul>
+</li>
+</ol>
+<h4 id="广度优先算法、深度优先算法"><a href="#广度优先算法、深度优先算法" class="headerlink" title="广度优先算法、深度优先算法"></a>广度优先算法、深度优先算法</h4><ol>
+<li>基于“图”这种数据结构</li>
+<li><p>广度优先算法(Breadth-First-Search)<br><img src="https://static001.geekbang.org/resource/image/00/ea/002e9e54fb0d4dbf5462226d946fa1ea.jpg" alt="广度优先算法"></p>
+<ul>
+<li>先查找离起始顶点最近的，然后是次近的，依次往外搜索。</li>
+<li>时间复杂度：O(E)，E是边的个数</li>
+<li>空间复杂度：O(V)，V是顶点的个数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public void bfs(int s, int t) &#123;</span><br><span class="line">    if (s == t) return;</span><br><span class="line">    boolean[] visited = new boolean[v];</span><br><span class="line">    visited[s]=true;</span><br><span class="line">    Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();</span><br><span class="line">    queue.add(s);</span><br><span class="line">    int[] prev = new int[v];</span><br><span class="line">    for (int i = 0; i &lt; v; ++i) &#123;</span><br><span class="line">        prev[i] = -1;</span><br><span class="line">    &#125;</span><br><span class="line">    while (queue.size() != 0) &#123;</span><br><span class="line">        int w = queue.poll();</span><br><span class="line">    for (int i = 0; i &lt; adj[w].size(); ++i) &#123;</span><br><span class="line">        int q = adj[w].get(i);</span><br><span class="line">        if (!visited[q]) &#123;</span><br><span class="line">            prev[q] = w;</span><br><span class="line">            if (q == t) &#123;</span><br><span class="line">            print(prev, s, t);</span><br><span class="line">            return;</span><br><span class="line">            &#125;</span><br><span class="line">            visited[q] = true;</span><br><span class="line">            queue.add(q);</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void print(int[] prev, int s, int t) &#123; // 递归打印 s-&gt;t 的路径</span><br><span class="line">    if (prev[t] != -1 &amp;&amp; t != s) &#123;</span><br><span class="line">        print(prev, s, prev[t]);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.print(t + &quot; &quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>深度优先算法(Depth-Firsh-Search)<br><img src="https://static001.geekbang.org/resource/image/87/85/8778201ce6ff7037c0b3f26b83efba85.jpg" alt="深度优先算法"></p>
+<ul>
+<li>时间复杂度 O(E)，E是边数</li>
+<li>空间复杂度 O(V), V是顶点数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">boolean found = false; // 全局变量或者类成员变量</span><br><span class="line"></span><br><span class="line">public void dfs(int s, int t) &#123;</span><br><span class="line">found = false;</span><br><span class="line">boolean[] visited = new boolean[v];</span><br><span class="line">int[] prev = new int[v];</span><br><span class="line">for (int i = 0; i &lt; v; ++i) &#123;</span><br><span class="line">    prev[i] = -1;</span><br><span class="line">&#125;</span><br><span class="line">recurDfs(s, t, visited, prev);</span><br><span class="line">print(prev, s, t);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void recurDfs(int w, int t, boolean[] visited, int[] prev) &#123;</span><br><span class="line">if (found == true) return;</span><br><span class="line">visited[w] = true;</span><br><span class="line">if (w == t) &#123;</span><br><span class="line">    found = true;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line">for (int i = 0; i &lt; adj[w].size(); ++i) &#123;</span><br><span class="line">    int q = adj[w].get(i);</span><br><span class="line">    if (!visited[q]) &#123;</span><br><span class="line">    prev[q] = w;</span><br><span class="line">    recurDfs(q, t, visited, prev);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>广度优先搜索需要借助队列来实现，遍历得到的路径就是，起始顶点到终止顶点的最短路径。深度优先算法使用回溯的思想，非常适合递归实现。</p>
+</li>
+</ol>
 
           
         
