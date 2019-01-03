@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,">
+  <meta name="keywords" content="算法,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="Python手册： https://docs.python.org/3/reference/index.html#reference-index 数据结构：列表[]、元组()、集合{}、字典{k:v} 循环技巧： 123456789101112# 列表循环技巧：for index, value in enumerate([&amp;apos;tic&amp;apos;, &amp;apos;tac&amp;apos;, &amp;ap">
-<meta name="keywords" content="Python">
+<meta name="description" content="字符串匹配算法BF算法（暴力匹配算法） 假设主串长度为n，模式串长度为m。我们在主串中，检查起始位置分别是0、1、2、3……n-m 且长度为m的n-m+1个子串，看看有没有跟模式传匹配的。 时间复杂度： 最坏情况下O(n*m)">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python数据结构">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/05/Python数据结构/index.html">
+<meta property="og:title" content="数据结构与算法（三）">
+<meta property="og:url" content="https://angelteng.github.io/blog/2018/12/24/数据结构与算法（三）/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="Python手册： https://docs.python.org/3/reference/index.html#reference-index 数据结构：列表[]、元组()、集合{}、字典{k:v} 循环技巧： 123456789101112# 列表循环技巧：for index, value in enumerate([&amp;apos;tic&amp;apos;, &amp;apos;tac&amp;apos;, &amp;ap">
+<meta property="og:description" content="字符串匹配算法BF算法（暴力匹配算法） 假设主串长度为n，模式串长度为m。我们在主串中，检查起始位置分别是0、1、2、3……n-m 且长度为m的n-m+1个子串，看看有没有跟模式传匹配的。 时间复杂度： 最坏情况下O(n*m)">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-30T09:07:42.000Z">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg">
+<meta property="og:updated_time" content="2018-12-24T09:07:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python数据结构">
-<meta name="twitter:description" content="Python手册： https://docs.python.org/3/reference/index.html#reference-index 数据结构：列表[]、元组()、集合{}、字典{k:v} 循环技巧： 123456789101112# 列表循环技巧：for index, value in enumerate([&amp;apos;tic&amp;apos;, &amp;apos;tac&amp;apos;, &amp;ap">
+<meta name="twitter:title" content="数据结构与算法（三）">
+<meta name="twitter:description" content="字符串匹配算法BF算法（暴力匹配算法） 假设主串长度为n，模式串长度为m。我们在主串中，检查起始位置分别是0、1、2、3……n-m 且长度为m的n-m+1个子串，看看有没有跟模式传匹配的。 时间复杂度： 最坏情况下O(n*m)">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/05/Python数据结构/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2018/12/24/数据结构与算法（三）/">
 
 
 
 
 
-  <title>Python数据结构 | Code war of Angel</title>
+  <title>数据结构与算法（三） | Code war of Angel</title>
   
 
 
@@ -233,7 +235,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/05/Python数据结构/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/24/数据结构与算法（三）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +252,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python数据结构</h1>
+          <h1 class="post-title" itemprop="name headline">数据结构与算法（三）</h1>
         
 
         <div class="post-meta">
@@ -262,8 +264,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-05T17:20:10+08:00">
-                2018-11-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-24T16:56:04+08:00">
+                2018-12-24
               </time>
             
 
@@ -285,8 +287,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
                   </a>
                 </span>
 
@@ -322,27 +324,10 @@
       
 
       
-        <ol>
-<li>Python手册： <a href="https://docs.python.org/3/reference/index.html#reference-index" target="_blank" rel="noopener">https://docs.python.org/3/reference/index.html#reference-index</a></li>
-<li>数据结构：列表[]、元组()、集合{}、字典{k:v}</li>
-<li><p>循环技巧：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 列表循环技巧：</span><br><span class="line">for index, value in enumerate([&apos;tic&apos;, &apos;tac&apos;, &apos;toe&apos;]):</span><br><span class="line"></span><br><span class="line"># 字典循环技巧：</span><br><span class="line">knights = &#123;&apos;gallahad&apos;: &apos;the pure&apos;, &apos;robin&apos;: &apos;the brave&apos;&#125;</span><br><span class="line">for key, value in knights.items():</span><br><span class="line"></span><br><span class="line">#列表打包</span><br><span class="line">questions = [&apos;name&apos;, &apos;quest&apos;, &apos;favorite color&apos;]</span><br><span class="line">answers = [&apos;lancelot&apos;, &apos;the holy grail&apos;, &apos;blue&apos;]</span><br><span class="line">for q, a in zip(questions, answers):</span><br><span class="line">    print(&apos;What is your &#123;0&#125;?  It is &#123;1&#125;.&apos;.format(q, a))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>推导式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 列表推导式</span><br><span class="line">squares = [x**2 for x in range(10)]</span><br><span class="line">mutiSquares = [[row[i] for row in matrix] for i in range(4)]    #嵌套的列表推导式</span><br><span class="line"></span><br><span class="line"># 集合推导式</span><br><span class="line">a = &#123;x for x in &apos;abracadabra&apos; if x not in &apos;abc&apos;&#125;</span><br><span class="line"># &gt;&gt;&gt; &#123;&apos;r&apos;, &apos;d&apos;&#125;</span><br><span class="line"></span><br><span class="line"># 字典推导式</span><br><span class="line">a = &#123;x: x**2 for x in (2, 4, 6)&#125;</span><br><span class="line"># &gt;&gt;&gt; &#123;2: 4, 4: 16, 6: 36&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>操作符：</p>
-</li>
+        <h4 id="字符串匹配算法"><a href="#字符串匹配算法" class="headerlink" title="字符串匹配算法"></a>字符串匹配算法</h4><h5 id="BF算法（暴力匹配算法）"><a href="#BF算法（暴力匹配算法）" class="headerlink" title="BF算法（暴力匹配算法）"></a>BF算法（暴力匹配算法）</h5><ol>
+<li>假设主串长度为n，模式串长度为m。我们在主串中，检查起始位置分别是0、1、2、3……n-m 且长度为m的n-m+1个子串，看看有没有跟模式传匹配的。<br><img src="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg" alt="BF算法"></li>
+<li>时间复杂度： 最坏情况下O(n*m)</li>
 </ol>
-<ul>
-<li>not </li>
-<li><p>and, or : 参数从左向右解析，一旦结果可以确定就停止</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string1, string2, string3 = &apos;&apos;, &apos;Trondheim&apos;, &apos;Hammer Dance&apos;</span><br><span class="line">non_null = string1 or string2 or string3</span><br><span class="line"># non_null  -&gt; &apos;Trondheim&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>in, not in</p>
-</li>
-<li>is, is not </li>
-</ul>
 
       
     </div>
@@ -360,7 +345,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
+            <a href="/blog/tags/算法/" rel="tag"># 算法</a>
           
         </div>
       
@@ -373,8 +358,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/11/02/可乐项目/" rel="next" title="可乐项目">
-                <i class="fa fa-chevron-left"></i> 可乐项目
+              <a href="/blog/2018/12/19/数据结构与算法（二）/" rel="next" title="数据结构与算法（二）">
+                <i class="fa fa-chevron-left"></i> 数据结构与算法（二）
               </a>
             
           </div>
@@ -383,8 +368,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2018/11/06/Python协程优化/" rel="prev" title="Python协程优化">
-                Python协程优化 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2019/01/03/Three三维世界初体验/" rel="prev" title="Three三维世界初体验">
+                Three三维世界初体验 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -437,8 +422,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -500,6 +494,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串匹配算法"><span class="nav-number">1.</span> <span class="nav-text">字符串匹配算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BF算法（暴力匹配算法）"><span class="nav-number">1.1.</span> <span class="nav-text">BF算法（暴力匹配算法）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
