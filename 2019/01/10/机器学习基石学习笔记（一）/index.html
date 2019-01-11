@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="架构设计,">
+  <meta name="keywords" content="机器学习,">
 
 
 
@@ -79,18 +79,25 @@
 
 
 
-<meta name="description" content="可拓展框架基本模式  面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能） 比如MVC分层 面向服务拆分：SOA（服务＋ESB） 、微服务 面向功能拆分：微内核架构  微服务的基础设施：  自动化测试 自动化部署 配置中心 接口框架 api网关 服务发现 服务路由 服务容错 服务监控 服务跟踪 服务安全">
-<meta name="keywords" content="架构设计">
+<meta name="description" content="机器学习应用的三个条件： 事物本身存在某种潜在规律 某些问题难以使用普通编程解决 有大量的数据样本可供使用   流程 术语：   输入x 输出y 目标函数f，即最接近实际样本分布的规律 训练样本data 假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要">
+<meta name="keywords" content="机器学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设计可拓展框架">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/21/设计可拓展框架/index.html">
+<meta property="og:title" content="机器学习基石学习笔记（一）">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="可拓展框架基本模式  面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能） 比如MVC分层 面向服务拆分：SOA（服务＋ESB） 、微服务 面向功能拆分：微内核架构  微服务的基础设施：  自动化测试 自动化部署 配置中心 接口框架 api网关 服务发现 服务路由 服务容错 服务监控 服务跟踪 服务安全">
+<meta property="og:description" content="机器学习应用的三个条件： 事物本身存在某种潜在规律 某些问题难以使用普通编程解决 有大量的数据样本可供使用   流程 术语：   输入x 输出y 目标函数f，即最接近实际样本分布的规律 训练样本data 假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-21T10:05:28.000Z">
+<meta property="og:image" content="https://i.loli.net/2018/07/24/5b55fd7c69d0c.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-da05a80b15f9f791.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-6df1ace7b37904ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-555ef5e069e554ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-4ff721dcc695769c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-4e8339fd939091ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-11T08:43:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="设计可拓展框架">
-<meta name="twitter:description" content="可拓展框架基本模式  面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能） 比如MVC分层 面向服务拆分：SOA（服务＋ESB） 、微服务 面向功能拆分：微内核架构  微服务的基础设施：  自动化测试 自动化部署 配置中心 接口框架 api网关 服务发现 服务路由 服务容错 服务监控 服务跟踪 服务安全">
+<meta name="twitter:title" content="机器学习基石学习笔记（一）">
+<meta name="twitter:description" content="机器学习应用的三个条件： 事物本身存在某种潜在规律 某些问题难以使用普通编程解决 有大量的数据样本可供使用   流程 术语：   输入x 输出y 目标函数f，即最接近实际样本分布的规律 训练样本data 假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要">
+<meta name="twitter:image" content="https://i.loli.net/2018/07/24/5b55fd7c69d0c.png">
 
 
 
@@ -120,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/21/设计可拓展框架/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/">
 
 
 
 
 
-  <title>设计可拓展框架 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>机器学习基石学习笔记（一） | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +240,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/21/设计可拓展框架/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/10/机器学习基石学习笔记（一）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +257,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">设计可拓展框架</h1>
+          <h1 class="post-title" itemprop="name headline">机器学习基石学习笔记（一）</h1>
         
 
         <div class="post-meta">
@@ -262,8 +269,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T17:33:57+08:00">
-                2018-11-21
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T16:45:16+08:00">
+                2019-01-10
               </time>
             
 
@@ -285,8 +292,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/架构设计/" itemprop="url" rel="index">
-                    <span itemprop="name">架构设计</span>
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
                   </a>
                 </span>
 
@@ -322,25 +329,42 @@
       
 
       
-        <p>可拓展框架基本模式</p>
-<ol>
-<li>面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能）<br> 比如MVC分层</li>
-<li>面向服务拆分：SOA（服务＋ESB） 、微服务</li>
-<li>面向功能拆分：微内核架构</li>
+        <ol>
+<li>机器学习应用的三个条件：<ul>
+<li>事物本身存在某种潜在规律</li>
+<li>某些问题难以使用普通编程解决</li>
+<li>有大量的数据样本可供使用</li>
+</ul>
+</li>
+<li>流程<br> <img src="https://i.loli.net/2018/07/24/5b55fd7c69d0c.png" alt="流程"><br>术语：</li>
 </ol>
-<p>微服务的基础设施：</p>
-<ol>
-<li>自动化测试</li>
-<li>自动化部署</li>
-<li>配置中心</li>
-<li>接口框架</li>
-<li>api网关</li>
-<li>服务发现</li>
-<li>服务路由</li>
-<li>服务容错</li>
-<li>服务监控</li>
-<li>服务跟踪</li>
-<li>服务安全</li>
+<ul>
+<li>输入x</li>
+<li>输出y</li>
+<li>目标函数f，即最接近实际样本分布的规律</li>
+<li>训练样本data</li>
+<li>假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要得到的模型表达式。</li>
+</ul>
+<ol start="3">
+<li><p>感知机（Perceptron）<br>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - threshold)$$<br>其中 h(x) = 1/ -1, w是权重，threshold是阙值<br>把$threshold = w_0x_0 (x_0 =1)$,得到<br>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - w_0x_0) $$<br>$$      = sign(\sum_{i=0}^n w_i x_i)$$<br>$$      = sign(W^TX) $$<br>假设只有二维，那么$ h(x) = w_0 + w_1x_1 + w_2x_2$，其中$w_0 + w_1x_1 + w_2x_2=0$是其中一条分类直线，权重w不同，代表不同的直线。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-da05a80b15f9f791.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="感知机"></p>
+</li>
+<li><p>线性感知机 Perceptron Learning Algorithm(PLA)</p>
+</li>
+</ol>
+<ul>
+<li>逐步修正：首先在平面上随意取一条直线，看看哪些点分类错误。然后开始对第一个错误点就行修正，即变换直线的位置，使这个错误点变成分类正确的点。接着，再对第二个、第三个等所有的错误分类点就行直线纠正，直到所有的点都完全分类正确了，就得到了最好的直线。</li>
+<li><p>做法：首先随机选择一条直线进行分类。然后找到第一个分类错误的点，如果这个点表示正类，被误分为负类，即$w_t ^t x_n(t)&lt;0$，那表示w和x夹角大于90度，其中w是直线的法向量(垂直于这条直线）（ps:直线方程式的系数代表该直线的法向量）。所以，x被误分在直线的下侧（相对于法向量，法向量的方向即为正类所在的一侧），修正的方法就是使w和x夹角小于90度。通常做法是$w←w+yx, y=1$，如图右上角所示，一次或多次更新后的w+yx与x夹角小于90度，能保证x位于直线的上侧，则对误分为负类的错误点完成了直线修正。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-6df1ace7b37904ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-555ef5e069e554ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"></p>
+</li>
+<li><p>保证数据是线性可分：假设有这样一条直线，能够将正类和负类完全分开，令这时候的目标权重为$w_f$,对于每一个点，满足$y_n = sign(w_f^t x_n)$， 那么即每一个到这条直线的距离都大于0，即对于每一个点t，满足：<br>$$ y_{n(t)} w_n^f x_{n(t)} &gt;= min y_{n} w_n^f x_{n} &gt; 0 $$</p>
+</li>
+<li><p>PLA会对每次错误的点进行修正，更新权重$w_{t+1}$的值，如果$w_{t+1}与w_f$越来越接近，数学运算上就是内积越大，那表示证明PLA是有学习效果<br>的。<br>推导：<br>$$ w_f^T w_{t+1} = w_f^T(w_t + y_nx_n^t) $$<br>$$               = w_f^Tw_t + w_f^Ty_nx_n^t $$<br>$$               &gt; w_f^Tw_t + 0 $$<br>$$               &gt; w_f^Tw_t $$</p>
+</li>
+<li><p>为了证明内积的增长不是由于长度而是夹角，推导：<br>当有错误的点的时候，即$ y_{n(t)} w_n^f x_{n(t)} &lt;= 0 $<br>那么<br>$$ ||w_{t+1}||^2 = || w_t + y_{n(t)}x_{n(t)}||^2 $$<br>$$               = || w_t||^2 + 2w_ty_{n(t)}x_{n(t)} + ||y_{n(t)}x_{n(t)}||^2 $$<br>$$               &lt;= || w_t||^2 + 0 + ||y_{n(t)}x_{n(t)}||^2  (y_n = 1/-1)$$<br>$$               &lt;= || w_t||^2 + ||maxx_{n(t)}||^2 $$<br>所以 $||w_{t+1}||^2$的增长量不会超过$||maxx_{n(t)}||^2$ </p>
+</li>
+<li>如果$w_0 = 0$, 经过T次修正后，得 $ w_f^T \over ||wf||$$ w_T \over ||w_T||$$ &gt;= \sqrt{T}*constant$<br>推导：<img src="https://upload-images.jianshu.io/upload_images/14827444-4ff721dcc695769c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-4e8339fd939091ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>因​$\sqrt{T}⋅constant≤1$，也就是说，迭代次数T是有上界的。</li>
+</ul>
+<ol start="4">
+<li>口袋算法 Packet Algorithm<br>对于非线性可分的PLA，容忍有错误点，取错误点的个数最少时的权重w。</li>
 </ol>
 
       
@@ -359,7 +383,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/架构设计/" rel="tag"># 架构设计</a>
+            <a href="/blog/tags/机器学习/" rel="tag"># 机器学习</a>
           
         </div>
       
@@ -372,8 +396,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/11/21/PHP项目中并发处理/" rel="next" title="PHP项目中并发处理">
-                <i class="fa fa-chevron-left"></i> PHP项目中并发处理
+              <a href="/blog/2019/01/10/Python-PIL-docker-环境部署问题/" rel="next" title="Python PIL docker 环境部署问题">
+                <i class="fa fa-chevron-left"></i> Python PIL docker 环境部署问题
               </a>
             
           </div>
@@ -381,10 +405,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/11/22/Redis原理/" rel="prev" title="Redis原理">
-                Redis原理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

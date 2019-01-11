@@ -7,7 +7,7 @@
 
 <html class="theme-next muse use-motion" lang="">
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
@@ -121,7 +121,7 @@
 
 
 
-  <title>Code war of Angel</title>
+  <title>Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -140,7 +140,7 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
   page-home">
     <div class="headband"></div>
 
@@ -215,6 +215,184 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/10/机器学习基石学习笔记（一）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/01/10/机器学习基石学习笔记（一）/" itemprop="url">机器学习基石学习笔记（一）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T16:45:16+08:00">
+                2019-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>机器学习应用的三个条件：<ul>
+<li>事物本身存在某种潜在规律</li>
+<li>某些问题难以使用普通编程解决</li>
+<li>有大量的数据样本可供使用</li>
+</ul>
+</li>
+<li>流程<br> <img src="https://i.loli.net/2018/07/24/5b55fd7c69d0c.png" alt="流程"><br>术语：</li>
+</ol>
+<ul>
+<li>输入x</li>
+<li>输出y</li>
+<li>目标函数f，即最接近实际样本分布的规律</li>
+<li>训练样本data</li>
+<li>假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要得到的模型表达式。</li>
+</ul>
+<ol start="3">
+<li><p>感知机（Perceptron）<br>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - threshold)$$<br>其中 h(x) = 1/ -1, w是权重，threshold是阙值<br>把$threshold = w_0x_0 (x_0 =1)$,得到<br>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - w_0x_0) $$<br>$$      = sign(\sum_{i=0}^n w_i x_i)$$<br>$$      = sign(W^TX) $$<br>假设只有二维，那么$ h(x) = w_0 + w_1x_1 + w_2x_2$，其中$w_0 + w_1x_1 + w_2x_2=0$是其中一条分类直线，权重w不同，代表不同的直线。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-da05a80b15f9f791.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="感知机"></p>
+</li>
+<li><p>线性感知机 Perceptron Learning Algorithm(PLA)</p>
+</li>
+</ol>
+<ul>
+<li>逐步修正：首先在平面上随意取一条直线，看看哪些点分类错误。然后开始对第一个错误点就行修正，即变换直线的位置，使这个错误点变成分类正确的点。接着，再对第二个、第三个等所有的错误分类点就行直线纠正，直到所有的点都完全分类正确了，就得到了最好的直线。</li>
+<li><p>做法：首先随机选择一条直线进行分类。然后找到第一个分类错误的点，如果这个点表示正类，被误分为负类，即$w_t ^t x_n(t)&lt;0$，那表示w和x夹角大于90度，其中w是直线的法向量(垂直于这条直线）（ps:直线方程式的系数代表该直线的法向量）。所以，x被误分在直线的下侧（相对于法向量，法向量的方向即为正类所在的一侧），修正的方法就是使w和x夹角小于90度。通常做法是$w←w+yx, y=1$，如图右上角所示，一次或多次更新后的w+yx与x夹角小于90度，能保证x位于直线的上侧，则对误分为负类的错误点完成了直线修正。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-6df1ace7b37904ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-555ef5e069e554ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"></p>
+</li>
+<li><p>保证数据是线性可分：假设有这样一条直线，能够将正类和负类完全分开，令这时候的目标权重为$w_f$,对于每一个点，满足$y_n = sign(w_f^t x_n)$， 那么即每一个到这条直线的距离都大于0，即对于每一个点t，满足：<br>$$ y_{n(t)} w_n^f x_{n(t)} &gt;= min y_{n} w_n^f x_{n} &gt; 0 $$</p>
+</li>
+<li><p>PLA会对每次错误的点进行修正，更新权重$w_{t+1}$的值，如果$w_{t+1}与w_f$越来越接近，数学运算上就是内积越大，那表示证明PLA是有学习效果<br>的。<br>推导：<br>$$ w_f^T w_{t+1} = w_f^T(w_t + y_nx_n^t) $$<br>$$               = w_f^Tw_t + w_f^Ty_nx_n^t $$<br>$$               &gt; w_f^Tw_t + 0 $$<br>$$               &gt; w_f^Tw_t $$</p>
+</li>
+<li><p>为了证明内积的增长不是由于长度而是夹角，推导：<br>当有错误的点的时候，即$ y_{n(t)} w_n^f x_{n(t)} &lt;= 0 $<br>那么<br>$$ ||w_{t+1}||^2 = || w_t + y_{n(t)}x_{n(t)}||^2 $$<br>$$               = || w_t||^2 + 2w_ty_{n(t)}x_{n(t)} + ||y_{n(t)}x_{n(t)}||^2 $$<br>$$               &lt;= || w_t||^2 + 0 + ||y_{n(t)}x_{n(t)}||^2  (y_n = 1/-1)$$<br>$$               &lt;= || w_t||^2 + ||maxx_{n(t)}||^2 $$<br>所以 $||w_{t+1}||^2$的增长量不会超过$||maxx_{n(t)}||^2$ </p>
+</li>
+<li>如果$w_0 = 0$, 经过T次修正后，得 $ w_f^T \over ||wf||$$ w_T \over ||w_T||$$ &gt;= \sqrt{T}*constant$<br>推导：<img src="https://upload-images.jianshu.io/upload_images/14827444-4ff721dcc695769c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-4e8339fd939091ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>因​$\sqrt{T}⋅constant≤1$，也就是说，迭代次数T是有上界的。</li>
+</ul>
+<ol start="4">
+<li>口袋算法 Packet Algorithm<br>对于非线性可分的PLA，容忍有错误点，取错误点的个数最少时的权重w。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -2245,154 +2423,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/30/Centos系统docker的坑/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/30/Centos系统docker的坑/" itemprop="url">Centos系统docker的坑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-30T15:12:20+08:00">
-                2018-11-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/系统/" itemprop="url" rel="index">
-                    <span itemprop="name">系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>环境：CentOS Linux release 7.1.1503 (Core)<br>dockerfiles 中有<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RUN mv /app/docker/localtime /etc/localtime</span><br><span class="line">......</span><br><span class="line">RUM rm /app/docker</span><br></pre></td></tr></table></figure></p>
-<p>docker build 过程中发现报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv: can&apos;t rename &apos;/app/docker/localtime&apos;: Invalid argument</span><br><span class="line">The command &apos;/bin/sh -c mv /app/docker/localtime /etc/localtime&apos; returned a non-zero code: 1</span><br></pre></td></tr></table></figure></p>
-<p>而同样的脚本在另外一个Ubuntu系统下没有这样的报错<br>从 docker info中可以看到<br><img src="https://upload-images.jianshu.io/upload_images/14827444-4a17653f35165366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="不正常系统"><br>Centos7<br><img src="https://upload-images.jianshu.io/upload_images/14827444-a3433e310cc982f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="正常系统"><br>Ubuntu16.04<br>并且可以看到报错信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WARNING: overlay: the backing xfs filesystem is formatted without d_type support, which leads to incorrect behavior.</span><br><span class="line">         Reformat the filesystem with ftype=1 to enable d_type support.</span><br><span class="line">         Running without d_type support will not be supported in future releases.</span><br></pre></td></tr></table></figure></p>
-<p>Centos7 发行版默认的Kernel版本是3.10，但是Overlay2存储驱动需要4.0以上的kernel版本支持，所以默认使用overlay 并且不支持d_type， 才导致这个报错。<br><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/7.2_release_notes/technology-preview-file_systems" target="_blank" rel="noopener">具体</a><br>解决方法一：<br>格式化 XFS 系统，添加ftype=1</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 查看当前系统xfs</span><br><span class="line">xfs_info /</span><br><span class="line">如果 ftype =0 表示不支持d_type</span><br><span class="line">省略具体格式化方法</span><br></pre></td></tr></table></figure>
-<p>解决方法二：<br>修改 storage driver 为 devicemapper<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/docker/daemon.json</span><br><span class="line">增加</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    &quot;storage-driver&quot;: &quot;devicemapper&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><a href="http://blog.51cto.com/foxhound/1841487" target="_blank" rel="noopener">docker疑难杂症</a><br><a href="https://www.jianshu.com/p/00ffd8df6010" target="_blank" rel="noopener">docker文件系统参考</a><br><a href="https://github.com/moby/moby/issues/15314" target="_blank" rel="noopener">github上的讨论</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2445,7 +2475,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2456,7 +2486,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2467,7 +2497,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -2680,6 +2710,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
 
   
 
