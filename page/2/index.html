@@ -229,6 +229,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/03/嘿！有人在偷你的比特币！/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/12/03/嘿！有人在偷你的比特币！/" itemprop="url">Hey! JavaScript Developer, someone is stealing your bitcoin!</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-03T11:29:49+08:00">
+                2018-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>To summarizes this event:</p>
+<ol>
+<li>copay-dash is a popular bitcoin platform which includes event-stream as a dependency.<br>copay-dash 是一个很流行的比特币平台，它使用了event-stream作为依赖包。</li>
+<li>For about a week in September, event-stream included flatmap-stream as a dependency, as it was passed along to a new maintainer who added the dependency and removed it a week later.<br>九月份的时候，event-stream 使用了flatmap-stream作为依赖报，它传给了一个新的维护者，这个维护者加上了这个依赖包，一周之后又删掉了。</li>
+<li>flatmap-stream had some code hiding at the end of its minified built output which attempts to decode and execute strings from its packaged test/data.js file, using the description of the top-level package as the AES256 key.<br>flatmap-steam 隐藏了一些代码在压缩代码的最后，它尝试使用顶级包的描述中的AES256 key去decode并且运行在test/data.js的字符串.</li>
+<li>For any other package, this produces a silently handled error (as the package description/decryption key is wrong). But for copay-dash, this produces some valid JavaScript which runs another round of decryption and executes a malicious script that steals your bitcoin wallet.<br>对于其他包，这些产生了轻微的错误(被try catch了)，但是对于copay-dash， 它产生了有效的JavaScript代码，运行另一轮解密并执行了偷取比特币的恶意脚本。</li>
+</ol>
+<p>What now?</p>
+<ol>
+<li><p>Use a lockfile. Whether it’s yarn’s yarn.lock or npm’s package-lock.json, a lockfile ensures that you get the same package versions on every install, so if you’re secure today then you’ll be secure tomorrow as well. Apps that utilize floating dependencies without a lockfile are particularly vulnerable to malicious updates, because they will automatically install the latest patch version of their dependencies — meaning that you may be compromised as soon as your next deploy, if one of your dependencies is compromised and publishes a malicious patch. With a lockfile, you at least limit your exposure to manual developer actions that add or update a package, which can be double-checked via code reviews and organizational policies.<br>使用lockfile, 比如说yarn.lock 或者package-lock.json。 lockfile文件确保了你每次install都会拿到相同版本的依赖包，所以如果你这次安装是安全的，那你下次也是安全的。如果你没有使用lockfile, 下载依赖包的时候会默认下载最新的版本，意味着你可能下载了一个含有恶意代码的版本。如果你某个依赖包遭到了破坏并发布了恶意版本，有lockfile的话，你至少可以限制对于手动添加、更新依赖包的风险，因为可以在代码审查、组织的时候double-check。</p>
+</li>
+<li><p>Think before you install. This isn’t a panacea — as demonstrated above, it’s easy for attackers to slip malicious code into minified output, which is hard to find even if you knew it was there. But you will drastically reduce your exposure if you stick to popular, well-maintained packages. Before you install a new dependency, first, ask yourself if you really need it. If you already know how to write the code, and it won’t take you more than a few dozen lines, just do it yourself. If you do need the dependency, scope it out before you install. Does it have high download numbers on npm? Does the GitHub repo appear well-maintained and active? Has the package been updated recently? If not, also consider forking the repository and either publishing a fork to npm or installing the package directly from your GitHub; this reduces risk because you aren’t exposed to future malicious updates, and you can read and minify the source yourself so you’re confident about what it really does.<br>下载前三思。这不是万能药 – 正如前面所示范的，将恶意代码写进压缩输出很简单，但是找出来很难，即使你知道它在。但是你会大大减少你的曝光率，如果你坚持使用流行的、维护好的依赖包。在你下载一个新的依赖包前，首先，问下你自己你真的需要吗？如果你已经知道怎么去写这段代码，而且不会很多，不如自己写。如果你真的需要这个依赖包，在你下载前确定范围，它有很高下载量吗？它的Github看起来最近有没有好好在维护？最近有更新吗？如果没有，也考虑下fork这个仓库而且将fork发不到npm或者直接从github下载包。这将减少风险，因为你没有暴露在未来可能的恶意更新中，而且你可以阅读、压缩源代码，知道它究竟在干什么。</p>
+</li>
+</ol>
+<p><a href="https://schneid.io/blog/event-stream-vulnerability-explained/" target="_blank" rel="noopener">原文</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/30/Centos系统docker的坑/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1751,184 +1907,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/21/浏览器相关流程及优化/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/21/浏览器相关流程及优化/" itemprop="url">浏览器相关流程及优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:46:33+08:00">
-                2018-11-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>####组成</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-830d8d2d96523c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器"></p>
-<p>####渲染引擎:<br>Trident, Gecko, Presto, Webkit, Blink</p>
-<p>####流程</p>
-<ol>
-<li>**DNS解析(迭代查询）<br>######优化：</li>
-</ol>
-<ul>
-<li>减少dns请求</li>
-<li>dns预解析 </li>
-<li>httpdns防劫持</li>
-<li>dns负载均衡**</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-d187ee2ebfb4688a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="DNS"></p>
-<ol start="2">
-<li><strong>浏览器以一个随机端口进入到网卡，进入TCP／IP协议栈，然后可能经过防火墙过滤，</strong></li>
-<li><strong>建立TCP链接：<br>######优化：<br>用https／http2</strong><br><img src="https://upload-images.jianshu.io/upload_images/14827444-23655dd1db374e25.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
-</ol>
-<ul>
-<li>第一次握手：客户端A将标志位SYN置为1,随机产生一个值为seq=J（J的取值范围为=1234567）的数据包到服务器，客户端A进入SYN_SENT状态，等待服务端B确认；</li>
-<li>第二次握手：服务端B收到数据包后由标志位SYN=1知道客户端A请求建立连接，服务端B将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给客户端A以确认连接请求，服务端B进入SYN_RCVD状态。</li>
-<li>第三次握手：客户端A收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给服务端B，服务端B检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，客户端A和服务端B进入ESTABLISHED状态，完成三次握手，随后客户端A与服务端B之间可以开始传输数据了<br><img src="https://upload-images.jianshu.io/upload_images/14827444-adc0940f024c5b4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
-</ul>
-<ol start="3">
-<li><strong>发送HTTP请求（**</strong>GET<strong> </strong>或者<strong> </strong>POST<strong> </strong>等，不常用的还有<strong> </strong>PUT<strong> </strong>和<strong> </strong>DELETE<strong> </strong>、<strong><strong>HEAD</strong></strong>、<strong><strong>OPTION</strong></strong>以及<strong> </strong>TRACE<strong> </strong>）：静态资源缓存，can，服务器负载均衡，服务器缓存，**</li>
-<li><strong>服务器给浏览器响应一个**</strong>301<strong>**永久重定向响应</strong></li>
-<li><strong>浏览器跟踪重定向地址</strong></li>
-<li><strong>服务器处理请求：nginx-&gt;应用服务器</strong></li>
-<li><strong>服务器返回一个http响应</strong></li>
-<li><strong>客户端渲染：jscss位置，减少体积</strong>，</li>
-</ol>
-<p>####渲染流程</p>
-<ol>
-<li>加载HTML内容，处理HTML标记，构建DOM树</li>
-<li>加载css，处理css标记，构建CSSOM树</li>
-<li>将DOM和CSSOM合并成一个渲染树</li>
-<li>Layout：CPU根据渲染树来布局，计算及节点几何信息</li>
-<li>Paint：GPU根据每个Layer位置绘制点，以渲染层缓存</li>
-<li>Composition：处理多层渲染层Layers之间的关系，合成一个页面<br>其中：</li>
-<li>CSS 被视为阻塞渲染的资源，这意味着浏览器将不会渲染任何已处理的内容，直至 CSSOM 构建完毕。存在阻塞的 CSS 资源时，浏览器会延迟 JavaScript 的执行和 DOM 构建。</li>
-<li>当浏览器遇到一个 script 标记时，DOM 构建将暂停，直至脚本完成执行</li>
-</ol>
-<p>####css优化：</p>
-<ol>
-<li><link href="print.css" rel="stylesheet" media="print">设置了媒体类型，会加载但不会阻塞<br>####js优化：</li>
-<li>async 与 defer 属性对于 inline-script 都是无效的</li>
-<li>defer 属性：载入 JavaScript 文件时不阻塞 HTML 的解析，执行阶段被放到 HTML 标签解析完成之后。</li>
-<li>async属性：表示异步执行引入的 JavaScript，如果已经加载好，就会开始执行，加载的 JavaScript 依然会阻塞 load 事件。多个 async-script 的执行顺序是不确定的</li>
-<li>使用 document.createElement 创建的 script 默认是异步async的<br>####dns优化</li>
-<li>减少 DNS 请求</li>
-<li>缩短 DNS 解析路径</li>
-<li>dns预解析 dns－prefetch</li>
-<li>localDns：缓存挟持，转发</li>
-<li>HttpDns：<br>客户端直接访问HttpDNS接口，获取业务在域名配置管理系统上配置的访问延迟最优的IP。客户端向获取到的IP后就向直接往此IP发送业务协议请求。<br>####CDN功能：</li>
-<li>调度分配主机；负载均衡，根据 IP，网络流量情况分配最靠近，网络最通畅的 CDN 节点实现加速</li>
-<li>反向代理</li>
-<li>静态缓存；缓存静态资源（html，图片，音乐，视频等）</li>
-<li>防止 DDOS 攻击</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1981,7 +1959,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

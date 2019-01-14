@@ -229,6 +229,184 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/21/浏览器相关流程及优化/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/21/浏览器相关流程及优化/" itemprop="url">浏览器相关流程及优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:46:33+08:00">
+                2018-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>####组成</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/14827444-830d8d2d96523c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器"></p>
+<p>####渲染引擎:<br>Trident, Gecko, Presto, Webkit, Blink</p>
+<p>####流程</p>
+<ol>
+<li>**DNS解析(迭代查询）<br>######优化：</li>
+</ol>
+<ul>
+<li>减少dns请求</li>
+<li>dns预解析 </li>
+<li>httpdns防劫持</li>
+<li>dns负载均衡**</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/14827444-d187ee2ebfb4688a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="DNS"></p>
+<ol start="2">
+<li><strong>浏览器以一个随机端口进入到网卡，进入TCP／IP协议栈，然后可能经过防火墙过滤，</strong></li>
+<li><strong>建立TCP链接：<br>######优化：<br>用https／http2</strong><br><img src="https://upload-images.jianshu.io/upload_images/14827444-23655dd1db374e25.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
+</ol>
+<ul>
+<li>第一次握手：客户端A将标志位SYN置为1,随机产生一个值为seq=J（J的取值范围为=1234567）的数据包到服务器，客户端A进入SYN_SENT状态，等待服务端B确认；</li>
+<li>第二次握手：服务端B收到数据包后由标志位SYN=1知道客户端A请求建立连接，服务端B将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给客户端A以确认连接请求，服务端B进入SYN_RCVD状态。</li>
+<li>第三次握手：客户端A收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给服务端B，服务端B检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，客户端A和服务端B进入ESTABLISHED状态，完成三次握手，随后客户端A与服务端B之间可以开始传输数据了<br><img src="https://upload-images.jianshu.io/upload_images/14827444-adc0940f024c5b4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
+</ul>
+<ol start="3">
+<li><strong>发送HTTP请求（**</strong>GET<strong> </strong>或者<strong> </strong>POST<strong> </strong>等，不常用的还有<strong> </strong>PUT<strong> </strong>和<strong> </strong>DELETE<strong> </strong>、<strong><strong>HEAD</strong></strong>、<strong><strong>OPTION</strong></strong>以及<strong> </strong>TRACE<strong> </strong>）：静态资源缓存，can，服务器负载均衡，服务器缓存，**</li>
+<li><strong>服务器给浏览器响应一个**</strong>301<strong>**永久重定向响应</strong></li>
+<li><strong>浏览器跟踪重定向地址</strong></li>
+<li><strong>服务器处理请求：nginx-&gt;应用服务器</strong></li>
+<li><strong>服务器返回一个http响应</strong></li>
+<li><strong>客户端渲染：jscss位置，减少体积</strong>，</li>
+</ol>
+<p>####渲染流程</p>
+<ol>
+<li>加载HTML内容，处理HTML标记，构建DOM树</li>
+<li>加载css，处理css标记，构建CSSOM树</li>
+<li>将DOM和CSSOM合并成一个渲染树</li>
+<li>Layout：CPU根据渲染树来布局，计算及节点几何信息</li>
+<li>Paint：GPU根据每个Layer位置绘制点，以渲染层缓存</li>
+<li>Composition：处理多层渲染层Layers之间的关系，合成一个页面<br>其中：</li>
+<li>CSS 被视为阻塞渲染的资源，这意味着浏览器将不会渲染任何已处理的内容，直至 CSSOM 构建完毕。存在阻塞的 CSS 资源时，浏览器会延迟 JavaScript 的执行和 DOM 构建。</li>
+<li>当浏览器遇到一个 script 标记时，DOM 构建将暂停，直至脚本完成执行</li>
+</ol>
+<p>####css优化：</p>
+<ol>
+<li><link href="print.css" rel="stylesheet" media="print">设置了媒体类型，会加载但不会阻塞<br>####js优化：</li>
+<li>async 与 defer 属性对于 inline-script 都是无效的</li>
+<li>defer 属性：载入 JavaScript 文件时不阻塞 HTML 的解析，执行阶段被放到 HTML 标签解析完成之后。</li>
+<li>async属性：表示异步执行引入的 JavaScript，如果已经加载好，就会开始执行，加载的 JavaScript 依然会阻塞 load 事件。多个 async-script 的执行顺序是不确定的</li>
+<li>使用 document.createElement 创建的 script 默认是异步async的<br>####dns优化</li>
+<li>减少 DNS 请求</li>
+<li>缩短 DNS 解析路径</li>
+<li>dns预解析 dns－prefetch</li>
+<li>localDns：缓存挟持，转发</li>
+<li>HttpDns：<br>客户端直接访问HttpDNS接口，获取业务在域名配置管理系统上配置的访问延迟最优的IP。客户端向获取到的IP后就向直接往此IP发送业务协议请求。<br>####CDN功能：</li>
+<li>调度分配主机；负载均衡，根据 IP，网络流量情况分配最靠近，网络最通畅的 CDN 节点实现加速</li>
+<li>反向代理</li>
+<li>静态缓存；缓存静态资源（html，图片，音乐，视频等）</li>
+<li>防止 DDOS 攻击</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/20/利用hexo搭建个人blog/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1586,160 +1764,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/09/Python标准库/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/09/Python标准库/" itemprop="url">Python标准库</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-09T10:16:50+08:00">
-                2018-11-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://www.pythondoc.com/pythontutorial3/stdlib.html" target="_blank" rel="noopener">参考</a></p>
-<ol>
-<li>正则 ：<a href="https://docs.python.org/3/library/re.html#module-re" target="_blank" rel="noopener">re</a></li>
-<li>测试</li>
-</ol>
-<ul>
-<li><a href="https://docs.python.org/3/library/doctest.html#module-doctest" target="_blank" rel="noopener">doctest</a></li>
-<li><a href="https://docs.python.org/3/library/unittest.html#module-unittest" target="_blank" rel="noopener">unittest</a></li>
-</ul>
-<ol start="3">
-<li>日志：<a href="https://docs.python.org/3/library/logging.html#module-logging" target="_blank" rel="noopener">logging</a></li>
-<li>打印错误信息：sys.exc_info()</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1792,7 +1816,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
