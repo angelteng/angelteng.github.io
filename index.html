@@ -322,30 +322,11 @@
       
         
           
-            <ol>
-<li><p>按输出y的分类</p>
-<ul>
-<li>监督学习</li>
-<li>非监督学习</li>
-<li>半监督学习</li>
-<li>增强学习(Reniforcement Learning): 我们给模型或系统一些输入，但是给不了我们希望的真实的输出y，根据模型的输出反馈，如果反馈结果良好，更接近真实输出，就给其正向激励，如果反馈结果不好，偏离真实输出，就给其反向激励。不断通过“反馈-修正”这种形式，一步一步让模型学习的更好。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-76aec3f8c180d9b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="分类"></li>
-</ul>
-</li>
-<li><p>按Data分类</p>
-<ul>
-<li>Batch Learning: 一次性拿到整个Data，对其进行学习建模。</li>
-<li>Online: 在线学习模型，数据是实时更新的，根据数据一个个进来，同步更新我们的算法。<br>  PLA算法。<br>  增强学习。</li>
-<li>Active Learning: 让机器具备主动问问题的能力，例如手写数字识别，机器自己生成一个数字或者对它不确定的手写字主动提问。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-d75fbba06061b513.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="按协议分类"></li>
-</ul>
-</li>
-</ol>
-<ol start="3">
-<li>按输入X的类型<ul>
-<li>concrete features：具体的特征。</li>
-<li>raw features：比如说手写数字识别中每个数字所在图片的mxn维像素值；比如语音信号的频谱。</li>
-<li>abstract features：比如某购物网站做购买预测时，提供给参赛者的是抽象加密过的资料编号或者ID。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-f5218d30d2eafcfc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="输入X的类型"></li>
-</ul>
-</li>
+            <h1 id="Why-can-machines-learn"><a href="#Why-can-machines-learn" class="headerlink" title="Why can machines learn?"></a>Why can machines learn?</h1><h2 id="No-Free-Lunch定理"><a href="#No-Free-Lunch定理" class="headerlink" title="No Free Lunch定理"></a>No Free Lunch定理</h2><p>No Free Lunch定理表明，没有一个学习算法可以在任何领域总是产生最准确的学习器。不管采用何种学习算法，至少存在一个目标函数，能够使得随机猜测算法是更好的算法。<br>NFL说明了无法保证一个机器学习算法在D以外的数据集上一定能分类或预测正确，除非加上一些假设条件。</p>
+<h2 id="机器学习中假设与目标函数相等的可能性"><a href="#机器学习中假设与目标函数相等的可能性" class="headerlink" title="机器学习中假设与目标函数相等的可能性"></a>机器学习中假设与目标函数相等的可能性</h2><ol>
+<li>机器学习中hypothesis与目标函数相等的可能性，类比于罐子中橙色球的概率问题；罐子里的一颗颗弹珠类比于机器学习样本空间的x；橙色的弹珠类比于h(x)与f不相等；绿色的弹珠类比于h(x)与f相等；从罐子中抽取的N个球类比于机器学习的训练样本D，且这两种抽样的样本与总体样本之间都是独立同分布的。所以呢，如果样本N够大，且是独立同分布的，那么，从样本中h(x)!=f(x)的概率就能推导在抽样样本外的所有样本中h(x)!=f(x)的概率是多少。</li>
+<li>$E_{in}(h)$表示在抽样样本中，h(x)与$y_n$不相等的概率；$E_{out}(h)$表示实际所有样本中，h(x)与f(x)不相等的概率是多少。如果$E_{in}$很小，那么他们错误概率满足PAC，他们很接近。</li>
+<li>M是hypothesis的个数，N是样本D的数量，ϵ是参数。该union bound表明，当M有限，且N足够大的时候，Bad Data出现的概率就更低了，即能保证D对于所有的h都有$E_{in}~~E_{out}$，满足PAC，演算法A的选择不受限制。那么满足这种union bound的情况，我们就可以和之前一样，选取一个合理的演算法（PLA/pocket），选择使$E_{in}$最小的$h_m$作为矩g，一般能够保证$g≈f$，即有不错的泛化能力。<br>所以，如果hypothesis的个数M是有限的，N足够大，那么通过演算法A任意选择一个矩g，都有$E_{in}≈E_{out}$成立；同时，如果找到一个矩g，使<br>$E_{in}≈0$，PAC就能保证$E_{out}≈0$。至此，就证明了机器学习是可行的。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-03c02ac56816b05a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PAC"></li>
 </ol>
 
           
@@ -513,7 +494,7 @@
 </li>
 <li>如果$w_0 = 0$, 经过T次修正后，得 $ w_f^T \over ||wf||$$ w_T \over ||w_T||$$ &gt;= \sqrt{T}*constant$<br>推导：<img src="https://upload-images.jianshu.io/upload_images/14827444-4ff721dcc695769c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-4e8339fd939091ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>因​$\sqrt{T}⋅constant≤1$，也就是说，迭代次数T是有上界的。</li>
 </ul>
-<h3 id="口袋算法-Packet-Algorithm"><a href="#口袋算法-Packet-Algorithm" class="headerlink" title="口袋算法 Packet Algorithm"></a>口袋算法 Packet Algorithm</h3><p>对于非线性可分的PLA，容忍有错误点，取错误点的个数最少时的权重w。</p>
+<h2 id="口袋算法-Packet-Algorithm"><a href="#口袋算法-Packet-Algorithm" class="headerlink" title="口袋算法 Packet Algorithm"></a>口袋算法 Packet Algorithm</h2><p>对于非线性可分的PLA，容忍有错误点，取错误点的个数最少时的权重w。</p>
 <h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><pre><code>1. 按输出y的分类
     - 监督学习
     - 非监督学习
@@ -535,7 +516,10 @@
     - raw features：比如说手写数字识别中每个数字所在图片的mxn维像素值；比如语音信号的频谱。
     - abstract features：比如某购物网站做购买预测时，提供给参赛者的是抽象加密过的资料编号或者ID。
 ![输入X的类型](https://upload-images.jianshu.io/upload_images/14827444-f5218d30d2eafcfc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-</code></pre>
+</code></pre><h2 id="Python实现PLA"><a href="#Python实现PLA" class="headerlink" title="Python实现PLA"></a>Python实现PLA</h2><p><a href="https://huangweiran.club/2018/01/27/PLA和pocket算法：简单Python实现/index.html" target="_blank" rel="noopener">参考</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def new_PLA(mat):</span><br><span class="line">    &apos;&apos;&apos; </span><br><span class="line">    rewrite the naive PLA algorithm using vectorazation.</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    m,n = mat.shape</span><br><span class="line">    w = zeros(n)</span><br><span class="line">    bias = ones(m)</span><br><span class="line">    x_vec = c_[bias, mat] # add x0=1</span><br><span class="line">    update_cnt = 0</span><br><span class="line">    prepos = -1 # the previous position</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        out = sign(x_vec[:,0:-1] @ w)</span><br><span class="line">        out[out == 0] = -1 # sign(0) = -1 here</span><br><span class="line"></span><br><span class="line">        false_ind = where(out != sign(x_vec[:,-1]))[0] # indices where PLA is false</span><br><span class="line">        if not false_ind.any():</span><br><span class="line">            break # no false points</span><br><span class="line">        if not false_ind[false_ind &gt; prepos].any():</span><br><span class="line">            prepos = -1</span><br><span class="line"></span><br><span class="line">        pos = false_ind[false_ind &gt; prepos][0]</span><br><span class="line">        w += x_vec[pos, -1] * x_vec[pos, 0:-1] # updating the weight</span><br><span class="line">        prepos = pos</span><br><span class="line">        update_cnt += 1</span><br><span class="line"></span><br><span class="line">    return w, update_cnt</span><br><span class="line"></span><br><span class="line">data = loadtxt(r&apos;/vagrant/train.dat.txt&apos;)</span><br><span class="line">w1, iteration1 = new_PLA(data)</span><br><span class="line">print(w1,&apos;\n&apos;, iteration1)</span><br></pre></td></tr></table></figure>
+<h2 id="Python实现Pocket算法"><a href="#Python实现Pocket算法" class="headerlink" title="Python实现Pocket算法"></a>Python实现Pocket算法</h2><p><a href="https://huangweiran.club/2018/01/27/PLA和pocket算法：简单Python实现/index.html" target="_blank" rel="noopener">参考</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">def pocket(mat, iter_num = 50):</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    pocket algorithm implement.</span><br><span class="line">    what is different from PLA is that pocket pick a random point each time</span><br><span class="line">    and update if the new point causes less mistakes</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    m,n = mat.shape</span><br><span class="line">    w = zeros(n)</span><br><span class="line">    bias = ones(m)</span><br><span class="line">    x_vec = c_[bias,mat] # add the bias term</span><br><span class="line"></span><br><span class="line">    out = sign(x_vec[:,0:-1] @ w)</span><br><span class="line">    out[out == 0 ] = -1 # for sign(0) = -1 here</span><br><span class="line">    pre_error = sum((out - x_vec[:,-1]) != 0) # calculate the error</span><br><span class="line"></span><br><span class="line">    for i in range(iter_num):</span><br><span class="line">        false_id = where(out != x_vec[:,-1])[0] # the indices of mistakes</span><br><span class="line">        if not false_id.any():</span><br><span class="line">            break</span><br><span class="line">        rand_id = false_id[random.randint(len(false_id))] # randomly pick one false point</span><br><span class="line">        w += x_vec[rand_id,-1] * x_vec[rand_id,0:-1] # updating the weight</span><br><span class="line">        out = sign(x_vec[:,0:-1] @ w)</span><br><span class="line">        out[out == 0] = -1</span><br><span class="line">        new_error = sum((out - x_vec[:,-1]) != 0)</span><br><span class="line">        if new_error &lt; pre_error:</span><br><span class="line">            w_pocket = w.copy() # w_pocket&apos;s base should not be w</span><br><span class="line">            pre_error = new_error</span><br><span class="line"></span><br><span class="line">    return w_pocket</span><br></pre></td></tr></table></figure>
           
         
       

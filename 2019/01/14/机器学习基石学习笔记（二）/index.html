@@ -79,22 +79,20 @@
 
 
 
-<meta name="description" content="按输出y的分类  监督学习 非监督学习 半监督学习 增强学习(Reniforcement Learning): 我们给模型或系统一些输入，但是给不了我们希望的真实的输出y，根据模型的输出反馈，如果反馈结果良好，更接近真实输出，就给其正向激励，如果反馈结果不好，偏离真实输出，就给其反向激励。不断通过“反馈-修正”这种形式，一步一步让模型学习的更好。   按Data分类  Batch Learnin">
+<meta name="description" content="Why can machines learn?No Free Lunch定理No Free Lunch定理表明，没有一个学习算法可以在任何领域总是产生最准确的学习器。不管采用何种学习算法，至少存在一个目标函数，能够使得随机猜测算法是更好的算法。NFL说明了无法保证一个机器学习算法在D以外的数据集上一定能分类或预测正确，除非加上一些假设条件。 机器学习中假设与目标函数相等的可能性 机器学习中hypo">
 <meta name="keywords" content="机器学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习基石学习笔记（二）">
 <meta property="og:url" content="https://angelteng.github.io/blog/2019/01/14/机器学习基石学习笔记（二）/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="按输出y的分类  监督学习 非监督学习 半监督学习 增强学习(Reniforcement Learning): 我们给模型或系统一些输入，但是给不了我们希望的真实的输出y，根据模型的输出反馈，如果反馈结果良好，更接近真实输出，就给其正向激励，如果反馈结果不好，偏离真实输出，就给其反向激励。不断通过“反馈-修正”这种形式，一步一步让模型学习的更好。   按Data分类  Batch Learnin">
+<meta property="og:description" content="Why can machines learn?No Free Lunch定理No Free Lunch定理表明，没有一个学习算法可以在任何领域总是产生最准确的学习器。不管采用何种学习算法，至少存在一个目标函数，能够使得随机猜测算法是更好的算法。NFL说明了无法保证一个机器学习算法在D以外的数据集上一定能分类或预测正确，除非加上一些假设条件。 机器学习中假设与目标函数相等的可能性 机器学习中hypo">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-76aec3f8c180d9b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-d75fbba06061b513.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-f5218d30d2eafcfc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-14T03:23:25.000Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-03c02ac56816b05a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-14T07:17:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习基石学习笔记（二）">
-<meta name="twitter:description" content="按输出y的分类  监督学习 非监督学习 半监督学习 增强学习(Reniforcement Learning): 我们给模型或系统一些输入，但是给不了我们希望的真实的输出y，根据模型的输出反馈，如果反馈结果良好，更接近真实输出，就给其正向激励，如果反馈结果不好，偏离真实输出，就给其反向激励。不断通过“反馈-修正”这种形式，一步一步让模型学习的更好。   按Data分类  Batch Learnin">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-76aec3f8c180d9b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:description" content="Why can machines learn?No Free Lunch定理No Free Lunch定理表明，没有一个学习算法可以在任何领域总是产生最准确的学习器。不管采用何种学习算法，至少存在一个目标函数，能够使得随机猜测算法是更好的算法。NFL说明了无法保证一个机器学习算法在D以外的数据集上一定能分类或预测正确，除非加上一些假设条件。 机器学习中假设与目标函数相等的可能性 机器学习中hypo">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-03c02ac56816b05a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -326,30 +324,11 @@
       
 
       
-        <ol>
-<li><p>按输出y的分类</p>
-<ul>
-<li>监督学习</li>
-<li>非监督学习</li>
-<li>半监督学习</li>
-<li>增强学习(Reniforcement Learning): 我们给模型或系统一些输入，但是给不了我们希望的真实的输出y，根据模型的输出反馈，如果反馈结果良好，更接近真实输出，就给其正向激励，如果反馈结果不好，偏离真实输出，就给其反向激励。不断通过“反馈-修正”这种形式，一步一步让模型学习的更好。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-76aec3f8c180d9b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="分类"></li>
-</ul>
-</li>
-<li><p>按Data分类</p>
-<ul>
-<li>Batch Learning: 一次性拿到整个Data，对其进行学习建模。</li>
-<li>Online: 在线学习模型，数据是实时更新的，根据数据一个个进来，同步更新我们的算法。<br>  PLA算法。<br>  增强学习。</li>
-<li>Active Learning: 让机器具备主动问问题的能力，例如手写数字识别，机器自己生成一个数字或者对它不确定的手写字主动提问。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-d75fbba06061b513.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="按协议分类"></li>
-</ul>
-</li>
-</ol>
-<ol start="3">
-<li>按输入X的类型<ul>
-<li>concrete features：具体的特征。</li>
-<li>raw features：比如说手写数字识别中每个数字所在图片的mxn维像素值；比如语音信号的频谱。</li>
-<li>abstract features：比如某购物网站做购买预测时，提供给参赛者的是抽象加密过的资料编号或者ID。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-f5218d30d2eafcfc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="输入X的类型"></li>
-</ul>
-</li>
+        <h1 id="Why-can-machines-learn"><a href="#Why-can-machines-learn" class="headerlink" title="Why can machines learn?"></a>Why can machines learn?</h1><h2 id="No-Free-Lunch定理"><a href="#No-Free-Lunch定理" class="headerlink" title="No Free Lunch定理"></a>No Free Lunch定理</h2><p>No Free Lunch定理表明，没有一个学习算法可以在任何领域总是产生最准确的学习器。不管采用何种学习算法，至少存在一个目标函数，能够使得随机猜测算法是更好的算法。<br>NFL说明了无法保证一个机器学习算法在D以外的数据集上一定能分类或预测正确，除非加上一些假设条件。</p>
+<h2 id="机器学习中假设与目标函数相等的可能性"><a href="#机器学习中假设与目标函数相等的可能性" class="headerlink" title="机器学习中假设与目标函数相等的可能性"></a>机器学习中假设与目标函数相等的可能性</h2><ol>
+<li>机器学习中hypothesis与目标函数相等的可能性，类比于罐子中橙色球的概率问题；罐子里的一颗颗弹珠类比于机器学习样本空间的x；橙色的弹珠类比于h(x)与f不相等；绿色的弹珠类比于h(x)与f相等；从罐子中抽取的N个球类比于机器学习的训练样本D，且这两种抽样的样本与总体样本之间都是独立同分布的。所以呢，如果样本N够大，且是独立同分布的，那么，从样本中h(x)!=f(x)的概率就能推导在抽样样本外的所有样本中h(x)!=f(x)的概率是多少。</li>
+<li>$E_{in}(h)$表示在抽样样本中，h(x)与$y_n$不相等的概率；$E_{out}(h)$表示实际所有样本中，h(x)与f(x)不相等的概率是多少。如果$E_{in}$很小，那么他们错误概率满足PAC，他们很接近。</li>
+<li>M是hypothesis的个数，N是样本D的数量，ϵ是参数。该union bound表明，当M有限，且N足够大的时候，Bad Data出现的概率就更低了，即能保证D对于所有的h都有$E_{in}~~E_{out}$，满足PAC，演算法A的选择不受限制。那么满足这种union bound的情况，我们就可以和之前一样，选取一个合理的演算法（PLA/pocket），选择使$E_{in}$最小的$h_m$作为矩g，一般能够保证$g≈f$，即有不错的泛化能力。<br>所以，如果hypothesis的个数M是有限的，N足够大，那么通过演算法A任意选择一个矩g，都有$E_{in}≈E_{out}$成立；同时，如果找到一个矩g，使<br>$E_{in}≈0$，PAC就能保证$E_{out}≈0$。至此，就证明了机器学习是可行的。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-03c02ac56816b05a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PAC"></li>
 </ol>
 
       
@@ -441,8 +420,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -504,6 +492,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Why-can-machines-learn"><span class="nav-number">1.</span> <span class="nav-text">Why can machines learn?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#No-Free-Lunch定理"><span class="nav-number">1.1.</span> <span class="nav-text">No Free Lunch定理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机器学习中假设与目标函数相等的可能性"><span class="nav-number">1.2.</span> <span class="nav-text">机器学习中假设与目标函数相等的可能性</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
