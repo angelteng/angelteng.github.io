@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/2019/01/22/HTTP中的链接/" itemprop="url">HTTP中的链接</a></h1>
+                <a class="post-title-link" href="/blog/2019/01/22/HTTP中的链接/" itemprop="url">HTTP中的"链接"</a></h1>
         
 
         <div class="post-meta">
@@ -642,6 +642,24 @@
 <li>将$d_{vc}$代表k，此时vc bound 为<br><img src="https://upload-images.jianshu.io/upload_images/14827444-accd66b08778439d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="vc bound"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-d3da3e84b07ac608.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ϵ的值"><br>ϵ表现了假设空间H的泛化能力，ϵ越小，泛化能力越大。<br>那么，可以得到<br><img src="https://upload-images.jianshu.io/upload_images/14827444-e80ffd85385d0e95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ein"><br>上述不等式的右边第二项称为模型复杂度，其模型复杂度与样本数量N、假设空间$H(d_{vc})$、ϵ有关。$E_{out}$由$E_{in}$共同决定。下面绘出$E_{out}$、model complexity、$E_{in}$随$d_{vc}$变化的关系：<br><img src="https://upload-images.jianshu.io/upload_images/14827444-58c067ed436601e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="eout"></li>
 <li>样本复杂度（Sample Complexity），如果选定$d_{vc}$，样本D的数量N大约是$d_{vc}$的10000倍。这个数值太大了，实际中往往不需要这么多的样本数量，大概只需要$d_{vc}$的10倍就够了。</li>
 </ol>
+<h2 id="Noise-and-Error"><a href="#Noise-and-Error" class="headerlink" title="Noise and Error"></a>Noise and Error</h2><h3 id="错误衡量"><a href="#错误衡量" class="headerlink" title="错误衡量"></a>错误衡量</h3><p><img src="https://upload-images.jianshu.io/upload_images/14827444-475ff99ec11870e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Noise"></p>
+<ol>
+<li><p>错误衡量三个特性</p>
+<ul>
+<li>out-of-sample：样本外的未知数据</li>
+<li>pointwise：对每个数据点x进行测试</li>
+<li>classification：看prediction与target是否一致，classification error通常称为0/1 error</li>
+</ul>
+</li>
+<li><p>PointWise error实际上就是对数据集的每个点计算错误并计算平均<br><img src="https://upload-images.jianshu.io/upload_images/14827444-8dd269939c49fec9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PointWise"><br>pointwise error一般可以分成两类：0/1 error和squared error。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-48a29866a612b03c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PointWise"></p>
+</li>
+<li>Ideal Mini-Target由P(y∣x)和err共同决定。<br>0/1 error中的mini-target是取P(y|x)最大的那个类，而squared error中的mini-target是取所有类的加权平方和。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-40449f24bc45f4bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Ideal"></li>
+</ol>
+<h3 id="Algorithmic-Error-Measure"><a href="#Algorithmic-Error-Measure" class="headerlink" title="Algorithmic Error Measure"></a>Algorithmic Error Measure</h3><ol>
+<li>Error有两种：false accept和false reject。false accept意思是误把负类当成正类，false reject是误把正类当成负类。</li>
+<li>机器学习演算法A的cost function error估计有多种方法，真实的err一般难以计算，常用的方法可以采用plausible或者friendly<br><img src="https://upload-images.jianshu.io/upload_images/14827444-e806b8c8d89313a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="err"></li>
+</ol>
+<h3 id="Weighted-Classification"><a href="#Weighted-Classification" class="headerlink" title="Weighted Classification"></a>Weighted Classification</h3><p>机器学习的Cost Function即来自于这些error，也就是算法里面的迭代的目标函数，通过优化使得Error（Ein）不断变小。<br>cost function中，false accept和false reject赋予不同的权重，在演算法中体现。对不同权重的错误惩罚，可以选用virtual copying的方法。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-c6eafcced58adb88.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Weighted Classification"></p>
 
           
         
