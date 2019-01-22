@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="后端,">
+  <meta name="keywords" content="浏览器,HTTP,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="密钥散列消息认证码(Keyed-hash message authentication code)它是一种通过特别计算方式之后产生的消息认证码（MAC），使用密码散列函数，同时结合一个加密密钥。它可以用来保证数据的完整性，同时可以用来作某个消息的身份验证。 使用方法（Python)：12345678import hmac# 传入的key和message都是bytes类型message = b&amp;ap">
-<meta name="keywords" content="后端">
+<meta name="description" content="短链接在HTTP/1.0中，默认使用的是短连接。也就是说，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。如果客户端浏览器访问的某个HTML或其他类型的 Web页中包含有其他的Web资源，如JavaScript文件、图像文件、CSS文件等；当浏览器每遇到这样一个Web资源，就会建立一个HTTP会话。 长链接HTTP/1.1起，默认使用长连接，用以保持连接特性。使用长连接">
+<meta name="keywords" content="浏览器,HTTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hmac加密算法">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/12/06/hmac加密算法/index.html">
+<meta property="og:title" content="HTTP中的链接">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/01/22/HTTP中的链接/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="密钥散列消息认证码(Keyed-hash message authentication code)它是一种通过特别计算方式之后产生的消息认证码（MAC），使用密码散列函数，同时结合一个加密密钥。它可以用来保证数据的完整性，同时可以用来作某个消息的身份验证。 使用方法（Python)：12345678import hmac# 传入的key和message都是bytes类型message = b&amp;ap">
+<meta property="og:description" content="短链接在HTTP/1.0中，默认使用的是短连接。也就是说，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。如果客户端浏览器访问的某个HTML或其他类型的 Web页中包含有其他的Web资源，如JavaScript文件、图像文件、CSS文件等；当浏览器每遇到这样一个Web资源，就会建立一个HTTP会话。 长链接HTTP/1.1起，默认使用长连接，用以保持连接特性。使用长连接">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-06T06:58:48.000Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-ad2e8696df76a798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-22T03:12:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hmac加密算法">
-<meta name="twitter:description" content="密钥散列消息认证码(Keyed-hash message authentication code)它是一种通过特别计算方式之后产生的消息认证码（MAC），使用密码散列函数，同时结合一个加密密钥。它可以用来保证数据的完整性，同时可以用来作某个消息的身份验证。 使用方法（Python)：12345678import hmac# 传入的key和message都是bytes类型message = b&amp;ap">
+<meta name="twitter:title" content="HTTP中的链接">
+<meta name="twitter:description" content="短链接在HTTP/1.0中，默认使用的是短连接。也就是说，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。如果客户端浏览器访问的某个HTML或其他类型的 Web页中包含有其他的Web资源，如JavaScript文件、图像文件、CSS文件等；当浏览器每遇到这样一个Web资源，就会建立一个HTTP会话。 长链接HTTP/1.1起，默认使用长连接，用以保持连接特性。使用长连接">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-ad2e8696df76a798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/12/06/hmac加密算法/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/01/22/HTTP中的链接/">
 
 
 
 
 
-  <title>hmac加密算法 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>HTTP中的链接 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +235,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/06/hmac加密算法/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/22/HTTP中的链接/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +252,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">hmac加密算法</h1>
+          <h1 class="post-title" itemprop="name headline">HTTP中的链接</h1>
         
 
         <div class="post-meta">
@@ -262,8 +264,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-06T11:42:51+08:00">
-                2018-12-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T11:05:32+08:00">
+                2019-01-22
               </time>
             
 
@@ -285,8 +287,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
-                    <span itemprop="name">后端</span>
+                  <a href="/blog/categories/浏览器/" itemprop="url" rel="index">
+                    <span itemprop="name">浏览器</span>
                   </a>
                 </span>
 
@@ -322,9 +324,17 @@
       
 
       
-        <p>密钥散列消息认证码(Keyed-hash message authentication code)<br>它是一种通过特别计算方式之后产生的消息认证码（MAC），使用密码散列函数，同时结合一个加密密钥。它可以用来保证数据的完整性，同时可以用来作某个消息的身份验证。</p>
-<p>使用方法（Python)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import hmac</span><br><span class="line"># 传入的key和message都是bytes类型</span><br><span class="line">message = b&apos;Hello, world!&apos;</span><br><span class="line">key = b&apos;secret&apos;</span><br><span class="line">h = hmac.new(key, message, digestmod=&apos;MD5&apos;)</span><br><span class="line"># 如果消息很长，可以多次调用h.update(msg)</span><br><span class="line">h.hexdigest()</span><br><span class="line"># output: &apos;fa4ee7d173f2d97ee79022d1a7355bcf&apos;</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://pythoncaff.com/docs/pymotw/hmac-cryptographic-message-signing-and-verification/134" target="_blank" rel="noopener">参考</a></p>
+        <h1 id="短链接"><a href="#短链接" class="headerlink" title="短链接"></a>短链接</h1><p>在HTTP/1.0中，默认使用的是短连接。也就是说，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。如果客户端浏览器访问的某个HTML或其他类型的 Web页中包含有其他的Web资源，如JavaScript文件、图像文件、CSS文件等；当浏览器每遇到这样一个Web资源，就会建立一个HTTP会话。</p>
+<h1 id="长链接"><a href="#长链接" class="headerlink" title="长链接"></a>长链接</h1><p>HTTP/1.1起，默认使用长连接，用以保持连接特性。使用长连接的HTTP协议，会在响应头有加入这行代码：Connection:keep-alive<br>在使用长连接的情况下，当一个网页打开完成后，客户端和服务器之间用于传输HTTP数据的 TCP连接不会关闭，如果客户端再次访问这个服务器上的网页，会继续使用这一条已经建立的连接。Keep-Alive不会永久保持连接，它有一个保持时间，可以在不同的服务器软件（如Apache）中设定这个时间。实现长连接要客户端和服务端都支持长连接。<br>HTTP协议的长连接和短连接，实质上是TCP协议的长连接和短连接。</p>
+<h1 id="Websocket"><a href="#Websocket" class="headerlink" title="Websocket"></a>Websocket</h1><p>WebSocket是一种在单个TCP连接上进行全双工通信的协议。<br>网站为了实现推送技术，所用的技术都是轮询。轮询是在特定的的时间间隔（如每1秒），由浏览器对服务器发出HTTP请求，然后由服务器返回最新的数据给客户端的浏览器。这种传统的模式带来很明显的缺点，即浏览器需要不断的向服务器发出请求，然而HTTP请求可能包含较长的头部，其中真正有效的数据可能只是很小的一部分，显然这样会浪费很多的带宽等资源。<br>而比较新的技术去做轮询的效果是Comet。这种技术虽然可以双向通信，但依然需要反复发出请求。而且在Comet中，普遍采用的长链接，也会消耗服务器资源。<br>在这种情况下，HTML5定义了WebSocket协议，能更好的节省服务器资源和带宽，并且能够更实时地进行通讯。<br>Websocket使用ws或wss的统一资源标志符，类似于HTTPS，其中wss表示在TLS之上的Websocket。</p>
+<h1 id="HTTP2"><a href="#HTTP2" class="headerlink" title="HTTP2"></a>HTTP2</h1><p><a href="https://zh.wikipedia.org/wiki/HTTP/2" target="_blank" rel="noopener">wiki</a></p>
+<ol>
+<li>新的二进制格式：HTTP1.x的解析是基于文本，HTTP2.0的协议解析决定采用二进制格式</li>
+<li>多路复用<br>￼<img src="https://upload-images.jianshu.io/upload_images/14827444-ad2e8696df76a798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="多路复用"></li>
+<li>header压缩</li>
+<li>服务端推送</li>
+<li>HTTP2.0其实可以支持非HTTPS的，但是现在主流的浏览器像chrome，firefox表示还是只支持基于 TLS 部署的HTTP2.0协议，所以要想升级成HTTP2.0还是先升级HTTPS为好</li>
+</ol>
 
       
     </div>
@@ -342,7 +352,9 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/后端/" rel="tag"># 后端</a>
+            <a href="/blog/tags/浏览器/" rel="tag"># 浏览器</a>
+          
+            <a href="/blog/tags/HTTP/" rel="tag"># HTTP</a>
           
         </div>
       
@@ -355,8 +367,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/12/04/利用Tensorflow简单线性拟合实践/" rel="next" title="利用Tensorflow简单线性拟合实践">
-                <i class="fa fa-chevron-left"></i> 利用Tensorflow简单线性拟合实践
+              <a href="/blog/2019/01/18/机器学习基石学习笔记（三）/" rel="next" title="机器学习基石学习笔记（三）">
+                <i class="fa fa-chevron-left"></i> 机器学习基石学习笔记（三）
               </a>
             
           </div>
@@ -364,10 +376,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/12/10/数据结构与算法/" rel="prev" title="数据结构与算法">
-                数据结构与算法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -419,8 +427,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -482,6 +499,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#短链接"><span class="nav-number">1.</span> <span class="nav-text">短链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#长链接"><span class="nav-number">2.</span> <span class="nav-text">长链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Websocket"><span class="nav-number">3.</span> <span class="nav-text">Websocket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP2"><span class="nav-number">4.</span> <span class="nav-text">HTTP2</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
