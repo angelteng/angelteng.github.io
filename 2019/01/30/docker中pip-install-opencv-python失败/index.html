@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="docker,">
 
 
 
@@ -79,14 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://angelteng.github.io/blog/tags/index.html">
+<meta name="description" content="问题：dockerFile中1234From Alpine....RUN pip3 install opencv-python docker build 时出现报错，即使升级了pip之后:Could not find a version that satisfies the requirement opencv-python (from version: )No matching distribu">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker中pip install opencv-python失败">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/01/30/docker中pip-install-opencv-python失败/index.html">
 <meta property="og:site_name" content="Code war of Angel">
+<meta property="og:description" content="问题：dockerFile中1234From Alpine....RUN pip3 install opencv-python docker build 时出现报错，即使升级了pip之后:Could not find a version that satisfies the requirement opencv-python (from version: )No matching distribu">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-30T09:30:00.000Z">
+<meta property="og:updated_time" content="2019-01-30T03:11:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
+<meta name="twitter:title" content="docker中pip install opencv-python失败">
+<meta name="twitter:description" content="问题：dockerFile中1234From Alpine....RUN pip3 install opencv-python docker build 时出现报错，即使升级了pip之后:Could not find a version that satisfies the requirement opencv-python (from version: )No matching distribu">
 
 
 
@@ -116,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/tags/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/01/30/docker中pip-install-opencv-python失败/">
 
 
 
 
 
-  <title>tags | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>docker中pip install opencv-python失败 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -217,40 +221,171 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/30/docker中pip-install-opencv-python失败/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">tags</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                21 tags in total
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/blog/tags/Flask/" style="font-size: 25.5px; color: #404040">Flask</a> <a href="/blog/tags/HTTP/" style="font-size: 16.5px; color: #9d9d9d">HTTP</a> <a href="/blog/tags/JavaScript/" style="font-size: 12px; color: #ccc">JavaScript</a> <a href="/blog/tags/Nginx/" style="font-size: 12px; color: #ccc">Nginx</a> <a href="/blog/tags/PHP/" style="font-size: 16.5px; color: #9d9d9d">PHP</a> <a href="/blog/tags/Python/" style="font-size: 30px; color: #111">Python</a> <a href="/blog/tags/Redis/" style="font-size: 12px; color: #ccc">Redis</a> <a href="/blog/tags/Tensorflow/" style="font-size: 12px; color: #ccc">Tensorflow</a> <a href="/blog/tags/Three-js/" style="font-size: 12px; color: #ccc">Three.js</a> <a href="/blog/tags/Ubuntu/" style="font-size: 12px; color: #ccc">Ubuntu</a> <a href="/blog/tags/WebGL/" style="font-size: 12px; color: #ccc">WebGL</a> <a href="/blog/tags/docker/" style="font-size: 21px; color: #6f6f6f">docker</a> <a href="/blog/tags/hexo-node/" style="font-size: 12px; color: #ccc">hexo, node</a> <a href="/blog/tags/前端/" style="font-size: 21px; color: #6f6f6f">前端</a> <a href="/blog/tags/后端/" style="font-size: 12px; color: #ccc">后端</a> <a href="/blog/tags/机器学习/" style="font-size: 21px; color: #6f6f6f">机器学习</a> <a href="/blog/tags/架构设计/" style="font-size: 12px; color: #ccc">架构设计</a> <a href="/blog/tags/浏览器/" style="font-size: 16.5px; color: #9d9d9d">浏览器</a> <a href="/blog/tags/算法/" style="font-size: 21px; color: #6f6f6f">算法</a> <a href="/blog/tags/系统/" style="font-size: 12px; color: #ccc">系统</a> <a href="/blog/tags/高并发/" style="font-size: 12px; color: #ccc">高并发</a>
-            </div>
-          </div>
+          <h1 class="post-title" itemprop="name headline">docker中pip install opencv-python失败</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T11:04:47+08:00">
+                2019-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>问题：<br>dockerFile中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">From Alpine</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">RUN pip3 install opencv-python</span><br></pre></td></tr></table></figure></p>
+<p>docker build 时出现报错，即使升级了pip之后:<br>Could not find a version that satisfies the requirement opencv-python (from version: )<br>No matching distribution found for opencv-python</p>
+<p>原因：<br><a href="https://stackoverflow.com/questions/50950588/trouble-installing-opencv-in-docker-container-using-pip" target="_blank" rel="noopener">from stackoverflow</a><br>I’ve just run into this issue as well. It turns out that this is not working because opencv-python does not have any prebuilt wheels for Alpine (the distribution you’re using as your base docker image).</p>
+<p>The conversation in this issue on the opencv-python package explains why this happens in greater detail. The TL;DR is: if you really need to use Alpine, you can try forcing the installation of the manylinux wheel for opencv-python, but this can break. Your best option if you need to keep Alpine is to build the module from source. Since you are running this on OpenFAAS, I suspect you will want to keep your size low, so building from source may be a good option for you.</p>
+<p>If you’re not attached to Alpine, I would suggest moving to a different base docker image. If you’re not sure which image to use as your base, I would recommend python:3.7-slim, since it will come with Python already installed (substitute 3.7 for whichever version you are using, but really. . . 3.7 is nice). With this container, you can simply run pip install opencv-python numpy scipy to have all three of your desired packages installed. The rest of your Dockerfile should work mostly unmodified; you will just need to install/uninstall curl using apt instead of apk.</p>
+<p>简单来说就是，Alpine中没有prebuild opencv-python,如果一定要用Alpine，可以强制下载编译，但是有可能出错。也可以更换使用 python:3.x-slim镜像。</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/docker/" rel="tag"># docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/29/Nginx通讯机制/" rel="next" title="Nginx通讯机制">
+                <i class="fa fa-chevron-left"></i> Nginx通讯机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 

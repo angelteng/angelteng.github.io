@@ -229,6 +229,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/30/docker中pip-install-opencv-python失败/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/01/30/docker中pip-install-opencv-python失败/" itemprop="url">docker中pip install opencv-python失败</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T11:04:47+08:00">
+                2019-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>问题：<br>dockerFile中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">From Alpine</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">RUN pip3 install opencv-python</span><br></pre></td></tr></table></figure></p>
+<p>docker build 时出现报错，即使升级了pip之后:<br>Could not find a version that satisfies the requirement opencv-python (from version: )<br>No matching distribution found for opencv-python</p>
+<p>原因：<br><a href="https://stackoverflow.com/questions/50950588/trouble-installing-opencv-in-docker-container-using-pip" target="_blank" rel="noopener">from stackoverflow</a><br>I’ve just run into this issue as well. It turns out that this is not working because opencv-python does not have any prebuilt wheels for Alpine (the distribution you’re using as your base docker image).</p>
+<p>The conversation in this issue on the opencv-python package explains why this happens in greater detail. The TL;DR is: if you really need to use Alpine, you can try forcing the installation of the manylinux wheel for opencv-python, but this can break. Your best option if you need to keep Alpine is to build the module from source. Since you are running this on OpenFAAS, I suspect you will want to keep your size low, so building from source may be a good option for you.</p>
+<p>If you’re not attached to Alpine, I would suggest moving to a different base docker image. If you’re not sure which image to use as your base, I would recommend python:3.7-slim, since it will come with Python already installed (substitute 3.7 for whichever version you are using, but really. . . 3.7 is nice). With this container, you can simply run pip install opencv-python numpy scipy to have all three of your desired packages installed. The rest of your Dockerfile should work mostly unmodified; you will just need to install/uninstall curl using apt instead of apk.</p>
+<p>简单来说就是，Alpine中没有prebuild opencv-python,如果一定要用Alpine，可以强制下载编译，但是有可能出错。也可以更换使用 python:3.x-slim镜像。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/29/Nginx通讯机制/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1606,435 +1753,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/19/数据结构与算法（二）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/12/19/数据结构与算法（二）/" itemprop="url">数据结构与算法（二）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-19T09:59:44+08:00">
-                2018-12-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
-                    <span itemprop="name">后端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><ol>
-<li>概念<br><img src="https://upload-images.jianshu.io/upload_images/14827444-ee545ef13dcf95de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树"><ul>
-<li>节点的高度：结点到叶子结点的最长路径</li>
-<li>节点的深度：根节点到这个结点所经历边的个数</li>
-<li>节点的层级：结点的深度+1</li>
-<li>树的高度：根节点的高度</li>
-</ul>
-</li>
-</ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-c52ab6536ec5111d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树的类型"></p>
-<pre><code>- 满二叉树：编号2，叶子节点都在最底层，除叶子节点外，每个节点都有左右两个子节点。
-- 完全二叉树：编号3，叶子节点都在最下层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大。
-</code></pre><ol start="2">
-<li><p>存储二叉树</p>
-<ul>
-<li>链表存储法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-f1b83bcd2e607e71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="链表存储法"></li>
-<li>顺序存储法<br><img src="https://upload-images.jianshu.io/upload_images/14827444-bd584d1f79d708c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="顺序存储法"><br>如果是完全二叉树，数组存储是最节省内存的方法。</li>
-</ul>
-</li>
-<li><p>二叉树的遍历 O(n)<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1cb04fef37e82f5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二叉树的遍历"></p>
-<ul>
-<li>前序遍历：对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。</li>
-<li>中序遍历：对于树中的任意节点来说，先打印它的左子树，然后再打印它本身，最后打印它的右子树。</li>
-<li>后序遍历：对于树中的任意节点来说，线打印它的左子树，然后打印右子树，最后打印它本身。</li>
-<li>按层遍历<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 前序遍历</span><br><span class="line">function preOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  console.log(root.val) </span><br><span class="line">  preOrder(root-&gt;left);</span><br><span class="line">  preOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 中序遍历</span><br><span class="line">function inOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  inOrder(root-&gt;left);</span><br><span class="line">  console.log(root.val) </span><br><span class="line">  inOrder(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 后序遍历</span><br><span class="line">function postOrder(root) &#123;</span><br><span class="line">  if (root == null) return;</span><br><span class="line">  postOrder(root-&gt;left);</span><br><span class="line">  postOrder(root-&gt;right);</span><br><span class="line">  console.log(root.val) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ol>
-<h5 id="二叉查找树-O-logn"><a href="#二叉查找树-O-logn" class="headerlink" title="二叉查找树 O(logn)"></a>二叉查找树 O(logn)</h5><ol>
-<li>要求：对于树中任意一个节点，其左子树的值都要小与这个节点的值，右子树的值都要大于这个节点的值。<br> 平衡时间复杂度：O(logn)</li>
-<li><p>二叉查找树的查找：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function treeSearch(tree,value)&#123;</span><br><span class="line">    if(tree.value === value)&#123;</span><br><span class="line">        return tree.value;</span><br><span class="line">    &#125;</span><br><span class="line">    else if(tree.value&lt;value &amp;&amp; tree.right)&#123;</span><br><span class="line">        return treeSearch(tree.right,value);</span><br><span class="line">    &#125;</span><br><span class="line">    else if(tree.value&gt;value &amp;&amp; tree.left)&#123;</span><br><span class="line">        return treeSearch(tree.left,value);</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>二叉树插入操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 假设插入的数据在叶子节点上</span><br><span class="line">function treeInsert(tree,value)&#123;</span><br><span class="line">    var p = tree;</span><br><span class="line">    while (p!=null)&#123;</span><br><span class="line">        if(p.value === value)&#123;</span><br><span class="line">            return &apos;repeat&apos;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(p.value &lt; value)&#123;</span><br><span class="line">            if(!p.right)&#123;</span><br><span class="line">                p.right = &#123;value: value&#125;;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.right;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(p.value &gt; value)&#123;</span><br><span class="line">            if(!p.left)&#123;</span><br><span class="line">                p.left = &#123;value: value&#125;;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>二叉树删除操作</p>
-<ul>
-<li>如果该节点没有子节点，删除该节点，并将父节点指向Null。</li>
-<li>如果该节点有一个子节点，删除该节点，并将父节点指向子节点。</li>
-<li>如果该节点有两个及以上子节点，删除该节点，并将右子树中最小节点替换到该位置。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">function treeDelete(tree,value)&#123;</span><br><span class="line">    var p = tree;</span><br><span class="line">    var pp = null; // 父节点</span><br><span class="line">    while (p!=null &amp;&amp; p.value!= value)&#123;</span><br><span class="line">        pp = p;</span><br><span class="line">        if(value &gt; p.value)&#123;</span><br><span class="line">            p = p.right;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if( p == null)&#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    // 没有子节点</span><br><span class="line">    if(!p.left &amp;&amp; !p.right)&#123;</span><br><span class="line">        if(pp.right == p)&#123;</span><br><span class="line">            delete pp.right;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            delete pp.left;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 有一个子节点</span><br><span class="line">    else if(!p.left || !p.right)&#123;</span><br><span class="line">        var child = p.left? p.left:p.right;</span><br><span class="line">        if(pp.right == p)&#123;</span><br><span class="line">            pp.right = child;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            pp.left = child;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 有两个及以上子节点</span><br><span class="line">    else&#123;</span><br><span class="line">        //找右子树中的最小值</span><br><span class="line">        minP = p.right; </span><br><span class="line">        minPP = p;</span><br><span class="line">        while(minP.left !=null)&#123;</span><br><span class="line">            minPP = minP;</span><br><span class="line">            minP = minP.left;</span><br><span class="line">        &#125;</span><br><span class="line">        p.value = minP.value;</span><br><span class="line">        delete minPP.left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>快速查找最大、最小节点、前驱节点、后继结点</p>
-</li>
-<li>中序遍历查找二叉树，可以输出有序的数据，时间复杂度是O(n)</li>
-<li>支持重复数据的二叉查找树：<ul>
-<li>方法一：二叉查找树每个节点不止存储一个数据，存储一个链表，或者是动态扩容的数据。</li>
-<li>方法二：每个节点只存储一个数据，如果重复，将这个值放在右子树，当作大于这个节点处理。查找时，查到值相同节点不停止查找，继续在右子树中查找，知道找到叶子节点。删除时，先找到所有节点，再按正常删除操作处理。</li>
-</ul>
-</li>
-<li>与散列表对比：<ul>
-<li>散列表数据是无序的，如需要有序的数据，先排列；二叉查找树只需要中序遍历，可以在O(n)时间复杂度内，输出有序的数据序列。</li>
-<li>散列表扩容需要耗时比较久，遇到散列冲突时，性能不稳定；平衡二叉树的性能稳定，时间复杂度在O(logn)。</li>
-<li>散列表查找操作时间时常数级，但因为哈希冲突存在，这个常量不一定比logn小，加上哈希函数的耗时。</li>
-<li>散列表的构造比二叉查找树要复杂；平衡二叉查找树只需要考虑平衡性这一个问题。</li>
-</ul>
-</li>
-</ol>
-<h5 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h5><p><img src="https://upload-images.jianshu.io/upload_images/14827444-c0b6e9ab694ca38c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="红黑树"><br>红黑树是一种性能非常稳定的平衡二叉树，它是为了解决普通二叉树在数据更新中，复杂度退化的问题产生的，红黑树的高度近似log2n，所以它是近似平衡，查找、插入、删除的时间复杂度都是O(logn)。</p>
-<ol>
-<li>要求<ul>
-<li>根节点是黑色</li>
-<li>每个叶子节点都是黑色空节点，也就是说叶子节点不存储数据</li>
-<li>任何相邻节点不同时为红色，也就是说，红色节点是被黑色节点隔开</li>
-<li>每个节点，从该节点到达其可达叶子节点所经过的所有路径，经过的黑色节点的数目相同</li>
-</ul>
-</li>
-<li><p>实现</p>
-<ul>
-<li><img src="https://upload-images.jianshu.io/upload_images/14827444-e0d2f799bf77eb78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="左旋&amp;右旋"><br>左旋：围绕某个节点的左旋<br>右旋：围绕某个节点的右旋</li>
-</ul>
-</li>
-<li><p>插入</p>
-<ul>
-<li>插入操作的平衡调整：<br>  规定：插入的节点必须是红色的，而且二叉查找树中新插入的节点都是放在叶子节点上。<ol>
-<li>如果插入节点的父节点是黑色的，那我们什么都不用做，它仍然满足红黑树的定义。</li>
-<li>如果插入的节点是根节点，那我们直接改变它的颜色，把它变成黑色就可以了。</li>
-<li>除此外的情况需要左右旋转、改变颜色来满足规定。</li>
-</ol>
-</li>
-<li>case1: 如果关注节点是 a，它的叔叔节点 d 是红色<br><img src="https://upload-images.jianshu.io/upload_images/14827444-93258d273272c9c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="case1"><ol>
-<li>将关注节点 a 的父节点 b、叔叔节点 d 的颜色都设置成黑色</li>
-<li>将关注节点 a 的祖父节点 c 的颜色设置成红色；</li>
-<li>关注节点变成 a 的祖父节点 c；</li>
-<li>跳到 CASE 2 或者 CASE 3。</li>
-</ol>
-</li>
-<li>case2: 如果关注节点是 a，它的叔叔节点 d 是黑色，关注节点 a是其父节点 b 的右子节点<br><img src="https://static001.geekbang.org/resource/image/44/ad/4480a314f9d83c343b8adbb28b6782ad.jpg" alt="case2"><ol>
-<li>关注节点变成节点 a 的父节点 b；</li>
-<li>围绕新的关注节点b 左旋；</li>
-<li>跳到case3.</li>
-</ol>
-</li>
-<li>case3: 如果关注节点是 a，它的叔叔节点d是黑色，关注节点a 是其父节点b的左子节点<br><img src="https://static001.geekbang.org/resource/image/04/12/04650d9470b1e67899f5b8b7b8e33212.jpg" alt="case3"><ol>
-<li>围绕关注节点 a 的祖父节点 c 右旋;</li>
-<li>将关注节点 a 的父节点 b、兄弟节点 c 的颜色互换。</li>
-<li>调整结束。</li>
-</ol>
-</li>
-</ul>
-</li>
-<li>删除<ul>
-<li>Step1: 针对删除节点初步调整，保证整个红黑树在删除这个节点后，依然满足“每个节点，从该节点到达其可达叶子节点所经过的所有路径，经过的黑色节点的数目相同”。<ol>
-<li>case1: 如果要删除的节点是 a，它只有一个子节点 b<br><img src="https://static001.geekbang.org/resource/image/a6/c3/a6c4c347b7cbdf57662bab399ed36cc3.jpg" alt="case1"><ul>
-<li>删除节点 a，并且把节点 b 替换到节点 a 的位置</li>
-<li>节点a只能是黑色，节点b只能是红色。在case1中，将节点b改成黑色。</li>
-<li>不需要二次调整</li>
-</ul>
-</li>
-<li>case2: 如果要删除的节点 a 有两个非空子节点，并且它的后继节点就是a的右子节点c<br><img src="https://static001.geekbang.org/resource/image/48/4e/48e3bd2cdd66cb635f8a4df8fb8fd64e.jpg" alt="case2"><ul>
-<li>如果节点 a 的后继节点就是右子节点 c，那右子节点 c 肯定没有左子树。我们把节点 a 删除，并且将节点 c 替换到节点a的位置。</li>
-<li>把节点c 的颜色设置为节点a的颜色</li>
-<li>如果节点c是黑色，为了不违反最后一条定义，给节点c的右子节点d增加一个黑色。</li>
-<li>此时关注节点变成d ，进行二次调整。</li>
-</ul>
-</li>
-<li>case3: 如果要删除的是节点 a，它有两个非空子节点，并且节点 a 的的后继节点不是右子节点<br><img src="https://static001.geekbang.org/resource/image/b9/29/b93c1fa4de16aee5482424ddf49f3c29.jpg" alt="case3"><ul>
-<li>找到后继节点 d，并将它删除，删除后继节点 d 的过程参照case1</li>
-<li>将节点 a 替换成后继节点 d</li>
-<li>把节点 d 的颜色设置为跟节点 a 相同的颜色</li>
-<li>如果节点 d 是黑色，为了不违反红黑树的最后一条定义，我们给节点d的右子节点c多加一个黑色</li>
-<li>此时关注节点变成c，进行二次调整。</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>Step2: 二次调整，以满足“即不存在相邻的两个红色节点“<ol>
-<li>case1: 如果关注节点是 a，它的兄弟节点 c 是红色的<br><img src="https://static001.geekbang.org/resource/image/ac/91/ac76d78c064a2486e2a5b4c4903acb91.jpg" alt="case1"><ul>
-<li>围绕关注节点 a 的父节点 b 左旋</li>
-<li>关注节点 a 的父节点 b 和祖父节点 c 交换颜色</li>
-<li>关注节点不变</li>
-<li>继续从四种情况中选择适合的规则来调整</li>
-</ul>
-</li>
-<li>case2: 如果关注节点是 a，它的兄弟节点 c 是黑色的，并且节点 c的左右子节点 d、e 都是黑色的<br><img src="https://static001.geekbang.org/resource/image/ec/ec/eca118d673c607eb2b103f3476fb24ec.jpg" alt="case2"><ul>
-<li>将关注节点 a 的兄弟节点 c 的颜色变成红色</li>
-<li>从关注节点 a 中去掉一个黑色，这个时候节点 a 就是单纯的红色/黑色</li>
-<li>给关注节点 a 的父节点b增加一个黑色</li>
-<li>关注节点从 a 变成其父节点 b</li>
-<li>继续从四种情况中选择适合的规则来调整</li>
-</ul>
-</li>
-<li>case3: 如果关注节点是 a，它的兄弟节点 c 是黑色，c 的左子节点d 是红色，c的右子节点d是黑色<br><img src="https://static001.geekbang.org/resource/image/44/af/44075213100edd70315e1492422c92af.jpg" alt="case3"><ul>
-<li>围绕关注节点 a 的兄弟节点 c 右旋</li>
-<li>节点 c 和节点 d 交换颜色</li>
-<li>关注节点不变</li>
-<li>继续从四种情况中选择适合的规则来调整</li>
-</ul>
-</li>
-<li>case4: 如果关注节点 a 的兄弟节点 c 是黑色的，并且 c 的右子节点是红色<br><img src="https://static001.geekbang.org/resource/image/5f/44/5f73f61bf77a7f2bb75f168cf432ec44.jpg" alt="case4"><ul>
-<li>围绕关注节点 a 的父节点 b 左旋</li>
-<li>将关注节点 a 的兄弟节点 c 的颜色，跟关注节点 a 的父节点 b 设置成相同的颜色</li>
-<li>将关注节点 a 的父节点 b 的颜色设置为黑色</li>
-<li>从关注节点 a 中去掉一个黑色，节点 a 就变成了单纯的红色/黑色</li>
-<li>将关注节点 a 的叔叔节点 e 设置为黑色</li>
-<li>调整结束</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<h4 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h4><h5 id="使用递归树分析时间复杂度"><a href="#使用递归树分析时间复杂度" class="headerlink" title="使用递归树分析时间复杂度"></a>使用递归树分析时间复杂度</h5><p><img src="https://static001.geekbang.org/resource/image/1d/a3/1d9648b7f43e430473d76d24803159a3.jpg" alt="递归树"></p>
-<ol>
-<li><p>归并排序递归树<br><img src="https://static001.geekbang.org/resource/image/c6/d0/c66bfc3d02d3b7b8f64c208bf4c948d0.jpg" alt="归并排序递归树"></p>
-<ul>
-<li>每一层耗时的合并操作耗时n</li>
-<li>满二叉树的高度是logn</li>
-<li>所以时间复杂度是 O(nlogn)</li>
-</ul>
-</li>
-<li><p>快排递归树<br><img src="https://static001.geekbang.org/resource/image/44/43/44972a3531dae0b7a0ccc935bc13f243.jpg" alt="快排递归树"></p>
-<ul>
-<li>假设每次分区都是1:9</li>
-<li>每层操作数据之和为n</li>
-<li>根节点到叶子节点最短路径是log(10)n，最长路径是log(9/10)n，忽略常数，即logn</li>
-<li>所以时间复杂度是O(nlogn)</li>
-</ul>
-</li>
-<li><p>斐波那契数列的递归树</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function feibo(n) &#123;</span><br><span class="line">if (n == 1) return 1;</span><br><span class="line">if (n == 2) return 2;</span><br><span class="line">return feibo(n-1) + feibo(n-2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><img src="https://static001.geekbang.org/resource/image/9c/ce/9ccbce1a70c7e2def52701dcf176a4ce.jpg" alt="斐波那契数列的递归树"></p>
-<pre><code>- 根节点到叶子节点最长路径是n， 最短路径是n/2
-- 如果是n，总耗时就是 2^n - 1； 如果是n/2 总耗时就是 2^(n/2) -1;
-- 所以时间复杂度是O(2^n) ~ O(2^(n/2))
-</code></pre><ol start="4">
-<li>全排列的时间复杂度<br><img src="https://static001.geekbang.org/resource/image/82/9b/82f40bed489cf29b14192b44decf059b.jpg" alt="全排列"><ul>
-<li>总和：n + n<em>(n-1) + n</em>(n-1)<em>(n-2) +… + n</em>(n-1)<em>(n-2)</em>…<em>2</em>1 = O(n!) ~ O(n*n!)</li>
-</ul>
-</li>
-</ol>
-<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
-<li>定义：<ul>
-<li>堆是个完全二叉树。</li>
-<li>堆中每一个节点的值都必须大于等于（或者小于等于）其子树中每个节点的值，称为“大顶堆”（或小顶堆）。</li>
-</ul>
-</li>
-<li><p>实现</p>
-<ul>
-<li>用数组存储堆<br><img src="https://static001.geekbang.org/resource/image/4d/1e/4d349f57947df6590a2dd1364c3b0b1e.jpg" alt="堆"></li>
-<li>插入元素<br>堆化：顺着节点所在的路径，向上或者向下，对比，然后交换。<br><img src="https://static001.geekbang.org/resource/image/e3/0e/e3744661e038e4ae570316bc862b2c0e.jpg" alt="堆化"></li>
-<li>删除堆顶元素<br>把最后一个节点放到堆顶，然后利用父子节点对比方法，对于不满足父子节点大小关系的，互换位置，重复该过程直到满足所有大小关系。<br><img src="https://static001.geekbang.org/resource/image/11/60/110d6f442e718f86d2a1d16095513260.jpg" alt="从上往下的堆化"></li>
-</ul>
-</li>
-<li><p>基于堆实现排序</p>
-<ul>
-<li>时间复杂度：O(nlogn)</li>
-<li><p>Step1: 建堆：<br><img src="https://static001.geekbang.org/resource/image/50/1e/50c1e6bc6fe68378d0a66bdccfff441e.jpg" alt="建堆"><br>从下往上的堆化</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function buildHeap(a, n)&#123;</span><br><span class="line">    // 对于完全二叉树来说，下标从n/2 + 1 到 n的节点都是叶子节点</span><br><span class="line">    for(var i = n/2;i&gt;=1; --i)&#123;</span><br><span class="line">        heapify(a,n,i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">function heapify(a,n,i)&#123;</span><br><span class="line">    while (true)&#123;</span><br><span class="line">        var maxPos = i;</span><br><span class="line">        if(i*2 &lt;= n &amp;&amp; a[i] &lt; a[i*2])&#123;</span><br><span class="line">            maxPos = i*2</span><br><span class="line">        &#125;</span><br><span class="line">        if(i*2+1 &lt;= n &amp;&amp; a[maxPos] &lt; a[i*2+1])&#123;</span><br><span class="line">            maxPos = i*2+1;</span><br><span class="line">        &#125; </span><br><span class="line">        if(maxPos == i) break;</span><br><span class="line">        var tmp = a[i];</span><br><span class="line">        a[i] = a[maxPos];</span><br><span class="line">        a[maxPos] = tmp;</span><br><span class="line">        i = maxPos</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度：O(n)</p>
-</li>
-<li><p>Step2: 排序：<br>每次都将最大的元素放到后面</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function sort(a)&#123;</span><br><span class="line">    buildHeap(a, a.length);</span><br><span class="line">    var k = a.length-1;</span><br><span class="line">    while (k&gt;1)&#123;</span><br><span class="line">        tmp = a[k];</span><br><span class="line">        a[k] = a[1];</span><br><span class="line">        a[1] = tmp;</span><br><span class="line">        k--; //除去刚刚交换到末尾的元素，进行堆化</span><br><span class="line">        heapify(a,k,1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度：O(nlogn)</p>
-</li>
-</ul>
-</li>
-</ol>
-<h5 id="快速排序与堆排序对比"><a href="#快速排序与堆排序对比" class="headerlink" title="快速排序与堆排序对比"></a>快速排序与堆排序对比</h5><ol>
-<li>堆排序数据访问没有快排友好</li>
-<li>对于同样的数据，在排序中，堆排序交换的次数多于快排</li>
-</ol>
-<h5 id="堆的应用"><a href="#堆的应用" class="headerlink" title="堆的应用"></a>堆的应用</h5><ol>
-<li>优先级队列<ul>
-<li>合并有序小文件：<br>  假设我们有 100 个小文件，每个文件的大小是 100MB，每个文件中存储的都是有序的字符串。我们希望将这些 100 个小文件合并成一个有序的大文件。我们从这 100 个文件中，各取第一个字符串，放入数组中，然后比较大小，如果每次都遍历数据找出最小的一个，显然比较慢。使用堆，小文件中取出来的字符串放入到小顶堆中，那堆顶的元素，也就是优先级队列队首的元素，就是最小的字符串。</li>
-<li>高性能定时器：<br>  按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（也就是小顶堆的堆顶）存储的是最先执行的任务。<br>  定时器拿队首任务的执行时间点，与当前时间点相减，得到一个时间间隔T。定时器就设定在T秒后，执行这个任务。<br>  这样就不用每个1s轮询一次。</li>
-</ul>
-</li>
-<li>利用堆求Top K<ul>
-<li>静态数据：<br>  维护一个大小为K的小顶堆，遍历静态数据数组n，如果元素比堆顶大，删除堆顶元素，插入该元素。</li>
-<li>动态数据：<br>  维护一个大小为K的小顶堆，当有新数据时，如果元素比堆顶大，删除堆顶元素，插入该元素。</li>
-</ul>
-</li>
-<li>利用堆求中位数<ul>
-<li>静态数据：<br>  直接数组排序</li>
-<li>动态数据：<br>  维护两个堆，一个大顶堆，一个小顶堆。大顶堆中存储前半部分数据，小顶堆存后半部分数据，且小顶堆中堆数据都大于大顶堆中堆数据。如果是奇数，大顶堆中存n/2+1个数据。中位数就是大顶堆的堆顶。</li>
-<li>求99% 响应时间：<br>  将响应时间从小到达排序后，第n<em>99%的数据就是99%响应时间。<br>  同样维护两个堆，一个大顶堆，一个小顶堆。大顶堆中存储n</em>99%的数据，小顶堆存储1%的数据，取大顶堆堆顶数据。</li>
-</ul>
-</li>
-</ol>
-<h4 id="图"><a href="#图" class="headerlink" title="图"></a>图</h4><ol>
-<li>概念<ul>
-<li>无向图：<br><img src="https://static001.geekbang.org/resource/image/df/af/df85dc345a9726cab0338e68982fd1af.jpg" alt="无向图"></li>
-<li>有向图：<br><img src="https://static001.geekbang.org/resource/image/c3/96/c31759a37d8a8719841f347bd479b796.jpg" alt="有向图">   </li>
-<li>带权图：<br><img src="https://static001.geekbang.org/resource/image/55/e8/55d7e4806dc47950ae098d959b03ace8.jpg" alt="带权图">  </li>
-<li>顶点</li>
-<li>边</li>
-<li>度：跟顶点相连接的边的个数</li>
-<li>入度：多少个边指向这个顶点。出度：多少个边以这个顶点为起点。</li>
-</ul>
-</li>
-<li>存储<ul>
-<li>邻接矩阵<br><img src="https://static001.geekbang.org/resource/image/62/d2/625e7493b5470e774b5aa91fb4fdb9d2.jpg" alt="邻接矩阵"><br>简单直接，浪费空间。</li>
-<li>邻接表<br><img src="https://static001.geekbang.org/resource/image/03/94/039bc254b97bd11670cdc4bf2a8e1394.jpg" alt="邻接表"><br>节省空间，使用耗时<br>可以将链表改成平衡二叉树、红黑树提升效率。</li>
-</ul>
-</li>
-</ol>
-<h4 id="广度优先算法、深度优先算法"><a href="#广度优先算法、深度优先算法" class="headerlink" title="广度优先算法、深度优先算法"></a>广度优先算法、深度优先算法</h4><ol>
-<li>基于“图”这种数据结构</li>
-<li><p>广度优先算法(Breadth-First-Search)<br><img src="https://static001.geekbang.org/resource/image/00/ea/002e9e54fb0d4dbf5462226d946fa1ea.jpg" alt="广度优先算法"></p>
-<ul>
-<li>先查找离起始顶点最近的，然后是次近的，依次往外搜索。</li>
-<li>时间复杂度：O(E)，E是边的个数</li>
-<li>空间复杂度：O(V)，V是顶点的个数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public void bfs(int s, int t) &#123;</span><br><span class="line">    if (s == t) return;</span><br><span class="line">    boolean[] visited = new boolean[v];</span><br><span class="line">    visited[s]=true;</span><br><span class="line">    Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();</span><br><span class="line">    queue.add(s);</span><br><span class="line">    int[] prev = new int[v];</span><br><span class="line">    for (int i = 0; i &lt; v; ++i) &#123;</span><br><span class="line">        prev[i] = -1;</span><br><span class="line">    &#125;</span><br><span class="line">    while (queue.size() != 0) &#123;</span><br><span class="line">        int w = queue.poll();</span><br><span class="line">    for (int i = 0; i &lt; adj[w].size(); ++i) &#123;</span><br><span class="line">        int q = adj[w].get(i);</span><br><span class="line">        if (!visited[q]) &#123;</span><br><span class="line">            prev[q] = w;</span><br><span class="line">            if (q == t) &#123;</span><br><span class="line">            print(prev, s, t);</span><br><span class="line">            return;</span><br><span class="line">            &#125;</span><br><span class="line">            visited[q] = true;</span><br><span class="line">            queue.add(q);</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void print(int[] prev, int s, int t) &#123; // 递归打印 s-&gt;t 的路径</span><br><span class="line">    if (prev[t] != -1 &amp;&amp; t != s) &#123;</span><br><span class="line">        print(prev, s, prev[t]);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.print(t + &quot; &quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>深度优先算法(Depth-Firsh-Search)<br><img src="https://static001.geekbang.org/resource/image/87/85/8778201ce6ff7037c0b3f26b83efba85.jpg" alt="深度优先算法"></p>
-<ul>
-<li>时间复杂度 O(E)，E是边数</li>
-<li>空间复杂度 O(V), V是顶点数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">boolean found = false; // 全局变量或者类成员变量</span><br><span class="line"></span><br><span class="line">public void dfs(int s, int t) &#123;</span><br><span class="line">found = false;</span><br><span class="line">boolean[] visited = new boolean[v];</span><br><span class="line">int[] prev = new int[v];</span><br><span class="line">for (int i = 0; i &lt; v; ++i) &#123;</span><br><span class="line">    prev[i] = -1;</span><br><span class="line">&#125;</span><br><span class="line">recurDfs(s, t, visited, prev);</span><br><span class="line">print(prev, s, t);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void recurDfs(int w, int t, boolean[] visited, int[] prev) &#123;</span><br><span class="line">if (found == true) return;</span><br><span class="line">visited[w] = true;</span><br><span class="line">if (w == t) &#123;</span><br><span class="line">    found = true;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line">for (int i = 0; i &lt; adj[w].size(); ++i) &#123;</span><br><span class="line">    int q = adj[w].get(i);</span><br><span class="line">    if (!visited[q]) &#123;</span><br><span class="line">    prev[q] = w;</span><br><span class="line">    recurDfs(q, t, visited, prev);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>广度优先搜索需要借助队列来实现，遍历得到的路径就是，起始顶点到终止顶点的最短路径。深度优先算法使用回溯的思想，非常适合递归实现。</p>
-</li>
-</ol>
-<h4 id="字符串匹配算法"><a href="#字符串匹配算法" class="headerlink" title="字符串匹配算法"></a>字符串匹配算法</h4><h5 id="BF算法"><a href="#BF算法" class="headerlink" title="BF算法"></a>BF算法</h5>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/4/">4</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/5/">5</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2082,7 +1805,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2093,7 +1816,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
