@@ -229,6 +229,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/14/asyncio报错/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/14/asyncio报错/" itemprop="url">asyncio报错</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-14T17:13:57+08:00">
+                2018-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在flask中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">.....</span><br><span class="line"> loop = asyncio.get_event_loop()</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+<p>发现报错<br>RuntimeError: There is no current event loop in thread ‘Thread-2’.</p>
+<p>修改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">...</span><br><span class="line">new_loop = asyncio.new_event_loop()</span><br><span class="line">asyncio.set_event_loop(new_loop)</span><br><span class="line">loop = asyncio.get_event_loop()</span><br></pre></td></tr></table></figure></p>
+<p>原因：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 源码</span><br><span class="line">def get_event_loop(self):</span><br><span class="line">    &quot;&quot;&quot;Get the event loop.</span><br><span class="line">    This may be None or an instance of EventLoop.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    if (self._local._loop is None and</span><br><span class="line">            not self._local._set_called and</span><br><span class="line">            isinstance(threading.current_thread(), threading._MainThread)):</span><br><span class="line">        self.set_event_loop(self.new_event_loop())</span><br><span class="line"></span><br><span class="line">    if self._local._loop is None:</span><br><span class="line">        raise RuntimeError(&apos;There is no current event loop in thread %r.&apos;</span><br><span class="line">                            % threading.current_thread().name)</span><br><span class="line"></span><br><span class="line">    return self._local._loop</span><br></pre></td></tr></table></figure></p>
+<p>在主线程中，调用get_event_loop总能返回属于主线程的event loop对象，如果是处于非主线程中，还需要调用set_event_loop方法指定一个event loop对象，这样get_event_loop才会获取到被标记的event loop对象：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def set_event_loop(self, loop):</span><br><span class="line">    &quot;&quot;&quot;Set the event loop.&quot;&quot;&quot;</span><br><span class="line">    self._local._set_called = True</span><br><span class="line">    assert loop is None or isinstance(loop, AbstractEventLoop)</span><br><span class="line">    self._local._loop = loop</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://juejin.im/entry/5b3d99565188251b134e5355" target="_blank" rel="noopener">参考</a><br>由于Flask工作流程：<br>如果启动app时将threaded参数设定为True,flask才会以多线程的方式去处理每一个请求，<br>否则，所有请求是在一个工作线程（非主线程）运行。<a href="https://www.cnblogs.com/jamespei/p/7158107.html" target="_blank" rel="noopener">具体</a>。此时与直接命令行运行脚本不同，请留意。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/14/Python项目相关路径配置/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1652,168 +1799,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/05/Python数据结构/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/05/Python数据结构/" itemprop="url">Python数据结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-05T17:20:10+08:00">
-                2018-11-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>Python手册： <a href="https://docs.python.org/3/reference/index.html#reference-index" target="_blank" rel="noopener">https://docs.python.org/3/reference/index.html#reference-index</a></li>
-<li>数据结构：列表[]、元组()、集合{}、字典{k:v}</li>
-<li><p>循环技巧：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 列表循环技巧：</span><br><span class="line">for index, value in enumerate([&apos;tic&apos;, &apos;tac&apos;, &apos;toe&apos;]):</span><br><span class="line"></span><br><span class="line"># 字典循环技巧：</span><br><span class="line">knights = &#123;&apos;gallahad&apos;: &apos;the pure&apos;, &apos;robin&apos;: &apos;the brave&apos;&#125;</span><br><span class="line">for key, value in knights.items():</span><br><span class="line"></span><br><span class="line">#列表打包</span><br><span class="line">questions = [&apos;name&apos;, &apos;quest&apos;, &apos;favorite color&apos;]</span><br><span class="line">answers = [&apos;lancelot&apos;, &apos;the holy grail&apos;, &apos;blue&apos;]</span><br><span class="line">for q, a in zip(questions, answers):</span><br><span class="line">    print(&apos;What is your &#123;0&#125;?  It is &#123;1&#125;.&apos;.format(q, a))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>推导式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 列表推导式</span><br><span class="line">squares = [x**2 for x in range(10)]</span><br><span class="line">mutiSquares = [[row[i] for row in matrix] for i in range(4)]    #嵌套的列表推导式</span><br><span class="line"></span><br><span class="line"># 集合推导式</span><br><span class="line">a = &#123;x for x in &apos;abracadabra&apos; if x not in &apos;abc&apos;&#125;</span><br><span class="line"># &gt;&gt;&gt; &#123;&apos;r&apos;, &apos;d&apos;&#125;</span><br><span class="line"></span><br><span class="line"># 字典推导式</span><br><span class="line">a = &#123;x: x**2 for x in (2, 4, 6)&#125;</span><br><span class="line"># &gt;&gt;&gt; &#123;2: 4, 4: 16, 6: 36&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>操作符：</p>
-</li>
-</ol>
-<ul>
-<li>not </li>
-<li><p>and, or : 参数从左向右解析，一旦结果可以确定就停止</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string1, string2, string3 = &apos;&apos;, &apos;Trondheim&apos;, &apos;Hammer Dance&apos;</span><br><span class="line">non_null = string1 or string2 or string3</span><br><span class="line"># non_null  -&gt; &apos;Trondheim&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>in, not in</p>
-</li>
-<li>is, is not </li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1866,7 +1851,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

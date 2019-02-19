@@ -229,6 +229,144 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/02/19/flask-uwsgi-nginx-websocket部署实战/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/02/19/flask-uwsgi-nginx-websocket部署实战/" itemprop="url">flask+uwsgi+nginx+websocket docker部署实战</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-19T10:49:35+08:00">
+                2019-02-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>部署方案：flask+uwsgi服务部署一个容器（服务使用flask-socketio实现websocket)、nginx部署一个容器</p>
+<h2 id="如何配置："><a href="#如何配置：" class="headerlink" title="如何配置："></a>如何配置：</h2><h3 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name test.local.com;</span><br><span class="line">    error_log /apps/logs/error_nginx.log ;</span><br><span class="line">    access_log /apps/logs/access_log.log ;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        include proxy_params;</span><br><span class="line">        ;;; 如果include proxy_params 没找到 替换成</span><br><span class="line">        ; proxy_set_header Host $http_host;</span><br><span class="line">        ; proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        ; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        ; proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line"></span><br><span class="line">        proxy_pass http://host_ip:8002;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /socket.io &#123;</span><br><span class="line">        include proxy_params;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;Upgrade&quot;;</span><br><span class="line">        proxy_pass http://host_ip:8002/socket.io;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：host_ip为宿主机ip</p>
+<h3 id="uwsgi"><a href="#uwsgi" class="headerlink" title="uwsgi"></a>uwsgi</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line"># uwsgi 启动时所使用的地址与端口</span><br><span class="line">http-socket = :8001</span><br><span class="line"></span><br><span class="line">master = true</span><br><span class="line">;lazy-apps = true</span><br><span class="line"># 指向网站目录</span><br><span class="line">chdir = /app</span><br><span class="line"></span><br><span class="line"># python 启动程序文件</span><br><span class="line">wsgi-file = uwsgi_entry.py</span><br><span class="line"># python 程序内用以启动的 application 变量名</span><br><span class="line">callable = app</span><br><span class="line"></span><br><span class="line"># 处理器数</span><br><span class="line">processes = 8</span><br><span class="line">;listen = 1024</span><br><span class="line">gevent = 100</span><br><span class="line">http-websockets = true</span><br></pre></td></tr></table></figure>
+<h3 id="uwsgi-entry-py"><a href="#uwsgi-entry-py" class="headerlink" title="uwsgi_entry.py"></a>uwsgi_entry.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from config import app_config</span><br><span class="line">from app import create_app</span><br><span class="line">from flask_socketio import SocketIO</span><br><span class="line">from app.services.message_push import MessagePush</span><br><span class="line"></span><br><span class="line">app = create_app(app_config)</span><br><span class="line"># 初始化socket 注意async_mode</span><br><span class="line">socketio = SocketIO(app, async_mode=&quot;threading&quot;)</span><br><span class="line"># nameSpace以类形式初始化</span><br><span class="line">MessagePushHelper = MessagePush(&apos;/test&apos;)</span><br><span class="line">socketio.on_namespace(MessagePushHelper)</span><br><span class="line"></span><br><span class="line"># 实际nginx转发的端口是socket运行的端口 注意host配置0.0.0.0</span><br><span class="line">socketio.run(app, host=&quot;0.0.0.0&quot;, port=8002, use_reloader=False)</span><br></pre></td></tr></table></figure>
+<h2 id="如何访问"><a href="#如何访问" class="headerlink" title="如何访问"></a>如何访问</h2><ol>
+<li>容器间通讯，目前通过docker run -p 3306:3306 暴露端口给宿主机，容器内部服务访问通过 宿主机ip+暴露的端口进行访问，<a href="https://birdben.github.io/2017/05/02/Docker/Docker实战（二十七）Docker容器之间的通信/" target="_blank" rel="noopener">其他方法</a></li>
+<li>mysql 持久化：通过 -v /home/data/mysql_data/:/var/lib/mysql/ 保存数据文件 默认路径可以查看 /etc/my.cnf里的datadir配置</li>
+<li>由于uwsgi_entry.py 直接运行了 socketio.run命令，实际上所有的服务是通过这个命令的端口访问的，-p暴露的也是这里的端口</li>
+<li>uwsgi_docker.ini 要配置http-socket模式</li>
+</ol>
+<h2 id="问题与方案"><a href="#问题与方案" class="headerlink" title="问题与方案"></a>问题与方案</h2><ol>
+<li>逻辑在子线程进行websocket的emit时，参考flask-socketio的文档：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">In all the examples shown until this point the server responds to an event sent by the client. But for some applications, the server needs to be the originator of a message. This can be useful to send notifications to clients of events that originated in the server, for example in a background thread. The socketio.send() and socketio.emit() methods can be used to broadcast to all connected clients:</span><br><span class="line"></span><br><span class="line">def some_function():</span><br><span class="line">    socketio.emit(&apos;some event&apos;, &#123;&apos;data&apos;: 42&#125;)</span><br><span class="line"></span><br><span class="line">Note that socketio.send() and socketio.emit() are not the same functions as the context-aware send() and emit(). Also note that in the above usage there is no client context, so broadcast=True is assumed and does not need to be specified.</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注意需要使用 socketio.emit方法，默认是广播的。<br>socketio 是flask-socketio初始化的实际，注意初始化时配置 async_mode=”threading” 参数，否则emit不成功<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">async_mode – The asynchronous model to use. See the Deployment section in the documentation for a description of the available options. Valid async modes are threading, eventlet, gevent and gevent_uwsgi. If this argument is not given, eventlet is tried first, then gevent_uwsgi, then gevent, and finally threading. The first async mode that has all its dependencies installed is then one that is chosen</span><br><span class="line"></span><br><span class="line">有效的异步模式参数是 threading, eventlet, gevent, gevent_uwsgi。</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li>时区： 在docker run 时增加参数 -v /etc/localtime:/etc/localtime<br><a href="https://brickyang.github.io/2017/03/16/Docker%20中如何设置%20container%20的时区/" target="_blank" rel="noopener">其他方法</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/30/docker中pip-install-opencv-python失败/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1611,151 +1749,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/12/24/数据结构与算法（三）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/12/24/数据结构与算法（三）/" itemprop="url">数据结构与算法（三）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-24T16:56:04+08:00">
-                2018-12-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
-                    <span itemprop="name">后端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="字符串匹配算法"><a href="#字符串匹配算法" class="headerlink" title="字符串匹配算法"></a>字符串匹配算法</h4><h5 id="BF算法（暴力匹配算法）"><a href="#BF算法（暴力匹配算法）" class="headerlink" title="BF算法（暴力匹配算法）"></a>BF算法（暴力匹配算法）</h5><ol>
-<li>假设主串长度为n，模式串长度为m。我们在主串中，检查起始位置分别是0、1、2、3……n-m 且长度为m的n-m+1个子串，看看有没有跟模式传匹配的。<br><img src="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg" alt="BF算法"></li>
-<li>时间复杂度： 最坏情况下O(n*m)</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1808,7 +1801,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
