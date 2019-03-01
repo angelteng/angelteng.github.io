@@ -584,3 +584,4 @@ categories: 前端
     threeStart();
 
 ```
+后期打算添加物理引擎[Physijs](https://www.jianshu.com/p/716b79ab5cde)

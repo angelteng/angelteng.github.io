@@ -93,3 +93,7 @@ menu:
   home: /
 
 avatar: https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg
+mathjax:
+    # src: custom_mathjax_source
+    config:
+      # MathJax config

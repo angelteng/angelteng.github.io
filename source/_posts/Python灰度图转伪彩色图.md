@@ -45,3 +45,6 @@ categories: Python
         base64_str = base64.b64encode(byte_data)
         return base64_str
 ```
+参考：
+关于Image与Base64转换可以看[这里](https://www.jianshu.com/p/2ff8e6f98257)
+[Image图像的convert](https://my.oschina.net/112612/blog/1594140)
