@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,Docker,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="部署方案：flask+uwsgi服务部署一个容器（服务使用flask-socketio实现websocket)、nginx部署一个容器 如何配置：nginx1234567891011121314151617181920212223242526server &amp;#123;    listen 80;    server_name test.local.com;    error_log /apps/l">
+<meta name="keywords" content="Python,Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx+gunicorn+flask-sockerio docker部署实战">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/03/01/flask-uwsgi-nginx-websocket部署实战/index.html">
+<meta property="og:site_name" content="Code war of Angel">
+<meta property="og:description" content="部署方案：flask+uwsgi服务部署一个容器（服务使用flask-socketio实现websocket)、nginx部署一个容器 如何配置：nginx1234567891011121314151617181920212223242526server &amp;#123;    listen 80;    server_name test.local.com;    error_log /apps/l">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-01T08:55:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx+gunicorn+flask-sockerio docker部署实战">
+<meta name="twitter:description" content="部署方案：flask+uwsgi服务部署一个容器（服务使用flask-socketio实现websocket)、nginx部署一个容器 如何配置：nginx1234567891011121314151617181920212223242526server &amp;#123;    listen 80;    server_name test.local.com;    error_log /apps/l">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/03/01/flask-uwsgi-nginx-websocket部署实战/">
+
+
+
+
+
+  <title>nginx+gunicorn+flask-sockerio docker部署实战 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Code war of Angel</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/01/flask-uwsgi-nginx-websocket部署实战/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx+gunicorn+flask-sockerio docker部署实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-01T16:49:35+08:00">
+                2019-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>部署方案：flask+uwsgi服务部署一个容器（服务使用flask-socketio实现websocket)、nginx部署一个容器</p>
+<h2 id="如何配置："><a href="#如何配置：" class="headerlink" title="如何配置："></a>如何配置：</h2><h3 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name test.local.com;</span><br><span class="line">    error_log /apps/logs/error_nginx.log ;</span><br><span class="line">    access_log /apps/logs/access_log.log ;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        include proxy_params;</span><br><span class="line">        ;;; 如果include proxy_params 没找到 替换成</span><br><span class="line">        ; proxy_set_header Host $http_host;</span><br><span class="line">        ; proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        ; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        ; proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line"></span><br><span class="line">        proxy_pass http://host_ip:8002;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /socket.io &#123;</span><br><span class="line">        include proxy_params;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;Upgrade&quot;;</span><br><span class="line">        proxy_pass http://host_ip:8002/socket.io;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：host_ip为宿主机ip</p>
+<h3 id="uwsgi"><a href="#uwsgi" class="headerlink" title="uwsgi"></a>uwsgi</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line"># uwsgi 启动时所使用的地址与端口</span><br><span class="line">http-socket = :8001</span><br><span class="line"></span><br><span class="line">master = true</span><br><span class="line">;lazy-apps = true</span><br><span class="line"># 指向网站目录</span><br><span class="line">chdir = /app</span><br><span class="line"></span><br><span class="line"># python 启动程序文件</span><br><span class="line">wsgi-file = uwsgi_entry.py</span><br><span class="line"># python 程序内用以启动的 application 变量名</span><br><span class="line">callable = app</span><br><span class="line"></span><br><span class="line"># 处理器数</span><br><span class="line">processes = 8</span><br><span class="line">;listen = 1024</span><br><span class="line">gevent = 100</span><br><span class="line">http-websockets = true</span><br></pre></td></tr></table></figure>
+<h3 id="uwsgi-entry-py"><a href="#uwsgi-entry-py" class="headerlink" title="uwsgi_entry.py"></a>uwsgi_entry.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from config import app_config</span><br><span class="line">from app import create_app</span><br><span class="line">from flask_socketio import SocketIO</span><br><span class="line">from app.services.message_push import MessagePush</span><br><span class="line"></span><br><span class="line">app = create_app(app_config)</span><br><span class="line"># 初始化socket 注意async_mode</span><br><span class="line">socketio = SocketIO(app, async_mode=&quot;threading&quot;)</span><br><span class="line"># nameSpace以类形式初始化</span><br><span class="line">MessagePushHelper = MessagePush(&apos;/test&apos;)</span><br><span class="line">socketio.on_namespace(MessagePushHelper)</span><br><span class="line"></span><br><span class="line"># 实际nginx转发的端口是socket运行的端口 注意host配置0.0.0.0</span><br><span class="line">socketio.run(app, host=&quot;0.0.0.0&quot;, port=8002, use_reloader=False)</span><br></pre></td></tr></table></figure>
+<h3 id="后续改用gunicorn"><a href="#后续改用gunicorn" class="headerlink" title="后续改用gunicorn"></a>后续改用gunicorn</h3><p>后面发现这个方案其实只是利用uwsgi起了个嵌入式服务器，所有请求根本没有经过uwsgi服务器。<br>后面看官方文档，改成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line"># uwsgi 启动时所使用的地址与端口</span><br><span class="line">http-socket = :8001</span><br><span class="line"></span><br><span class="line">master = true</span><br><span class="line">;lazy-apps = true</span><br><span class="line"># 指向网站目录</span><br><span class="line">chdir = /app</span><br><span class="line"></span><br><span class="line"># python 启动程序文件</span><br><span class="line">wsgi-file = uwsgi_entry.py</span><br><span class="line"># python 程序内用以启动的 application 变量名</span><br><span class="line">callable = app</span><br><span class="line"></span><br><span class="line"># 处理器数</span><br><span class="line">processes = 1</span><br><span class="line">;listen = 1024</span><br><span class="line">gevent = 100</span><br><span class="line">http-websockets = true </span><br><span class="line"></span><br><span class="line">........</span><br><span class="line">uwsgi_entry.py</span><br><span class="line"></span><br><span class="line">from config import app_config</span><br><span class="line">from app import create_app</span><br><span class="line">from flask_socketio import SocketIO</span><br><span class="line">from app.services.message_push import MessagePush</span><br><span class="line"></span><br><span class="line"># 初始化socket 注意async_mode</span><br><span class="line">socketio = SocketIO()</span><br><span class="line">app = create_app(app_config,socketio)</span><br><span class="line"># nameSpace以类形式初始化</span><br><span class="line">MessagePushHelper = MessagePush(&apos;/test&apos;)</span><br><span class="line">socketio.on_namespace(MessagePushHelper)</span><br><span class="line"></span><br><span class="line">.....</span><br><span class="line">def create_app(app,socketio):</span><br><span class="line">....</span><br><span class="line">socketio.init_app(app, message_queue=&apos;redis://&apos;+ config.HOST_IP) #mutil thread</span><br><span class="line">return app</span><br></pre></td></tr></table></figure></p>
+<p>测试发现，还是有间隔400出现，前端不断的connect,disconnect<br>尝试n个方法无果，改用gunicorn服务器<br>gunicorn配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">    #  -*- coding: utf-8 -*-</span><br><span class="line">    # 预加载资源</span><br><span class="line">    preload_app = True</span><br><span class="line">    # 绑定</span><br><span class="line">    bind = &quot;0.0.0.0:8002&quot;</span><br><span class="line">    # 进程数</span><br><span class="line">    workers = 1</span><br><span class="line">    # 线程数</span><br><span class="line">    threads = 10</span><br><span class="line">    # 等待队列最大长度,超过这个长度的链接将被拒绝连接</span><br><span class="line">    backlog = 100</span><br><span class="line">    # 工作模式</span><br><span class="line">    # worker_class = &quot;egg:meinheld#gunicorn_worker&quot;</span><br><span class="line">    worker_class = &quot;geventwebsocket.gunicorn.workers.GeventWebSocketWorker&quot;</span><br><span class="line">    # 最大客户客户端并发数量,对使用线程和协程的worker的工作有影响</span><br><span class="line">    worker_connections = 100</span><br><span class="line">``` </span><br><span class="line">因为websocket需要粘性会话，所以worker只能设为1</span><br><span class="line">[gunicorn不同woker type](https://medium.com/@genchilu/淺談-gunicorn-各個-worker-type-適合的情境-490b20707f28)</span><br><span class="line">其余代码跟上面一样，目前测试稳定。</span><br><span class="line"></span><br><span class="line">## 如何访问</span><br><span class="line">1. 容器间通讯，目前通过docker run -p 3306:3306 暴露端口给宿主机，容器内部服务访问通过 宿主机ip+暴露的端口进行访问，[其他方法](https://birdben.github.io/2017/05/02/Docker/Docker实战（二十七）Docker容器之间的通信/)</span><br><span class="line">2. mysql 持久化：通过 -v /home/data/mysql_data/:/var/lib/mysql/ 保存数据文件 默认路径可以查看 /etc/my.cnf里的datadir配置</span><br><span class="line">3. 由于uwsgi_entry.py 直接运行了 socketio.run命令，实际上所有的服务是通过这个命令的端口访问的，-p暴露的也是这里的端口</span><br><span class="line">4. uwsgi_docker.ini 要配置http-socket模式</span><br><span class="line"></span><br><span class="line">## 问题与方案</span><br><span class="line">1. 逻辑在子线程进行websocket的emit时，参考flask-socketio的文档：</span><br></pre></td></tr></table></figure></p>
+<pre><code>In all the examples shown until this point the server responds to an event sent by the client. But for some applications, the server needs to be the originator of a message. This can be useful to send notifications to clients of events that originated in the server, for example in a background thread. The socketio.send() and socketio.emit() methods can be used to broadcast to all connected clients:
+
+def some_function():
+    socketio.emit(&apos;some event&apos;, {&apos;data&apos;: 42})
+
+Note that socketio.send() and socketio.emit() are not the same functions as the context-aware send() and emit(). Also note that in the above usage there is no client context, so broadcast=True is assumed and does not need to be specified.
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">注意需要使用 socketio.emit方法，默认是广播的。</span><br><span class="line">socketio 是flask-socketio初始化的实际，注意初始化时配置 async_mode=&quot;threading&quot; 参数，否则emit不成功</span><br></pre></td></tr></table></figure>
+<pre><code>async_mode – The asynchronous model to use. See the Deployment section in the documentation for a description of the available options. Valid async modes are threading, eventlet, gevent and gevent_uwsgi. If this argument is not given, eventlet is tried first, then gevent_uwsgi, then gevent, and finally threading. The first async mode that has all its dependencies installed is then one that is chosen
+
+有效的异步模式参数是 threading, eventlet, gevent, gevent_uwsgi。
+</code></pre><p><code>`</code></p>
+<ol start="2">
+<li><p>时区： 在docker run 时增加参数 -v /etc/localtime:/etc/localtime<br><a href="https://brickyang.github.io/2017/03/16/Docker%20中如何设置%20container%20的时区/" target="_blank" rel="noopener">其他方法</a></p>
+</li>
+<li><p>async_mode=eventlet 有问题，<a href="https://stackoverflow.com/questions/34581255/python-flask-socketio-send-message-from-thread-not-always-working" target="_blank" rel="noopener">see this</a></p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/blog/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/30/docker中pip-install-opencv-python失败/" rel="next" title="docker部署uwsgi+flask问题">
+                <i class="fa fa-chevron-left"></i> docker部署uwsgi+flask问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/03/05/flask-blurprint-增加自动发现/" rel="prev" title="flask blurprint 增加路由自动发现">
+                flask blurprint 增加路由自动发现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg" alt="Angel Teng">
+            
+              <p class="site-author-name" itemprop="name">Angel Teng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/category/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何配置："><span class="nav-number">1.</span> <span class="nav-text">如何配置：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx"><span class="nav-number">1.1.</span> <span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uwsgi"><span class="nav-number">1.2.</span> <span class="nav-text">uwsgi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uwsgi-entry-py"><span class="nav-number">1.3.</span> <span class="nav-text">uwsgi_entry.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续改用gunicorn"><span class="nav-number">1.4.</span> <span class="nav-text">后续改用gunicorn</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
