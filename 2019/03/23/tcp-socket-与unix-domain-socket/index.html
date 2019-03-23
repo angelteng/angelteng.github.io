@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="socket,">
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Code war of Angel">
-<meta property="og:url" content="https://angelteng.github.io/blog/tags/前端/index.html">
+<meta name="description" content="什么是Socket在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。 Unix Domain Sock">
+<meta name="keywords" content="socket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tcp socket 与unix domain socket">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/03/23/tcp-socket-与unix-domain-socket/index.html">
 <meta property="og:site_name" content="Code war of Angel">
+<meta property="og:description" content="什么是Socket在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。 Unix Domain Sock">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-23T07:00:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Code war of Angel">
+<meta name="twitter:title" content="tcp socket 与unix domain socket">
+<meta name="twitter:description" content="什么是Socket在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。 Unix Domain Sock">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/tags/前端/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/03/23/tcp-socket-与unix-domain-socket/">
 
 
 
 
 
-  <title>Tag: 前端 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>tcp socket 与unix domain socket | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -140,7 +145,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -214,104 +219,157 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>前端<small>Tag</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/23/tcp-socket-与unix-domain-socket/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/blog/2019/01/03/Three三维世界初体验/" itemprop="url">
-              
-                <span itemprop="name">Three三维世界初体验</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">tcp socket 与unix domain socket</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-03T15:26:03+08:00" content="2019-01-03">
-          01-03
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-23T14:58:46+08:00">
+                2019-03-23
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/blog/2018/11/21/V8垃圾回收/" itemprop="url">
-              
-                <span itemprop="name">V8垃圾回收</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-21T10:48:28+08:00" content="2018-11-21">
-          11-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/blog/2018/11/21/JS中的引用类型/" itemprop="url">
-              
-                <span itemprop="name">JS中的引用类型</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-21T10:47:37+08:00" content="2018-11-21">
-          11-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <h1 id="什么是Socket"><a href="#什么是Socket" class="headerlink" title="什么是Socket"></a>什么是Socket</h1><p>在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。</p>
+<h1 id="Unix-Domain-Socket"><a href="#Unix-Domain-Socket" class="headerlink" title="Unix Domain Socket"></a>Unix Domain Socket</h1><p>Unix Domain Socket并不是一个实际的协议，它只在同客户机和服务器通信时使用的API，且一台主机与在不同主机间通信时使用相同的API。</p>
+<p>Unix Domain Socket有以下特点:</p>
+<ul>
+<li>Unix Domain Socket使用的地址通常是一个文件</li>
+<li>在同一主机通讯时，传输速率是不同主机间的两倍</li>
+<li>Unix Domain Socket套接字描述符可以在同一主机不同进程间传递</li>
+<li>Unix Domain Socket套接字可以向服务器提供用户认证信息</li>
+</ul>
+<h1 id="TCP-Socket与Unix-Domain-Socket"><a href="#TCP-Socket与Unix-Domain-Socket" class="headerlink" title="TCP Socket与Unix Domain Socket"></a>TCP Socket与Unix Domain Socket</h1><p>无论时TCP Socket套接字还是Unix Domain Socket套接字，每个套接字都是唯一的。TCP Socket通过IP和端口描述，而Unix Domain Socket描述。<br>TCP属于传输层的协议，使用TCP Socket进行通讯时，需要经过传输层TCP/IP协议的解析。<br>而Unix Domain Socket可用于不同进程间的通讯和传递，使用Unix Domain Socket进行通讯时不需要经过传输层，也不需要使用TCP/IP协议。所以，理论上讲Unix Domain Socket具有更好的传输效率。</p>
+<p>[参考][<a href="https://itbilu.com/nodejs/core/EJd85BikZ.html]" target="_blank" rel="noopener">https://itbilu.com/nodejs/core/EJd85BikZ.html]</a></p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/socket/" rel="tag"># socket</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/03/05/flask-blurprint-增加自动发现/" rel="next" title="flask blurprint 增加路由自动发现">
+                <i class="fa fa-chevron-left"></i> flask blurprint 增加路由自动发现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -319,6 +377,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -339,8 +401,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -402,6 +473,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Socket"><span class="nav-number">1.</span> <span class="nav-text">什么是Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unix-Domain-Socket"><span class="nav-number">2.</span> <span class="nav-text">Unix Domain Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-Socket与Unix-Domain-Socket"><span class="nav-number">3.</span> <span class="nav-text">TCP Socket与Unix Domain Socket</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -535,6 +622,10 @@
   
 
   
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

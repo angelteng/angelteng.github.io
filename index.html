@@ -229,6 +229,136 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/23/tcp-socket-与unix-domain-socket/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/03/23/tcp-socket-与unix-domain-socket/" itemprop="url">tcp socket 与unix domain socket</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-23T14:58:46+08:00">
+                2019-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是Socket"><a href="#什么是Socket" class="headerlink" title="什么是Socket"></a>什么是Socket</h1><p>在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。</p>
+<h1 id="Unix-Domain-Socket"><a href="#Unix-Domain-Socket" class="headerlink" title="Unix Domain Socket"></a>Unix Domain Socket</h1><p>Unix Domain Socket并不是一个实际的协议，它只在同客户机和服务器通信时使用的API，且一台主机与在不同主机间通信时使用相同的API。</p>
+<p>Unix Domain Socket有以下特点:</p>
+<ul>
+<li>Unix Domain Socket使用的地址通常是一个文件</li>
+<li>在同一主机通讯时，传输速率是不同主机间的两倍</li>
+<li>Unix Domain Socket套接字描述符可以在同一主机不同进程间传递</li>
+<li>Unix Domain Socket套接字可以向服务器提供用户认证信息</li>
+</ul>
+<h1 id="TCP-Socket与Unix-Domain-Socket"><a href="#TCP-Socket与Unix-Domain-Socket" class="headerlink" title="TCP Socket与Unix Domain Socket"></a>TCP Socket与Unix Domain Socket</h1><p>无论时TCP Socket套接字还是Unix Domain Socket套接字，每个套接字都是唯一的。TCP Socket通过IP和端口描述，而Unix Domain Socket描述。<br>TCP属于传输层的协议，使用TCP Socket进行通讯时，需要经过传输层TCP/IP协议的解析。<br>而Unix Domain Socket可用于不同进程间的通讯和传递，使用Unix Domain Socket进行通讯时不需要经过传输层，也不需要使用TCP/IP协议。所以，理论上讲Unix Domain Socket具有更好的传输效率。</p>
+<p>[参考][<a href="https://itbilu.com/nodejs/core/EJd85BikZ.html]" target="_blank" rel="noopener">https://itbilu.com/nodejs/core/EJd85BikZ.html]</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/05/flask-blurprint-增加自动发现/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -774,7 +904,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 <p><a href="https://segmentfault.com/a/1190000018048956" target="_blank" rel="noopener">参考</a></p>
 <h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p><img src="https://upload-images.jianshu.io/upload_images/3240886-313fd9b1018241f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/682" alt="uwsgi"></p>
 <ol>
-<li>WSGI: 它是用在 python web 框架编写的应用程序与后端服务器之间的规范。（本例就是 Django 和 uWSGI 之间）它使得Web App可以与Web Server顺利通信。所有使用 WSGI 的服务器都可以运行使用 WSGI 规范的web 框架。它规定WSGI application应该实现为一个可调用对象。</li>
+<li>WSGI: 它是用在 python web 框架编写的应用程序与web服务器之间的规范。它使得Web App可以与Web Server顺利通信。所有使用 WSGI 的服务器都可以运行使用 WSGI 规范的web 框架。它规定WSGI application应该实现为一个可调用对象。</li>
 <li>uWSGI: uWSGI: 是一个Web服务器，它实现了WSGI协议、uwsgi、http等协议。用于接收前端服务器转发的动态请求并处理后发给 web 应用程序。</li>
 <li>uwsgi: uwsgi是uWSGI服务器实现的独有的协议。</li>
 </ol>
@@ -1632,150 +1762,6 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/10/Python灰度图转伪彩色图/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/10/Python灰度图转伪彩色图/" itemprop="url">Python灰度图转伪彩色图</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T10:02:47+08:00">
-                2019-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因项目中算法给出分割图是灰度图，而前端需要展示彩色图，搜了下网上资料，参考了opencv写的<a href="http://blog.sina.com.cn/s/blog_8924265b0101ext1.html" target="_blank" rel="noopener">这篇</a>，改成了Python代码<br>效果：<br>原灰度图<br><img src="https://upload-images.jianshu.io/upload_images/14827444-b83e1508197f3373.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="灰度图"><br>伪彩色图<br><img src="https://upload-images.jianshu.io/upload_images/14827444-74c7a847851bcac8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="彩色图"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line">import requests</span><br><span class="line">from io import BytesIO</span><br><span class="line">import numpy as np</span><br><span class="line">def grayImageTrans(url):</span><br><span class="line">    # url</span><br><span class="line">    # 如果是本地图片</span><br><span class="line">    # img = Image.open(&apos;/tmp/test.jpg&apos;)</span><br><span class="line">    file = requests.get(url)</span><br><span class="line">    tmpIm = BytesIO(file.content)</span><br><span class="line">    img = Image.open(tmpIm)</span><br><span class="line">    # 图片转矩阵</span><br><span class="line">    img = np.array(img)</span><br><span class="line">    # nparray转list</span><br><span class="line">    imgAry = img.tolist()</span><br><span class="line">    tmp=0</span><br><span class="line">    # 加颜色</span><br><span class="line">    for x in range(img.shape[0]):</span><br><span class="line">        for y in range(img.shape[1]):</span><br><span class="line">            tmp = imgAry[x][y]</span><br><span class="line">            imgAry[x][y] = __grayColorTrans(tmp)</span><br><span class="line">    newImgAry = np.array(imgAry)</span><br><span class="line">    # 矩阵转图片</span><br><span class="line">    newImg = Image.fromarray(np.uint8(newImgAry))</span><br><span class="line">    # newImg.save(&apos;/vagrant/test.png&apos;)</span><br><span class="line">    # 转base64</span><br><span class="line">    output_buffer = BytesIO()</span><br><span class="line">    newImg.save(output_buffer, format=&apos;PNG&apos;)</span><br><span class="line">    byte_data = output_buffer.getvalue()</span><br><span class="line">    base64_str = base64.b64encode(byte_data)</span><br><span class="line">    return base64_str</span><br></pre></td></tr></table></figure>
-<p>参考：<br>关于Image与Base64转换可以看<a href="https://www.jianshu.com/p/2ff8e6f98257" target="_blank" rel="noopener">这里</a><br><a href="https://my.oschina.net/112612/blog/1594140" target="_blank" rel="noopener">Image图像的convert</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1828,7 +1814,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1850,7 +1836,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
