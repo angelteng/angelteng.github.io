@@ -1,6 +1,6 @@
 ---
-title: flask+uwsgi+nginx+websocket docker部署实战
-date: 2019-02-19 10:49:35
+title: nginx+gunicorn+flask-sockerio docker部署实战
+date: 2019-03-01 16:49:35
 tags:
 - Python
 - Docker 

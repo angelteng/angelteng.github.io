@@ -27,6 +27,6 @@ PHP-FPM 即 PHP-FastCGI Process Manager， 它是 FastCGI 的实现，并提供�
 ## Python
 ![uwsgi](https://upload-images.jianshu.io/upload_images/3240886-313fd9b1018241f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/682)
 
-1. WSGI: 它是用在 python web 框架编写的应用程序与后端服务器之间的规范。（本例就是 Django 和 uWSGI 之间）它使得Web App可以与Web Server顺利通信。所有使用 WSGI 的服务器都可以运行使用 WSGI 规范的web 框架。它规定WSGI application应该实现为一个可调用对象。
+1. WSGI: 它是用在 python web 框架编写的应用程序与web服务器之间的规范。它使得Web App可以与Web Server顺利通信。所有使用 WSGI 的服务器都可以运行使用 WSGI 规范的web 框架。它规定WSGI application应该实现为一个可调用对象。
 2. uWSGI: uWSGI: 是一个Web服务器，它实现了WSGI协议、uwsgi、http等协议。用于接收前端服务器转发的动态请求并处理后发给 web 应用程序。
 3. uwsgi: uwsgi是uWSGI服务器实现的独有的协议。
