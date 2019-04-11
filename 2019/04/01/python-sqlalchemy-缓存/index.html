@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="描述：    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。 原因一：数据库的事务隔离在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-11T02:21:45.000Z">
+<meta property="og:updated_time" content="2019-04-11T03:15:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python sqlalchemy 缓存">
 <meta name="twitter:description" content="描述：    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。 原因一：数据库的事务隔离在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他">
@@ -238,7 +238,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -324,7 +324,42 @@
       
         <p>描述：<br>    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。</p>
 <h2 id="原因一：数据库的事务隔离"><a href="#原因一：数据库的事务隔离" class="headerlink" title="原因一：数据库的事务隔离"></a>原因一：数据库的事务隔离</h2><p>在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他们的区别如下表所示。</p>
-<p>| 隔离级别   | 脏读 | 不可重复读 | 幻读 |<br>|未提交读(RU)| 可能 |    可能     |可能 |<br>|已提交读(RC)| 不可能|    可能     |可能  |<br>|可重复读(RR)| 不可能|    不可能     |可能  |<br>|可串行化     | 不可能|    不可能     |不可能 |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">未提交读(RU)</td>
+<td>可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">已提交读(RC)</td>
+<td>不可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">可重复读(RR)</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">可串行化</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>不可能</td>
+</tr>
+</tbody>
+</table>
 <p>对于MySQL来说，默认的事务隔离级别是RR，RR是可重复读的，因此可以解释这个现象。</p>
 <h2 id="原因二：Sqlaalchemy的会话隔离"><a href="#原因二：Sqlaalchemy的会话隔离" class="headerlink" title="原因二：Sqlaalchemy的会话隔离"></a>原因二：Sqlaalchemy的会话隔离</h2><p>看作者在stackoverflow的回答：<br>“<br>The usual cause for people thinking there’s a “cache” at play, besides the usual SQLAlchemy identity map which is local to a transaction, is that they are observing the effects of transaction isolation. SQLAlchemy’s session works by default in a transactional mode, meaning it waits until session.commit() is called in order to persist data to the database. During this time, other transactions in progress elsewhere will not see this data.</p>
 <p>However, due to the isolated nature of transactions, there’s an extra twist. Those other transactions in progress will not only not see your transaction’s data until it is committed, they also can’t see it in some cases until they are committed or rolled back also (which is the same effect your close() is having here). A transaction with an average degree of isolation will hold onto the state that it has loaded thus far, and keep giving you that same state local to the transaction even though the real data has changed - this is called repeatable reads in transaction isolation parlance.<br>”<br>SQLAlchemy的会话默认在事务模式下工作，这意味着它会等到调用session.commit()才将数据持久保存到数据库中。<br>由于事务的隔离性，正在进行的其他事务在提交之前不仅不会看到这个事务的数据，在它们被提交或回滚之前它们也无法在某些情况下看到它，这在事务隔离用语中称为可重复读取。</p>
@@ -369,6 +404,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/04/11/python-u-命令行参数/" rel="prev" title="python -u 命令行参数">
+                python -u 命令行参数 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -434,7 +473,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg" alt="Angel Teng">
+              <img class="site-author-image" itemprop="image" src="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Angel Teng">
             
               <p class="site-author-name" itemprop="name">Angel Teng</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -447,7 +486,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -458,7 +497,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -731,4 +770,3 @@
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   

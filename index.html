@@ -229,12 +229,159 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/11/python-u-命令行参数/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/11/python-u-命令行参数/" itemprop="url">python -u 命令行参数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-11T14:13:41+08:00">
+                2019-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>关闭stdin/stdout/stderr缓冲区.<br>-u :</p>
+<ul>
+<li>unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x. </li>
+<li>Force  stdin,  stdout and stderr to be totally unbuffered.  On systems where it matters, also put stdin, stdout and stderr in binary mode.  Note that there is internal buffering  in  xreadlines(),  readlines() and  file-object  iterators  (“for  line in sys.stdin”) which is not influenced by this option.  To work around this, you will want to use “sys.stdin.readline()” inside a “while 1:” loop.</li>
+</ul>
+<p><a href="https://stackoverflow.com/questions/14258500/python-significance-of-u-option" target="_blank" rel="noopener">参考</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/01/python-sqlalchemy-缓存/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -324,7 +471,42 @@
           
             <p>描述：<br>    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。</p>
 <h2 id="原因一：数据库的事务隔离"><a href="#原因一：数据库的事务隔离" class="headerlink" title="原因一：数据库的事务隔离"></a>原因一：数据库的事务隔离</h2><p>在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他们的区别如下表所示。</p>
-<p>| 隔离级别   | 脏读 | 不可重复读 | 幻读 |<br>|未提交读(RU)| 可能 |    可能     |可能 |<br>|已提交读(RC)| 不可能|    可能     |可能  |<br>|可重复读(RR)| 不可能|    不可能     |可能  |<br>|可串行化     | 不可能|    不可能     |不可能 |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">未提交读(RU)</td>
+<td>可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">已提交读(RC)</td>
+<td>不可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">可重复读(RR)</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">可串行化</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>不可能</td>
+</tr>
+</tbody>
+</table>
 <p>对于MySQL来说，默认的事务隔离级别是RR，RR是可重复读的，因此可以解释这个现象。</p>
 <h2 id="原因二：Sqlaalchemy的会话隔离"><a href="#原因二：Sqlaalchemy的会话隔离" class="headerlink" title="原因二：Sqlaalchemy的会话隔离"></a>原因二：Sqlaalchemy的会话隔离</h2><p>看作者在stackoverflow的回答：<br>“<br>The usual cause for people thinking there’s a “cache” at play, besides the usual SQLAlchemy identity map which is local to a transaction, is that they are observing the effects of transaction isolation. SQLAlchemy’s session works by default in a transactional mode, meaning it waits until session.commit() is called in order to persist data to the database. During this time, other transactions in progress elsewhere will not see this data.</p>
 <p>However, due to the isolated nature of transactions, there’s an extra twist. Those other transactions in progress will not only not see your transaction’s data until it is committed, they also can’t see it in some cases until they are committed or rolled back also (which is the same effect your close() is having here). A transaction with an average degree of isolation will hold onto the state that it has loaded thus far, and keep giving you that same state local to the transaction even though the real data has changed - this is called repeatable reads in transaction isolation parlance.<br>”<br>SQLAlchemy的会话默认在事务模式下工作，这意味着它会等到调用session.commit()才将数据持久保存到数据库中。<br>由于事务的隔离性，正在进行的其他事务在提交之前不仅不会看到这个事务的数据，在它们被提交或回滚之前它们也无法在某些情况下看到它，这在事务隔离用语中称为可重复读取。</p>
@@ -383,7 +565,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -419,6 +601,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
+                    <span itemprop="name">底层</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -465,11 +669,49 @@
 <li>I/O缓冲区在每个TCP套接字中单独存在；</li>
 <li>I/O缓冲区在创建套接字时自动生成；</li>
 <li>即使关闭套接字也会继续传送输出缓冲区中遗留的数据；</li>
-<li>关闭套接字将丢失输入缓冲区中的数据。<br>实时性：</li>
+<li>关闭套接字将丢失输入缓冲区中的数据。</li>
+</ul>
+<p>实时性：</p>
+<ul>
 <li>TCP socket的send缓冲区有自己的timeout，因为默认开启Nagle算法，所以缓冲区没满的话要等到超时再发送。对实时性有要求可以用setsockopt关闭Nagle算法。</li>
 <li>设置合适的缓存区的大小。</li>
 </ul>
-<p>参考：<br><a href="https://itbilu.com/nodejs/core/EJd85BikZ.html" target="_blank" rel="noopener">参考</a><br><a href="https://blog.csdn.net/wlh_flame/article/details/6358795#" target="_blank" rel="noopener">Unix domain socket 的一些小结</a></p>
+<h2 id="Nagle算法"><a href="#Nagle算法" class="headerlink" title="Nagle算法"></a>Nagle算法</h2><p>Nagle算法由John Nagle在1984年提出，这个算法可以减少网络中小的packet的数量，从而降低网络的拥塞程度。<br>为了减小网络开销，Nagle算法指出，当TCP发送了一个小的segment(小于MSS)，它必须等到接收了对方的ACK之后，才能继续发送另一个小的segment。那么在等待的过程中(一个RTT时间)，TCP就能尽量多地将要发送的数据收集在一起，从而减少要发送的segment的数量。<br>默认情况下，TCP开启了Nagle算法，然而Nagle算法并不是灵丹妙药，它会增加TCP发送数据的延迟。在一些要求低延迟的应用程序中(例如即时通讯应用)，则需要禁用Nagle算法。</p>
+<p>Nagle算法的规则:</p>
+<ul>
+<li>如果包长度达到MSS，则允许发送；</li>
+<li>如果该包含有FIN，则允许发送；</li>
+<li>设置了TCP_NODELAY选项，则允许发送；</li>
+<li>未设置TCP_CORK选项时，若所有发出去的小数据包（包长度小于MSS）均被确认，则允许发送；</li>
+<li>上述条件都未满足，但发生了超时（一般为200ms），则立即发送。</li>
+</ul>
+<p>禁用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int optval = 1;</span><br><span class="line">setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &amp;optval, sizeof(optval));</span><br></pre></td></tr></table></figure></p>
+<h2 id="Delayed-ACK"><a href="#Delayed-ACK" class="headerlink" title="Delayed ACK"></a>Delayed ACK</h2><p>TCP的 Delayed ACK 与Nagle算法有异曲同工之妙，Delayed ACK很好理解，当TCP接收到数据时，并不会立即发送ACK给对方，相反，它会等待应用层产生数据，以便将ACK和数据一起发送(在Linux最多等待40ms)。<br>为避免这种延迟的出现，需要做两件事：</p>
+<ul>
+<li>设置TCP_NODELAY选项。</li>
+<li>将客户端的两次write()合并成一个，避免服务端的Delayed ACK。</li>
+</ul>
+<h2 id="TCP-CORK"><a href="#TCP-CORK" class="headerlink" title="TCP_CORK"></a>TCP_CORK</h2><p>Linux提供了TCP_CORK选项，如果在某个TCP socket上开启了这个选项，那就相当于在这个socket的出口堵上了塞子，往这个socket写入的数据都会聚集起来。下面几种情况都会导致这个塞子打开，这样TCP就能继续发送segment出来了。</p>
+<ul>
+<li>程序取消设置TCP_CORK这个选项。</li>
+<li>socket聚集的数据大于一个MSS的大小。</li>
+<li>自从堵上塞子写入第一个字节开始，已经经过200ms。</li>
+<li>socket被关闭了。</li>
+</ul>
+<h1 id="提高socket性能"><a href="#提高socket性能" class="headerlink" title="提高socket性能"></a>提高socket性能</h1><ul>
+<li>禁用 Nagle 算法来减少传输延时</li>
+<li>通过设置缓冲区的大小来提高 socket 带宽的利用</li>
+<li>通过最小化系统调用的个数来降低系统调用的负载</li>
+<li>以及使用可调节的内核参数来优化 Linux 的 TCP/IP 栈。</li>
+</ul>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><ol>
+<li><a href="https://itbilu.com/nodejs/core/EJd85BikZ.html" target="_blank" rel="noopener">参考</a></li>
+<li><a href="https://blog.csdn.net/wlh_flame/article/details/6358795#" target="_blank" rel="noopener">Unix domain socket 的一些小结</a></li>
+<li><a href="http://senlinzhan.github.io/2017/02/10/Linux的TCP-CORK/" target="_blank" rel="noopener">Nagle 算法与 TCP socket 选项 TCP_CORK</a></li>
+<li>*<a href="https://www.ibm.com/developerworks/cn/linux/l-hisock.html" target="_blank" rel="noopener">提高 Linux 上 socket 性能-IBM</a></li>
+<li><a href="https://www.zoulei.net/2016/06/17/socket_recv/" target="_blank" rel="noopener">socket.recv 完整接收数据</a></li>
+<li>*<a href="https://keelii.com/2018/09/24/socket-programming-in-python/" target="_blank" rel="noopener">Python 中的 Socket 编程（指南）</a></li>
+</ol>
 
           
         
@@ -523,7 +765,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -671,7 +913,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -836,7 +1078,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -986,7 +1228,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1120,7 +1362,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1272,7 +1514,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1413,7 +1655,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1582,160 +1824,319 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/5/">5</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
       
 
-  
+      
 
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/10/机器学习基石学习笔记（一）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/10/机器学习基石学习笔记（一）/" itemprop="url">机器学习基石学习笔记（一）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+              <img class="site-author-image" itemprop="image" src="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Angel Teng">
+            
+              <p class="site-author-name" itemprop="name">Angel Teng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
               
-                <span class="post-meta-item-text">Posted on</span>
+                <a href="/blog/archives/">
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T16:45:16+08:00">
-                2019-01-10
-              </time>
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
             
 
             
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/category/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
             
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
           
 
           
           
 
           
-
           
 
           
 
         </div>
-      </header>
-    
+      </section>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
+
+    </div>
+  </aside>
+
+
         
-          
-            <h1 id="When-can-machines-learn"><a href="#When-can-machines-learn" class="headerlink" title="When can machines learn?"></a>When can machines learn?</h1><h2 id="机器学习应用的三个条件："><a href="#机器学习应用的三个条件：" class="headerlink" title="机器学习应用的三个条件："></a>机器学习应用的三个条件：</h2><pre><code>- 事物本身存在某种潜在规律
-- 某些问题难以使用普通编程解决
-- 有大量的数据样本可供使用
-</code></pre><h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><pre><code>![流程](https://i.loli.net/2018/07/24/5b55fd7c69d0c.png)
-</code></pre><p>术语：</p>
-<ul>
-<li>输入x</li>
-<li>输出y</li>
-<li>目标函数f，即最接近实际样本分布的规律</li>
-<li>训练样本data</li>
-<li>假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要得到的模型表达式。</li>
-</ul>
-<h2 id="感知机（Perceptron）"><a href="#感知机（Perceptron）" class="headerlink" title="感知机（Perceptron）"></a>感知机（Perceptron）</h2><p>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - threshold)$$<br>其中 h(x) = 1/ -1, w是权重，threshold是阙值<br>把$threshold = w_0x_0 (x_0 =1)$,得到<br>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - w_0x_0) $$<br>$$      = sign(\sum_{i=0}^n w_i x_i)$$<br>$$      = sign(W^TX) $$<br>假设只有二维，那么$ h(x) = w_0 + w_1x_1 + w_2x_2$，其中$w_0 + w_1x_1 + w_2x_2=0$是其中一条分类直线，权重w不同，代表不同的直线。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-da05a80b15f9f791.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="感知机"></p>
-<h3 id="线性感知机-Perceptron-Learning-Algorithm-PLA"><a href="#线性感知机-Perceptron-Learning-Algorithm-PLA" class="headerlink" title="线性感知机 Perceptron Learning Algorithm(PLA)"></a>线性感知机 Perceptron Learning Algorithm(PLA)</h3><ul>
-<li>逐步修正：首先在平面上随意取一条直线，看看哪些点分类错误。然后开始对第一个错误点就行修正，即变换直线的位置，使这个错误点变成分类正确的点。接着，再对第二个、第三个等所有的错误分类点就行直线纠正，直到所有的点都完全分类正确了，就得到了最好的直线。</li>
-<li><p>做法：首先随机选择一条直线进行分类。然后找到第一个分类错误的点，如果这个点表示正类，被误分为负类，即$w_t ^t x_n(t)&lt;0$，那表示w和x夹角大于90度，其中w是直线的法向量(垂直于这条直线）（ps:直线方程式的系数代表该直线的法向量）。所以，x被误分在直线的下侧（相对于法向量，法向量的方向即为正类所在的一侧），修正的方法就是使w和x夹角小于90度。通常做法是$w←w+yx, y=1$，如图右上角所示，一次或多次更新后的w+yx与x夹角小于90度，能保证x位于直线的上侧，则对误分为负类的错误点完成了直线修正。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-6df1ace7b37904ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-555ef5e069e554ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"></p>
-</li>
-<li><p>保证数据是线性可分：假设有这样一条直线，能够将正类和负类完全分开，令这时候的目标权重为$w_f$,对于每一个点，满足$y_n = sign(w_f^t x_n)$， 那么即每一个到这条直线的距离都大于0，即对于每一个点t，满足：<br>$$ y_{n(t)} w_n^f x_{n(t)} &gt;= min y_{n} w_n^f x_{n} &gt; 0 $$</p>
-</li>
-<li><p>PLA会对每次错误的点进行修正，更新权重$w_{t+1}$的值，如果$w_{t+1}与w_f$越来越接近，数学运算上就是内积越大，那表示证明PLA是有学习效果<br>的。<br>推导：<br>$$ w_f^T w_{t+1} = w_f^T(w_t + y_nx_n^t) $$<br>$$               = w_f^Tw_t + w_f^Ty_nx_n^t $$<br>$$               &gt; w_f^Tw_t + 0 $$<br>$$               &gt; w_f^Tw_t $$</p>
-</li>
-<li><p>为了证明内积的增长不是由于长度而是夹角，推导：<br>当有错误的点的时候，即$ y_{n(t)} w_n^f x_{n(t)} &lt;= 0 $<br>那么<br>$$ ||w_{t+1}||^2 = || w_t + y_{n(t)}x_{n(t)}||^2 $$<br>$$               = || w_t||^2 + 2w_ty_{n(t)}x_{n(t)} + ||y_{n(t)}x_{n(t)}||^2 $$<br>$$               &lt;= || w_t||^2 + 0 + ||y_{n(t)}x_{n(t)}||^2  (y_n = 1/-1)$$<br>$$               &lt;= || w_t||^2 + ||maxx_{n(t)}||^2 $$<br>所以 $||w_{t+1}||^2$的增长量不会超过$||maxx_{n(t)}||^2$ </p>
-</li>
-<li>如果$w_0 = 0$, 经过T次修正后，得 $ w_f^T \over ||wf||$$ w_T \over ||w_T||$$ &gt;= \sqrt{T}*constant$<br>推导：<img src="https://upload-images.jianshu.io/upload_images/14827444-4ff721dcc695769c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-4e8339fd939091ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>因​$\sqrt{T}⋅constant≤1$，也就是说，迭代次数T是有上界的。</li>
-</ul>
-<h2 id="口袋算法-Packet-Algorithm"><a href="#口袋算法-Packet-Algorithm" class="headerlink" title="口袋算法 Packet Algorithm"></a>口袋算法 Packet Algorithm</h2><p>对于非线性可分的PLA，容忍有错误点，取错误点的个数最少时的权重w。</p>
-<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><pre><code>1. 按输出y的分类
-    - 监督学习
-    - 非监督学习
-    - 半监督学习
-    - 增强学习(Reniforcement Learning): 我们给模型或系统一些输入，但是给不了我们希望的真实的输出y，根据模型的输出反馈，如果反馈结果良好，更接近真实输出，就给其正向激励，如果反馈结果不好，偏离真实输出，就给其反向激励。不断通过“反馈-修正”这种形式，一步一步让模型学习的更好。
-![分类](https://upload-images.jianshu.io/upload_images/14827444-76aec3f8c180d9b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+      </div>
+    </main>
 
-2. 按Data分类
-    - Batch Learning: 一次性拿到整个Data，对其进行学习建模。
-    - Online: 在线学习模型，数据是实时更新的，根据数据一个个进来，同步更新我们的算法。
-        PLA算法。
-        增强学习。
-    - Active Learning: 让机器具备主动问问题的能力，例如手写数字识别，机器自己生成一个数字或者对它不确定的手写字主动提问。
-![按协议分类](https://upload-images.jianshu.io/upload_images/14827444-d75fbba06061b513.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
+
+  
+</div>
 
 
-3. 按输入X的类型
-    - concrete features：具体的特征。
-    - raw features：比如说手写数字识别中每个数字所在图片的mxn维像素值；比如语音信号的频谱。
-    - abstract features：比如某购物网站做购买预测时，提供给参赛者的是抽象加密过的资料编号或者ID。
-![输入X的类型](https://upload-images.jianshu.io/upload_images/14827444-f5218d30d2eafcfc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-</code></pre><h2 id="Python实现PLA"><a href="#Python实现PLA" class="headerlink" title="Python实现PLA"></a>Python实现PLA</h2><p><a href="https://huangweiran.club/2018/01/27/PLA和pocket算法：简单Python实现/index.html" target="_blank" rel="noopener">参考</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def new_PLA(mat):</span><br><span class="line">    &apos;&apos;&apos; </span><br><span class="line">    rewrite the naive PLA algorithm using vectorazation.</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    m,n = mat.shape</span><br><span class="line">    w = zeros(n)</span><br><span class="line">    bias = ones(m)</span><br><span class="line">    x_vec = c_[bias, mat] # add x0=1</span><br><span class="line">    update_cnt = 0</span><br><span class="line">    prepos = -1 # the previous position</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        out = sign(x_vec[:,0:-1] @ w)</span><br><span class="line">        out[out == 0] = -1 # sign(0) = -1 here</span><br><span class="line"></span><br><span class="line">        false_ind = where(out != sign(x_vec[:,-1]))[0] # indices where PLA is false</span><br><span class="line">        if not false_ind.any():</span><br><span class="line">            break # no false points</span><br><span class="line">        if not false_ind[false_ind &gt; prepos].any():</span><br><span class="line">            prepos = -1</span><br><span class="line"></span><br><span class="line">        pos = false_ind[false_ind &gt; prepos][0]</span><br><span class="line">        w += x_vec[pos, -1] * x_vec[pos, 0:-1] # updating the weight</span><br><span class="line">        prepos = pos</span><br><span class="line">        update_cnt += 1</span><br><span class="line"></span><br><span class="line">    return w, update_cnt</span><br><span class="line"></span><br><span class="line">data = loadtxt(r&apos;/vagrant/train.dat.txt&apos;)</span><br><span class="line">w1, iteration1 = new_PLA(data)</span><br><span class="line">print(w1,&apos;\n&apos;, iteration1)</span><br></pre></td></tr></table></figure>
-<h2 id="Python实现Pocket算法"><a href="#Python实现Pocket算法" class="headerlink" title="Python实现Pocket算法"></a>Python实现Pocket算法</h2><p><a href="https://huangweiran.club/2018/01/27/PLA和pocket算法：简单Python实现/index.html" target="_blank" rel="noopener">参考</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">2
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

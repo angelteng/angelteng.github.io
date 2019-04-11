@@ -229,12 +229,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/30/Centos系统docker的坑/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/30/Centos系统docker的坑/" itemprop="url">Centos系统docker的坑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-30T15:12:20+08:00">
+                2018-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/系统/" itemprop="url" rel="index">
+                    <span itemprop="name">系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>环境：CentOS Linux release 7.1.1503 (Core)<br>dockerfiles 中有<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RUN mv /app/docker/localtime /etc/localtime</span><br><span class="line">......</span><br><span class="line">RUM rm /app/docker</span><br></pre></td></tr></table></figure></p>
+<p>docker build 过程中发现报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv: can&apos;t rename &apos;/app/docker/localtime&apos;: Invalid argument</span><br><span class="line">The command &apos;/bin/sh -c mv /app/docker/localtime /etc/localtime&apos; returned a non-zero code: 1</span><br></pre></td></tr></table></figure></p>
+<p>而同样的脚本在另外一个Ubuntu系统下没有这样的报错<br>从 docker info中可以看到<br><img src="https://upload-images.jianshu.io/upload_images/14827444-4a17653f35165366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="不正常系统"><br>Centos7<br><img src="https://upload-images.jianshu.io/upload_images/14827444-a3433e310cc982f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="正常系统"><br>Ubuntu16.04<br>并且可以看到报错信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WARNING: overlay: the backing xfs filesystem is formatted without d_type support, which leads to incorrect behavior.</span><br><span class="line">         Reformat the filesystem with ftype=1 to enable d_type support.</span><br><span class="line">         Running without d_type support will not be supported in future releases.</span><br></pre></td></tr></table></figure></p>
+<p>Centos7 发行版默认的Kernel版本是3.10，但是Overlay2存储驱动需要4.0以上的kernel版本支持，所以默认使用overlay 并且不支持d_type， 才导致这个报错。<br><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/7.2_release_notes/technology-preview-file_systems" target="_blank" rel="noopener">具体</a><br>解决方法一：<br>格式化 XFS 系统，添加ftype=1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 查看当前系统xfs</span><br><span class="line">xfs_info /</span><br><span class="line">如果 ftype =0 表示不支持d_type</span><br><span class="line">省略具体格式化方法</span><br></pre></td></tr></table></figure>
+<p>解决方法二：<br>修改 storage driver 为 devicemapper<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/docker/daemon.json</span><br><span class="line">增加</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    &quot;storage-driver&quot;: &quot;devicemapper&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://blog.51cto.com/foxhound/1841487" target="_blank" rel="noopener">docker疑难杂症</a><br><a href="https://www.jianshu.com/p/00ffd8df6010" target="_blank" rel="noopener">docker文件系统参考</a><br><a href="https://github.com/moby/moby/issues/15314" target="_blank" rel="noopener">github上的讨论</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/30/ubuntu下安装配置mysql/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -355,7 +503,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -497,7 +645,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -851,7 +999,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1012,7 +1160,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1191,7 +1339,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1336,7 +1484,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1472,7 +1620,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1621,7 +1769,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -1781,144 +1929,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/20/利用hexo搭建个人blog/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/20/利用hexo搭建个人blog/" itemprop="url">利用hexo搭建个人blog</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-20T15:13:48+08:00">
-                2018-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; npm install -g hexo</span><br><span class="line">&gt;&gt;&gt; cd /blog-project</span><br><span class="line">&gt;&gt;&gt; hexo init</span><br><span class="line">&gt;&gt;&gt; npm install</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo server #启动一个本地服务器</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#修改 _config.yml</span><br><span class="line">....</span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://angelteng.github.io/blog/  # git仓库地址</span><br><span class="line">root: /blog/   #根目录</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br><span class="line">.....</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:angelteng/blog.git</span><br><span class="line">  branch: gh-pages #发布分支</span><br><span class="line">  name: </span><br><span class="line">  email:</span><br><span class="line"></span><br><span class="line">server:</span><br><span class="line">  port: 8080  #本地服务器端口</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>去git新增一个仓库<br>修改git page选项<br><img src="https://upload-images.jianshu.io/upload_images/14827444-02b3b58647e2bac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git page"><br>新增一个ssh key</p>
-</li>
-<li><p>管理：建议源代码根目录 git init 之后放在master分支，发布代码放在gh-pages分支</p>
-</li>
-<li><p>新增及发布</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 新增 </span><br><span class="line">&gt;&gt;&gt; hexo new post &quot;blog title&quot;</span><br><span class="line"># 发布</span><br><span class="line">&gt;&gt;&gt; hexo g</span><br><span class="line">&gt;&gt;&gt; hexo d</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>静态资源引用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将图片放在 /source/_post/blogTitle 文件夹下</span><br><span class="line">&#123;% asset_img hexoLocal.png 图片描述 %&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><a href="https://www.jianshu.com/p/1519f22aff24" target="_blank" rel="noopener">参考</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1958,7 +1968,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg" alt="Angel Teng">
+              <img class="site-author-image" itemprop="image" src="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Angel Teng">
             
               <p class="site-author-name" itemprop="name">Angel Teng</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -1971,7 +1981,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1982,7 +1992,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2235,4 +2245,3 @@
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

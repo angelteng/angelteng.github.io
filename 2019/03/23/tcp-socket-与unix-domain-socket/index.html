@@ -88,7 +88,7 @@
 <meta property="og:description" content="什么是Socket在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。 Unix Domain Sock">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/191918-36ec0344bae9d79e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/697">
-<meta property="og:updated_time" content="2019-04-11T03:05:12.000Z">
+<meta property="og:updated_time" content="2019-04-11T06:11:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tcp socket 与unix domain socket">
 <meta name="twitter:description" content="什么是Socket在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。 Unix Domain Sock">
@@ -240,7 +240,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -274,6 +274,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
+                    <span itemprop="name">底层</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -318,11 +340,49 @@
 <li>I/O缓冲区在每个TCP套接字中单独存在；</li>
 <li>I/O缓冲区在创建套接字时自动生成；</li>
 <li>即使关闭套接字也会继续传送输出缓冲区中遗留的数据；</li>
-<li>关闭套接字将丢失输入缓冲区中的数据。<br>实时性：</li>
+<li>关闭套接字将丢失输入缓冲区中的数据。</li>
+</ul>
+<p>实时性：</p>
+<ul>
 <li>TCP socket的send缓冲区有自己的timeout，因为默认开启Nagle算法，所以缓冲区没满的话要等到超时再发送。对实时性有要求可以用setsockopt关闭Nagle算法。</li>
 <li>设置合适的缓存区的大小。</li>
 </ul>
-<p>参考：<br><a href="https://itbilu.com/nodejs/core/EJd85BikZ.html" target="_blank" rel="noopener">参考</a><br><a href="https://blog.csdn.net/wlh_flame/article/details/6358795#" target="_blank" rel="noopener">Unix domain socket 的一些小结</a></p>
+<h2 id="Nagle算法"><a href="#Nagle算法" class="headerlink" title="Nagle算法"></a>Nagle算法</h2><p>Nagle算法由John Nagle在1984年提出，这个算法可以减少网络中小的packet的数量，从而降低网络的拥塞程度。<br>为了减小网络开销，Nagle算法指出，当TCP发送了一个小的segment(小于MSS)，它必须等到接收了对方的ACK之后，才能继续发送另一个小的segment。那么在等待的过程中(一个RTT时间)，TCP就能尽量多地将要发送的数据收集在一起，从而减少要发送的segment的数量。<br>默认情况下，TCP开启了Nagle算法，然而Nagle算法并不是灵丹妙药，它会增加TCP发送数据的延迟。在一些要求低延迟的应用程序中(例如即时通讯应用)，则需要禁用Nagle算法。</p>
+<p>Nagle算法的规则:</p>
+<ul>
+<li>如果包长度达到MSS，则允许发送；</li>
+<li>如果该包含有FIN，则允许发送；</li>
+<li>设置了TCP_NODELAY选项，则允许发送；</li>
+<li>未设置TCP_CORK选项时，若所有发出去的小数据包（包长度小于MSS）均被确认，则允许发送；</li>
+<li>上述条件都未满足，但发生了超时（一般为200ms），则立即发送。</li>
+</ul>
+<p>禁用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int optval = 1;</span><br><span class="line">setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &amp;optval, sizeof(optval));</span><br></pre></td></tr></table></figure></p>
+<h2 id="Delayed-ACK"><a href="#Delayed-ACK" class="headerlink" title="Delayed ACK"></a>Delayed ACK</h2><p>TCP的 Delayed ACK 与Nagle算法有异曲同工之妙，Delayed ACK很好理解，当TCP接收到数据时，并不会立即发送ACK给对方，相反，它会等待应用层产生数据，以便将ACK和数据一起发送(在Linux最多等待40ms)。<br>为避免这种延迟的出现，需要做两件事：</p>
+<ul>
+<li>设置TCP_NODELAY选项。</li>
+<li>将客户端的两次write()合并成一个，避免服务端的Delayed ACK。</li>
+</ul>
+<h2 id="TCP-CORK"><a href="#TCP-CORK" class="headerlink" title="TCP_CORK"></a>TCP_CORK</h2><p>Linux提供了TCP_CORK选项，如果在某个TCP socket上开启了这个选项，那就相当于在这个socket的出口堵上了塞子，往这个socket写入的数据都会聚集起来。下面几种情况都会导致这个塞子打开，这样TCP就能继续发送segment出来了。</p>
+<ul>
+<li>程序取消设置TCP_CORK这个选项。</li>
+<li>socket聚集的数据大于一个MSS的大小。</li>
+<li>自从堵上塞子写入第一个字节开始，已经经过200ms。</li>
+<li>socket被关闭了。</li>
+</ul>
+<h1 id="提高socket性能"><a href="#提高socket性能" class="headerlink" title="提高socket性能"></a>提高socket性能</h1><ul>
+<li>禁用 Nagle 算法来减少传输延时</li>
+<li>通过设置缓冲区的大小来提高 socket 带宽的利用</li>
+<li>通过最小化系统调用的个数来降低系统调用的负载</li>
+<li>以及使用可调节的内核参数来优化 Linux 的 TCP/IP 栈。</li>
+</ul>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><ol>
+<li><a href="https://itbilu.com/nodejs/core/EJd85BikZ.html" target="_blank" rel="noopener">参考</a></li>
+<li><a href="https://blog.csdn.net/wlh_flame/article/details/6358795#" target="_blank" rel="noopener">Unix domain socket 的一些小结</a></li>
+<li><a href="http://senlinzhan.github.io/2017/02/10/Linux的TCP-CORK/" target="_blank" rel="noopener">Nagle 算法与 TCP socket 选项 TCP_CORK</a></li>
+<li>*<a href="https://www.ibm.com/developerworks/cn/linux/l-hisock.html" target="_blank" rel="noopener">提高 Linux 上 socket 性能-IBM</a></li>
+<li><a href="https://www.zoulei.net/2016/06/17/socket_recv/" target="_blank" rel="noopener">socket.recv 完整接收数据</a></li>
+<li>*<a href="https://keelii.com/2018/09/24/socket-programming-in-python/" target="_blank" rel="noopener">Python 中的 Socket 编程（指南）</a></li>
+</ol>
 
       
     </div>
@@ -431,7 +491,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="https://erp.ainnovation.com/avatar/thumb/tenganqi@chuangxin.com.jpg" alt="Angel Teng">
+              <img class="site-author-image" itemprop="image" src="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Angel Teng">
             
               <p class="site-author-name" itemprop="name">Angel Teng</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -444,7 +504,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -455,7 +515,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -499,7 +559,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Socket"><span class="nav-number">1.</span> <span class="nav-text">什么是Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unix-Domain-Socket"><span class="nav-number">2.</span> <span class="nav-text">Unix Domain Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-Socket与Unix-Domain-Socket"><span class="nav-number">3.</span> <span class="nav-text">TCP Socket与Unix Domain Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#socket缓冲区"><span class="nav-number">4.</span> <span class="nav-text">socket缓冲区</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Socket"><span class="nav-number">1.</span> <span class="nav-text">什么是Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unix-Domain-Socket"><span class="nav-number">2.</span> <span class="nav-text">Unix Domain Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-Socket与Unix-Domain-Socket"><span class="nav-number">3.</span> <span class="nav-text">TCP Socket与Unix Domain Socket</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#socket缓冲区"><span class="nav-number">4.</span> <span class="nav-text">socket缓冲区</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nagle算法"><span class="nav-number">4.1.</span> <span class="nav-text">Nagle算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delayed-ACK"><span class="nav-number">4.2.</span> <span class="nav-text">Delayed ACK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-CORK"><span class="nav-number">4.3.</span> <span class="nav-text">TCP_CORK</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提高socket性能"><span class="nav-number">5.</span> <span class="nav-text">提高socket性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考："><span class="nav-number">6.</span> <span class="nav-text">参考：</span></a></li></ol></div>
             
 
           </div>
@@ -728,247 +788,3 @@
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 lass="nav-item nav-level-1"><a class="nav-link" href="#socket缓冲区"><span class="nav-number">4.</span> <span class="nav-text">socket缓冲区</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nagle算法"><span class="nav-number">4.1.</span> <span class="nav-text">Nagle算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delayed-ACK"><span class="nav-number">4.2.</span> <span class="nav-text">Delayed ACK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-CORK"><span class="nav-number">4.3.</span> <span class="nav-text">TCP_CORK</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提高socket性能"><span class="nav-number">5.</span> <span class="nav-text">提高socket性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考："><span class="nav-number">6.</span> <span class="nav-text">参考：</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
-
-  
-</div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
-
-
-  
-
-  
-
-</body>
-</html>
-                                               jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
-
-
-  
-
-  
-
-</body>
-</html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
