@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Python手册： https://docs.python.org/3/reference/index.html#reference-index 数据结构：列表[]、元组()、集合{}、字典{k:v} 循环技巧： 123456789101112# 列表循环技巧：for index, value in enumerate([&amp;apos;tic&amp;apos;, &amp;apos;tac&amp;apos;, &amp;ap">
+<meta name="description" content="描述：    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。 原因一：数据库的事务隔离在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他">
 <meta name="keywords" content="Python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python数据结构">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/05/Python数据结构/index.html">
+<meta property="og:title" content="python sqlalchemy 缓存">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/04/01/python-sqlalchemy-缓存/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="Python手册： https://docs.python.org/3/reference/index.html#reference-index 数据结构：列表[]、元组()、集合{}、字典{k:v} 循环技巧： 123456789101112# 列表循环技巧：for index, value in enumerate([&amp;apos;tic&amp;apos;, &amp;apos;tac&amp;apos;, &amp;ap">
+<meta property="og:description" content="描述：    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。 原因一：数据库的事务隔离在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-30T09:07:42.000Z">
+<meta property="og:updated_time" content="2019-04-11T02:21:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python数据结构">
-<meta name="twitter:description" content="Python手册： https://docs.python.org/3/reference/index.html#reference-index 数据结构：列表[]、元组()、集合{}、字典{k:v} 循环技巧： 123456789101112# 列表循环技巧：for index, value in enumerate([&amp;apos;tic&amp;apos;, &amp;apos;tac&amp;apos;, &amp;ap">
+<meta name="twitter:title" content="python sqlalchemy 缓存">
+<meta name="twitter:description" content="描述：    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。 原因一：数据库的事务隔离在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/05/Python数据结构/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/04/01/python-sqlalchemy-缓存/">
 
 
 
 
 
-  <title>Python数据结构 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>python sqlalchemy 缓存 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/05/Python数据结构/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/01/python-sqlalchemy-缓存/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python数据结构</h1>
+          <h1 class="post-title" itemprop="name headline">python sqlalchemy 缓存</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-05T17:20:10+08:00">
-                2018-11-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-01T11:34:42+08:00">
+                2019-04-01
               </time>
             
 
@@ -322,27 +322,14 @@
       
 
       
-        <ol>
-<li>Python手册： <a href="https://docs.python.org/3/reference/index.html#reference-index" target="_blank" rel="noopener">https://docs.python.org/3/reference/index.html#reference-index</a></li>
-<li>数据结构：列表[]、元组()、集合{}、字典{k:v}</li>
-<li><p>循环技巧：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 列表循环技巧：</span><br><span class="line">for index, value in enumerate([&apos;tic&apos;, &apos;tac&apos;, &apos;toe&apos;]):</span><br><span class="line"></span><br><span class="line"># 字典循环技巧：</span><br><span class="line">knights = &#123;&apos;gallahad&apos;: &apos;the pure&apos;, &apos;robin&apos;: &apos;the brave&apos;&#125;</span><br><span class="line">for key, value in knights.items():</span><br><span class="line"></span><br><span class="line">#列表打包</span><br><span class="line">questions = [&apos;name&apos;, &apos;quest&apos;, &apos;favorite color&apos;]</span><br><span class="line">answers = [&apos;lancelot&apos;, &apos;the holy grail&apos;, &apos;blue&apos;]</span><br><span class="line">for q, a in zip(questions, answers):</span><br><span class="line">    print(&apos;What is your &#123;0&#125;?  It is &#123;1&#125;.&apos;.format(q, a))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>推导式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 列表推导式</span><br><span class="line">squares = [x**2 for x in range(10)]</span><br><span class="line">mutiSquares = [[row[i] for row in matrix] for i in range(4)]    #嵌套的列表推导式</span><br><span class="line"></span><br><span class="line"># 集合推导式</span><br><span class="line">a = &#123;x for x in &apos;abracadabra&apos; if x not in &apos;abc&apos;&#125;</span><br><span class="line"># &gt;&gt;&gt; &#123;&apos;r&apos;, &apos;d&apos;&#125;</span><br><span class="line"></span><br><span class="line"># 字典推导式</span><br><span class="line">a = &#123;x: x**2 for x in (2, 4, 6)&#125;</span><br><span class="line"># &gt;&gt;&gt; &#123;2: 4, 4: 16, 6: 36&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>操作符：</p>
-</li>
-</ol>
-<ul>
-<li>not </li>
-<li><p>and, or : 参数从左向右解析，一旦结果可以确定就停止</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string1, string2, string3 = &apos;&apos;, &apos;Trondheim&apos;, &apos;Hammer Dance&apos;</span><br><span class="line">non_null = string1 or string2 or string3</span><br><span class="line"># non_null  -&gt; &apos;Trondheim&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>in, not in</p>
-</li>
-<li>is, is not </li>
-</ul>
+        <p>描述：<br>    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。</p>
+<h2 id="原因一：数据库的事务隔离"><a href="#原因一：数据库的事务隔离" class="headerlink" title="原因一：数据库的事务隔离"></a>原因一：数据库的事务隔离</h2><p>在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他们的区别如下表所示。</p>
+<p>| 隔离级别   | 脏读 | 不可重复读 | 幻读 |<br>|未提交读(RU)| 可能 |    可能     |可能 |<br>|已提交读(RC)| 不可能|    可能     |可能  |<br>|可重复读(RR)| 不可能|    不可能     |可能  |<br>|可串行化     | 不可能|    不可能     |不可能 |</p>
+<p>对于MySQL来说，默认的事务隔离级别是RR，RR是可重复读的，因此可以解释这个现象。</p>
+<h2 id="原因二：Sqlaalchemy的会话隔离"><a href="#原因二：Sqlaalchemy的会话隔离" class="headerlink" title="原因二：Sqlaalchemy的会话隔离"></a>原因二：Sqlaalchemy的会话隔离</h2><p>看作者在stackoverflow的回答：<br>“<br>The usual cause for people thinking there’s a “cache” at play, besides the usual SQLAlchemy identity map which is local to a transaction, is that they are observing the effects of transaction isolation. SQLAlchemy’s session works by default in a transactional mode, meaning it waits until session.commit() is called in order to persist data to the database. During this time, other transactions in progress elsewhere will not see this data.</p>
+<p>However, due to the isolated nature of transactions, there’s an extra twist. Those other transactions in progress will not only not see your transaction’s data until it is committed, they also can’t see it in some cases until they are committed or rolled back also (which is the same effect your close() is having here). A transaction with an average degree of isolation will hold onto the state that it has loaded thus far, and keep giving you that same state local to the transaction even though the real data has changed - this is called repeatable reads in transaction isolation parlance.<br>”<br>SQLAlchemy的会话默认在事务模式下工作，这意味着它会等到调用session.commit()才将数据持久保存到数据库中。<br>由于事务的隔离性，正在进行的其他事务在提交之前不仅不会看到这个事务的数据，在它们被提交或回滚之前它们也无法在某些情况下看到它，这在事务隔离用语中称为可重复读取。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>在MySQL的同一个事务中，多次查询同一行的数据得到的结果是相同的，这里既有SQLAlchemy本身“缓存”结果的原因，也受到数据库隔离级别的影响。如果要强制读取最新的结果，最简单的办法就是在查询前手动COMMIT一次。（commit不仅把所有本地修改写入到数据库，同时也提交了该事务）</p>
+<p>参考：<br><a href="https://www.jianshu.com/p/c0a8275cce99" target="_blank" rel="noopener">https://www.jianshu.com/p/c0a8275cce99</a><br><a href="https://stackoverflow.com/questions/10210080/how-to-disable-sqlalchemy-caching" target="_blank" rel="noopener">https://stackoverflow.com/questions/10210080/how-to-disable-sqlalchemy-caching</a><br><a href="https://stackoverflow.com/questions/12108913/how-to-avoid-caching-in-sqlalchemy" target="_blank" rel="noopener">https://stackoverflow.com/questions/12108913/how-to-avoid-caching-in-sqlalchemy</a></p>
 
       
     </div>
@@ -373,8 +360,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/11/02/可乐项目/" rel="next" title="可乐项目">
-                <i class="fa fa-chevron-left"></i> 可乐项目
+              <a href="/blog/2019/03/23/tcp-socket-与unix-domain-socket/" rel="next" title="tcp socket 与unix domain socket">
+                <i class="fa fa-chevron-left"></i> tcp socket 与unix domain socket
               </a>
             
           </div>
@@ -382,10 +369,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/11/06/Python协程优化/" rel="prev" title="Python协程优化">
-                Python协程优化 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -437,8 +420,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -500,6 +492,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原因一：数据库的事务隔离"><span class="nav-number">1.</span> <span class="nav-text">原因一：数据库的事务隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原因二：Sqlaalchemy的会话隔离"><span class="nav-number">2.</span> <span class="nav-text">原因二：Sqlaalchemy的会话隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">3.</span> <span class="nav-text">解决方法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
