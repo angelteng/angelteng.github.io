@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,19 @@
 
 
 
-<meta name="description" content="关闭stdin/stdout/stderr缓冲区.-u :  unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x.  Force  stdin,  stdout and stderr to be totally unbuffered.  On systems where it matters, also put stdin, s">
-<meta name="keywords" content="Python">
+<meta name="description" content="原因一：多核CPU的缓存当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python -u 命令行参数">
-<meta property="og:url" content="https://angelteng.github.io/blog/2019/04/11/python-u-命令行参数/index.html">
+<meta property="og:title" content="线程安全">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/04/15/线程安全/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="关闭stdin/stdout/stderr缓冲区.-u :  unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x.  Force  stdin,  stdout and stderr to be totally unbuffered.  On systems where it matters, also put stdin, s">
+<meta property="og:description" content="原因一：多核CPU的缓存当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-11T06:20:49.000Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-1dc8fc061e339eb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-15T06:36:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python -u 命令行参数">
-<meta name="twitter:description" content="关闭stdin/stdout/stderr缓冲区.-u :  unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x.  Force  stdin,  stdout and stderr to be totally unbuffered.  On systems where it matters, also put stdin, s">
+<meta name="twitter:title" content="线程安全">
+<meta name="twitter:description" content="原因一：多核CPU的缓存当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-1dc8fc061e339eb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2019/04/11/python-u-命令行参数/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/04/15/线程安全/">
 
 
 
 
 
-  <title>python -u 命令行参数 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>线程安全 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +234,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/11/python-u-命令行参数/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/15/线程安全/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +251,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python -u 命令行参数</h1>
+          <h1 class="post-title" itemprop="name headline">线程安全</h1>
         
 
         <div class="post-meta">
@@ -262,8 +263,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-11T14:13:41+08:00">
-                2019-04-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-15T14:12:31+08:00">
+                2019-04-15
               </time>
             
 
@@ -285,8 +286,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
+                    <span itemprop="name">底层</span>
                   </a>
                 </span>
 
@@ -322,12 +323,26 @@
       
 
       
-        <p>关闭stdin/stdout/stderr缓冲区.<br>-u :</p>
+        <h1 id="原因一：多核CPU的缓存"><a href="#原因一：多核CPU的缓存" class="headerlink" title="原因一：多核CPU的缓存"></a>原因一：多核CPU的缓存</h1><p>当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。<br>按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的一部分。<br>当CPU要读取一个数据时，首先从一级缓存中查找，如果没有找到再从二级缓存中查找，如果还是没有就从三级缓存或内存中查找。<br>单核CPU只含有一套L1，L2，L3缓存；如果CPU含有多个核心，即多核CPU，则每个核心都含有一套L1（甚至和L2）缓存，而共享L3（或者和L2）缓存。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1dc8fc061e339eb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <ul>
-<li>unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x. </li>
-<li>Force  stdin,  stdout and stderr to be totally unbuffered.  On systems where it matters, also put stdin, stdout and stderr in binary mode.  Note that there is internal buffering  in  xreadlines(),  readlines() and  file-object  iterators  (“for  line in sys.stdin”) which is not influenced by this option.  To work around this, you will want to use “sys.stdin.readline()” inside a “while 1:” loop.</li>
+<li>单线程。cpu核心的缓存只被一个线程访问。缓存独占，不会出现访问冲突等问题。</li>
+<li>单核CPU，多线程。进程中的多个线程会同时访问进程中的共享数据，CPU将某块内存加载到缓存后，不同线程在访问相同的物理地址的时候，都会映射到相同的缓存位置，这样即使发生线程的切换，缓存仍然不会失效。但由于任何时刻只能有一个线程在执行，因此不会出现缓存访问冲突。</li>
+<li>多核CPU，多线程。每个核都至少有一个L1 缓存。多个线程访问进程中的某个共享内存，且这多个线程分别在不同的核心上执行，则每个核心都会在各自的caehe中保留一份共享内存的缓冲。由于多核是可以并行的，可能会出现多个线程同时写各自的缓存的情况，而各自的cache之间的数据就有可能不同。这就是缓存一致性问题。</li>
 </ul>
-<p><a href="https://stackoverflow.com/questions/14258500/python-significance-of-u-option" target="_blank" rel="noopener">参考</a></p>
+<h1 id="原因二：处理器优化和指令重排"><a href="#原因二：处理器优化和指令重排" class="headerlink" title="原因二：处理器优化和指令重排"></a>原因二：处理器优化和指令重排</h1><p>那就是为了使处理器内部的运算单元能够尽量的被充分利用，处理器可能会对输入代码进行乱序执行处理。这就是处理器优化。<br>除了现在很多流行的处理器会对代码进行优化乱序处理，很多编程语言的编译器也会有类似的优化，比如Java虚拟机的即时编译器（JIT）也会做指令重排。</p>
+<h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><p>并发编程中的线程安全，必须保证三个条件：</p>
+<ol>
+<li>原子性：是指在一个操作中就是cpu不可以在中途暂停然后再调度，既不被中断操作，要不执行完成，要不就不执行。</li>
+<li>可见性：是指当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值。</li>
+<li>有序性：即程序执行的顺序按照代码的先后顺序执行。</li>
+</ol>
+<h1 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h1><p>为了保证共享内存的正确性（可见性、有序性、原子性），内存模型定义了共享内存系统中多线程程序读写操作行为的规范。通过这些规则来规范对内存的读写操作，从而保证指令执行的正确性。</p>
+<h1 id="Python中的线程安全"><a href="#Python中的线程安全" class="headerlink" title="Python中的线程安全"></a>Python中的线程安全</h1><p>python中由于GIL（Global Interpreter Lock）的存在，即使开了多线程，同一个时间也只有一个线程在执行，但Python不是线程安全的。<br>GIL:任何python线程在执行之前都需要先获得GIL锁，然后每执行一部分代码，解释器就会自动释放GIL锁，其他线程就可以竞争这个锁，只有得到才能执行程序。对于CPU密集型程序，GIL锁的影响在于，有了它的存在，开启多线程无法利用多核优势，也就是只能用到一个核CPU来运行代码，要想用到多个核只能开启多进程（或者使用不带有GIL锁的解释器）。</p>
+<ol>
+<li>使用线程锁： threading.Lock() / threading.RLock()</li>
+<li>使用原子操作</li>
+</ol>
+<p>参考<br><a href="https://juejin.im/post/5cad4adc5188251b1f4d87d2" target="_blank" rel="noopener">再有人问你Java内存模型是什么，就把这篇文章发给他</a><br><a href="https://juejin.im/post/5b129a1be51d45068a6c91d4" target="_blank" rel="noopener">列表与队列——谈谈线程安全</a></p>
 
       
     </div>
@@ -343,12 +358,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
-          
-        </div>
-      
 
       
       
@@ -358,8 +367,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/04/01/python-sqlalchemy-缓存/" rel="next" title="python sqlalchemy 缓存">
-                <i class="fa fa-chevron-left"></i> python sqlalchemy 缓存
+              <a href="/blog/2019/04/11/python-u-命令行参数/" rel="next" title="python -u 命令行参数">
+                <i class="fa fa-chevron-left"></i> python -u 命令行参数
               </a>
             
           </div>
@@ -418,8 +427,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -436,7 +454,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -481,6 +499,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原因一：多核CPU的缓存"><span class="nav-number">1.</span> <span class="nav-text">原因一：多核CPU的缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原因二：处理器优化和指令重排"><span class="nav-number">2.</span> <span class="nav-text">原因二：处理器优化和指令重排</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并发编程"><span class="nav-number">3.</span> <span class="nav-text">并发编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存模型"><span class="nav-number">4.</span> <span class="nav-text">内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python中的线程安全"><span class="nav-number">5.</span> <span class="nav-text">Python中的线程安全</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -704,4 +738,3 @@
 
 </body>
 </html>
-                                                                                                                                                                                         
