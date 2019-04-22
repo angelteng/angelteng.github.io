@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="概念 并发数： 也叫并发连接数，指网络设备所能处理的最大会话数量。这里的会话数是指请求-&amp;gt;响应一次会话。 吞吐量：用户请求是由一个个数据包组成，网络设备（防火墙/路由器/交换机）对每个数据包的处理要耗费资源。吞吐量是指在不丢包的情况下单位时间内通过网络设备的数据包数量。 网络层面并发数和吞吐量的关系：并发数x包长度=吞吐量 TPS：Transactions Per Second（每秒事务处理">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-22T08:24:06.000Z">
+<meta property="og:updated_time" content="2019-04-22T08:32:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务性能分析">
 <meta name="twitter:description" content="概念 并发数： 也叫并发连接数，指网络设备所能处理的最大会话数量。这里的会话数是指请求-&amp;gt;响应一次会话。 吞吐量：用户请求是由一个个数据包组成，网络设备（防火墙/路由器/交换机）对每个数据包的处理要耗费资源。吞吐量是指在不丢包的情况下单位时间内通过网络设备的数据包数量。 网络层面并发数和吞吐量的关系：并发数x包长度=吞吐量 TPS：Transactions Per Second（每秒事务处理">
@@ -309,10 +309,46 @@
 </ol>
 <p>并发数高，吞吐量不一定高。<br>如果谈的是网络设备，参照：并发数x包长度=吞吐量，吞吐量依赖于并发数和包长度。<br>如果谈的是服务器及完整整体性能，需要明确吞吐量的度量指标，假定以吞吐量以QPS作为度量指标，如果并发数高，但平均响应也很高的话，则QPS可能降低。</p>
 <h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><p>请求响应时间=请求发送耗时+请求解析耗时+请求处理耗时+处理结果返回耗时<br>从性能优化角度出发，就需要我们尽力保持和降低系统的99%RT（即一段时间内请求响应时间从低到高排序，低于99%响应时间的上限边界值(比如容忍值是3s)）的同时，提高单位时间内的处理能力。</p>
-<p>step 1:<br>测试指标<br>|指标名称    |指标数值       |指标说明|<br>| :——– | ——— | ——|<br>|TPS       |100            |每秒事务数，很重要的一个指标，衡量系统的处理能力|<br>|RT           |95%、99%、99.99%    |百分比请求的响应时间，即n%以内的RT请求响应时间是多少，百分比越高，RT越低，系统越稳定|<br>|error       |0.1%、0.01%    |错误率，即可接受的请求失败的占比|<br>|Cache       |90%、95%    |缓存命中率：命中率越高，使用缓存的收益越高，系统的性能越好|<br>|CPU       |75%、90%    |CPU使用率，一般来说75%是一个阈值，超过85%就需要重点关注|</p>
+<p>step 1:<br>测试指标</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指标名称</th>
+<th>指标数值</th>
+<th>指标说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">TPS</td>
+<td>100</td>
+<td>每秒事务数，很重要的一个指标，衡量系统的处理能力</td>
+</tr>
+<tr>
+<td style="text-align:left">RT</td>
+<td>95%、99%、99.99%</td>
+<td>百分比请求的响应时间，即n%以内的RT请求响应时间是多少，百分比越高，RT越低，系统越稳定</td>
+</tr>
+<tr>
+<td style="text-align:left">error</td>
+<td>0.1%、0.01%</td>
+<td>错误率，即可接受的请求失败的占比</td>
+</tr>
+<tr>
+<td style="text-align:left">Cache</td>
+<td>90%、95%</td>
+<td>缓存命中率：命中率越高，使用缓存的收益越高，系统的性能越好</td>
+</tr>
+<tr>
+<td style="text-align:left">CPU</td>
+<td>75%、90%</td>
+<td>CPU使用率，一般来说75%是一个阈值，超过85%就需要重点关注</td>
+</tr>
+</tbody>
+</table>
 <p>step 2:<br>《jmeter测试指南》</p>
 <p>step 3:<br>分析<br><a href="https://www.cnblogs.com/imyalost/p/9611566.html" target="_blank" rel="noopener">常见的性能测试缺陷</a></p>
-<p>参考<br><a href="https://www.zhihu.com/question/36734171" target="_blank" rel="noopener">衡量网站性能时，并发数与吞吐量为何要分别考量？</a><br><a href="https://zhuanlan.zhihu.com/p/41189928" target="_blank" rel="noopener">性能测试基础-常见性能指标详解</a><br><a href="https://www.cnblogs.com/imyalost/category/848600.html" target="_blank" rel="noopener">*性能测试</a></p>
+<p>参考<br><a href="https://www.zhihu.com/question/36734171" target="_blank" rel="noopener">衡量网站性能时，并发数与吞吐量为何要分别考量？</a><br><a href="https://zhuanlan.zhihu.com/p/41189928" target="_blank" rel="noopener">性能测试基础-常见性能指标详解</a><br><a href="https://www.cnblogs.com/imyalost/category/848600.html" target="_blank" rel="noopener">*性能测试</a><br><a href="https://blog.csdn.net/timchen525/article/details/80113749" target="_blank" rel="noopener">JMeter压测上对于并发的认识误区</a></p>
 
       
     </div>
