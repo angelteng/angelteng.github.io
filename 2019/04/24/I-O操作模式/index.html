@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,">
+  <meta name="keywords" content="底层,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="* 用于展开/收集元组， ** 用于展开/收集字典 request类库：http://docs.python-requests.org/zh_CN/latest/ 计算图片MD5，如果MD5一致，判断为同一张图片 1234567def calMD5(url):  r = requests.get(url)  imgBytes = r.content   hl = hashlib.md5()  h">
-<meta name="keywords" content="Python">
+<meta name="description" content="概念 流：一个流可以是文件，socket，pipe等等可以进行I/O操作的内核对象 I/O操作：流的操作（读/写）。缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的">
+<meta name="keywords" content="底层">
 <meta property="og:type" content="article">
-<meta property="og:title" content="可乐项目">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/02/可乐项目/index.html">
+<meta property="og:title" content="I&#x2F;O操作模式">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/04/24/I-O操作模式/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="* 用于展开/收集元组， ** 用于展开/收集字典 request类库：http://docs.python-requests.org/zh_CN/latest/ 计算图片MD5，如果MD5一致，判断为同一张图片 1234567def calMD5(url):  r = requests.get(url)  imgBytes = r.content   hl = hashlib.md5()  h">
+<meta property="og:description" content="概念 流：一个流可以是文件，socket，pipe等等可以进行I/O操作的内核对象 I/O操作：流的操作（读/写）。缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-19T01:48:54.000Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T07:42:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="可乐项目">
-<meta name="twitter:description" content="* 用于展开/收集元组， ** 用于展开/收集字典 request类库：http://docs.python-requests.org/zh_CN/latest/ 计算图片MD5，如果MD5一致，判断为同一张图片 1234567def calMD5(url):  r = requests.get(url)  imgBytes = r.content   hl = hashlib.md5()  h">
+<meta name="twitter:title" content="I&#x2F;O操作模式">
+<meta name="twitter:description" content="概念 流：一个流可以是文件，socket，pipe等等可以进行I/O操作的内核对象 I/O操作：流的操作（读/写）。缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/02/可乐项目/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/04/24/I-O操作模式/">
 
 
 
 
 
-  <title>可乐项目 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>I/O操作模式 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +235,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/02/可乐项目/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/I-O操作模式/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +252,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">可乐项目</h1>
+          <h1 class="post-title" itemprop="name headline">I/O操作模式</h1>
         
 
         <div class="post-meta">
@@ -262,8 +264,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-02T17:20:35+08:00">
-                2018-11-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T15:18:15+08:00">
+                2019-04-24
               </time>
             
 
@@ -272,6 +274,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
+                    <span itemprop="name">底层</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -300,24 +324,35 @@
       
 
       
-        <ol>
-<li>* 用于展开/收集元组， ** 用于展开/收集字典</li>
-<li>request类库：<a href="http://docs.python-requests.org/zh_CN/latest/" target="_blank" rel="noopener">http://docs.python-requests.org/zh_CN/latest/</a></li>
-<li><p>计算图片MD5，如果MD5一致，判断为同一张图片</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def calMD5(url):</span><br><span class="line">  r = requests.get(url)</span><br><span class="line">  imgBytes = r.content </span><br><span class="line">  hl = hashlib.md5()</span><br><span class="line">  hl.update(imgBytes)</span><br><span class="line">  re = hl.hexdigest()</span><br><span class="line">  return re</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>异步HTTP库aiohttp: <a href="https://hubertroy.gitbooks.io/aiohttp-chinese-documentation/content/" target="_blank" rel="noopener">https://hubertroy.gitbooks.io/aiohttp-chinese-documentation/content/</a></p>
-<ul>
-<li>配置ssl证书：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sslcontext = ssl.create_default_context(cafile=&apos;/test.crt&apos;)</span><br><span class="line">async with aiohttp.ClientSession() as session:</span><br><span class="line">    async with session.post(&apos;/&apos;,data=&apos;&apos;,ssl_context=sslcontext) as r:</span><br></pre></td></tr></table></figure>
-</li>
+        <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ul>
+<li>流：一个流可以是文件，socket，pipe等等可以进行I/O操作的内核对象</li>
+<li>I/O操作：流的操作（读/写）。缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的缓冲区拷贝到应用程序的地址空间。</li>
+<li>文件描述符fd：是一个用于表述指向文件的引用的抽象化概念。文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。</li>
 </ul>
-</li>
-<li><p>协程：<a href="https://docs.python.org/3/library/asyncio-task.html" target="_blank" rel="noopener">https://docs.python.org/3/library/asyncio-task.html</a></p>
-<ul>
-<li>控制协程并发数量：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sema = asyncio.Semaphore(2)</span><br><span class="line">with (await sema):</span><br><span class="line">    sslcontext........</span><br><span class="line">    async ..........</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
+<h2 id="IO模式"><a href="#IO模式" class="headerlink" title="IO模式"></a>IO模式</h2><p>一次IO访问（以read举例），数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的缓冲区拷贝到应用程序的地址空间。所以说，当一个read操作发生时，它会经历两个阶段：</p>
+<ol>
+<li>等待数据准备 (Waiting for the data to be ready)</li>
+<li>将数据从内核拷贝到进程中 (Copying the data from the kernel to the process)</li>
 </ol>
+<p>正式因为这两个阶段，linux系统产生了下面五种网络模式的方案。</p>
+<ul>
+<li>阻塞 I/O（blocking IO）</li>
+<li>非阻塞 I/O（nonblocking IO）</li>
+<li>I/O 多路复用（ IO multiplexing）</li>
+<li>信号驱动 I/O（ signal driven IO）</li>
+<li>异步 I/O（asynchronous IO）</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="I-O多路复用"><a href="#I-O多路复用" class="headerlink" title="I/O多路复用"></a>I/O多路复用</h3><p>select，poll，epoll都是IO多路复用的机制。一个进程可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。但select，poll，epoll本质上都是同步I/O。</p>
+<p>与阻塞I/O相比，多路复用需要使用两个system call (select 和 recvfrom)，而blocking IO只调用了一个system call (recvfrom)。但是，用select的优势在于它可以同时处理多个connection。</p>
+<p>epoll 操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int epoll_create(int size)；//创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大</span><br><span class="line">int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；//对指定描述符fd执行op操作</span><br><span class="line">int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);//等待epfd上的io事件，最多返回maxevents个事件。</span><br></pre></td></tr></table></figure></p>
+<p>在 select/poll中，进程只有在调用一定的方法后，内核才对所有监视的文件描述符进行扫描，而epoll事先通过epoll_ctl()来注册一 个文件描述符，一旦基于某个文件描述符就绪时，内核会采用类似callback的回调机制，迅速激活这个文件描述符，当进程调用epoll_wait() 时便得到通知。(此处去掉了遍历文件描述符，而是通过监听回调的的机制。)</p>
+<p>优点：</p>
+<ol>
+<li>监视的描述符数量不受限制，它所支持的FD上限是最大可以打开文件的数目。</li>
+<li>IO的效率不会随着监视fd的数量的增长而下降。epoll不同于select和poll轮询的方式，而是通过每个fd定义的回调函数来实现的。只有就绪的fd才会执行回调函数。</li>
+</ol>
+<p>参考：<br><a href="https://blog.51cto.com/yaocoder/888374" target="_blank" rel="noopener">我读过的最好的epoll讲解–转自”知乎“</a><br><a href="https://segmentfault.com/a/1190000003063859" target="_blank" rel="noopener">Linux IO模式及 select、poll、epoll详解</a><br><a href="https://blog.csdn.net/qq_28090573/article/details/50863779" target="_blank" rel="noopener">文件描述符和流的关系？</a></p>
 
       
     </div>
@@ -335,7 +370,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
+            <a href="/blog/tags/底层/" rel="tag"># 底层</a>
           
         </div>
       
@@ -348,15 +383,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/blog/2019/04/22/服务性能分析/" rel="next" title="服务性能分析">
+                <i class="fa fa-chevron-left"></i> 服务性能分析
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/11/05/Python数据结构/" rel="prev" title="Python数据结构">
-                Python数据结构 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -408,8 +443,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -471,6 +515,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IO模式"><span class="nav-number">1.1.</span> <span class="nav-text">IO模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O多路复用"><span class="nav-number">1.1.1.</span> <span class="nav-text">I/O多路复用</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
