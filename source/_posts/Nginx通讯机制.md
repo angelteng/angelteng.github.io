@@ -5,7 +5,7 @@ tags:
 - Nginx
 - PHP
 - Python
-categories: 
+categories: 服务器
 ---
 # PHP-FPM与Nginx通讯机制
 ## CGI协议

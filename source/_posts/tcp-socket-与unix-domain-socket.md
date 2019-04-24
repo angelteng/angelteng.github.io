@@ -2,6 +2,7 @@
 title: tcp socket 与unix domain socket
 date: 2019-03-23 14:58:46
 tags: socket
+categories: 底层
 ---
 # 什么是Socket
 
@@ -78,4 +79,6 @@ Linux提供了TCP_CORK选项，如果在某个TCP socket上开启了这个选项
 1. [参考](https://itbilu.com/nodejs/core/EJd85BikZ.html)
 2. [Unix domain socket 的一些小结](https://blog.csdn.net/wlh_flame/article/details/6358795#)
 3. [Nagle 算法与 TCP socket 选项 TCP_CORK](http://senlinzhan.github.io/2017/02/10/Linux的TCP-CORK/)
-4. [提高 Linux 上 socket 性能-IBM](https://www.ibm.com/developerworks/cn/linux/l-hisock.html)
+4. *[提高 Linux 上 socket 性能-IBM](https://www.ibm.com/developerworks/cn/linux/l-hisock.html)
+5. [socket.recv 完整接收数据](https://www.zoulei.net/2016/06/17/socket_recv/)
+6. *[Python 中的 Socket 编程（指南）](https://keelii.com/2018/09/24/socket-programming-in-python/)
