@@ -271,6 +271,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -317,11 +339,12 @@
 <p>也就是说，在Linux中，fork的时候只复制当前线程到子进程。</p>
 <ol start="2">
 <li><p>那么，monkey_patch究竟做了什么?<br>monkeypatch修改了threading标准库中的_start_new_thread方法, Condition类等，创建了一个greenlet而不是真正的线程，然后就会在fork的时候被复制了。因此，也可以在gunicron的配置文件中，在on_starting的hook中创建真正的线程。<br>gevent是第三方库，通过greenlet实现协程，其基本思想是：当一个greenlet遇到IO操作时，比如访问网络，就自动切换到其他的greenlet，等到IO操作完成，再在适当的时候切换回来继续执行。由于IO操作非常耗时，经常使程序处于等待状态，有了gevent为我们自动切换协程，就保证总有greenlet在运行，而不是等待IO。<br>事实上，gunicron在使用gevent的时候，已经monkey patch了一次，如果patch多次，将会求多次中参数为True的并集。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># venv/lib/python3.5/site-packages/gunicorn/workers/ggevent.py:65</span><br><span class="line">def patch(self):</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.noisy = False</span><br><span class="line"></span><br><span class="line"># if the new version is used make sure to patch subprocess</span><br><span class="line">if gevent.version_info[0] == 0:</span><br><span class="line">    monkey.patch_all()</span><br><span class="line">else:</span><br><span class="line">    monkey.patch_all(subprocess=True)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># venv/lib/python3.5/site-packages/gunicorn/workers/ggevent.py:65</span><br><span class="line">def patch(self):</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.noisy = False</span><br><span class="line"></span><br><span class="line"># if the new version is used make sure to patch subprocess</span><br><span class="line">if gevent.version_info[0] == 0:</span><br><span class="line">    monkey.patch_all()  # 默认值socket=True, dns=True, time=True, select=True, thread=True, os=True, ssl=True， httplib=False, subprocess=True, sys=False, aggressive=True, Event=False, builtins=True, signal=True</span><br><span class="line">else:</span><br><span class="line">    monkey.patch_all(subprocess=True)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>问题2: 从gevent的<a href="http://sdiehl.github.io/gevent-tutorial/" target="_blank" rel="noopener">文档</a>，可以知道，同一时间，只能有一个greenlet在运行，所以如果一个greenlet阻塞了，另一个greentlet就不可能运行，可以通过在while true末尾添加gevent.sleep(0.1)，把控制权（有可能）交给另外一个greenlet。</p>
 </li>
 </ol>
+<h1 id="最终方案："><a href="#最终方案：" class="headerlink" title="最终方案："></a>最终方案：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 方案一：阻塞事件使用线程</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all(thread=False)</span><br><span class="line"></span><br><span class="line">from threading</span><br><span class="line">ta = threading.Thread(target=task)</span><br><span class="line">ta.start</span><br><span class="line"></span><br><span class="line">while true:</span><br><span class="line">    ....</span><br><span class="line">    gevent.sleep(0.1)</span><br><span class="line"></span><br><span class="line"># 方案二：阻塞事件使用进程</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all()</span><br><span class="line"></span><br><span class="line">from multiprocess import Process</span><br><span class="line">p = Process(target=task)</span><br><span class="line">p.start()</span><br><span class="line"></span><br><span class="line">while true:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
 <p>参考:<br><a href="https://www.cnblogs.com/liyuan989/p/4279210.html" target="_blank" rel="noopener">谨慎使用多线程中的fork</a><br><a href="https://segmentfault.com/a/1190000013096677" target="_blank" rel="noopener">eventlet 之 monkeypatch 带来的若干兼容性问题实例分析</a><br><a href="https://github.com/benoitc/gunicorn/issues/1056" target="_blank" rel="noopener">monkey.patch_all and gunicorn with more than 1 worker</a><br><a href="http://xiaorui.cc/2016/04/27/源码分析之gevent-monkey-patch_all实现原理/" target="_blank" rel="noopener">源码分析之gevent monkey.patch_all实现原理</a><br><a href="http://www.361way.com/python-gevent/5329.html" target="_blank" rel="noopener">python异步 I/O模块gevent</a><br><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001407503089986d175822da68d4d6685fbe849a0e0ca35000" target="_blank" rel="noopener">gevent-廖雪峰</a></p>
 
           
@@ -1942,7 +1965,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
