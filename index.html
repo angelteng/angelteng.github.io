@@ -229,6 +229,146 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/30/tensorflow-Web服务部署的坑/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/30/tensorflow-Web服务部署的坑/" itemprop="url">tensorflow Web服务部署的坑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-30T14:13:32+08:00">
+                2019-04-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="问题场景："><a href="#问题场景：" class="headerlink" title="问题场景："></a>问题场景：</h1><p>由于需要部署一个基于tensorflow的算法Web服务，使用了uwsgi+flask去部署。<br>uwsgi 使用了多进程，参数为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line">socket = 0.0.0.0:5051</span><br><span class="line">chdir = /vagrant/images_check</span><br><span class="line">wsgi-file = /vagrant/images_check/uwsgi_entry.py</span><br><span class="line">callable = app</span><br><span class="line">processes = 4</span><br><span class="line">;harakiri = 30</span><br><span class="line">log-format = %(addr) - %(user) [%(ltime)] &quot;%(method) %(uri) %(proto)&quot; %(status) %(size) &quot;%(referer)&quot; &quot;%(uagent)&quot; %(msecs)ms</span><br></pre></td></tr></table></figure></p>
+<p>而算法服务初始化，在入口出使用了queue去初始化，本来的目的是使多个进程都去同一个queue里获取算法服务的实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">q = Queue() </span><br><span class="line">for i in range(multiprocessing.cpu_count()):</span><br><span class="line">    bqc = CheckImage()</span><br><span class="line">    q.put(bqc)</span><br></pre></td></tr></table></figure></p>
+<p>然而发现，运行之后，只有一个进程是能正确运行的，其他进程会阻塞在tf.session.run无法返回</p>
+<h1 id="问题跟踪"><a href="#问题跟踪" class="headerlink" title="问题跟踪"></a>问题跟踪</h1><ol>
+<li>因为在uwsgi中，工作进程是fork()主进程，获得了一个主进程“拷贝”的内存，所以每个进程都会有一个queue。</li>
+<li><p>tensorflow不是进程安全的，所以上面“拷贝”内存的操作，可能倒是tensorflow hang了。<br>在tensorflow issue有类似的提问，<a href="https://github.com/tensorflow/tensorflow/issues/2448" target="_blank" rel="noopener">Session got stuck after fork</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The in-process session (i.e. tf.Session() with no arguments) is not designed to be fork()-safe. If you want to share a set of devices between multiple processes, create a tf.train.Server in one process, and create sessions that connect to that server (with tf.Session(&quot;grpc://...&quot;)) in the other processes.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这篇文章中提到<a href="https://www.cnblogs.com/haolujun/p/9778939.html" target="_blank" rel="noopener">机器学习web服务化实战：一次吐血的服务化之路</a>，的方法，在gunicorn的配置中实例化算法服务，gunicorn可以保证配置文件中的代码只运行一次。同时利用gc.freeze()把截止到当前的所有对象放入持久化区域，不进行回收，从而model占用的内存不会被copy-on-write。但是按照这个方法发现这个实例依然在fork的时候被copy了。</p>
+</li>
+</ol>
+<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><ol>
+<li><p>方案一：改成了在每个进程初始化之后，初始化一个算法服务实例，根据cpu核数配置uwsgi工作进程数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@app.before_first_request</span><br><span class="line">def first_quest():</span><br><span class="line">    q = Queue()</span><br><span class="line">    for i in range(1):</span><br><span class="line">    bqc = CheckImage()</span><br><span class="line">    q.put(bqc)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方案二；<br> 使用redis/mc等中间件。但是有可能有序列化失败的问题。</p>
+</li>
+<li>使用tensorflow server</li>
+</ol>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>在gunicron中，配置preload_app = True是可以预加载资源的，但是fork工作进程还是可能出现坑。</p>
+<p>参考:<br><a href="https://github.com/tensorflow/tensorflow/issues/2448" target="_blank" rel="noopener">Session got stuck after fork</a><br><a href="https://stackoverflow.com/questions/49227958/how-to-serve-tensorflow-model-using-flaskuwsgi" target="_blank" rel="noopener">How to serve tensorflow model using flask+uwsgi?</a><br><a href="https://www.cnblogs.com/haolujun/p/9778939.html" target="_blank" rel="noopener">机器学习web服务化实战：一次吐血的服务化之路</a><br><a href="http://timd.cn/fork-safety-and-thread-safety/" target="_blank" rel="noopener">fork-safe和thread-safe简介</a><br><a href="https://www.crifan.com/flask_gunicorn_multiple_process_worker_share_data_or_singleton/" target="_blank" rel="noopener">【已解决】Flask的gunicorn中多进程多worker如何共享数据或单实例</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/28/使用多进程服务器gunicorn中多线程问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -345,7 +485,7 @@
 </li>
 </ol>
 <h1 id="最终方案："><a href="#最终方案：" class="headerlink" title="最终方案："></a>最终方案：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 方案一：阻塞事件使用线程</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all(thread=False)</span><br><span class="line"></span><br><span class="line">from threading</span><br><span class="line">ta = threading.Thread(target=task)</span><br><span class="line">ta.start</span><br><span class="line"></span><br><span class="line">while true:</span><br><span class="line">    ....</span><br><span class="line">    # gevent.sleep(0.1)</span><br><span class="line"></span><br><span class="line"># 方案二：阻塞事件使用进程</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all()</span><br><span class="line"></span><br><span class="line">from multiprocess import Process</span><br><span class="line">p = Process(target=task)</span><br><span class="line">p.start()</span><br><span class="line"></span><br><span class="line">while true:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<p>参考:<br><a href="https://www.cnblogs.com/liyuan989/p/4279210.html" target="_blank" rel="noopener">谨慎使用多线程中的fork</a><br><a href="https://segmentfault.com/a/1190000013096677" target="_blank" rel="noopener">eventlet 之 monkeypatch 带来的若干兼容性问题实例分析</a><br><a href="https://github.com/benoitc/gunicorn/issues/1056" target="_blank" rel="noopener">monkey.patch_all and gunicorn with more than 1 worker</a><br><a href="http://xiaorui.cc/2016/04/27/源码分析之gevent-monkey-patch_all实现原理/" target="_blank" rel="noopener">源码分析之gevent monkey.patch_all实现原理</a><br><a href="http://www.361way.com/python-gevent/5329.html" target="_blank" rel="noopener">python异步 I/O模块gevent</a><br><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001407503089986d175822da68d4d6685fbe849a0e0ca35000" target="_blank" rel="noopener">gevent-廖雪峰</a><br><a href="https://github.com/Junnplus/blog/issues/9" target="_blank" rel="noopener">gunicorn源码解析</a></p>
+<p>参考:<br><a href="https://www.cnblogs.com/liyuan989/p/4279210.html" target="_blank" rel="noopener">谨慎使用多线程中的fork</a><br><a href="https://segmentfault.com/a/1190000013096677" target="_blank" rel="noopener">eventlet 之 monkeypatch 带来的若干兼容性问题实例分析</a><br><a href="https://github.com/benoitc/gunicorn/issues/1056" target="_blank" rel="noopener">monkey.patch_all and gunicorn with more than 1 worker</a><br><a href="http://xiaorui.cc/2016/04/27/源码分析之gevent-monkey-patch_all实现原理/" target="_blank" rel="noopener">源码分析之gevent monkey.patch_all实现原理</a><br><a href="http://www.361way.com/python-gevent/5329.html" target="_blank" rel="noopener">python异步 I/O模块gevent</a><br><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001407503089986d175822da68d4d6685fbe849a0e0ca35000" target="_blank" rel="noopener">gevent-廖雪峰</a><br><a href="https://github.com/Junnplus/blog/issues/9" target="_blank" rel="noopener">gunicorn源码解析</a><br><a href="http://xiaorui.cc/2017/02/16/深入理解uwsgi和gunicorn网络模型上/" target="_blank" rel="noopener">深入理解uwsgi和gunicorn网络模型[上]</a></p>
 
           
         
@@ -1743,154 +1883,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/05/flask-blurprint-增加自动发现/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/03/05/flask-blurprint-增加自动发现/" itemprop="url">flask blurprint 增加路由自动发现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-05T16:53:53+08:00">
-                2019-03-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>路由自动发现基于约定代码结构及命名规范实现的。<br>例子：<br>约定 [name]_api.py 输出对象名：[name]_bp<br>目录结构:<br>—– view</p>
-<pre><code>- __init__.py
-- user_api.py
-- history_api.py
-- type_api.py
-</code></pre><p>在文件__init__.py中，原本写法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from .user_api import user_bp</span><br><span class="line">from .history_api import history_bp</span><br><span class="line">from .type_api import type_api</span><br><span class="line"></span><br><span class="line">blue_print = [user_bp, history_bp, type_api]</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">for bp in blue_prints:</span><br><span class="line">    app.register_blueprint(bp)</span><br></pre></td></tr></table></figure></p>
-<p>现在改成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import re</span><br><span class="line">path = os.getcwd() + &apos;/app/views&apos;</span><br><span class="line"></span><br><span class="line"># 路由自动查找</span><br><span class="line">blue_prints = []</span><br><span class="line">for root, dirs, files in os.walk(path):</span><br><span class="line">    for f in files:</span><br><span class="line">        if re.match(&apos;(.*?)_api.py&apos;, f):</span><br><span class="line">            name = f.replace(&apos;_api.py&apos;, &apos;&apos;)</span><br><span class="line">            _temp = __import__(&apos;app.views.&apos;+name+&apos;_api&apos;, fromlist=[name+&apos;_bp&apos;]) </span><br><span class="line">            if(hasattr(_temp,name+&apos;_bp&apos;)):</span><br><span class="line">                blue_prints.append(getattr(_temp,name+&apos;_bp&apos;))</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">for bp in blue_prints:</span><br><span class="line">    app.register_blueprint(bp)</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1943,7 +1935,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
