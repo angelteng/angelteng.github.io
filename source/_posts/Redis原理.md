@@ -3,7 +3,7 @@ title: Redis原理
 date: 2018-11-22 10:16:51
 tags:
 - Redis
-categories: 后端
+categories: 缓存
 ---
 # 数据结构
 #### 字符串
@@ -219,3 +219,6 @@ index = hash & dict->ht[x].sizemask;
 ![对比](https://upload-images.jianshu.io/upload_images/14827444-a136b240901c9e77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 [why redis](https://segmentfault.com/a/1190000015706221?utm_source=weekly&utm_medium=email&utm_campaign=email_weekly)
 
+
+参考：
+[Redis 设计与实现（第一版）](http://origin.redisbook.com)
