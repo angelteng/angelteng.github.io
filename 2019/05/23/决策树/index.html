@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,">
+  <meta name="keywords" content="机器学习,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="函数 str() 用于将值转化为适于人阅读的形式 repr() 转化为供解释器读取的形式（如果没有等价的语法，则会发生SyntaxError异常）  虚拟环境 123456# 创建虚拟环境virtualenv --no-site-package venv# 启用source ./venv/bin/activate# 停用deactivate  可执行python脚本  1#!/usr/bin/e">
-<meta name="keywords" content="Python">
+<meta name="description" content="决策树算法的核心是要解决两个问题:  如何从数据表中找出最佳节点和最佳分枝?  如何让决策树停止生长，防止过拟合?   流程： 计算全部特征的不纯度 选取不纯度指标最优的特征来分化 在第一个特征分支下，计算全部特征不纯度 选取不纯度指标最优的特征继续分化   sklearn中使用 123456from sklearn import treetree.DecisionTreeClassifier:">
+<meta name="keywords" content="机器学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python虚拟环境">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/09/Python虚拟环境/index.html">
+<meta property="og:title" content="决策树">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/05/23/决策树/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="函数 str() 用于将值转化为适于人阅读的形式 repr() 转化为供解释器读取的形式（如果没有等价的语法，则会发生SyntaxError异常）  虚拟环境 123456# 创建虚拟环境virtualenv --no-site-package venv# 启用source ./venv/bin/activate# 停用deactivate  可执行python脚本  1#!/usr/bin/e">
+<meta property="og:description" content="决策树算法的核心是要解决两个问题:  如何从数据表中找出最佳节点和最佳分枝?  如何让决策树停止生长，防止过拟合?   流程： 计算全部特征的不纯度 选取不纯度指标最优的特征来分化 在第一个特征分支下，计算全部特征不纯度 选取不纯度指标最优的特征继续分化   sklearn中使用 123456from sklearn import treetree.DecisionTreeClassifier:">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-30T09:07:23.000Z">
+<meta property="og:updated_time" content="2019-05-23T10:08:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python虚拟环境">
-<meta name="twitter:description" content="函数 str() 用于将值转化为适于人阅读的形式 repr() 转化为供解释器读取的形式（如果没有等价的语法，则会发生SyntaxError异常）  虚拟环境 123456# 创建虚拟环境virtualenv --no-site-package venv# 启用source ./venv/bin/activate# 停用deactivate  可执行python脚本  1#!/usr/bin/e">
+<meta name="twitter:title" content="决策树">
+<meta name="twitter:description" content="决策树算法的核心是要解决两个问题:  如何从数据表中找出最佳节点和最佳分枝?  如何让决策树停止生长，防止过拟合?   流程： 计算全部特征的不纯度 选取不纯度指标最优的特征来分化 在第一个特征分支下，计算全部特征不纯度 选取不纯度指标最优的特征继续分化   sklearn中使用 123456from sklearn import treetree.DecisionTreeClassifier:">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/09/Python虚拟环境/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/05/23/决策树/">
 
 
 
 
 
-  <title>Python虚拟环境 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>决策树 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/09/Python虚拟环境/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/决策树/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python虚拟环境</h1>
+          <h1 class="post-title" itemprop="name headline">决策树</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-09T17:16:24+08:00">
-                2018-11-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-23T17:55:30+08:00">
+                2019-05-23
               </time>
             
 
@@ -285,8 +285,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
                   </a>
                 </span>
 
@@ -323,17 +323,55 @@
 
       
         <ol>
-<li><p>函数 str() 用于将值转化为适于人阅读的形式<br> repr() 转化为供解释器读取的形式（如果没有等价的语法，则会发生SyntaxError异常）</p>
+<li>决策树算法的核心是要解决两个问题: <ul>
+<li>如何从数据表中找出最佳节点和最佳分枝? </li>
+<li>如何让决策树停止生长，防止过拟合?</li>
+</ul>
 </li>
-<li><p>虚拟环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 创建虚拟环境</span><br><span class="line">virtualenv --no-site-package venv</span><br><span class="line"># 启用</span><br><span class="line">source ./venv/bin/activate</span><br><span class="line"># 停用</span><br><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+<li>流程：<ul>
+<li>计算全部特征的不纯度</li>
+<li>选取不纯度指标最优的特征来分化</li>
+<li>在第一个特征分支下，计算全部特征不纯度</li>
+<li>选取不纯度指标最优的特征继续分化</li>
+</ul>
 </li>
-<li><p>可执行python脚本 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python3.5</span><br></pre></td></tr></table></figure>
+<li><p>sklearn中使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from sklearn import tree</span><br><span class="line">tree.DecisionTreeClassifier:分类树</span><br><span class="line">tree.DecisionTreeRegressor:回归树</span><br><span class="line">tree.export_graphviz:将生成的决策树导出为DOT格式，画图专用</span><br><span class="line">tree.ExtraTreeClassifier:高随机版本的分类树</span><br><span class="line">tree.ExtraTreeRegressor:高随机版本的回归树</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>记录依赖变更<br>requirements.txt是一个常常被许多Flask应用用于列出它所依赖的包的文本文件。它是通过pip freeze &gt; requirements.txt生成的。 使用pip install -r requirements.txt，你就能安装所有的包。</p>
+<li><p>一般参数</p>
+<ul>
+<li>criterion: 不纯度的计算方法（不纯度越低、拟合效果越好）<ul>
+<li>entropy 信息熵</li>
+<li>gini    基尼系数（默认）</li>
+</ul>
 </li>
+<li>random_state: 随机模式，高纬度下随机性更明显<ul>
+<li>None （默认）</li>
+<li>任意整数</li>
+</ul>
+</li>
+<li>splitter： 随机选项<ul>
+<li>best： 优先选择更重要的特征进行分支</li>
+<li>random： 分支随机（防止过拟合）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>剪枝参数<br>在不加限制的情况下，一棵决策树会生长到衡量不纯度的指标最优，或者没有更多的特征可用为止。这样的决策树往往会过拟合。</li>
 </ol>
+<ul>
+<li>max_depth: 限制最大深度</li>
+<li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
+<li>min_samples_split: 一个分支至少含有min_samples_split个训练样本</li>
+<li>max_features: 限制分枝时考虑的特征个数 </li>
+<li>min_impurity_decrease: 限制信息增益的大小</li>
+</ul>
+<ol start="6">
+<li>确定最优参数：</li>
+</ol>
+<ul>
+<li>学习曲线</li>
+</ul>
 
       
     </div>
@@ -351,7 +389,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
+            <a href="/blog/tags/机器学习/" rel="tag"># 机器学习</a>
           
         </div>
       
@@ -364,8 +402,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/11/09/Python标准库/" rel="next" title="Python标准库">
-                <i class="fa fa-chevron-left"></i> Python标准库
+              <a href="/blog/2019/05/23/机器学习链接/" rel="next" title="机器学习链接">
+                <i class="fa fa-chevron-left"></i> 机器学习链接
               </a>
             
           </div>
@@ -373,10 +411,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/11/12/Flask安装配置/" rel="prev" title="Flask安装配置">
-                Flask安装配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

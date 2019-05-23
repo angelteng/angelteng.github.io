@@ -229,6 +229,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/07/Python的类/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/07/Python的类/" itemprop="url">Python的类</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T17:18:02+08:00">
+                2018-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>作用域：一个定义于某模块中的函数的全局作用域是该模块的命名空间，而不是该函数的别名被定义或调用的位置</li>
+<li><p>example</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    i = 12345</span><br><span class="line">    # 类的实例化操作会自动为新创建的类实例调用 __init__() 方法</span><br><span class="line">    def __init__(self,realpart, imagpart):</span><br><span class="line">        self.data = []</span><br><span class="line">        self.r = real part</span><br><span class="line">        self.im = imagpart</span><br><span class="line">    # 一般方法的第一个参数被命名为 self,这仅仅是一个约定</span><br><span class="line">    def f(self):</span><br><span class="line">        return &apos;hello world&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; x = MyClass(&apos;realpart&apos;,&apos;imagpart&apos;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>继承</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class DerivedClassName(BaseClassName):</span><br><span class="line">    pass</span><br><span class="line">class DerivedClassName(modname.BaseClassName):</span><br><span class="line">    pass</span><br><span class="line"></span><br><span class="line"># 多继承</span><br><span class="line">class DerivedClassName(Base1, Base2, Base3):</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>派生类可能会覆盖其基类的方法。因为方法调用同一个对象中的其它方法时没有特权，基类的方法调用同一个基类的方法时，可能实际上最终调用了派生类中的覆盖方法。</li>
+<li>检查继承类型：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 函数 isinstance()用于检查实例类型</span><br><span class="line">isinstance(obj, int)</span><br><span class="line"># 函数 issubclass()用于检查类继承</span><br><span class="line">issubclass(bool, int)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="4">
+<li><p>public: name<br> protect : _name<br> private: __name</p>
+</li>
+<li><p>迭代器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Reverse:</span><br><span class="line">  # 定义一个 __iter__()方法，使其返回一个带有 __next__()方法的对象。</span><br><span class="line">    &quot;&quot;&quot;Iterator for looping over a sequence backwards.&quot;&quot;&quot;</span><br><span class="line">    def __init__(self, data):</span><br><span class="line">        self.data = data</span><br><span class="line">        self.index = len(data)</span><br><span class="line">    def __iter__(self):</span><br><span class="line">        return self</span><br><span class="line">    def __next__(self):</span><br><span class="line">        if self.index == 0:</span><br><span class="line">            raise StopIteration</span><br><span class="line">        self.index = self.index - 1</span><br><span class="line">        return self.data[self.index]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def reverse(data):</span><br><span class="line">    for index in range(len(data)-1, -1, -1):</span><br><span class="line">        yield data[index]</span><br><span class="line">for char in reverse(&apos;golf&apos;):</span><br><span class="line">     print(char)</span><br><span class="line">`</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/07/Python的模块与包/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -903,7 +1067,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
