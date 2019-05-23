@@ -229,6 +229,206 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/23/tcp-socket-与unix-domain-socket/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/03/23/tcp-socket-与unix-domain-socket/" itemprop="url">tcp socket 与unix domain socket</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-23T14:58:46+08:00">
+                2019-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
+                    <span itemprop="name">底层</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是Socket"><a href="#什么是Socket" class="headerlink" title="什么是Socket"></a>什么是Socket</h1><p>在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。</p>
+<h1 id="Unix-Domain-Socket"><a href="#Unix-Domain-Socket" class="headerlink" title="Unix Domain Socket"></a>Unix Domain Socket</h1><p>Unix Domain Socket并不是一个实际的协议，它只在同客户机和服务器通信时使用的API，且一台主机与在不同主机间通信时使用相同的API。</p>
+<p>Unix Domain Socket有以下特点:</p>
+<ul>
+<li>Unix Domain Socket使用的地址通常是一个文件 xxx.sock</li>
+<li>在同一主机通讯时，传输速率是不同主机间的两倍</li>
+<li>Unix Domain Socket套接字描述符可以在同一主机不同进程间传递</li>
+<li>Unix Domain Socket套接字可以向服务器提供用户认证信息</li>
+</ul>
+<h1 id="TCP-Socket与Unix-Domain-Socket"><a href="#TCP-Socket与Unix-Domain-Socket" class="headerlink" title="TCP Socket与Unix Domain Socket"></a>TCP Socket与Unix Domain Socket</h1><p>无论时TCP Socket套接字还是Unix Domain Socket套接字，每个套接字都是唯一的。TCP Socket通过IP和端口描述，而Unix Domain Socket描述。<br>TCP属于传输层的协议，使用TCP Socket进行通讯时，需要经过传输层TCP/IP协议的解析。<br>而Unix Domain Socket可用于不同进程间的通讯和传递，使用Unix Domain Socket进行通讯时不需要经过传输层，也不需要使用TCP/IP协议。所以，理论上讲Unix Domain Socket具有更好的传输效率。</p>
+<h1 id="socket缓冲区"><a href="#socket缓冲区" class="headerlink" title="socket缓冲区"></a>socket缓冲区</h1><p><img src="https://upload-images.jianshu.io/upload_images/191918-36ec0344bae9d79e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/697" alt="TCP套接字的I/O缓冲区示意图"></p>
+<p>每个 socket 被创建后，都会分配两个缓冲区，输入缓冲区和输出缓冲区。write()/send() 并不立即向网络中传输数据，而是先将数据写入缓冲区中，再由TCP协议将数据从缓冲区发送到目标机器。一旦将数据写入到缓冲区，函数就可以成功返回，不管它们有没有到达目标机器，也不管它们何时被发送到网络，这些都是TCP协议负责的事情。TCP协议独立于 write()/send() 函数，数据有可能刚被写入缓冲区就发送到网络，也可能在缓冲区中不断积压，多次写入的数据被一次性发送到网络，这取决于当时的网络情况、当前线程是否空闲等诸多因素，不由程序员控制。read()/recv() 函数也是如此，也从输入缓冲区中读取数据，而不是直接从网络中读取。<br>大小：socket默认的是1024×8=8192字节<br>特性：</p>
+<ul>
+<li>I/O缓冲区在每个TCP套接字中单独存在；</li>
+<li>I/O缓冲区在创建套接字时自动生成；</li>
+<li>即使关闭套接字也会继续传送输出缓冲区中遗留的数据；</li>
+<li>关闭套接字将丢失输入缓冲区中的数据。</li>
+</ul>
+<p>实时性：</p>
+<ul>
+<li>TCP socket的send缓冲区有自己的timeout，因为默认开启Nagle算法，所以缓冲区没满的话要等到超时再发送。对实时性有要求可以用setsockopt关闭Nagle算法。</li>
+<li>设置合适的缓存区的大小。</li>
+</ul>
+<h2 id="Nagle算法"><a href="#Nagle算法" class="headerlink" title="Nagle算法"></a>Nagle算法</h2><p>Nagle算法由John Nagle在1984年提出，这个算法可以减少网络中小的packet的数量，从而降低网络的拥塞程度。<br>为了减小网络开销，Nagle算法指出，当TCP发送了一个小的segment(小于MSS)，它必须等到接收了对方的ACK之后，才能继续发送另一个小的segment。那么在等待的过程中(一个RTT时间)，TCP就能尽量多地将要发送的数据收集在一起，从而减少要发送的segment的数量。<br>默认情况下，TCP开启了Nagle算法，然而Nagle算法并不是灵丹妙药，它会增加TCP发送数据的延迟。在一些要求低延迟的应用程序中(例如即时通讯应用)，则需要禁用Nagle算法。</p>
+<p>Nagle算法的规则:</p>
+<ul>
+<li>如果包长度达到MSS，则允许发送；</li>
+<li>如果该包含有FIN，则允许发送；</li>
+<li>设置了TCP_NODELAY选项，则允许发送；</li>
+<li>未设置TCP_CORK选项时，若所有发出去的小数据包（包长度小于MSS）均被确认，则允许发送；</li>
+<li>上述条件都未满足，但发生了超时（一般为200ms），则立即发送。</li>
+</ul>
+<p>禁用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int optval = 1;</span><br><span class="line">setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &amp;optval, sizeof(optval));</span><br></pre></td></tr></table></figure></p>
+<h2 id="Delayed-ACK"><a href="#Delayed-ACK" class="headerlink" title="Delayed ACK"></a>Delayed ACK</h2><p>TCP的 Delayed ACK 与Nagle算法有异曲同工之妙，Delayed ACK很好理解，当TCP接收到数据时，并不会立即发送ACK给对方，相反，它会等待应用层产生数据，以便将ACK和数据一起发送(在Linux最多等待40ms)。<br>为避免这种延迟的出现，需要做两件事：</p>
+<ul>
+<li>设置TCP_NODELAY选项。</li>
+<li>将客户端的两次write()合并成一个，避免服务端的Delayed ACK。</li>
+</ul>
+<h2 id="TCP-CORK"><a href="#TCP-CORK" class="headerlink" title="TCP_CORK"></a>TCP_CORK</h2><p>Linux提供了TCP_CORK选项，如果在某个TCP socket上开启了这个选项，那就相当于在这个socket的出口堵上了塞子，往这个socket写入的数据都会聚集起来。下面几种情况都会导致这个塞子打开，这样TCP就能继续发送segment出来了。</p>
+<ul>
+<li>程序取消设置TCP_CORK这个选项。</li>
+<li>socket聚集的数据大于一个MSS的大小。</li>
+<li>自从堵上塞子写入第一个字节开始，已经经过200ms。</li>
+<li>socket被关闭了。</li>
+</ul>
+<h1 id="提高socket性能"><a href="#提高socket性能" class="headerlink" title="提高socket性能"></a>提高socket性能</h1><ul>
+<li>禁用 Nagle 算法来减少传输延时</li>
+<li>通过设置缓冲区的大小来提高 socket 带宽的利用</li>
+<li>通过最小化系统调用的个数来降低系统调用的负载</li>
+<li>以及使用可调节的内核参数来优化 Linux 的 TCP/IP 栈。</li>
+</ul>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><ol>
+<li><a href="https://itbilu.com/nodejs/core/EJd85BikZ.html" target="_blank" rel="noopener">参考</a></li>
+<li><a href="https://blog.csdn.net/wlh_flame/article/details/6358795#" target="_blank" rel="noopener">Unix domain socket 的一些小结</a></li>
+<li><a href="http://senlinzhan.github.io/2017/02/10/Linux的TCP-CORK/" target="_blank" rel="noopener">Nagle 算法与 TCP socket 选项 TCP_CORK</a></li>
+<li>*<a href="https://www.ibm.com/developerworks/cn/linux/l-hisock.html" target="_blank" rel="noopener">提高 Linux 上 socket 性能-IBM</a></li>
+<li><a href="https://www.zoulei.net/2016/06/17/socket_recv/" target="_blank" rel="noopener">socket.recv 完整接收数据</a></li>
+<li>*<a href="https://keelii.com/2018/09/24/socket-programming-in-python/" target="_blank" rel="noopener">Python 中的 Socket 编程（指南）</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/05/flask-blurprint-增加自动发现/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -797,9 +997,12 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 <h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p><img src="https://upload-images.jianshu.io/upload_images/3240886-313fd9b1018241f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/682" alt="uwsgi"></p>
 <ol>
 <li>WSGI: 它是用在 python web 框架编写的应用程序与web服务器之间的规范。它使得Web App可以与Web Server顺利通信。所有使用 WSGI 的服务器都可以运行使用 WSGI 规范的web 框架。它规定WSGI application应该实现为一个可调用对象。</li>
-<li>uWSGI: uWSGI: 是一个Web服务器，它实现了WSGI协议、uwsgi、http等协议。用于接收前端服务器转发的动态请求并处理后发给 web 应用程序。</li>
+<li>uWSGI: uWSGI: 是一个Web服务器(WSGI容器），它实现了WSGI协议、uwsgi、http等协议。用于接收前端服务器转发的动态请求并处理后发给 web 应用程序。</li>
 <li>uwsgi: uwsgi是uWSGI服务器实现的独有的协议。</li>
 </ol>
+<h2 id="FLASK"><a href="#FLASK" class="headerlink" title="FLASK"></a>FLASK</h2><p>Flask是一个web框架，而且Flask是基于werkzeug开发的，那werkzeug是什么呢？</p>
+<p>Werkzeug是一个WSGI工具包，他可以作为一个Web框架的底层库。werkzeug 不是一个web服务器，也不是一个web框架，而是一个工具包，官方的介绍说是一个 WSGI 工具包，它可以作为一个 Web 框架的底层库，因为它封装好了很多 Web 框架的东西，例如 Request，Response 等等。使用它可以减轻web框架开发工作量。我看过werkzeug的源码后发现，werkzeug也实现了WSGI容器的功能，而且利用python/http/server.py库实现了一个简易的http服务器。因此在调试的时候可以直接使用app.run()把服务器给运行起来。</p>
+<p><a href="https://blog.csdn.net/sodawaterer/article/details/71497086" target="_blank" rel="noopener">参考</a></p>
 
           
         
@@ -1654,150 +1857,6 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/10/Python灰度图转伪彩色图/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/10/Python灰度图转伪彩色图/" itemprop="url">Python灰度图转伪彩色图</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T10:02:47+08:00">
-                2019-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因项目中算法给出分割图是灰度图，而前端需要展示彩色图，搜了下网上资料，参考了opencv写的<a href="http://blog.sina.com.cn/s/blog_8924265b0101ext1.html" target="_blank" rel="noopener">这篇</a>，改成了Python代码<br>效果：<br>原灰度图<br><img src="https://upload-images.jianshu.io/upload_images/14827444-b83e1508197f3373.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="灰度图"><br>伪彩色图<br><img src="https://upload-images.jianshu.io/upload_images/14827444-74c7a847851bcac8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="彩色图"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line">import requests</span><br><span class="line">from io import BytesIO</span><br><span class="line">import numpy as np</span><br><span class="line">def grayImageTrans(url):</span><br><span class="line">    # url</span><br><span class="line">    # 如果是本地图片</span><br><span class="line">    # img = Image.open(&apos;/tmp/test.jpg&apos;)</span><br><span class="line">    file = requests.get(url)</span><br><span class="line">    tmpIm = BytesIO(file.content)</span><br><span class="line">    img = Image.open(tmpIm)</span><br><span class="line">    # 图片转矩阵</span><br><span class="line">    img = np.array(img)</span><br><span class="line">    # nparray转list</span><br><span class="line">    imgAry = img.tolist()</span><br><span class="line">    tmp=0</span><br><span class="line">    # 加颜色</span><br><span class="line">    for x in range(img.shape[0]):</span><br><span class="line">        for y in range(img.shape[1]):</span><br><span class="line">            tmp = imgAry[x][y]</span><br><span class="line">            imgAry[x][y] = __grayColorTrans(tmp)</span><br><span class="line">    newImgAry = np.array(imgAry)</span><br><span class="line">    # 矩阵转图片</span><br><span class="line">    newImg = Image.fromarray(np.uint8(newImgAry))</span><br><span class="line">    # newImg.save(&apos;/vagrant/test.png&apos;)</span><br><span class="line">    # 转base64</span><br><span class="line">    output_buffer = BytesIO()</span><br><span class="line">    newImg.save(output_buffer, format=&apos;PNG&apos;)</span><br><span class="line">    byte_data = output_buffer.getvalue()</span><br><span class="line">    base64_str = base64.b64encode(byte_data)</span><br><span class="line">    return base64_str</span><br></pre></td></tr></table></figure>
-<p>参考：<br>关于Image与Base64转换可以看<a href="https://www.jianshu.com/p/2ff8e6f98257" target="_blank" rel="noopener">这里</a><br><a href="https://my.oschina.net/112612/blog/1594140" target="_blank" rel="noopener">Image图像的convert</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1850,7 +1909,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
