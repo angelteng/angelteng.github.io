@@ -88,7 +88,7 @@
 <meta property="og:description" content="随机森林是一种集成算法，集成算法的目标：考虑多个评估器的建模结果，汇总之后得到一个综合的结果，以此来获取比单个模型更好的回归或分类表现。 多个模型集成成为的模型叫做集成评估器(ensemble estimator)，组成集成评估器的每个模型都叫做基评估器 (base estimator)。通常来说，有三类集成算法:装袋法(Bagging)，提升法(Boosting)和stacking。 随机森林">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-1b107c7a033ad21a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-05-24T03:58:56.000Z">
+<meta property="og:updated_time" content="2019-05-24T06:35:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="随机森林">
 <meta name="twitter:description" content="随机森林是一种集成算法，集成算法的目标：考虑多个评估器的建模结果，汇总之后得到一个综合的结果，以此来获取比单个模型更好的回归或分类表现。 多个模型集成成为的模型叫做集成评估器(ensemble estimator)，组成集成评估器的每个模型都叫做基评估器 (base estimator)。通常来说，有三类集成算法:装袋法(Bagging)，提升法(Boosting)和stacking。 随机森林">
@@ -327,8 +327,23 @@
         <ol>
 <li>随机森林是一种集成算法，集成算法的目标：考虑多个评估器的建模结果，汇总之后得到一个综合的结果，以此来获取比单个模型更好的回归或<br>分类表现。</li>
 <li>多个模型集成成为的模型叫做集成评估器(ensemble estimator)，组成集成评估器的每个模型都叫做基评估器 (base estimator)。通常来说，有三类集成算法:装袋法(Bagging)，提升法(Boosting)和stacking。</li>
-<li>随机森林是一种装袋法模型，装袋法的核心是构建多个独立的评估器，然后对其预测进行平均或多数表决原则决定集成评估器的效果。而提升法中，基评估器是相关的，是按顺序一一构建的。其核心思想是结合弱评估器的力量一次次对难以评估的样本 进行预测，从而构成一个强评估器。提升法的代表模型有Adaboost和梯度提升树。</li>
-<li>控制评估器的参数<ul>
+<li><p>随机森林是一种装袋法模型，装袋法的核心是构建多个独立的评估器，然后对其预测进行平均或多数表决原则决定集成评估器的效果。而提升法中，基评估器是相关的，是按顺序一一构建的。其核心思想是结合弱评估器的力量一次次对难以评估的样本 进行预测，从而构成一个强评估器。提升法的代表模型有Adaboost和梯度提升树。</p>
+</li>
+<li><p>随机森林的特点：</p>
+<ul>
+<li>在与其它现有的算法相比，其预测准确率很好</li>
+<li>在较大的数据集上计算速度依然很快</li>
+<li>不需要降维，算法本身是采取随机降维的</li>
+<li>他能处理有缺失值的数据集。算法内部有补缺失值的函数</li>
+<li>能给出变量的重要性</li>
+<li>能处理imbalanced data set</li>
+<li>能给出观测实例间的相似度矩阵，其实就是proximity啦，继而能做clustering 和 location outlier</li>
+<li>能对unlabeled data 进行无监督的学习，进行clustering</li>
+<li>生成的森林可以保留，应用在新的数据集上</li>
+</ul>
+</li>
+<li><p>控制评估器的参数</p>
+<ul>
 <li>criterion: 不纯度衡量指标</li>
 <li>max_depth: 树最大深度</li>
 <li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
@@ -345,7 +360,7 @@
 - oob_score_指的是袋外得分。随机森林为了确保林中的每棵树都不尽相同，所以采用了对训练集进行有放回抽样的 方式来不断组成信的训练集，在这个程中，会有一些数据从来没有被随机挑选到，他们就被叫做“袋外数据”。
 - .feature_importances_和决策树中的.feature_importances_用法和含义都一致，是返回特征的重要性。
 - predict_proba()： 返回每个测试样本对应的被分到每一类标签的概率
-</code></pre><ol start="5">
+</code></pre><ol start="6">
 <li><p>在sklearn中的使用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.ensemble import RandomForestClassifier</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 </li>
@@ -388,17 +403,19 @@
 </tr>
 </tbody>
 </table>
-<ol start="6">
+<ol start="9">
 <li><p>调参</p>
 <ul>
 <li><p>学习曲线</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.model_selection import cross_val_score</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">scorel = []</span><br><span class="line">for i in range(0,200,10):</span><br><span class="line">    rfc = RandomForestClassifier(n_estimators=i+1,</span><br><span class="line">                                n_jobs=-1,</span><br><span class="line">                                random_state=90)</span><br><span class="line">    score = cross_val_score(rfc,data.data,data.target,cv=10).mean()</span><br><span class="line">    scorel.append(score)</span><br><span class="line">print(max(scorel),(scorel.index(max(scorel))*10)+1)</span><br><span class="line">plt.figure(figsize=[20,5])</span><br><span class="line">plt.plot(range(1,201,10),scorel)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>网格搜索</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.model_selection import GridSearchCV</span><br><span class="line">param_grid = &#123;&apos;max_depth&apos;:np.arange(1,20,1)&#125;</span><br><span class="line">rfc = RandomForestClassifier(n_estimators=39</span><br><span class="line">                     ,random_state=90</span><br><span class="line">                    )</span><br><span class="line">GS = GridSearchCV(rfc,param_grid,cv=10)</span><br><span class="line">GS.fit(data.data,data.target)</span><br><span class="line">GS.best_params_</span><br><span class="line">GS.best_score_</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.model_selection import GridSearchCV</span><br><span class="line">param_grid = &#123;&apos;max_depth&apos;:np.arange(1,20,1)&#125;</span><br><span class="line">rfc = RandomForestClassifier(n_estimators=39</span><br><span class="line">                     ,random_state=90</span><br><span class="line">                    )</span><br><span class="line">GS = GridSearchCV(rfc,param_grid,cv=10)</span><br><span class="line">GS.fit(data.data,data.target)</span><br><span class="line">GS.best_params_</span><br><span class="line">GS.best_score_</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
 </ol>
+<p>参考：<br><a href="http://edu.cda.cn/course/982/tasks" target="_blank" rel="noopener">菜菜的机器学习sklearn课堂</a><br><a href="http://www.cnblogs.com/litao1105/p/5021747.html" target="_blank" rel="noopener">随机森林算法－Deep Dive</a></p>
 
       
     </div>
@@ -438,6 +455,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/05/24/数据预处理/" rel="prev" title="数据预处理">
+                数据预处理 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -507,7 +528,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
