@@ -229,6 +229,218 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/24/随机森林/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/24/随机森林/" itemprop="url">随机森林</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-24T10:59:56+08:00">
+                2019-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>随机森林是一种集成算法，集成算法的目标：考虑多个评估器的建模结果，汇总之后得到一个综合的结果，以此来获取比单个模型更好的回归或<br>分类表现。</li>
+<li>多个模型集成成为的模型叫做集成评估器(ensemble estimator)，组成集成评估器的每个模型都叫做基评估器 (base estimator)。通常来说，有三类集成算法:装袋法(Bagging)，提升法(Boosting)和stacking。</li>
+<li>随机森林是一种装袋法模型，装袋法的核心是构建多个独立的评估器，然后对其预测进行平均或多数表决原则决定集成评估器的效果。而提升法中，基评估器是相关的，是按顺序一一构建的。其核心思想是结合弱评估器的力量一次次对难以评估的样本 进行预测，从而构成一个强评估器。提升法的代表模型有Adaboost和梯度提升树。</li>
+<li>控制评估器的参数<ul>
+<li>criterion: 不纯度衡量指标</li>
+<li>max_depth: 树最大深度</li>
+<li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
+<li>min_samples_split: 一个分支至少含有min_samples_split个训练样本</li>
+<li>max_features： 限制分支时考虑特征个数</li>
+<li>min_impurity_decrease: 限制信息增益大小</li>
+</ul>
+</li>
+</ol>
+<p>重要参数</p>
+<pre><code>- n_estimators： 这是森林中树木的数量，即基基评估器的数量。这个参数对随机森林模型的精确性影响是单调的，n_estimators 越大，模型的效往往越好。但是相应的，任何模型都有决策边界，n_estimators达到一定的程度之后，随机森林 的精确性往往不在上升或开始波动。
+</code></pre><p>重要属性</p>
+<pre><code>- .estimators_是用来查看随机森林中所有树的列表的。
+- oob_score_指的是袋外得分。随机森林为了确保林中的每棵树都不尽相同，所以采用了对训练集进行有放回抽样的 方式来不断组成信的训练集，在这个程中，会有一些数据从来没有被随机挑选到，他们就被叫做“袋外数据”。
+- .feature_importances_和决策树中的.feature_importances_用法和含义都一致，是返回特征的重要性。
+- predict_proba()： 返回每个测试样本对应的被分到每一类标签的概率
+</code></pre><ol start="5">
+<li><p>在sklearn中的使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.ensemble import RandomForestClassifier</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>泛化误差<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1b107c7a033ad21a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>当模型太复杂，模型就会过拟合，泛化能力就不够，所以泛化误差大。当模型太简单，模型就会欠拟合，拟合能力就不够，所以误差也会大。只有当模型的复杂度刚刚好的才能够达到泛化误差最小的目标。<br>树模型是天生位于图的右上角的模型，随机森林是以树模型为基础，所以随机森林也是天生复杂度高的模型。随机森林的参数，都是向着一个目标去:减少模型的复杂度，把模型往图像的左边移动，防止过拟合。</p>
+</li>
+<li><p>参数对误差的影响</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">n_estimators</td>
+<td style="text-align:left">提升至平稳，n_estimators↑，不影响单个模型的复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">max_depth</td>
+<td style="text-align:left">有增有减，默认最大深度，即最高复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">min_samples_leaf</td>
+<td style="text-align:left">有增有减，默认最小限制1，即最高复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">min_samples_split</td>
+<td style="text-align:left">有增有减，默认最小限制2，即最高复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">max_features</td>
+<td style="text-align:left">有增有减，默认auto，是特征总数的开平方，位于中间复杂度，max_features↓，模型更简单</td>
+</tr>
+<tr>
+<td style="text-align:left">criterion</td>
+<td style="text-align:left">有增有减，一般使用gini</td>
+</tr>
+</tbody>
+</table>
+<ol start="6">
+<li>调参<ul>
+<li>学习曲线</li>
+<li>网格搜索<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.model_selection import GridSearchCV</span><br><span class="line">param_grid = &#123;&apos;max_depth&apos;:np.arange(1,20,1)&#125;</span><br><span class="line">rfc = RandomForestClassifier(n_estimators=39</span><br><span class="line">                     ,random_state=90</span><br><span class="line">                    )</span><br><span class="line">GS = GridSearchCV(rfc,param_grid,cv=10)</span><br><span class="line">GS.fit(data.data,data.target)</span><br><span class="line">GS.best_params_</span><br><span class="line">GS.best_score_</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/决策树/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -338,7 +550,7 @@
 <li><p>sklearn中使用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from sklearn import tree</span><br><span class="line">tree.DecisionTreeClassifier:分类树</span><br><span class="line">tree.DecisionTreeRegressor:回归树</span><br><span class="line">tree.export_graphviz:将生成的决策树导出为DOT格式，画图专用</span><br><span class="line">tree.ExtraTreeClassifier:高随机版本的分类树</span><br><span class="line">tree.ExtraTreeRegressor:高随机版本的回归树</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>一般参数</p>
+<li><p>重要参数</p>
 <ul>
 <li>criterion: 不纯度的计算方法（不纯度越低、拟合效果越好）<ul>
 <li>entropy 信息熵</li>
@@ -357,21 +569,24 @@
 </li>
 </ul>
 </li>
-<li>剪枝参数<br>在不加限制的情况下，一棵决策树会生长到衡量不纯度的指标最优，或者没有更多的特征可用为止。这样的决策树往往会过拟合。</li>
-</ol>
-<ul>
+<li>剪枝参数<br>在不加限制的情况下，一棵决策树会生长到衡量不纯度的指标最优，或者没有更多的特征可用为止，这样的决策树往往会过拟合。<ul>
 <li>max_depth: 限制最大深度</li>
 <li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
 <li>min_samples_split: 一个分支至少含有min_samples_split个训练样本</li>
 <li>max_features: 限制分枝时考虑的特征个数 </li>
 <li>min_impurity_decrease: 限制信息增益的大小</li>
 </ul>
-<ol start="6">
-<li>确定最优参数：</li>
-</ol>
-<ul>
+</li>
+<li>目标权重参数<ul>
+<li>class_weight：均衡标签样本的权重</li>
+<li>min_ weight_fraction_leaf：基于权重的剪枝参数</li>
+</ul>
+</li>
+<li>确定最优参数：<ul>
 <li>学习曲线</li>
 </ul>
+</li>
+</ol>
 
           
         
@@ -1694,153 +1909,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/11/python-u-命令行参数/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/11/python-u-命令行参数/" itemprop="url">python -u 命令行参数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-11T14:13:41+08:00">
-                2019-04-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>关闭stdin/stdout/stderr缓冲区.<br>-u :</p>
-<ul>
-<li>unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x. </li>
-<li>Force  stdin,  stdout and stderr to be totally unbuffered.  On systems where it matters, also put stdin, stdout and stderr in binary mode.  Note that there is internal buffering  in  xreadlines(),  readlines() and  file-object  iterators  (“for  line in sys.stdin”) which is not influenced by this option.  To work around this, you will want to use “sys.stdin.readline()” inside a “while 1:” loop.</li>
-</ul>
-<p><a href="https://stackoverflow.com/questions/14258500/python-significance-of-u-option" target="_blank" rel="noopener">参考</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1893,7 +1961,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

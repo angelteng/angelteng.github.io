@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="决策树算法的核心是要解决两个问题:  如何从数据表中找出最佳节点和最佳分枝?  如何让决策树停止生长，防止过拟合?   流程： 计算全部特征的不纯度 选取不纯度指标最优的特征来分化 在第一个特征分支下，计算全部特征不纯度 选取不纯度指标最优的特征继续分化   sklearn中使用 123456from sklearn import treetree.DecisionTreeClassifier:">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-23T10:08:23.000Z">
+<meta property="og:updated_time" content="2019-05-24T02:23:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="决策树">
 <meta name="twitter:description" content="决策树算法的核心是要解决两个问题:  如何从数据表中找出最佳节点和最佳分枝?  如何让决策树停止生长，防止过拟合?   流程： 计算全部特征的不纯度 选取不纯度指标最优的特征来分化 在第一个特征分支下，计算全部特征不纯度 选取不纯度指标最优的特征继续分化   sklearn中使用 123456from sklearn import treetree.DecisionTreeClassifier:">
@@ -338,7 +338,7 @@
 <li><p>sklearn中使用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from sklearn import tree</span><br><span class="line">tree.DecisionTreeClassifier:分类树</span><br><span class="line">tree.DecisionTreeRegressor:回归树</span><br><span class="line">tree.export_graphviz:将生成的决策树导出为DOT格式，画图专用</span><br><span class="line">tree.ExtraTreeClassifier:高随机版本的分类树</span><br><span class="line">tree.ExtraTreeRegressor:高随机版本的回归树</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>一般参数</p>
+<li><p>重要参数</p>
 <ul>
 <li>criterion: 不纯度的计算方法（不纯度越低、拟合效果越好）<ul>
 <li>entropy 信息熵</li>
@@ -357,21 +357,24 @@
 </li>
 </ul>
 </li>
-<li>剪枝参数<br>在不加限制的情况下，一棵决策树会生长到衡量不纯度的指标最优，或者没有更多的特征可用为止。这样的决策树往往会过拟合。</li>
-</ol>
-<ul>
+<li>剪枝参数<br>在不加限制的情况下，一棵决策树会生长到衡量不纯度的指标最优，或者没有更多的特征可用为止，这样的决策树往往会过拟合。<ul>
 <li>max_depth: 限制最大深度</li>
 <li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
 <li>min_samples_split: 一个分支至少含有min_samples_split个训练样本</li>
 <li>max_features: 限制分枝时考虑的特征个数 </li>
 <li>min_impurity_decrease: 限制信息增益的大小</li>
 </ul>
-<ol start="6">
-<li>确定最优参数：</li>
-</ol>
-<ul>
+</li>
+<li>目标权重参数<ul>
+<li>class_weight：均衡标签样本的权重</li>
+<li>min_ weight_fraction_leaf：基于权重的剪枝参数</li>
+</ul>
+</li>
+<li>确定最优参数：<ul>
 <li>学习曲线</li>
 </ul>
+</li>
+</ol>
 
       
     </div>
@@ -411,6 +414,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/05/24/随机森林/" rel="prev" title="随机森林">
+                随机森林 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -480,7 +487,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
