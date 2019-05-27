@@ -229,6 +229,369 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/特征工程-embedded嵌入法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/27/特征工程-embedded嵌入法/" itemprop="url">特征工程_embedded嵌入法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T11:19:56+08:00">
+                2019-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+</li>
+<li><p>sklearn.feature_selection.SelectFromModel (estimator, threshold=None, prefit=False, norm_order=1,<br>max_features=None)</p>
+<ul>
+<li>estimator　　　　　　　　<br>  使用的模型评估器，只要是带feature_importances_或者coef_属性，或带有l1和l2惩罚项的模型都可以使用</li>
+<li>threshold<br>  特征重要性的阈值，重要性低于这个阈值的特征都将被删除</li>
+<li>prefit<br>  默认False，判断是否将实例化后的模型直接传递给构造函数。如果为True，则必须直接调用fit和transform，不能使用fit_transform，并且SelectFromModel不能与cross_val_score，GridSearchCV和克隆估计器的类似实用程序一起使用。</li>
+<li>norm_order<br>  k可输入非零整数，正无穷，负无穷，默认值为1<br>  在评估器的coef_属性高于一维的情况下，用于过滤低于阈值的系数的向量的范数的阶数</li>
+<li><p>max_features<br>  在阈值设定下，要选择的最大特征数。要禁用阈值并仅根据max_features选择，请设置threshold = -np.inf</p>
+<p>随机森林中的应用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import SelectFromModel</span><br><span class="line">from sklearn.ensemble import RandomForestClassifier as RFC</span><br><span class="line">RFC_ = RFC(n_estimators =10,random_state=0)</span><br><span class="line">X_embedded = SelectFromModel(RFC_,threshold=0.005).fit_transform(X,y)</span><br><span class="line"># 可以使用学习曲线确认threshold最佳值</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>在嵌入法下，我们很容易就能够实现特征选择的目标：减少计算量，提升模型表现。因此，比起要思考很多统计量的过滤法来说，嵌入法可能是更有效的一种方法。然而，在算法本身很复杂的时候，过滤法的计算远远比嵌入法要快，所以大型数据中，我们还是会优先考虑过滤法。</p>
+</li>
+</ol>
+<p>参考：<br><a href="https://www.cnblogs.com/zhange000/articles/10751525.html" target="_blank" rel="noopener">特征选择-嵌入</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/24/特征工程_Filter过滤法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/24/特征工程_Filter过滤法/" itemprop="url">特征工程_Filter过滤法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-24T17:36:09+08:00">
+                2019-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>流程</p>
+<ul>
+<li>特征提取</li>
+<li>特征创造</li>
+<li>特征选择：过滤-&gt;嵌入/包装/降维</li>
+</ul>
+</li>
+<li><p>Filter过滤法</p>
+<ol>
+<li><p>方差过滤<br> 这是通过特征本身的方差来筛选特征的类。比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用。所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import VarianceThreshold</span><br><span class="line">selector = VarianceThreshold(threshold=0) #阈值，抛弃所有低于阈值的特征</span><br><span class="line">X_var0 = selector.fit_transform(X)</span><br></pre></td></tr></table></figure>
+<p> 影响：最近邻算法KNN，单棵决策树，支持向量机SVM，神经网络，回归算法，都需要遍历特征或升维来进行运算，所以他们本身的运算量就很大，需要的时间就很长，因此方差过滤这样的特征选择对他们来说就尤为重要。但对于不需要遍历特征的算法，比如随机森林，它随机选取特征进行分枝，本身运算就非常快速，因此特征选择对它来说效果平平。</p>
+</li>
+<li><p>相关性过滤</p>
+<ol>
+<li><p>卡方过滤</p>
+<ul>
+<li>卡方过滤是专门针对离散型标签（即分类问题）的相关性过滤。</li>
+<li><p>卡方检验类feature_selection.chi2计算每个非负特征和标签之间的卡方统计量，并依照卡方统计量由高到低为特征排名。再结合feature_selection.SelectKBest这个可以输入”评分标准“来选出前K个分数最高的特征的类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import SelectKBest</span><br><span class="line">from sklearn.feature_selection import chi2</span><br><span class="line">#假设需要300个特征</span><br><span class="line">X_fschi = SelectKBest(chi2, k=300).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义超参数K的值</p>
+<ul>
+<li>学习曲线</li>
+<li><p>看p值选择K<br>  卡方检验的本质是推测两组数据之间的差异，其检验的原假设是”两组数据是相互独立的”。卡方检验返回卡方值和P值两个统计量，其中卡方值很难界定有效的范围，而p值，我们一般使用0.01或0.05作为显著性水平</p>
+<ul>
+<li>P&lt;=0.05/0.01: 拒绝原假设，接受备择假设 </li>
+<li><p>p&gt;0.05/0.01 : 接受原假设</p>
+<p>从特征工程的角度，我们希望选取卡方值很大，p值小于0.05的特征，即和标签是相关联的特征。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chivalue, pvalues_chi = chi2(X_fsvar,y)</span><br><span class="line"># k取多少？我们想要消除所有p值大于设定值，比如0.05或0.01的特征：</span><br><span class="line">k_ = chivalue.shape[0] - (pvalues_chi &gt; 0.05).sum()</span><br><span class="line">X_fschi = SelectKBest(chi2, k=k_).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>F检验</p>
+<ul>
+<li>是用来捕捉每个特征与标签之间的线性关系的过滤方法。它即可以做回归(feature_selection.f_regression)也可以做分类(feature_selection.f_classif)。</li>
+<li>和卡方检验一样，这两个类需要和类SelectKBest连用.</li>
+<li>F检验在数据服从正态分布时效果会非常稳定，因此如果使用F检验过滤，我们会先将数据转换成服从正态分布的方式。</li>
+<li>F检验的本质是寻找两组数据之间的线性关系，其原假设是”数据不存在显著的线性关系“。它返回F值和p值两个统计量。和卡方过滤一样，我们希望选取p值小于0.05或0.01的特征，这些特征与标签时显著线性相关的。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import f_classif</span><br><span class="line">F, pvalues_f = f_classif(X_fsvar,y)</span><br><span class="line">k_ = F.shape[0] - (pvalues_f &gt; 0.05).sum()</span><br><span class="line">X_fsF = SelectKBest(f_classif, k=k_).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>互信息法</p>
+<ul>
+<li>互信息法是用来捕捉每个特征与标签之间的任意关系（包括线性和非线性关系）的过滤方法。和F检验相似，它既可以做回归也可以做分类，并且包含两个类feature_selection.mutual_info_classif（互信息分类）和feature_selection.mutual_info_regression（互信息回归）。</li>
+<li>互信息法不返回p值或F值类似的统计量，它返回“每个特征与目标之间的互信息量的估计”，这个估计量在[0,1]之间取值，为0则表示两个变量独立，为1则表示两个变量完全相关。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import mutual_info_classif as MIC</span><br><span class="line">result = MIC(X_fsvar,y)</span><br><span class="line">k_ = result.shape[0] - sum(result &lt;= 0)</span><br><span class="line">X_fsmic = SelectKBest(MIC, k=k_).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>总结</p>
+<p> |类                  |说明                                          |超参数选择                  |<br> |:–                 |:–|:–     |<br> |VarianceThreshold   |方差过滤，可输入方差阈值，返回方差大于阈值的新特征矩阵|一般使用0/1筛选，可以画学习曲线|<br> |SelectKBest         |用来选取K个统计量结果最佳的矩阵，生成符合统计量要求的新特征矩阵|看配合使用的统计量|<br> |chi2                |卡方验证，专用于分类算法                         |追求p小于显著性水平的特征|<br> |f_classif           |F检验分类，只能捕捉线性相关，要求数据服从正态分布    |追求p小于显著性水平的特征|<br> |f_regression        |F检验回归，只能捕捉线性相关，要求数据服从正态分布    |追求p小于显著性水平的特征|<br> |mutual_info_classif |互信息分类，可以捕捉任何相关性，不能用于稀疏矩阵     |追求互信息大于0的特征   |<br> |mutual_info_regression|互信息回归，可以捕捉任何相关性，不能用于稀疏矩阵   |追求互信息大于0的特征   |</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/24/数据预处理/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1640,345 +2003,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/I-O操作模式/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/24/I-O操作模式/" itemprop="url">I/O操作模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T15:18:15+08:00">
-                2019-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
-                    <span itemprop="name">底层</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ul>
-<li>流：一个流可以是文件，socket，pipe等等可以进行I/O操作的内核对象</li>
-<li>I/O操作：流的操作（读/写）。缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的缓冲区拷贝到应用程序的地址空间。</li>
-<li>文件描述符fd：是一个用于表述指向文件的引用的抽象化概念。文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。</li>
-</ul>
-<h2 id="IO模式"><a href="#IO模式" class="headerlink" title="IO模式"></a>IO模式</h2><p>一次IO访问（以read举例），数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的缓冲区拷贝到应用程序的地址空间。所以说，当一个read操作发生时，它会经历两个阶段：</p>
-<ol>
-<li>等待数据准备 (Waiting for the data to be ready)</li>
-<li>将数据从内核拷贝到进程中 (Copying the data from the kernel to the process)</li>
-</ol>
-<p>正式因为这两个阶段，linux系统产生了下面五种网络模式的方案。</p>
-<ul>
-<li>阻塞 I/O（blocking IO）</li>
-<li>非阻塞 I/O（nonblocking IO）</li>
-<li>I/O 多路复用（ IO multiplexing）</li>
-<li>信号驱动 I/O（ signal driven IO）</li>
-<li>异步 I/O（asynchronous IO）</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<h3 id="I-O多路复用"><a href="#I-O多路复用" class="headerlink" title="I/O多路复用"></a>I/O多路复用</h3><p>select，poll，epoll都是IO多路复用的机制。一个进程可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。但select，poll，epoll本质上都是同步I/O。</p>
-<p>与阻塞I/O相比，多路复用需要使用两个system call (select 和 recvfrom)，而blocking IO只调用了一个system call (recvfrom)。但是，用select的优势在于它可以同时处理多个connection。</p>
-<p>epoll 操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int epoll_create(int size)；//创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大</span><br><span class="line">int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；//对指定描述符fd执行op操作</span><br><span class="line">int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);//等待epfd上的io事件，最多返回maxevents个事件。</span><br></pre></td></tr></table></figure></p>
-<p>在 select/poll中，进程只有在调用一定的方法后，内核才对所有监视的文件描述符进行扫描，而epoll事先通过epoll_ctl()来注册一 个文件描述符，一旦基于某个文件描述符就绪时，内核会采用类似callback的回调机制，迅速激活这个文件描述符，当进程调用epoll_wait() 时便得到通知。(此处去掉了遍历文件描述符，而是通过监听回调的的机制。)</p>
-<p>优点：</p>
-<ol>
-<li>监视的描述符数量不受限制，它所支持的FD上限是最大可以打开文件的数目。</li>
-<li>IO的效率不会随着监视fd的数量的增长而下降。epoll不同于select和poll轮询的方式，而是通过每个fd定义的回调函数来实现的。只有就绪的fd才会执行回调函数。</li>
-</ol>
-<p>参考：<br><a href="https://blog.51cto.com/yaocoder/888374" target="_blank" rel="noopener">我读过的最好的epoll讲解–转自”知乎“</a><br><a href="https://segmentfault.com/a/1190000003063859" target="_blank" rel="noopener">Linux IO模式及 select、poll、epoll详解</a><br><a href="https://blog.csdn.net/qq_28090573/article/details/50863779" target="_blank" rel="noopener">文件描述符和流的关系？</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/22/服务性能分析/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/22/服务性能分析/" itemprop="url">服务性能分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-22T14:37:15+08:00">
-                2019-04-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ol>
-<li>并发数： 也叫并发连接数，指网络设备所能处理的最大会话数量。这里的会话数是指请求-&gt;响应一次会话。</li>
-<li>吞吐量：用户请求是由一个个数据包组成，网络设备（防火墙/路由器/交换机）对每个数据包的处理要耗费资源。吞吐量是指在不丢包的情况下单位时间内通过网络设备的数据包数量。</li>
-<li>网络层面并发数和吞吐量的关系：<br>并发数x包长度=吞吐量</li>
-<li>TPS：Transactions Per Second（每秒事务处理数），指服务器每秒处理的事务次数。一般用于评估数据库、交易系统的基准性能。</li>
-<li>QPS：Queries Per Second（查询量/秒），是服务器每秒能够处理的查询次数，例如域名服务器、Mysql查询性能。</li>
-<li>QPS（TPS）= 并发数/平均响应时间</li>
-</ol>
-<p>并发数高，吞吐量不一定高。<br>如果谈的是网络设备，参照：并发数x包长度=吞吐量，吞吐量依赖于并发数和包长度。<br>如果谈的是服务器及完整整体性能，需要明确吞吐量的度量指标，假定以吞吐量以QPS作为度量指标，如果并发数高，但平均响应也很高的话，则QPS可能降低。</p>
-<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><p>请求响应时间=请求发送耗时+请求解析耗时+请求处理耗时+处理结果返回耗时<br>从性能优化角度出发，就需要我们尽力保持和降低系统的99%RT（即一段时间内请求响应时间从低到高排序，低于99%响应时间的上限边界值(比如容忍值是3s)）的同时，提高单位时间内的处理能力。</p>
-<p>step 1:<br>测试指标</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">指标名称</th>
-<th>指标数值</th>
-<th>指标说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">TPS</td>
-<td>100</td>
-<td>每秒事务数，很重要的一个指标，衡量系统的处理能力</td>
-</tr>
-<tr>
-<td style="text-align:left">RT</td>
-<td>95%、99%、99.99%</td>
-<td>百分比请求的响应时间，即n%以内的RT请求响应时间是多少，百分比越高，RT越低，系统越稳定</td>
-</tr>
-<tr>
-<td style="text-align:left">error</td>
-<td>0.1%、0.01%</td>
-<td>错误率，即可接受的请求失败的占比</td>
-</tr>
-<tr>
-<td style="text-align:left">Cache</td>
-<td>90%、95%</td>
-<td>缓存命中率：命中率越高，使用缓存的收益越高，系统的性能越好</td>
-</tr>
-<tr>
-<td style="text-align:left">CPU</td>
-<td>75%、90%</td>
-<td>CPU使用率，一般来说75%是一个阈值，超过85%就需要重点关注</td>
-</tr>
-</tbody>
-</table>
-<p>step 2:<br>《jmeter测试指南》</p>
-<p>step 3:<br>分析<br><a href="https://www.cnblogs.com/imyalost/p/9611566.html" target="_blank" rel="noopener">常见的性能测试缺陷</a></p>
-<p>参考<br><a href="https://www.zhihu.com/question/36734171" target="_blank" rel="noopener">衡量网站性能时，并发数与吞吐量为何要分别考量？</a><br><a href="https://zhuanlan.zhihu.com/p/41189928" target="_blank" rel="noopener">性能测试基础-常见性能指标详解</a><br><a href="https://www.cnblogs.com/imyalost/category/848600.html" target="_blank" rel="noopener">*性能测试</a><br><a href="https://blog.csdn.net/timchen525/article/details/80113749" target="_blank" rel="noopener">JMeter压测上对于并发的认识误区</a><br><a href="https://www.jianshu.com/p/2fff42a9dfcf" target="_blank" rel="noopener">什么是QPS，TPS，吞吐量</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2031,7 +2055,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

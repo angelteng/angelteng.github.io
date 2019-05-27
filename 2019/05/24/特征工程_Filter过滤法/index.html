@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,">
+  <meta name="keywords" content="机器学习,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="参考  正则 ：re 测试   doctest unittest   日志：logging 打印错误信息：sys.exc_info()">
-<meta name="keywords" content="Python">
+<meta name="description" content="流程  特征提取 特征创造 特征选择：过滤-&amp;gt;嵌入/包装/降维   Filter过滤法  方差过滤 这是通过特征本身的方差来筛选特征的类。比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用。所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征。  123from sklearn.f">
+<meta name="keywords" content="机器学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python标准库">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/09/Python标准库/index.html">
+<meta property="og:title" content="特征工程_Filter过滤法">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/05/24/特征工程_Filter过滤法/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="参考  正则 ：re 测试   doctest unittest   日志：logging 打印错误信息：sys.exc_info()">
+<meta property="og:description" content="流程  特征提取 特征创造 特征选择：过滤-&amp;gt;嵌入/包装/降维   Filter过滤法  方差过滤 这是通过特征本身的方差来筛选特征的类。比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用。所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征。  123from sklearn.f">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-30T09:07:38.000Z">
+<meta property="og:updated_time" content="2019-05-27T03:19:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python标准库">
-<meta name="twitter:description" content="参考  正则 ：re 测试   doctest unittest   日志：logging 打印错误信息：sys.exc_info()">
+<meta name="twitter:title" content="特征工程_Filter过滤法">
+<meta name="twitter:description" content="流程  特征提取 特征创造 特征选择：过滤-&amp;gt;嵌入/包装/降维   Filter过滤法  方差过滤 这是通过特征本身的方差来筛选特征的类。比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用。所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征。  123from sklearn.f">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/09/Python标准库/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/05/24/特征工程_Filter过滤法/">
 
 
 
 
 
-  <title>Python标准库 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>特征工程_Filter过滤法 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/09/Python标准库/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/24/特征工程_Filter过滤法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python标准库</h1>
+          <h1 class="post-title" itemprop="name headline">特征工程_Filter过滤法</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-09T10:16:50+08:00">
-                2018-11-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-24T17:36:09+08:00">
+                2019-05-24
               </time>
             
 
@@ -285,8 +285,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
                   </a>
                 </span>
 
@@ -322,18 +322,67 @@
       
 
       
-        <p><a href="http://www.pythondoc.com/pythontutorial3/stdlib.html" target="_blank" rel="noopener">参考</a></p>
-<ol>
-<li>正则 ：<a href="https://docs.python.org/3/library/re.html#module-re" target="_blank" rel="noopener">re</a></li>
-<li>测试</li>
-</ol>
+        <ol>
+<li><p>流程</p>
 <ul>
-<li><a href="https://docs.python.org/3/library/doctest.html#module-doctest" target="_blank" rel="noopener">doctest</a></li>
-<li><a href="https://docs.python.org/3/library/unittest.html#module-unittest" target="_blank" rel="noopener">unittest</a></li>
+<li>特征提取</li>
+<li>特征创造</li>
+<li>特征选择：过滤-&gt;嵌入/包装/降维</li>
 </ul>
-<ol start="3">
-<li>日志：<a href="https://docs.python.org/3/library/logging.html#module-logging" target="_blank" rel="noopener">logging</a></li>
-<li>打印错误信息：sys.exc_info()</li>
+</li>
+<li><p>Filter过滤法</p>
+<ol>
+<li><p>方差过滤<br> 这是通过特征本身的方差来筛选特征的类。比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用。所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import VarianceThreshold</span><br><span class="line">selector = VarianceThreshold(threshold=0) #阈值，抛弃所有低于阈值的特征</span><br><span class="line">X_var0 = selector.fit_transform(X)</span><br></pre></td></tr></table></figure>
+<p> 影响：最近邻算法KNN，单棵决策树，支持向量机SVM，神经网络，回归算法，都需要遍历特征或升维来进行运算，所以他们本身的运算量就很大，需要的时间就很长，因此方差过滤这样的特征选择对他们来说就尤为重要。但对于不需要遍历特征的算法，比如随机森林，它随机选取特征进行分枝，本身运算就非常快速，因此特征选择对它来说效果平平。</p>
+</li>
+<li><p>相关性过滤</p>
+<ol>
+<li><p>卡方过滤</p>
+<ul>
+<li>卡方过滤是专门针对离散型标签（即分类问题）的相关性过滤。</li>
+<li><p>卡方检验类feature_selection.chi2计算每个非负特征和标签之间的卡方统计量，并依照卡方统计量由高到低为特征排名。再结合feature_selection.SelectKBest这个可以输入”评分标准“来选出前K个分数最高的特征的类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import SelectKBest</span><br><span class="line">from sklearn.feature_selection import chi2</span><br><span class="line">#假设需要300个特征</span><br><span class="line">X_fschi = SelectKBest(chi2, k=300).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义超参数K的值</p>
+<ul>
+<li>学习曲线</li>
+<li><p>看p值选择K<br>  卡方检验的本质是推测两组数据之间的差异，其检验的原假设是”两组数据是相互独立的”。卡方检验返回卡方值和P值两个统计量，其中卡方值很难界定有效的范围，而p值，我们一般使用0.01或0.05作为显著性水平</p>
+<ul>
+<li>P&lt;=0.05/0.01: 拒绝原假设，接受备择假设 </li>
+<li><p>p&gt;0.05/0.01 : 接受原假设</p>
+<p>从特征工程的角度，我们希望选取卡方值很大，p值小于0.05的特征，即和标签是相关联的特征。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chivalue, pvalues_chi = chi2(X_fsvar,y)</span><br><span class="line"># k取多少？我们想要消除所有p值大于设定值，比如0.05或0.01的特征：</span><br><span class="line">k_ = chivalue.shape[0] - (pvalues_chi &gt; 0.05).sum()</span><br><span class="line">X_fschi = SelectKBest(chi2, k=k_).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>F检验</p>
+<ul>
+<li>是用来捕捉每个特征与标签之间的线性关系的过滤方法。它即可以做回归(feature_selection.f_regression)也可以做分类(feature_selection.f_classif)。</li>
+<li>和卡方检验一样，这两个类需要和类SelectKBest连用.</li>
+<li>F检验在数据服从正态分布时效果会非常稳定，因此如果使用F检验过滤，我们会先将数据转换成服从正态分布的方式。</li>
+<li>F检验的本质是寻找两组数据之间的线性关系，其原假设是”数据不存在显著的线性关系“。它返回F值和p值两个统计量。和卡方过滤一样，我们希望选取p值小于0.05或0.01的特征，这些特征与标签时显著线性相关的。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import f_classif</span><br><span class="line">F, pvalues_f = f_classif(X_fsvar,y)</span><br><span class="line">k_ = F.shape[0] - (pvalues_f &gt; 0.05).sum()</span><br><span class="line">X_fsF = SelectKBest(f_classif, k=k_).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>互信息法</p>
+<ul>
+<li>互信息法是用来捕捉每个特征与标签之间的任意关系（包括线性和非线性关系）的过滤方法。和F检验相似，它既可以做回归也可以做分类，并且包含两个类feature_selection.mutual_info_classif（互信息分类）和feature_selection.mutual_info_regression（互信息回归）。</li>
+<li>互信息法不返回p值或F值类似的统计量，它返回“每个特征与目标之间的互信息量的估计”，这个估计量在[0,1]之间取值，为0则表示两个变量独立，为1则表示两个变量完全相关。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import mutual_info_classif as MIC</span><br><span class="line">result = MIC(X_fsvar,y)</span><br><span class="line">k_ = result.shape[0] - sum(result &lt;= 0)</span><br><span class="line">X_fsmic = SelectKBest(MIC, k=k_).fit_transform(X_fsvar, y)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>总结</p>
+<p> |类                  |说明                                          |超参数选择                  |<br> |:–                 |:–|:–     |<br> |VarianceThreshold   |方差过滤，可输入方差阈值，返回方差大于阈值的新特征矩阵|一般使用0/1筛选，可以画学习曲线|<br> |SelectKBest         |用来选取K个统计量结果最佳的矩阵，生成符合统计量要求的新特征矩阵|看配合使用的统计量|<br> |chi2                |卡方验证，专用于分类算法                         |追求p小于显著性水平的特征|<br> |f_classif           |F检验分类，只能捕捉线性相关，要求数据服从正态分布    |追求p小于显著性水平的特征|<br> |f_regression        |F检验回归，只能捕捉线性相关，要求数据服从正态分布    |追求p小于显著性水平的特征|<br> |mutual_info_classif |互信息分类，可以捕捉任何相关性，不能用于稀疏矩阵     |追求互信息大于0的特征   |<br> |mutual_info_regression|互信息回归，可以捕捉任何相关性，不能用于稀疏矩阵   |追求互信息大于0的特征   |</p>
+</li>
 </ol>
 
       
@@ -352,7 +401,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
+            <a href="/blog/tags/机器学习/" rel="tag"># 机器学习</a>
           
         </div>
       
@@ -365,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/11/08/搭建Discuz论坛/" rel="next" title="搭建Discuz论坛">
-                <i class="fa fa-chevron-left"></i> 搭建Discuz论坛
+              <a href="/blog/2019/05/24/数据预处理/" rel="next" title="数据预处理">
+                <i class="fa fa-chevron-left"></i> 数据预处理
               </a>
             
           </div>
@@ -375,8 +424,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2018/11/09/Python虚拟环境/" rel="prev" title="Python虚拟环境">
-                Python虚拟环境 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2019/05/27/特征工程-embedded嵌入法/" rel="prev" title="特征工程_embedded嵌入法">
+                特征工程_embedded嵌入法 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

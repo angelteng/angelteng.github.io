@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,">
+  <meta name="keywords" content="机器学习,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="参考  正则 ：re 测试   doctest unittest   日志：logging 打印错误信息：sys.exc_info()">
-<meta name="keywords" content="Python">
+<meta name="description" content="嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_sel">
+<meta name="keywords" content="机器学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python标准库">
-<meta property="og:url" content="https://angelteng.github.io/blog/2018/11/09/Python标准库/index.html">
+<meta property="og:title" content="特征工程_embedded嵌入法">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/05/27/特征工程-embedded嵌入法/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="参考  正则 ：re 测试   doctest unittest   日志：logging 打印错误信息：sys.exc_info()">
+<meta property="og:description" content="嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_sel">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-30T09:07:38.000Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-05-27T03:52:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python标准库">
-<meta name="twitter:description" content="参考  正则 ：re 测试   doctest unittest   日志：logging 打印错误信息：sys.exc_info()">
+<meta name="twitter:title" content="特征工程_embedded嵌入法">
+<meta name="twitter:description" content="嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_sel">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2018/11/09/Python标准库/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/05/27/特征工程-embedded嵌入法/">
 
 
 
 
 
-  <title>Python标准库 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>特征工程_embedded嵌入法 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +235,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/09/Python标准库/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/特征工程-embedded嵌入法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +252,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python标准库</h1>
+          <h1 class="post-title" itemprop="name headline">特征工程_embedded嵌入法</h1>
         
 
         <div class="post-meta">
@@ -262,8 +264,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-09T10:16:50+08:00">
-                2018-11-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T11:19:56+08:00">
+                2019-05-27
               </time>
             
 
@@ -285,8 +287,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
                   </a>
                 </span>
 
@@ -322,19 +324,25 @@
       
 
       
-        <p><a href="http://www.pythondoc.com/pythontutorial3/stdlib.html" target="_blank" rel="noopener">参考</a></p>
-<ol>
-<li>正则 ：<a href="https://docs.python.org/3/library/re.html#module-re" target="_blank" rel="noopener">re</a></li>
-<li>测试</li>
-</ol>
+        <ol>
+<li><p>嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+</li>
+<li><p>sklearn.feature_selection.SelectFromModel (estimator, threshold=None, prefit=False, norm_order=1,<br>max_features=None)</p>
 <ul>
-<li><a href="https://docs.python.org/3/library/doctest.html#module-doctest" target="_blank" rel="noopener">doctest</a></li>
-<li><a href="https://docs.python.org/3/library/unittest.html#module-unittest" target="_blank" rel="noopener">unittest</a></li>
+<li>estimator　　　　　　　　<br>  使用的模型评估器，只要是带feature_importances_或者coef_属性，或带有l1和l2惩罚项的模型都可以使用</li>
+<li>threshold<br>  特征重要性的阈值，重要性低于这个阈值的特征都将被删除</li>
+<li>prefit<br>  默认False，判断是否将实例化后的模型直接传递给构造函数。如果为True，则必须直接调用fit和transform，不能使用fit_transform，并且SelectFromModel不能与cross_val_score，GridSearchCV和克隆估计器的类似实用程序一起使用。</li>
+<li>norm_order<br>  k可输入非零整数，正无穷，负无穷，默认值为1<br>  在评估器的coef_属性高于一维的情况下，用于过滤低于阈值的系数的向量的范数的阶数</li>
+<li><p>max_features<br>  在阈值设定下，要选择的最大特征数。要禁用阈值并仅根据max_features选择，请设置threshold = -np.inf</p>
+<p>随机森林中的应用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import SelectFromModel</span><br><span class="line">from sklearn.ensemble import RandomForestClassifier as RFC</span><br><span class="line">RFC_ = RFC(n_estimators =10,random_state=0)</span><br><span class="line">X_embedded = SelectFromModel(RFC_,threshold=0.005).fit_transform(X,y)</span><br><span class="line"># 可以使用学习曲线确认threshold最佳值</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<ol start="3">
-<li>日志：<a href="https://docs.python.org/3/library/logging.html#module-logging" target="_blank" rel="noopener">logging</a></li>
-<li>打印错误信息：sys.exc_info()</li>
+</li>
+<li><p>在嵌入法下，我们很容易就能够实现特征选择的目标：减少计算量，提升模型表现。因此，比起要思考很多统计量的过滤法来说，嵌入法可能是更有效的一种方法。然而，在算法本身很复杂的时候，过滤法的计算远远比嵌入法要快，所以大型数据中，我们还是会优先考虑过滤法。</p>
+</li>
 </ol>
+<p>参考：<br><a href="https://www.cnblogs.com/zhange000/articles/10751525.html" target="_blank" rel="noopener">特征选择-嵌入</a></p>
 
       
     </div>
@@ -352,7 +360,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
+            <a href="/blog/tags/机器学习/" rel="tag"># 机器学习</a>
           
         </div>
       
@@ -365,8 +373,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/11/08/搭建Discuz论坛/" rel="next" title="搭建Discuz论坛">
-                <i class="fa fa-chevron-left"></i> 搭建Discuz论坛
+              <a href="/blog/2019/05/24/特征工程_Filter过滤法/" rel="next" title="特征工程_Filter过滤法">
+                <i class="fa fa-chevron-left"></i> 特征工程_Filter过滤法
               </a>
             
           </div>
@@ -374,10 +382,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/11/09/Python虚拟环境/" rel="prev" title="Python虚拟环境">
-                Python虚拟环境 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
