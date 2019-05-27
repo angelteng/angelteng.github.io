@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="流程  特征提取 特征创造 特征选择：过滤-&amp;gt;嵌入/包装/降维   Filter过滤法  方差过滤 这是通过特征本身的方差来筛选特征的类。比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用。所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征。  123from sklearn.f">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-27T03:19:05.000Z">
+<meta property="og:updated_time" content="2019-05-27T05:52:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="特征工程_Filter过滤法">
 <meta name="twitter:description" content="流程  特征提取 特征创造 特征选择：过滤-&amp;gt;嵌入/包装/降维   Filter过滤法  方差过滤 这是通过特征本身的方差来筛选特征的类。比如一个特征本身的方差很小，就表示样本在这个特征上基本没有差异，可能特征中的大多数值都一样，甚至整个特征的取值都相同，那这个特征对于样本区分没有什么作用。所以无论接下来的特征工程要做什么，都要优先消除方差为0的特征。  123from sklearn.f">
@@ -381,9 +381,54 @@
 </ol>
 </li>
 <li><p>总结</p>
-<p> |类                  |说明                                          |超参数选择                  |<br> |:–                 |:–|:–     |<br> |VarianceThreshold   |方差过滤，可输入方差阈值，返回方差大于阈值的新特征矩阵|一般使用0/1筛选，可以画学习曲线|<br> |SelectKBest         |用来选取K个统计量结果最佳的矩阵，生成符合统计量要求的新特征矩阵|看配合使用的统计量|<br> |chi2                |卡方验证，专用于分类算法                         |追求p小于显著性水平的特征|<br> |f_classif           |F检验分类，只能捕捉线性相关，要求数据服从正态分布    |追求p小于显著性水平的特征|<br> |f_regression        |F检验回归，只能捕捉线性相关，要求数据服从正态分布    |追求p小于显著性水平的特征|<br> |mutual_info_classif |互信息分类，可以捕捉任何相关性，不能用于稀疏矩阵     |追求互信息大于0的特征   |<br> |mutual_info_regression|互信息回归，可以捕捉任何相关性，不能用于稀疏矩阵   |追求互信息大于0的特征   |</p>
 </li>
 </ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th>说明</th>
+<th>超参数配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">VarianceThreshold</td>
+<td>方差过滤，可输入方差阈值，返回方差大于阈值的新特征矩阵</td>
+<td>一般使用0/1筛选，可以画学习曲线</td>
+</tr>
+<tr>
+<td style="text-align:left">SelectKBest</td>
+<td>用来选取K个统计量结果最佳的矩阵，生成符合统计量要求的新特征矩阵</td>
+<td>看配合使用的统计量</td>
+</tr>
+<tr>
+<td style="text-align:left">chi2</td>
+<td>卡方验证，专用于分类算法</td>
+<td>追求p小于显著性水平的特征</td>
+</tr>
+<tr>
+<td style="text-align:left">f_classif</td>
+<td>F检验分类，只能捕捉线性相关，要求数据服从正态分布</td>
+<td>追求p小于显著性水平的特征</td>
+</tr>
+<tr>
+<td style="text-align:left">f_regression</td>
+<td>F检验回归，只能捕捉线性相关，要求数据服从正态分布</td>
+<td>追求p小于显著性水平的特征</td>
+</tr>
+<tr>
+<td style="text-align:left">mutual_info_classif</td>
+<td>互信息分类，可以捕捉任何相关性，不能用于稀疏矩阵</td>
+<td>追求互信息大于0的特征</td>
+</tr>
+<tr>
+<td style="text-align:left">mutual_info_regression</td>
+<td>互信息回归，可以捕捉任何相关性，不能用于稀疏矩阵</td>
+<td>追求互信息大于0的特征</td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
