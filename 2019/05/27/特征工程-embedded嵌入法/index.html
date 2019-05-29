@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_sel">
+<meta name="description" content="嵌入法 嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_">
 <meta name="keywords" content="机器学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="特征工程_embedded嵌入法">
+<meta property="og:title" content="特征工程_embedded嵌入法与包装法">
 <meta property="og:url" content="https://angelteng.github.io/blog/2019/05/27/特征工程-embedded嵌入法/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_sel">
+<meta property="og:description" content="嵌入法 嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-05-27T03:52:08.000Z">
+<meta property="og:updated_time" content="2019-05-27T06:20:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="特征工程_embedded嵌入法">
-<meta name="twitter:description" content="嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_sel">
+<meta name="twitter:title" content="特征工程_embedded嵌入法与包装法">
+<meta name="twitter:description" content="嵌入法 嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。  sklearn.feature_">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>特征工程_embedded嵌入法 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>特征工程_embedded嵌入法与包装法 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -252,7 +252,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">特征工程_embedded嵌入法</h1>
+          <h1 class="post-title" itemprop="name headline">特征工程_embedded嵌入法与包装法</h1>
         
 
         <div class="post-meta">
@@ -324,7 +324,7 @@
       
 
       
-        <ol>
+        <h1 id="嵌入法"><a href="#嵌入法" class="headerlink" title="嵌入法"></a>嵌入法</h1><ol>
 <li><p>嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 </li>
 <li><p>sklearn.feature_selection.SelectFromModel (estimator, threshold=None, prefit=False, norm_order=1,<br>max_features=None)</p>
@@ -343,6 +343,11 @@
 </li>
 </ol>
 <p>参考：<br><a href="https://www.cnblogs.com/zhange000/articles/10751525.html" target="_blank" rel="noopener">特征选择-嵌入</a></p>
+<h1 id="包装法"><a href="#包装法" class="headerlink" title="包装法"></a>包装法</h1><p>包装法，根据目标函数（通常是预测效果评分），每次选择若干特征，或者排除若干特征。</p>
+<ol>
+<li>递归特征消除法<br> 递归消除特征法使用一个基模型来进行多轮训练，每轮训练后，消除若干权值系数的特征，再基于新的特征集进行下一轮训练。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import RFE</span><br><span class="line">from sklearn.linear_model import LogisticRegression</span><br><span class="line"></span><br><span class="line">#递归特征消除法，返回特征选择后的数据</span><br><span class="line">#参数estimator为基模型</span><br><span class="line">#参数n_features_to_select为选择的特征个数</span><br><span class="line">RFE(estimator=LogisticRegression(), n_features_to_select=2).fit_transform(iris.data,iris.target)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
     </div>
@@ -382,6 +387,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/05/27/降维算法/" rel="prev" title="降维算法">
+                降维算法 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -433,8 +442,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -451,7 +469,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">62</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -496,6 +514,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#嵌入法"><span class="nav-number">1.</span> <span class="nav-text">嵌入法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#包装法"><span class="nav-number">2.</span> <span class="nav-text">包装法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
