@@ -229,6 +229,359 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/29/支持向量机SVM/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/29/支持向量机SVM/" itemprop="url">支持向量机SVM</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-29T14:46:23+08:00">
+                2019-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>支持向量机算法功能</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">有监督学习</td>
+<td style="text-align:left">线性二分类与多分类(Linear Support Vector Classification) <br> 非线性二分类与多分类(Support Vector Classification, SVC)  <br> 普通连续型变量的回归(Support Vector Regression) 概率型连续变量的回归(Bayesian SVM)</td>
+</tr>
+<tr>
+<td style="text-align:left">无监督学习</td>
+<td style="text-align:left">支持向量聚类(Support Vector Clustering，SVC) 异常值检测(One-class SVM)</td>
+</tr>
+<tr>
+<td style="text-align:left">半监督学习</td>
+<td style="text-align:left">转导支持向量机(Transductive Support Vector Machines，TSVM)</td>
+</tr>
+</tbody>
+</table>
+<p>从分类效力来讲，SVM在无论线性还是非线性分类中，都是明星般的存在。</p>
+<ol start="2">
+<li><p>支持向量机的分类方法，是在这组分布中找出一个超平面作为决策边界，使模型在数据上的分类误差尽量接近于小，尤其是在未知数据集上的分类误差(泛化误差)尽量小。决策边界一侧的所有点在分类为属于一个类，而另一侧的所有点分类属于另一个类。如果我们能够找出决策边界， 分类问题就可以变成探讨每个样本对于决策边界而言的相对位置，因此，支持向量机，就是通过找出边际最大的决策边界，来对数据进行分类的分类器。</p>
+</li>
+<li><p>in sklearn<br><img src="https://upload-images.jianshu.io/upload_images/14827444-5b5ac4a5b9e252b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+</li>
+</ol>
+<p>svm.SVC(C=1.0,kernel=’rbf’,degree=3,gamma=’auto_deprecated’,coef0=0.0,shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape=’ovr’, random_state=None)</p>
+<p>参数</p>
+<pre><code>- kernel
+    - linear
+    - poly
+    - sigmoid
+    - rbf (good)
+- degree
+- gamma
+</code></pre><p><img src="https://upload-images.jianshu.io/upload_images/14827444-d63ee8495b6a8374.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-9011ea2b4d81725f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.svm import SVC</span><br><span class="line">clf = SVC(kernel = &quot;linear&quot;).fit(X,y)</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>核函数<br>也叫做“核技巧”(Kernel Trick)，是一种能够使用数据原始空间中的向量计算来表示 升维后的空间中的点积结果的数学方式。 这个原始空间中的点积函数就被叫做“核函数”(Kernel Function)。<br>第一，有了核函数之后，我们无需去担心函数究竟应该是什么样，因为非线性SVM中的核函数都是正定核函数 (positive definite kernel functions)，他们都满足美世定律(Mercer’s theorem)，确保了高维空间中任意两个向量 的点积一定可以被低维空间中的这两个向量的某种计算来表示(多数时候是点积的某种变换)。<br>第二，使用核函数计算低维度中的向量关系比计算原本的要简单太多了。<br>第三，因为计算是在原始空间中进行，所以避免了维度诅咒的问题。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/29/聚类算法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/29/聚类算法/" itemprop="url">聚类算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-29T14:23:16+08:00">
+                2019-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>聚类算法又叫做“无监督分类”，其目的是将数据划分成有意义或有用的组(或簇)。这种划分可以基于我们的业务 需求或建模需求来完成，也可以单纯地帮助我们探索数据的自然结构和分布。</li>
+<li><p>in sklearn<br><img src="https://upload-images.jianshu.io/upload_images/14827444-d90bc26a99b1db29.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+</li>
+<li><p>KMeans聚类算法<br> KMeans算法将一组N个样本的特征矩阵X划分为K个无交集的簇，直观上来看是簇是一组一组聚集在一起的数据，在一个簇中的数据就认为是同一类。簇就是聚类的结果表现。<br> 簇中所有数据的均值通常被称为这个簇的“质心”(centroids)。在一个二维平面中，一簇数据点的质心的 横坐标就是这一簇数据点的横坐标的均值，质心的纵坐标就是这一簇数据点的纵坐标的均值。同理可推广至高维空间。<br> 流程：</p>
+<pre><code>- 随机抽取K个样本作为最初的质心
+- 开始循环:
+- 将每个样本点分配到离他们最近的质心，生成K个簇
+- 对于每个簇，计算所有被分到该簇的样本点的平均值作为新的质心
+- 当质心的位置不再发生变化，迭代停止，聚类完成
+</code></pre></li>
+<li><p>簇内平方和（Inertia）：<br> Total Inertia越小，代表每个簇内样本越相似，聚类的效果就越好。因此 KMeans追求的是，求解能够让Inertia最小化的质心。<br> Inertia是基于欧几里得距离的计算公式得到的。<br> 簇内平方和/整体平方和是KMeans的损失函数。</p>
+</li>
+<li><p>cluster.KMeans (n_clusters=8, init=’k-means++’, n_init=10, max_iter=300, tol=0.0001, precompute_distances=’auto’, verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm=’auto’)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.cluster import KMeans</span><br><span class="line">n_clusters = 3</span><br><span class="line"># kmean不需要建立模型或者预测数据，因此只要fit就可以查看结果</span><br><span class="line">cluster = KMeans(n_clusters=n_clusters, random_state=0).fit(X)</span><br><span class="line"># 查看聚好的类别，每个样本对应的类</span><br><span class="line">y_pred = cluster.labels_</span><br><span class="line"># 查看质心</span><br><span class="line">centroid = cluster.cluster_centers_</span><br><span class="line"># 查看总距离平方和</span><br><span class="line">inertia = cluster.inertia_</span><br></pre></td></tr></table></figure>
+<p> 参数：</p>
+<pre><code>- n_clusters：分的类数
+</code></pre></li>
+<li><p>模型评估指标<br> 通过衡量簇内差异来衡量聚类的效果，可以通过轮廓系数来判断。</p>
+<ul>
+<li>样本与其自身所在的簇中的其他样本的相似度a，等于样本与同一簇中所有其他点之间的平均距离</li>
+<li>样本与其他簇中的样本的相似度b，等于样本与下一个最近的簇中得所有点之间的平均距离<br>单个样本的轮廓系统为：s = (b-a) / max(b,a)<br>轮廓系数范围是(-1,1)，其中值越接近1表示样本与自己所在的簇中的样本很相似，并且与其他簇中的样本不相似，当样本点与簇外的样本更相似的时候，轮廓系数就为负。当轮廓系数为0时，则代表两个簇中的样本相 似度一致，两个簇本应该是一个簇。<br>缺点：再凸型函数表现虚高<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import silhouette_score</span><br><span class="line">from sklearn.metrics import silhouette_samples</span><br><span class="line">silhouette_score(X,cluster_.labels_) #总数</span><br><span class="line">silhouette_samples(X,y_pred) #每个样本</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/28/线性回归/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -342,7 +695,7 @@
 <li><p>评估</p>
 <ol>
 <li><p>是否预测了正确的值<br> 均方误差MSE：均方误差，本质是在RSS的基础上除以了样本总量，得到了每个样本量上的平均误差。<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-f94fe09897c4ea43.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import mean_squared_error as MSE</span><br><span class="line">MSE(yhat,Ytest)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import mean_squared_error as MSE</span><br><span class="line">MSE(y_true,y_predict)</span><br></pre></td></tr></table></figure>
 <p> 再sklearn中，均方误差是个负数，代表一种损失。</p>
 </li>
 <li><p>是否拟合到了足够的信息</p>
@@ -1134,6 +1487,7 @@
 </tr>
 </tbody>
 </table>
+<p> 参考：<br><a href="https://www.cnblogs.com/zhange000/articles/10750903.html" target="_blank" rel="noopener">Filter过滤法</a> </p>
 
           
         
@@ -1806,297 +2160,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/机器学习链接/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/23/机器学习链接/" itemprop="url">机器学习链接</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-23T15:43:22+08:00">
-                2019-05-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>持续更新中….</p>
-<ol>
-<li>courea上吴恩达的机器学习课程，<a href="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/">笔记</a></li>
-<li><a href="https://wizardforcel.gitbooks.io/pyda-2e/content/14.html" target="_blank" rel="noopener">《利用python进行数据分析》</a>，包含pandas、numpy、matplotlib的使用</li>
-<li>sklearn 的使用：<ul>
-<li><a href="https://morvanzhou.github.io/tutorials/machine-learning/sklearn/" target="_blank" rel="noopener">通用机器学习 Scikit-learn</a></li>
-<li><a href="https://www.bilibili.com/video/av35523476" target="_blank" rel="noopener">菜菜的sklearn课堂</a></li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/30/tensorflow-Web服务部署的坑/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/30/tensorflow-Web服务部署的坑/" itemprop="url">tensorflow Web服务部署的坑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-30T14:13:32+08:00">
-                2019-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="问题场景："><a href="#问题场景：" class="headerlink" title="问题场景："></a>问题场景：</h1><p>由于需要部署一个基于tensorflow的算法Web服务，使用了uwsgi+flask去部署。<br>uwsgi 使用了多进程，参数为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line">socket = 0.0.0.0:5051</span><br><span class="line">chdir = /vagrant/images_check</span><br><span class="line">wsgi-file = /vagrant/images_check/uwsgi_entry.py</span><br><span class="line">callable = app</span><br><span class="line">processes = 4</span><br><span class="line">;harakiri = 30</span><br><span class="line">log-format = %(addr) - %(user) [%(ltime)] &quot;%(method) %(uri) %(proto)&quot; %(status) %(size) &quot;%(referer)&quot; &quot;%(uagent)&quot; %(msecs)ms</span><br></pre></td></tr></table></figure></p>
-<p>而算法服务初始化，在入口出使用了queue去初始化，本来的目的是使多个进程都去同一个queue里获取算法服务的实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">q = Queue() </span><br><span class="line">for i in range(multiprocessing.cpu_count()):</span><br><span class="line">    bqc = CheckImage()</span><br><span class="line">    q.put(bqc)</span><br></pre></td></tr></table></figure></p>
-<p>然而发现，运行之后，只有一个进程是能正确运行的，其他进程会阻塞在tf.session.run无法返回</p>
-<h1 id="问题跟踪"><a href="#问题跟踪" class="headerlink" title="问题跟踪"></a>问题跟踪</h1><ol>
-<li>因为在uwsgi中，工作进程是fork()主进程，获得了一个主进程“拷贝”的内存，所以每个进程都会有一个queue。</li>
-<li><p>tensorflow不是进程安全的，所以上面“拷贝”内存的操作，可能倒是tensorflow hang了。<br>在tensorflow issue有类似的提问，<a href="https://github.com/tensorflow/tensorflow/issues/2448" target="_blank" rel="noopener">Session got stuck after fork</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The in-process session (i.e. tf.Session() with no arguments) is not designed to be fork()-safe. If you want to share a set of devices between multiple processes, create a tf.train.Server in one process, and create sessions that connect to that server (with tf.Session(&quot;grpc://...&quot;)) in the other processes.</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>这篇文章中提到<a href="https://www.cnblogs.com/haolujun/p/9778939.html" target="_blank" rel="noopener">机器学习web服务化实战：一次吐血的服务化之路</a>，的方法，在gunicorn的配置中实例化算法服务，gunicorn可以保证配置文件中的代码只运行一次。同时利用gc.freeze()把截止到当前的所有对象放入持久化区域，不进行回收，从而model占用的内存不会被copy-on-write。但是按照这个方法发现这个实例依然在fork的时候被copy了。</p>
-</li>
-</ol>
-<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><ol>
-<li><p>方案一：改成了在每个进程初始化之后，初始化一个算法服务实例，根据cpu核数配置uwsgi工作进程数量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@app.before_first_request</span><br><span class="line">def first_quest():</span><br><span class="line">    q = Queue()</span><br><span class="line">    for i in range(1):</span><br><span class="line">    bqc = CheckImage()</span><br><span class="line">    q.put(bqc)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>方案二；<br> 使用redis/mc等中间件。但是有可能有序列化失败的问题。</p>
-</li>
-<li>使用tensorflow server</li>
-</ol>
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>在gunicron中，配置preload_app = True是可以预加载资源的，但是fork工作进程还是可能出现坑。</p>
-<p>参考:<br><a href="https://github.com/tensorflow/tensorflow/issues/2448" target="_blank" rel="noopener">Session got stuck after fork</a><br><a href="https://stackoverflow.com/questions/49227958/how-to-serve-tensorflow-model-using-flaskuwsgi" target="_blank" rel="noopener">How to serve tensorflow model using flask+uwsgi?</a><br><a href="https://www.cnblogs.com/haolujun/p/9778939.html" target="_blank" rel="noopener">机器学习web服务化实战：一次吐血的服务化之路</a><br><a href="http://timd.cn/fork-safety-and-thread-safety/" target="_blank" rel="noopener">fork-safe和thread-safe简介</a><br><a href="https://www.crifan.com/flask_gunicorn_multiple_process_worker_share_data_or_singleton/" target="_blank" rel="noopener">【已解决】Flask的gunicorn中多进程多worker如何共享数据或单实例</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2149,7 +2212,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

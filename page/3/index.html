@@ -229,6 +229,354 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/23/tcp-socket-与unix-domain-socket/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/03/23/tcp-socket-与unix-domain-socket/" itemprop="url">tcp socket 与unix domain socket</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-23T14:58:46+08:00">
+                2019-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
+                    <span itemprop="name">底层</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是Socket"><a href="#什么是Socket" class="headerlink" title="什么是Socket"></a>什么是Socket</h1><p>在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。</p>
+<h1 id="Unix-Domain-Socket"><a href="#Unix-Domain-Socket" class="headerlink" title="Unix Domain Socket"></a>Unix Domain Socket</h1><p>Unix Domain Socket并不是一个实际的协议，它只在同客户机和服务器通信时使用的API，且一台主机与在不同主机间通信时使用相同的API。</p>
+<p>Unix Domain Socket有以下特点:</p>
+<ul>
+<li>Unix Domain Socket使用的地址通常是一个文件 xxx.sock</li>
+<li>在同一主机通讯时，传输速率是不同主机间的两倍</li>
+<li>Unix Domain Socket套接字描述符可以在同一主机不同进程间传递</li>
+<li>Unix Domain Socket套接字可以向服务器提供用户认证信息</li>
+</ul>
+<h1 id="TCP-Socket与Unix-Domain-Socket"><a href="#TCP-Socket与Unix-Domain-Socket" class="headerlink" title="TCP Socket与Unix Domain Socket"></a>TCP Socket与Unix Domain Socket</h1><p>无论时TCP Socket套接字还是Unix Domain Socket套接字，每个套接字都是唯一的。TCP Socket通过IP和端口描述，而Unix Domain Socket描述。<br>TCP属于传输层的协议，使用TCP Socket进行通讯时，需要经过传输层TCP/IP协议的解析。<br>而Unix Domain Socket可用于不同进程间的通讯和传递，使用Unix Domain Socket进行通讯时不需要经过传输层，也不需要使用TCP/IP协议。所以，理论上讲Unix Domain Socket具有更好的传输效率。</p>
+<h1 id="socket缓冲区"><a href="#socket缓冲区" class="headerlink" title="socket缓冲区"></a>socket缓冲区</h1><p><img src="https://upload-images.jianshu.io/upload_images/191918-36ec0344bae9d79e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/697" alt="TCP套接字的I/O缓冲区示意图"></p>
+<p>每个 socket 被创建后，都会分配两个缓冲区，输入缓冲区和输出缓冲区。write()/send() 并不立即向网络中传输数据，而是先将数据写入缓冲区中，再由TCP协议将数据从缓冲区发送到目标机器。一旦将数据写入到缓冲区，函数就可以成功返回，不管它们有没有到达目标机器，也不管它们何时被发送到网络，这些都是TCP协议负责的事情。TCP协议独立于 write()/send() 函数，数据有可能刚被写入缓冲区就发送到网络，也可能在缓冲区中不断积压，多次写入的数据被一次性发送到网络，这取决于当时的网络情况、当前线程是否空闲等诸多因素，不由程序员控制。read()/recv() 函数也是如此，也从输入缓冲区中读取数据，而不是直接从网络中读取。<br>大小：socket默认的是1024×8=8192字节<br>特性：</p>
+<ul>
+<li>I/O缓冲区在每个TCP套接字中单独存在；</li>
+<li>I/O缓冲区在创建套接字时自动生成；</li>
+<li>即使关闭套接字也会继续传送输出缓冲区中遗留的数据；</li>
+<li>关闭套接字将丢失输入缓冲区中的数据。</li>
+</ul>
+<p>实时性：</p>
+<ul>
+<li>TCP socket的send缓冲区有自己的timeout，因为默认开启Nagle算法，所以缓冲区没满的话要等到超时再发送。对实时性有要求可以用setsockopt关闭Nagle算法。</li>
+<li>设置合适的缓存区的大小。</li>
+</ul>
+<h2 id="Nagle算法"><a href="#Nagle算法" class="headerlink" title="Nagle算法"></a>Nagle算法</h2><p>Nagle算法由John Nagle在1984年提出，这个算法可以减少网络中小的packet的数量，从而降低网络的拥塞程度。<br>为了减小网络开销，Nagle算法指出，当TCP发送了一个小的segment(小于MSS)，它必须等到接收了对方的ACK之后，才能继续发送另一个小的segment。那么在等待的过程中(一个RTT时间)，TCP就能尽量多地将要发送的数据收集在一起，从而减少要发送的segment的数量。<br>默认情况下，TCP开启了Nagle算法，然而Nagle算法并不是灵丹妙药，它会增加TCP发送数据的延迟。在一些要求低延迟的应用程序中(例如即时通讯应用)，则需要禁用Nagle算法。</p>
+<p>Nagle算法的规则:</p>
+<ul>
+<li>如果包长度达到MSS，则允许发送；</li>
+<li>如果该包含有FIN，则允许发送；</li>
+<li>设置了TCP_NODELAY选项，则允许发送；</li>
+<li>未设置TCP_CORK选项时，若所有发出去的小数据包（包长度小于MSS）均被确认，则允许发送；</li>
+<li>上述条件都未满足，但发生了超时（一般为200ms），则立即发送。</li>
+</ul>
+<p>禁用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int optval = 1;</span><br><span class="line">setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &amp;optval, sizeof(optval));</span><br></pre></td></tr></table></figure></p>
+<h2 id="Delayed-ACK"><a href="#Delayed-ACK" class="headerlink" title="Delayed ACK"></a>Delayed ACK</h2><p>TCP的 Delayed ACK 与Nagle算法有异曲同工之妙，Delayed ACK很好理解，当TCP接收到数据时，并不会立即发送ACK给对方，相反，它会等待应用层产生数据，以便将ACK和数据一起发送(在Linux最多等待40ms)。<br>为避免这种延迟的出现，需要做两件事：</p>
+<ul>
+<li>设置TCP_NODELAY选项。</li>
+<li>将客户端的两次write()合并成一个，避免服务端的Delayed ACK。</li>
+</ul>
+<h2 id="TCP-CORK"><a href="#TCP-CORK" class="headerlink" title="TCP_CORK"></a>TCP_CORK</h2><p>Linux提供了TCP_CORK选项，如果在某个TCP socket上开启了这个选项，那就相当于在这个socket的出口堵上了塞子，往这个socket写入的数据都会聚集起来。下面几种情况都会导致这个塞子打开，这样TCP就能继续发送segment出来了。</p>
+<ul>
+<li>程序取消设置TCP_CORK这个选项。</li>
+<li>socket聚集的数据大于一个MSS的大小。</li>
+<li>自从堵上塞子写入第一个字节开始，已经经过200ms。</li>
+<li>socket被关闭了。</li>
+</ul>
+<h1 id="提高socket性能"><a href="#提高socket性能" class="headerlink" title="提高socket性能"></a>提高socket性能</h1><ul>
+<li>禁用 Nagle 算法来减少传输延时</li>
+<li>通过设置缓冲区的大小来提高 socket 带宽的利用</li>
+<li>通过最小化系统调用的个数来降低系统调用的负载</li>
+<li>以及使用可调节的内核参数来优化 Linux 的 TCP/IP 栈。</li>
+</ul>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><ol>
+<li><a href="https://itbilu.com/nodejs/core/EJd85BikZ.html" target="_blank" rel="noopener">参考</a></li>
+<li><a href="https://blog.csdn.net/wlh_flame/article/details/6358795#" target="_blank" rel="noopener">Unix domain socket 的一些小结</a></li>
+<li><a href="http://senlinzhan.github.io/2017/02/10/Linux的TCP-CORK/" target="_blank" rel="noopener">Nagle 算法与 TCP socket 选项 TCP_CORK</a></li>
+<li>*<a href="https://www.ibm.com/developerworks/cn/linux/l-hisock.html" target="_blank" rel="noopener">提高 Linux 上 socket 性能-IBM</a></li>
+<li><a href="https://www.zoulei.net/2016/06/17/socket_recv/" target="_blank" rel="noopener">socket.recv 完整接收数据</a></li>
+<li>*<a href="https://keelii.com/2018/09/24/socket-programming-in-python/" target="_blank" rel="noopener">Python 中的 Socket 编程（指南）</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/05/flask-blurprint-增加自动发现/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/03/05/flask-blurprint-增加自动发现/" itemprop="url">flask blurprint 增加路由自动发现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-05T16:53:53+08:00">
+                2019-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>路由自动发现基于约定代码结构及命名规范实现的。<br>例子：<br>约定 [name]_api.py 输出对象名：[name]_bp<br>目录结构:<br>—– view</p>
+<pre><code>- __init__.py
+- user_api.py
+- history_api.py
+- type_api.py
+</code></pre><p>在文件__init__.py中，原本写法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from .user_api import user_bp</span><br><span class="line">from .history_api import history_bp</span><br><span class="line">from .type_api import type_api</span><br><span class="line"></span><br><span class="line">blue_print = [user_bp, history_bp, type_api]</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">for bp in blue_prints:</span><br><span class="line">    app.register_blueprint(bp)</span><br></pre></td></tr></table></figure></p>
+<p>现在改成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import re</span><br><span class="line">path = os.getcwd() + &apos;/app/views&apos;</span><br><span class="line"></span><br><span class="line"># 路由自动查找</span><br><span class="line">blue_prints = []</span><br><span class="line">for root, dirs, files in os.walk(path):</span><br><span class="line">    for f in files:</span><br><span class="line">        if re.match(&apos;(.*?)_api.py&apos;, f):</span><br><span class="line">            name = f.replace(&apos;_api.py&apos;, &apos;&apos;)</span><br><span class="line">            _temp = __import__(&apos;app.views.&apos;+name+&apos;_api&apos;, fromlist=[name+&apos;_bp&apos;]) </span><br><span class="line">            if(hasattr(_temp,name+&apos;_bp&apos;)):</span><br><span class="line">                blue_prints.append(getattr(_temp,name+&apos;_bp&apos;))</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">for bp in blue_prints:</span><br><span class="line">    app.register_blueprint(bp)</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/03/01/flask-uwsgi-nginx-websocket部署实战/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1509,298 +1857,6 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/10/Python灰度图转伪彩色图/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/10/Python灰度图转伪彩色图/" itemprop="url">Python灰度图转伪彩色图</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T10:02:47+08:00">
-                2019-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因项目中算法给出分割图是灰度图，而前端需要展示彩色图，搜了下网上资料，参考了opencv写的<a href="http://blog.sina.com.cn/s/blog_8924265b0101ext1.html" target="_blank" rel="noopener">这篇</a>，改成了Python代码<br>效果：<br>原灰度图<br><img src="https://upload-images.jianshu.io/upload_images/14827444-b83e1508197f3373.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="灰度图"><br>伪彩色图<br><img src="https://upload-images.jianshu.io/upload_images/14827444-74c7a847851bcac8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="彩色图"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line">import requests</span><br><span class="line">from io import BytesIO</span><br><span class="line">import numpy as np</span><br><span class="line">def grayImageTrans(url):</span><br><span class="line">    # url</span><br><span class="line">    # 如果是本地图片</span><br><span class="line">    # img = Image.open(&apos;/tmp/test.jpg&apos;)</span><br><span class="line">    file = requests.get(url)</span><br><span class="line">    tmpIm = BytesIO(file.content)</span><br><span class="line">    img = Image.open(tmpIm)</span><br><span class="line">    # 图片转矩阵</span><br><span class="line">    img = np.array(img)</span><br><span class="line">    # nparray转list</span><br><span class="line">    imgAry = img.tolist()</span><br><span class="line">    tmp=0</span><br><span class="line">    # 加颜色</span><br><span class="line">    for x in range(img.shape[0]):</span><br><span class="line">        for y in range(img.shape[1]):</span><br><span class="line">            tmp = imgAry[x][y]</span><br><span class="line">            imgAry[x][y] = __grayColorTrans(tmp)</span><br><span class="line">    newImgAry = np.array(imgAry)</span><br><span class="line">    # 矩阵转图片</span><br><span class="line">    newImg = Image.fromarray(np.uint8(newImgAry))</span><br><span class="line">    # newImg.save(&apos;/vagrant/test.png&apos;)</span><br><span class="line">    # 转base64</span><br><span class="line">    output_buffer = BytesIO()</span><br><span class="line">    newImg.save(output_buffer, format=&apos;PNG&apos;)</span><br><span class="line">    byte_data = output_buffer.getvalue()</span><br><span class="line">    base64_str = base64.b64encode(byte_data)</span><br><span class="line">    return base64_str</span><br></pre></td></tr></table></figure>
-<p>参考：<br>关于Image与Base64转换可以看<a href="https://www.jianshu.com/p/2ff8e6f98257" target="_blank" rel="noopener">这里</a><br><a href="https://my.oschina.net/112612/blog/1594140" target="_blank" rel="noopener">Image图像的convert</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/03/Three三维世界初体验/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/03/Three三维世界初体验/" itemprop="url">Three三维世界初体验</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-03T15:26:03+08:00">
-                2019-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>教程：<br><a href="http://www.hewebgl.com/article/articledir/1" target="_blank" rel="noopener">WebGL中文网教程</a><br><a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene" target="_blank" rel="noopener">three文档</a><br><a href="https://blog.csdn.net/linolzhang/article/details/67119049" target="_blank" rel="noopener">碰撞检测</a><br>原理：<br>以物体的中心为起点，向各个顶点（vertices）发出射线，如果射线与其它的物体相交，则检查最近的一个交点与射线起点间的距离，如果这个距离比射线起点至物体顶点间的距离要小，则说明发生了碰撞。但是，当物体的中心在另一个物体内部时，是不能够检测到碰撞的。而且当两个物体能够互相穿过，且有较大部分重合时，检测效果也不理想。 </p>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-3b266c643b2f3f13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="代码示例"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-99942b6d2eb3e777.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="碰撞实例"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br></pre></td><td class="code"><pre><span class="line">// 初始化Three</span><br><span class="line">var renderer;</span><br><span class="line">function initThree() &#123;</span><br><span class="line">    renderer = new THREE.WebGLRenderer();</span><br><span class="line"></span><br><span class="line">    renderer.setSize(window.innerWidth, window.innerHeight);</span><br><span class="line"></span><br><span class="line">    width = document.getElementById(&apos;canvas-frame&apos;).clientWidth;</span><br><span class="line">    height = document.getElementById(&apos;canvas-frame&apos;).clientHeight;</span><br><span class="line">    renderer = new THREE.WebGLRenderer(&#123;</span><br><span class="line">        antialias : true</span><br><span class="line">    &#125;);</span><br><span class="line">    renderer.setSize(width, height);</span><br><span class="line">    document.getElementById(&apos;canvas-frame&apos;).appendChild(renderer.domElement);</span><br><span class="line">    renderer.setClearColor(0xffffff, 1.0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化Camera</span><br><span class="line">var camera;</span><br><span class="line">function initCamera() &#123;</span><br><span class="line">    // 设置透视相机</span><br><span class="line">    camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);</span><br><span class="line">    // 设置相机位置</span><br><span class="line">    camera.position.x = 200;</span><br><span class="line">    camera.position.y = 500;</span><br><span class="line">    camera.position.z = 800;</span><br><span class="line">    // 设置相机哪里为上</span><br><span class="line">    // camera.up.x = 0;</span><br><span class="line">    // camera.up.y = 0;</span><br><span class="line">    // camera.up.z = 1;</span><br><span class="line">    // 设置相机看向哪</span><br><span class="line">    camera.lookAt(new THREE.Vector3(0, 0, 0));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化场景</span><br><span class="line">var scene;</span><br><span class="line">function initScene() &#123;</span><br><span class="line">    scene = new THREE.Scene();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化灯光</span><br><span class="line">var light;</span><br><span class="line">function initLight() &#123;</span><br><span class="line">    light = new THREE.DirectionalLight(0xFF0000,1);</span><br><span class="line">    light.position.set(100,100,1);</span><br><span class="line">    scene.add(light);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化里面的元素</span><br><span class="line">var cube;</span><br><span class="line">var mesh;</span><br><span class="line">function initObject() &#123;</span><br><span class="line">    for(var k =0;k&lt;2;k++)&#123;</span><br><span class="line">        // 一个几何体</span><br><span class="line">        var geometry = new THREE.BoxGeometry( 100,100,100);</span><br><span class="line">        // 不同面设置不同颜色</span><br><span class="line">        for ( var i = 0; i &lt; geometry.faces.length; i += 2 ) &#123;</span><br><span class="line"></span><br><span class="line">            var hex = Math.random() * 0xffffff;</span><br><span class="line">            geometry.faces[ i ].color.setHex( hex );</span><br><span class="line">            geometry.faces[ i + 1 ].color.setHex( hex );</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        // 设置纹理</span><br><span class="line">        // var material = new THREE.MeshBasicMaterial( &#123; vertexColors: THREE.FaceColors&#125; );</span><br><span class="line">        var material = new THREE.MeshLambertMaterial( &#123; color: Math.random() * 0xffffff &#125; )</span><br><span class="line">        // 把几何体跟纹理混合起来</span><br><span class="line">        mesh = new THREE.Mesh( geometry,material);</span><br><span class="line">        // 元素的位置</span><br><span class="line">        mesh.position.set(0,k*50,k * 400);</span><br><span class="line">        // 把元素加到场景里</span><br><span class="line">        scene.add(mesh);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 渲染</span><br><span class="line">var stats;</span><br><span class="line">function render()</span><br><span class="line">&#123;</span><br><span class="line">    // renderer.clear();</span><br><span class="line">    // mesh.position.x =mesh.position.x +1;</span><br><span class="line">    renderer.render(scene, camera);</span><br><span class="line">    requestAnimationFrame(render);</span><br><span class="line">    stats.update();</span><br><span class="line">    // TWEEN.update();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 性能检测</span><br><span class="line">function initStats()&#123;</span><br><span class="line">    stats = new Stats();</span><br><span class="line">    stats.setMode(1); // 0: fps, 1: ms</span><br><span class="line">// 将stats的界面对应左上角</span><br><span class="line">    stats.domElement.style.position = &apos;absolute&apos;;</span><br><span class="line">    stats.domElement.style.left = &apos;0px&apos;;</span><br><span class="line">    stats.domElement.style.top = &apos;0px&apos;;</span><br><span class="line">    document.body.appendChild( stats.domElement );</span><br><span class="line">    setInterval( function () &#123;</span><br><span class="line">        stats.begin();</span><br><span class="line">        // 你的每一帧的代码</span><br><span class="line">        stats.end();</span><br><span class="line">    &#125;, 1000 / 60 );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化网格</span><br><span class="line">function initGrid()&#123;</span><br><span class="line">    // 网格的边长是1000，每个小网格的边长是50</span><br><span class="line">    var helper = new THREE.GridHelper( 1000, 50,0x0000ff, 0x808080 );</span><br><span class="line">    var helper2 = new THREE.GridHelper( 1000, 50,0x0000ff, 0x808080 );</span><br><span class="line">    helper2.rotation.x = Math.PI/2;</span><br><span class="line">    scene.add( helper );</span><br><span class="line">    scene.add(helper2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化事件</span><br><span class="line">var INTERSECTED;</span><br><span class="line">function initEvent()&#123;</span><br><span class="line">    var objects=[];</span><br><span class="line">    var raycaster = new THREE.Raycaster();</span><br><span class="line">    var mouse = new THREE.Vector2();</span><br><span class="line">    //监听全局点击事件,通过ray检测选中哪一个object</span><br><span class="line">    document.addEventListener(&quot;mousedown&quot;, (event) =&gt; &#123;</span><br><span class="line">        console.log(&apos;mousedown&apos;);</span><br><span class="line">        event.preventDefault();</span><br><span class="line">        mouse.x = (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1;</span><br><span class="line">        mouse.y = - (event.clientY / this.renderer.domElement.clientHeight) * 2 + 1;</span><br><span class="line"></span><br><span class="line">        raycaster.setFromCamera(mouse, this.camera);</span><br><span class="line">        this.scene.children.forEach(child =&gt; &#123;</span><br><span class="line">            if (child instanceof THREE.Mesh) &#123;//根据需求判断哪些加入objects,也可以在生成object的时候push进objects</span><br><span class="line">                objects.push(child)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        var intersects = raycaster.intersectObjects(objects);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        if (intersects.length &gt; 0) &#123;</span><br><span class="line">            if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );</span><br><span class="line"></span><br><span class="line">            INTERSECTED = intersects[ 0 ].object;</span><br><span class="line">            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();</span><br><span class="line">            INTERSECTED.material.emissive.setHex( 0x0000ff );</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            if ( INTERSECTED ) &#123;</span><br><span class="line">                INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );</span><br><span class="line">                // 碰撞检测</span><br><span class="line">                var originPoint = INTERSECTED.position.clone();</span><br><span class="line">                var crash = false;</span><br><span class="line">                for (var vertexIndex = 0; vertexIndex &lt; INTERSECTED.geometry.vertices.length; vertexIndex++) &#123;</span><br><span class="line">                    // 顶点原始坐标</span><br><span class="line">                    var localVertex = INTERSECTED.geometry.vertices[vertexIndex].clone();</span><br><span class="line">                    // 顶点经过变换后的坐标</span><br><span class="line">                    var globalVertex = localVertex.applyMatrix4(INTERSECTED.matrix);</span><br><span class="line">                    // 获得由中心指向顶点的向量</span><br><span class="line">                    var directionVector = globalVertex.sub(INTERSECTED.position);</span><br><span class="line"></span><br><span class="line">                    // 将方向向量初始化</span><br><span class="line">                    var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());</span><br><span class="line">                    // 检测射线与多个物体的相交情况</span><br><span class="line"></span><br><span class="line">                    var collisionResults = ray.intersectObjects(objects);</span><br><span class="line">                    // 如果返回结果不为空，且交点与射线起点的距离小于物体中心至顶点的距离，则发生了碰撞</span><br><span class="line">                    if (collisionResults.length &gt; 0 &amp;&amp; collisionResults[0].distance &lt; directionVector.length()) &#123;</span><br><span class="line">                        crash = true;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                if(crash)&#123;</span><br><span class="line">                    alert(&apos;crash&apos;);</span><br><span class="line">                    INTERSECTED.position.set(0,0,400);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            INTERSECTED = null;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, false);</span><br><span class="line"></span><br><span class="line">    document.addEventListener(&quot;mousemove&quot;,(event) =&gt; &#123;</span><br><span class="line">        event.preventDefault();</span><br><span class="line">        if(INTERSECTED)&#123;</span><br><span class="line">            </span><br><span class="line">            var mouse = new THREE.Vector2();</span><br><span class="line">            console.log(( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );</span><br><span class="line">            mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );</span><br><span class="line"></span><br><span class="line">            raycaster.setFromCamera( mouse, camera );</span><br><span class="line">            var objects = [];</span><br><span class="line">            scene.children.forEach(child =&gt; &#123;</span><br><span class="line">                if (child instanceof THREE.GridHelper) &#123;</span><br><span class="line">                    objects.push(child)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            var intersects = raycaster.intersectObjects( objects );</span><br><span class="line"></span><br><span class="line">            if (intersects.length &gt; 0) &#123;</span><br><span class="line">                var selected = intersects[ 0 ];</span><br><span class="line">                // console.log(selected.point.x,selected.point.y,selected.point.z);</span><br><span class="line">                INTERSECTED.position.copy(selected.point);</span><br><span class="line">                INTERSECTED.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,false);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 动画组件</span><br><span class="line">function initTween()&#123;</span><br><span class="line">    new TWEEN.Tween( mesh.position)</span><br><span class="line">        .to( &#123; x: -400,z:100,y:100 &#125;, 3000 ).repeat( Infinity ).start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function threeStart() &#123;</span><br><span class="line">    initThree();</span><br><span class="line">    initCamera();</span><br><span class="line">    initScene();</span><br><span class="line">    initLight();</span><br><span class="line">    initObject();</span><br><span class="line">    initGrid();</span><br><span class="line">    initStats();</span><br><span class="line">    initEvent();</span><br><span class="line">    // initTween();</span><br><span class="line">    render();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">threeStart();</span><br></pre></td></tr></table></figure>
-<p>拖拽优化：<br>使用three-drag-controller,替代mousemove时间监听<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import DragControls from &apos;three-dragcontrols&apos;;</span><br><span class="line">import OrbitControls from &apos;three-orbitcontrols&apos;;</span><br><span class="line">......</span><br><span class="line">function initDragControls() &#123;</span><br><span class="line">    // 初始化拖拽控件</span><br><span class="line">    var dragControls = new DragControls(meshList, camera, renderer.domElement);</span><br><span class="line">    var controls = new OrbitControls(camera, renderer.domElement);</span><br><span class="line">    </span><br><span class="line">    // 鼠标略过事件</span><br><span class="line">    dragControls.addEventListener(&apos;hoveron&apos;, function (event) &#123;</span><br><span class="line">       </span><br><span class="line">    &#125;);</span><br><span class="line">    // 开始拖拽</span><br><span class="line">    dragControls.addEventListener(&apos;dragstart&apos;, function (event) &#123;</span><br><span class="line">        controls.enabled = false;</span><br><span class="line">    &#125;);</span><br><span class="line">    // 拖拽结束</span><br><span class="line">    dragControls.addEventListener(&apos;dragend&apos;, function (event) &#123;</span><br><span class="line">        controls.enabled = true;</span><br><span class="line">        // crashCheck();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>加入webpack管理，<br>优化后完整代码：<br><img src="https://upload-images.jianshu.io/upload_images/14827444-f9f57f4633d3828f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3d"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br></pre></td><td class="code"><pre><span class="line">var THREE = require(&apos;three&apos;);</span><br><span class="line">import DragControls from &apos;three-dragcontrols&apos;;</span><br><span class="line">import OrbitControls from &apos;three-orbitcontrols&apos;;</span><br><span class="line">import TransformControls from &apos;threejs-transformcontrols&apos;;</span><br><span class="line"></span><br><span class="line">// 初始化Three</span><br><span class="line">var renderer;</span><br><span class="line">var width,height;</span><br><span class="line">function initThree() &#123;</span><br><span class="line">    renderer = new THREE.WebGLRenderer();</span><br><span class="line"></span><br><span class="line">    renderer.setSize(window.innerWidth, window.innerHeight);</span><br><span class="line"></span><br><span class="line">    width = document.getElementById(&apos;canvas-frame&apos;).clientWidth;</span><br><span class="line">    height = document.getElementById(&apos;canvas-frame&apos;).clientHeight;</span><br><span class="line">    renderer = new THREE.WebGLRenderer(&#123;</span><br><span class="line">        antialias : true</span><br><span class="line">    &#125;);</span><br><span class="line">    renderer.setSize(width, height);</span><br><span class="line">    document.getElementById(&apos;canvas-frame&apos;).appendChild(renderer.domElement);</span><br><span class="line">    renderer.setClearColor(0xffffff, 1.0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化Camera</span><br><span class="line">var camera;</span><br><span class="line">function initCamera() &#123;</span><br><span class="line">    // 设置透视相机</span><br><span class="line">    camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);</span><br><span class="line">    // 设置相机位置</span><br><span class="line">    camera.position.x = 800;</span><br><span class="line">    camera.position.y = 0;</span><br><span class="line">    camera.position.z = 1000;</span><br><span class="line">    // 设置相机哪里为上</span><br><span class="line">    // camera.up.x = 0;</span><br><span class="line">    // camera.up.y = 0;</span><br><span class="line">    // camera.up.z = 1;</span><br><span class="line">    // 设置相机看向哪</span><br><span class="line">    camera.lookAt(new THREE.Vector3(0, 0, 0));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化场景</span><br><span class="line">var scene;</span><br><span class="line">function initScene() &#123;</span><br><span class="line">    scene = new THREE.Scene();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化灯光</span><br><span class="line">var light;</span><br><span class="line">function initLight() &#123;</span><br><span class="line">    light = new THREE.DirectionalLight(0xFF0000,1);</span><br><span class="line">    light.position.set(100,100,1);</span><br><span class="line">    scene.add(light);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化里面的元素</span><br><span class="line">var cube;</span><br><span class="line">var bus;</span><br><span class="line">var meshList = [];</span><br><span class="line">function initObject() &#123;</span><br><span class="line">    for(var k =0;k&lt;2;k++)&#123;</span><br><span class="line">        // 一个几何体</span><br><span class="line">        var geometry = new THREE.BoxGeometry( 100,50,150);</span><br><span class="line">        // 不同面设置不同颜色</span><br><span class="line">        for ( var i = 0; i &lt; geometry.faces.length; i += 2 ) &#123;</span><br><span class="line"></span><br><span class="line">            var hex = Math.random() * 0xffffff;</span><br><span class="line">            geometry.faces[ i ].color.setHex( hex );</span><br><span class="line">            geometry.faces[ i + 1 ].color.setHex( hex );</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        // 设置纹理</span><br><span class="line">        // var material = new THREE.MeshBasicMaterial( &#123; vertexColors: THREE.FaceColors&#125; );</span><br><span class="line">        var material = new THREE.MeshLambertMaterial( &#123; color: Math.random() * 0xffffff &#125; )</span><br><span class="line">        // 把几何体跟纹理混合起来</span><br><span class="line">        var mesh = new THREE.Mesh( geometry,material);</span><br><span class="line">        meshList.push(mesh);</span><br><span class="line">        // 元素的位置</span><br><span class="line">        mesh.position.set(0,k*50,k * 400);</span><br><span class="line">        // 把元素加到场景里</span><br><span class="line">        scene.add(mesh);</span><br><span class="line">    &#125;</span><br><span class="line">    var busGeometry = new THREE.BoxGeometry( 500,500,500);</span><br><span class="line">    var butMaterial = new THREE.MeshLambertMaterial( &#123; color: Math.random() * 0xffffff, transparent: true, opacity: 0.5&#125; );</span><br><span class="line">    bus = new THREE.Mesh(busGeometry,butMaterial);</span><br><span class="line">    bus.position.set(0,0,0);</span><br><span class="line">    scene.add(bus);</span><br><span class="line">    var edges = new THREE.EdgesHelper( bus, 0x1535f7 );//设置边框，可以旋转</span><br><span class="line">    scene.add( edges );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 渲染</span><br><span class="line">var stats;</span><br><span class="line">function render()</span><br><span class="line">&#123;</span><br><span class="line">    // renderer.clear();</span><br><span class="line">    // mesh.position.x =mesh.position.x +1;</span><br><span class="line">    renderer.render(scene, camera);</span><br><span class="line">    requestAnimationFrame(render);</span><br><span class="line">    // stats.update();</span><br><span class="line">    // TWEEN.update();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 性能检测</span><br><span class="line">function initStats()&#123;</span><br><span class="line">    stats = new Stats();</span><br><span class="line">    stats.setMode(1); // 0: fps, 1: ms</span><br><span class="line">// 将stats的界面对应左上角</span><br><span class="line">    stats.domElement.style.position = &apos;absolute&apos;;</span><br><span class="line">    stats.domElement.style.left = &apos;0px&apos;;</span><br><span class="line">    stats.domElement.style.top = &apos;0px&apos;;</span><br><span class="line">    document.body.appendChild( stats.domElement );</span><br><span class="line">    setInterval( function () &#123;</span><br><span class="line">        stats.begin();</span><br><span class="line">        // 你的每一帧的代码</span><br><span class="line">        stats.end();</span><br><span class="line">    &#125;, 1000 / 60 );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化网格</span><br><span class="line">function initGrid()&#123;</span><br><span class="line">    // 网格的边长是1000，每个小网格的边长是50</span><br><span class="line"></span><br><span class="line">    var helper = new THREE.GridHelper( 1000, 50,0x0000ff, 0x808080 );</span><br><span class="line">    var helper2 = new THREE.GridHelper( 1000, 50,0x0000ff, 0x808080 );</span><br><span class="line">    helper2.rotation.x = Math.PI/2;</span><br><span class="line">    scene.add( helper );</span><br><span class="line">    // scene.add(helper2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 初始化事件</span><br><span class="line">var INTERSECTED;</span><br><span class="line">function initEvent()&#123;</span><br><span class="line">    var objects= meshList;</span><br><span class="line">    var raycaster = new THREE.Raycaster();</span><br><span class="line">    var mouse = new THREE.Vector2();</span><br><span class="line">    //监听全局点击事件,通过ray检测选中哪一个object</span><br><span class="line">    // document.addEventListener(&quot;mousedown&quot;, (event) =&gt; &#123;</span><br><span class="line">    //     console.log(&apos;mousedown&apos;);</span><br><span class="line">    //     event.preventDefault();</span><br><span class="line">    //     mouse.x = (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1;</span><br><span class="line">    //     mouse.y = - (event.clientY / this.renderer.domElement.clientHeight) * 2 + 1;</span><br><span class="line">    //</span><br><span class="line">    //     raycaster.setFromCamera(mouse, this.camera);</span><br><span class="line">    //     // this.scene.children.forEach(child =&gt; &#123;</span><br><span class="line">    //     //     if (child instanceof THREE.Mesh) &#123;//根据需求判断哪些加入objects,也可以在生成object的时候push进objects</span><br><span class="line">    //     //         objects.push(child)</span><br><span class="line">    //     //     &#125;</span><br><span class="line">    //     // &#125;)</span><br><span class="line">    //     var intersects = raycaster.intersectObjects(objects);</span><br><span class="line">    //</span><br><span class="line">    //</span><br><span class="line">    //     if (intersects.length &gt; 0) &#123;</span><br><span class="line">    //         if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );</span><br><span class="line">    //</span><br><span class="line">    //         INTERSECTED = intersects[ 0 ].object;</span><br><span class="line">    //         INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();</span><br><span class="line">    //         INTERSECTED.material.emissive.setHex( 0x0000ff );</span><br><span class="line">    //     &#125;</span><br><span class="line">    //     else &#123;</span><br><span class="line">    //         if ( INTERSECTED ) &#123;</span><br><span class="line">    //             INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );</span><br><span class="line">    //             // 碰撞检测</span><br><span class="line">    //             if(crashCheck(objects))&#123;</span><br><span class="line">    //                 alert(&apos;crash&apos;);</span><br><span class="line">    //                 INTERSECTED.position.set(0,0,400);</span><br><span class="line">    //             &#125;</span><br><span class="line">    //         &#125;</span><br><span class="line">    //         INTERSECTED = null;</span><br><span class="line">    //</span><br><span class="line">    //     &#125;</span><br><span class="line">    // &#125;, false);</span><br><span class="line"></span><br><span class="line">    // document.addEventListener(&quot;mousemove&quot;,(event) =&gt; &#123;</span><br><span class="line">    //     event.preventDefault();</span><br><span class="line">    //     if(INTERSECTED)&#123;</span><br><span class="line">    //</span><br><span class="line">    //         var mouse = new THREE.Vector2();</span><br><span class="line">    //         mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );</span><br><span class="line">    //         // console.log(mouse.x,mouse.y);</span><br><span class="line">    //         var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 ).unproject( camera );</span><br><span class="line">    //         var raycaster = new THREE.Raycaster(camera.position, vector.sub( camera.position ).normalize());</span><br><span class="line">    //         var objects = [bus];</span><br><span class="line">    //         // scene.children.forEach(child =&gt; &#123;</span><br><span class="line">    //         //     if (child instanceof THREE.GridHelper) &#123;</span><br><span class="line">    //         //         objects.push(child)</span><br><span class="line">    //         //     &#125;</span><br><span class="line">    //         // &#125;);</span><br><span class="line">    //</span><br><span class="line">    //         var intersects = raycaster.intersectObjects( objects );</span><br><span class="line">    //</span><br><span class="line">    //</span><br><span class="line">    //         if (intersects.length &gt; 0) &#123;</span><br><span class="line">    //             var selected = intersects[ 0 ];</span><br><span class="line">    //             console.log(selected.point.x,selected.point.y,selected.point.z,INTERSECTED.position.z);</span><br><span class="line">    //             INTERSECTED.position.set(selected.point.x,selected.point.y,INTERSECTED.position.z);</span><br><span class="line">    //             INTERSECTED.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );</span><br><span class="line">    //</span><br><span class="line">    //         &#125;</span><br><span class="line">    //     &#125;</span><br><span class="line">    // &#125;,false);</span><br><span class="line"></span><br><span class="line">    var an = 1;</span><br><span class="line">    document.getElementById(&apos;J_left&apos;).addEventListener(&apos;click&apos;,function(e)&#123;</span><br><span class="line">        e.preventDefault();</span><br><span class="line">        e.stopPropagation();</span><br><span class="line">        var radius = 1000;</span><br><span class="line">        an = an + 1;</span><br><span class="line">        // console.log(an);</span><br><span class="line">        camera.position.z = radius * Math.cos( (Math.PI / 180 ) * (an) );</span><br><span class="line">        camera.position.x = radius * Math.sin( (Math.PI / 180 ) * (an) );</span><br><span class="line">        camera.lookAt(new THREE.Vector3(0, 0, 0));</span><br><span class="line">        // console.log(&apos;left,x=&apos;+camera.position.x+&apos;,z=&apos;+camera.position.z);</span><br><span class="line">    &#125;);</span><br><span class="line">    document.getElementById(&apos;J_right&apos;).addEventListener(&apos;click&apos;,function(e)&#123;</span><br><span class="line">        e.preventDefault();</span><br><span class="line">        e.stopPropagation();</span><br><span class="line">        var radius = 1000;</span><br><span class="line">        an = an - 1;</span><br><span class="line">        // console.log(an);</span><br><span class="line">        camera.position.z = radius * Math.cos( (Math.PI / 180 ) * (an) );</span><br><span class="line">        camera.position.x = radius * Math.sin( (Math.PI / 180 ) * (an) );</span><br><span class="line">        camera.lookAt(new THREE.Vector3(0, 0, 0));</span><br><span class="line">        // console.log(&apos;left,x=&apos;+camera.position.x+&apos;,z=&apos;+camera.position.z);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function crashCheck(objects)&#123;</span><br><span class="line">    if(INTERSECTED)&#123;</span><br><span class="line">        var originPoint = INTERSECTED.position.clone();</span><br><span class="line">        var crash = false;</span><br><span class="line">        for (var vertexIndex = 0; vertexIndex &lt; INTERSECTED.geometry.vertices.length; vertexIndex++) &#123;</span><br><span class="line">            // 顶点原始坐标</span><br><span class="line">            var localVertex = INTERSECTED.geometry.vertices[vertexIndex].clone();</span><br><span class="line">            // 顶点经过变换后的坐标</span><br><span class="line">            var globalVertex = localVertex.applyMatrix4(INTERSECTED.matrix);</span><br><span class="line">            // 获得由中心指向顶点的向量</span><br><span class="line">            var directionVector = globalVertex.sub(INTERSECTED.position);</span><br><span class="line"></span><br><span class="line">            // 将方向向量初始化</span><br><span class="line">            var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());</span><br><span class="line">            // 检测射线与多个物体的相交情况</span><br><span class="line"></span><br><span class="line">            var collisionResults = ray.intersectObjects(objects);</span><br><span class="line">            // 如果返回结果不为空，且交点与射线起点的距离小于物体中心至顶点的距离，则发生了碰撞</span><br><span class="line">            if (collisionResults.length &gt; 0 &amp;&amp; collisionResults[0].distance &lt; directionVector.length()) &#123;</span><br><span class="line">                crash = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        if(crash)&#123;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 动画组建</span><br><span class="line">function initTween()&#123;</span><br><span class="line">    new TWEEN.Tween( mesh.position)</span><br><span class="line">        .to( &#123; x: -400,z:100,y:100 &#125;, 3000 ).repeat( Infinity ).start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function initDragControls() &#123;</span><br><span class="line">    // 添加平移控件</span><br><span class="line">    // var transformControls = new TransformControls(camera, renderer.domElement);</span><br><span class="line">    // scene.add(transformControls);</span><br><span class="line"></span><br><span class="line">    // 初始化拖拽控件</span><br><span class="line">    var dragControls = new DragControls(meshList, camera, renderer.domElement);</span><br><span class="line">    var controls = new OrbitControls(camera, renderer.domElement);</span><br><span class="line">    </span><br><span class="line">    // 鼠标略过事件</span><br><span class="line">    dragControls.addEventListener(&apos;hoveron&apos;, function (event) &#123;</span><br><span class="line">        // 让变换控件对象和选中的对象绑定</span><br><span class="line">        // transformControls.attach(event.object);</span><br><span class="line">    &#125;);</span><br><span class="line">    // 开始拖拽</span><br><span class="line">    dragControls.addEventListener(&apos;dragstart&apos;, function (event) &#123;</span><br><span class="line">        controls.enabled = false;</span><br><span class="line">    &#125;);</span><br><span class="line">    // 拖拽结束</span><br><span class="line">    dragControls.addEventListener(&apos;dragend&apos;, function (event) &#123;</span><br><span class="line">        controls.enabled = true;</span><br><span class="line">        crashCheck();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function threeStart() &#123;</span><br><span class="line">    initThree();</span><br><span class="line">    initCamera();</span><br><span class="line">    initScene();</span><br><span class="line">    initLight();</span><br><span class="line">    initObject();</span><br><span class="line">    initGrid();</span><br><span class="line">    initDragControls();</span><br><span class="line">    // initStats();</span><br><span class="line">    initEvent();</span><br><span class="line">    // initTween();</span><br><span class="line">    render();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">threeStart();</span><br></pre></td></tr></table></figure>
-<p>后期打算添加物理引擎<a href="https://www.jianshu.com/p/716b79ab5cde" target="_blank" rel="noopener">Physijs</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1853,7 +1909,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
