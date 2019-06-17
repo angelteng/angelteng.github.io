@@ -362,7 +362,7 @@
 <li><p>在sklearn中的使用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.ensemble import RandomForestClassifier</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>泛化误差<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1b107c7a033ad21a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>当模型太复杂，模型就会过拟合，泛化能力就不够，所以泛化误差大。当模型太简单，模型就会欠拟合，拟合能力就不够，所以误差也会大。只有当模型的复杂度刚刚好的才能够达到泛化误差最小的目标。<br>树模型是天生位于图的右上角的模型，随机森林是以树模型为基础，所以随机森林也是天生复杂度高的模型。随机森林的参数，都是向着一个目标去:减少模型的复杂度，把模型往图像的左边移动，防止过拟合。</p>
+<li><p>泛化误差<br><img src="0.png" alt="image.png"><br>当模型太复杂，模型就会过拟合，泛化能力就不够，所以泛化误差大。当模型太简单，模型就会欠拟合，拟合能力就不够，所以误差也会大。只有当模型的复杂度刚刚好的才能够达到泛化误差最小的目标。<br>树模型是天生位于图的右上角的模型，随机森林是以树模型为基础，所以随机森林也是天生复杂度高的模型。随机森林的参数，都是向着一个目标去:减少模型的复杂度，把模型往图像的左边移动，防止过拟合。</p>
 </li>
 <li><p>参数对误差的影响</p>
 </li>
@@ -1208,7 +1208,7 @@
           
             <p><a href="https://angelteng.github.io/blog/2018/11/22/Redis原理/">Redis的基本数据结构</a></p>
 <p>首先，众所周知，Redis是单线程的。</p>
-<h1 id="有多快？"><a href="#有多快？" class="headerlink" title="有多快？"></a>有多快？</h1><p>Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-5334ee209b270e5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h1 id="有多快？"><a href="#有多快？" class="headerlink" title="有多快？"></a>有多快？</h1><p>Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。<br><img src="0.png" alt="image.png"></p>
 <h1 id="为什么快？"><a href="#为什么快？" class="headerlink" title="为什么快？"></a>为什么快？</h1><ol>
 <li>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</li>
 <li>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</li>
@@ -1376,7 +1376,7 @@
       
         
           
-            <h1 id="Nginx-模块结构"><a href="#Nginx-模块结构" class="headerlink" title="Nginx 模块结构"></a>Nginx 模块结构</h1><p><img src="https://upload-images.jianshu.io/upload_images/14827444-b1321442e1909834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+            <h1 id="Nginx-模块结构"><a href="#Nginx-模块结构" class="headerlink" title="Nginx 模块结构"></a>Nginx 模块结构</h1><p><img src="0.png" alt="image.png"></p>
 <h1 id="Nginx-工作流程"><a href="#Nginx-工作流程" class="headerlink" title="Nginx 工作流程"></a>Nginx 工作流程</h1><p>Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。</p>
 <ol>
 <li>master进程一开始根据配置，来建立需要listen的网络socket fd，然后fork出多个worker进程。根据进程的特性，新建立的worker进程，也会和master进程一样，具有相同的设置。因此，其也会去监听相同ip端口的套接字socket fd。</li>
@@ -1555,7 +1555,7 @@
 <li>信号驱动 I/O（ signal driven IO）</li>
 <li>异步 I/O（asynchronous IO）</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="0.png" alt="image.png"></p>
 <h3 id="I-O多路复用"><a href="#I-O多路复用" class="headerlink" title="I/O多路复用"></a>I/O多路复用</h3><p>select，poll，epoll都是IO多路复用的机制。一个进程可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。但select，poll，epoll本质上都是同步I/O。</p>
 <p>与阻塞I/O相比，多路复用需要使用两个system call (select 和 recvfrom)，而blocking IO只调用了一个system call (recvfrom)。但是，用select的优势在于它可以同时处理多个connection。</p>
 <p>epoll 操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int epoll_create(int size)；//创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大</span><br><span class="line">int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；//对指定描述符fd执行op操作</span><br><span class="line">int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);//等待epfd上的io事件，最多返回maxevents个事件。</span><br></pre></td></tr></table></figure></p>
@@ -1876,7 +1876,7 @@
       
         
           
-            <h1 id="原因一：多核CPU的缓存"><a href="#原因一：多核CPU的缓存" class="headerlink" title="原因一：多核CPU的缓存"></a>原因一：多核CPU的缓存</h1><p>当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。<br>按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的一部分。<br>当CPU要读取一个数据时，首先从一级缓存中查找，如果没有找到再从二级缓存中查找，如果还是没有就从三级缓存或内存中查找。<br>单核CPU只含有一套L1，L2，L3缓存；如果CPU含有多个核心，即多核CPU，则每个核心都含有一套L1（甚至和L2）缓存，而共享L3（或者和L2）缓存。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1dc8fc061e339eb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+            <h1 id="原因一：多核CPU的缓存"><a href="#原因一：多核CPU的缓存" class="headerlink" title="原因一：多核CPU的缓存"></a>原因一：多核CPU的缓存</h1><p>当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。<br>按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的一部分。<br>当CPU要读取一个数据时，首先从一级缓存中查找，如果没有找到再从二级缓存中查找，如果还是没有就从三级缓存或内存中查找。<br>单核CPU只含有一套L1，L2，L3缓存；如果CPU含有多个核心，即多核CPU，则每个核心都含有一套L1（甚至和L2）缓存，而共享L3（或者和L2）缓存。<br><img src="0.png" alt="image.png"></p>
 <ul>
 <li>单线程。cpu核心的缓存只被一个线程访问。缓存独占，不会出现访问冲突等问题。</li>
 <li>单核CPU，多线程。进程中的多个线程会同时访问进程中的共享数据，CPU将某块内存加载到缓存后，不同线程在访问相同的物理地址的时候，都会映射到相同的缓存位置，这样即使发生线程的切换，缓存仍然不会失效。但由于任何时刻只能有一个线程在执行，因此不会出现缓存访问冲突。</li>

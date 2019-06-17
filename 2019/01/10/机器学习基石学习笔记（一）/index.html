@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="When can machines learn?机器学习应用的三个条件：- 事物本身存在某种潜在规律 - 某些问题难以使用普通编程解决 - 有大量的数据样本可供使用 流程![流程](https://i.loli.net/2018/07/24/5b55fd7c69d0c.png) 术语：  输入x 输出y 目标函数f，即最接近实际样本分布的规律 训练样本data 假设hypothesis，一个机器学">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-da05a80b15f9f791.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-6df1ace7b37904ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-555ef5e069e554ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-4ff721dcc695769c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-4e8339fd939091ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-15T03:15:18.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/0.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/1.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/2.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/3.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/4.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习基石学习笔记（一）">
 <meta name="twitter:description" content="When can machines learn?机器学习应用的三个条件：- 事物本身存在某种潜在规律 - 某些问题难以使用普通编程解决 - 有大量的数据样本可供使用 流程![流程](https://i.loli.net/2018/07/24/5b55fd7c69d0c.png) 术语：  输入x 输出y 目标函数f，即最接近实际样本分布的规律 训练样本data 假设hypothesis，一个机器学">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-da05a80b15f9f791.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/0.png">
 
 
 
@@ -340,10 +340,10 @@
 <li>训练样本data</li>
 <li>假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要得到的模型表达式。</li>
 </ul>
-<h2 id="感知机（Perceptron）"><a href="#感知机（Perceptron）" class="headerlink" title="感知机（Perceptron）"></a>感知机（Perceptron）</h2><p>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - threshold)$$<br>其中 h(x) = 1/ -1, w是权重，threshold是阙值<br>把$threshold = w_0x_0 (x_0 =1)$,得到<br>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - w_0x_0) $$<br>$$      = sign(\sum_{i=0}^n w_i x_i)$$<br>$$      = sign(W^TX) $$<br>假设只有二维，那么$ h(x) = w_0 + w_1x_1 + w_2x_2$，其中$w_0 + w_1x_1 + w_2x_2=0$是其中一条分类直线，权重w不同，代表不同的直线。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-da05a80b15f9f791.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="感知机"></p>
+<h2 id="感知机（Perceptron）"><a href="#感知机（Perceptron）" class="headerlink" title="感知机（Perceptron）"></a>感知机（Perceptron）</h2><p>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - threshold)$$<br>其中 h(x) = 1/ -1, w是权重，threshold是阙值<br>把$threshold = w_0x_0 (x_0 =1)$,得到<br>$$ h(x) = sign ((\sum_{i=1}^n w_i x_i) - w_0x_0) $$<br>$$      = sign(\sum_{i=0}^n w_i x_i)$$<br>$$      = sign(W^TX) $$<br>假设只有二维，那么$ h(x) = w_0 + w_1x_1 + w_2x_2$，其中$w_0 + w_1x_1 + w_2x_2=0$是其中一条分类直线，权重w不同，代表不同的直线。<br><img src="0.png" alt="感知机"></p>
 <h3 id="线性感知机-Perceptron-Learning-Algorithm-PLA"><a href="#线性感知机-Perceptron-Learning-Algorithm-PLA" class="headerlink" title="线性感知机 Perceptron Learning Algorithm(PLA)"></a>线性感知机 Perceptron Learning Algorithm(PLA)</h3><ul>
 <li>逐步修正：首先在平面上随意取一条直线，看看哪些点分类错误。然后开始对第一个错误点就行修正，即变换直线的位置，使这个错误点变成分类正确的点。接着，再对第二个、第三个等所有的错误分类点就行直线纠正，直到所有的点都完全分类正确了，就得到了最好的直线。</li>
-<li><p>做法：首先随机选择一条直线进行分类。然后找到第一个分类错误的点，如果这个点表示正类，被误分为负类，即$w_t ^t x_n(t)&lt;0$，那表示w和x夹角大于90度，其中w是直线的法向量(垂直于这条直线）（ps:直线方程式的系数代表该直线的法向量）。所以，x被误分在直线的下侧（相对于法向量，法向量的方向即为正类所在的一侧），修正的方法就是使w和x夹角小于90度。通常做法是$w←w+yx, y=1$，如图右上角所示，一次或多次更新后的w+yx与x夹角小于90度，能保证x位于直线的上侧，则对误分为负类的错误点完成了直线修正。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-6df1ace7b37904ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-555ef5e069e554ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修正"></p>
+<li><p>做法：首先随机选择一条直线进行分类。然后找到第一个分类错误的点，如果这个点表示正类，被误分为负类，即$w_t ^t x_n(t)&lt;0$，那表示w和x夹角大于90度，其中w是直线的法向量(垂直于这条直线）（ps:直线方程式的系数代表该直线的法向量）。所以，x被误分在直线的下侧（相对于法向量，法向量的方向即为正类所在的一侧），修正的方法就是使w和x夹角小于90度。通常做法是$w←w+yx, y=1$，如图右上角所示，一次或多次更新后的w+yx与x夹角小于90度，能保证x位于直线的上侧，则对误分为负类的错误点完成了直线修正。<br><img src="1.png" alt="修正"><br><img src="2.png" alt="修正"></p>
 </li>
 <li><p>保证数据是线性可分：假设有这样一条直线，能够将正类和负类完全分开，令这时候的目标权重为$w_f$,对于每一个点，满足$y_n = sign(w_f^t x_n)$， 那么即每一个到这条直线的距离都大于0，即对于每一个点t，满足：<br>$$ y_{n(t)} w_n^f x_{n(t)} &gt;= min y_{n} w_n^f x_{n} &gt; 0 $$</p>
 </li>
@@ -351,7 +351,7 @@
 </li>
 <li><p>为了证明内积的增长不是由于长度而是夹角，推导：<br>当有错误的点的时候，即$ y_{n(t)} w_n^f x_{n(t)} &lt;= 0 $<br>那么<br>$$ ||w_{t+1}||^2 = || w_t + y_{n(t)}x_{n(t)}||^2 $$<br>$$               = || w_t||^2 + 2w_ty_{n(t)}x_{n(t)} + ||y_{n(t)}x_{n(t)}||^2 $$<br>$$               &lt;= || w_t||^2 + 0 + ||y_{n(t)}x_{n(t)}||^2  (y_n = 1/-1)$$<br>$$               &lt;= || w_t||^2 + ||maxx_{n(t)}||^2 $$<br>所以 $||w_{t+1}||^2$的增长量不会超过$||maxx_{n(t)}||^2$ </p>
 </li>
-<li>如果$w_0 = 0$, 经过T次修正后，得 $ w_f^T \over ||wf||$$ w_T \over ||w_T||$$ &gt;= \sqrt{T}*constant$<br>推导：<img src="https://upload-images.jianshu.io/upload_images/14827444-4ff721dcc695769c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-4e8339fd939091ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>因​$\sqrt{T}⋅constant≤1$，也就是说，迭代次数T是有上界的。</li>
+<li>如果$w_0 = 0$, 经过T次修正后，得 $ w_f^T \over ||wf||$$ w_T \over ||w_T||$$ &gt;= \sqrt{T}*constant$<br>推导：<img src="3.png" alt="image.png"><br><img src="4.png" alt="image.png"><br>因​$\sqrt{T}⋅constant≤1$，也就是说，迭代次数T是有上界的。</li>
 </ul>
 <h2 id="口袋算法-Packet-Algorithm"><a href="#口袋算法-Packet-Algorithm" class="headerlink" title="口袋算法 Packet Algorithm"></a>口袋算法 Packet Algorithm</h2><p>对于非线性可分的PLA，容忍有错误点，取错误点的个数最少时的权重w。</p>
 <h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><pre><code>1. 按输出y的分类
@@ -359,7 +359,7 @@
     - 非监督学习
     - 半监督学习
     - 增强学习(Reniforcement Learning): 我们给模型或系统一些输入，但是给不了我们希望的真实的输出y，根据模型的输出反馈，如果反馈结果良好，更接近真实输出，就给其正向激励，如果反馈结果不好，偏离真实输出，就给其反向激励。不断通过“反馈-修正”这种形式，一步一步让模型学习的更好。
-![分类](https://upload-images.jianshu.io/upload_images/14827444-76aec3f8c180d9b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![分类](5.png)
 
 2. 按Data分类
     - Batch Learning: 一次性拿到整个Data，对其进行学习建模。
@@ -367,14 +367,14 @@
         PLA算法。
         增强学习。
     - Active Learning: 让机器具备主动问问题的能力，例如手写数字识别，机器自己生成一个数字或者对它不确定的手写字主动提问。
-![按协议分类](https://upload-images.jianshu.io/upload_images/14827444-d75fbba06061b513.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![按协议分类](6.png)
 
 
 3. 按输入X的类型
     - concrete features：具体的特征。
     - raw features：比如说手写数字识别中每个数字所在图片的mxn维像素值；比如语音信号的频谱。
     - abstract features：比如某购物网站做购买预测时，提供给参赛者的是抽象加密过的资料编号或者ID。
-![输入X的类型](https://upload-images.jianshu.io/upload_images/14827444-f5218d30d2eafcfc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![输入X的类型](7.png)
 </code></pre><h2 id="Python实现PLA"><a href="#Python实现PLA" class="headerlink" title="Python实现PLA"></a>Python实现PLA</h2><p><a href="https://huangweiran.club/2018/01/27/PLA和pocket算法：简单Python实现/index.html" target="_blank" rel="noopener">参考</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def new_PLA(mat):</span><br><span class="line">    &apos;&apos;&apos; </span><br><span class="line">    rewrite the naive PLA algorithm using vectorazation.</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    m,n = mat.shape</span><br><span class="line">    w = zeros(n)</span><br><span class="line">    bias = ones(m)</span><br><span class="line">    x_vec = c_[bias, mat] # add x0=1</span><br><span class="line">    update_cnt = 0</span><br><span class="line">    prepos = -1 # the previous position</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        out = sign(x_vec[:,0:-1] @ w)</span><br><span class="line">        out[out == 0] = -1 # sign(0) = -1 here</span><br><span class="line"></span><br><span class="line">        false_ind = where(out != sign(x_vec[:,-1]))[0] # indices where PLA is false</span><br><span class="line">        if not false_ind.any():</span><br><span class="line">            break # no false points</span><br><span class="line">        if not false_ind[false_ind &gt; prepos].any():</span><br><span class="line">            prepos = -1</span><br><span class="line"></span><br><span class="line">        pos = false_ind[false_ind &gt; prepos][0]</span><br><span class="line">        w += x_vec[pos, -1] * x_vec[pos, 0:-1] # updating the weight</span><br><span class="line">        prepos = pos</span><br><span class="line">        update_cnt += 1</span><br><span class="line"></span><br><span class="line">    return w, update_cnt</span><br><span class="line"></span><br><span class="line">data = loadtxt(r&apos;/vagrant/train.dat.txt&apos;)</span><br><span class="line">w1, iteration1 = new_PLA(data)</span><br><span class="line">print(w1,&apos;\n&apos;, iteration1)</span><br></pre></td></tr></table></figure>
 <h2 id="Python实现Pocket算法"><a href="#Python实现Pocket算法" class="headerlink" title="Python实现Pocket算法"></a>Python实现Pocket算法</h2><p><a href="https://huangweiran.club/2018/01/27/PLA和pocket算法：简单Python实现/index.html" target="_blank" rel="noopener">参考</a></p>

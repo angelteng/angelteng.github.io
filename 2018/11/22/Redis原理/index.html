@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="数据结构字符串简单动态字符串（SDS），比起 C 字符串， SDS 具有以下优点：  常数复杂度O1获取字符串长度。 杜绝缓冲区溢出。 减少修改字符串长度时所需的内存重分配次数：空间预分配未使用空间，SDS修改后，长度少于1m酒会分配跟len相同大小的未使用空间，大于1m分配1m的未使用空间。 二进制安全。 兼容部分 C 字符串函数。  链表 每个链表节点由一个 listNode 结构来表示， 每">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-a136b240901c9e77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-04-25T08:53:03.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2018/11/22/Redis原理/0.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis原理">
 <meta name="twitter:description" content="数据结构字符串简单动态字符串（SDS），比起 C 字符串， SDS 具有以下优点：  常数复杂度O1获取字符串长度。 杜绝缓冲区溢出。 减少修改字符串长度时所需的内存重分配次数：空间预分配未使用空间，SDS修改后，长度少于1m酒会分配跟len相同大小的未使用空间，大于1m分配1m的未使用空间。 二进制安全。 兼容部分 C 字符串函数。  链表 每个链表节点由一个 listNode 结构来表示， 每">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-a136b240901c9e77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2018/11/22/Redis原理/0.png">
 
 
 
@@ -536,7 +536,7 @@
 <li>主服务器复制 EVAL 、 SCRIPT_FLUSH 、 SCRIPT_LOAD 三个命令的方法和复制普通 Redis 命令一样 —— 只要将相同的命令传播给从服务器就可以了。</li>
 <li>主服务器在复制 EVALSHA 命令时， 必须确保所有从服务器都已经载入了 EVALSHA 命令指定的 SHA1 校验和所对应的 Lua 脚本， 如果不能确保这一点的话， 主服务器会将 EVALSHA 命令转换成等效的 EVAL 命令， 并通过传播 EVAL 命令来获得相同的脚本执行效果。</li>
 </ol>
-<h1 id="Redis与MC对比"><a href="#Redis与MC对比" class="headerlink" title="Redis与MC对比"></a>Redis与MC对比</h1><p><img src="https://upload-images.jianshu.io/upload_images/14827444-a136b240901c9e77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="对比"><br><a href="https://segmentfault.com/a/1190000015706221?utm_source=weekly&amp;utm_medium=email&amp;utm_campaign=email_weekly" target="_blank" rel="noopener">why redis</a></p>
+<h1 id="Redis与MC对比"><a href="#Redis与MC对比" class="headerlink" title="Redis与MC对比"></a>Redis与MC对比</h1><p><img src="0.png" alt="对比"><br><a href="https://segmentfault.com/a/1190000015706221?utm_source=weekly&amp;utm_medium=email&amp;utm_campaign=email_weekly" target="_blank" rel="noopener">why redis</a></p>
 <p>参考：<br><a href="http://origin.redisbook.com" target="_blank" rel="noopener">Redis 设计与实现（第一版）</a></p>
 
       

@@ -696,7 +696,7 @@
 <ol start="2">
 <li><p>支持向量机的分类方法，是在这组分布中找出一个超平面作为决策边界，使模型在数据上的分类误差尽量接近于小，尤其是在未知数据集上的分类误差(泛化误差)尽量小。决策边界一侧的所有点在分类为属于一个类，而另一侧的所有点分类属于另一个类。如果我们能够找出决策边界， 分类问题就可以变成探讨每个样本对于决策边界而言的相对位置，因此，支持向量机，就是通过找出边际最大的决策边界，来对数据进行分类的分类器。</p>
 </li>
-<li><p>in sklearn<br><img src="https://upload-images.jianshu.io/upload_images/14827444-5b5ac4a5b9e252b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
 </li>
 </ol>
 <p>svm.SVC(C=1.0,kernel=’rbf’,degree=3,gamma=’auto_deprecated’,coef0=0.0,shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape=’ovr’, random_state=None)</p>
@@ -708,7 +708,7 @@
     - rbf (good)
 - degree
 - gamma
-</code></pre><p><img src="https://upload-images.jianshu.io/upload_images/14827444-d63ee8495b6a8374.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/14827444-9011ea2b4d81725f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+</code></pre><p><img src="1.png" alt="image.png"><br><img src="2.png" alt="image.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.svm import SVC</span><br><span class="line">clf = SVC(kernel = &quot;linear&quot;).fit(X,y)</span><br></pre></td></tr></table></figure>
 <ol start="4">
 <li>核函数<br>也叫做“核技巧”(Kernel Trick)，是一种能够使用数据原始空间中的向量计算来表示 升维后的空间中的点积结果的数学方式。 这个原始空间中的点积函数就被叫做“核函数”(Kernel Function)。<br>第一，有了核函数之后，我们无需去担心函数究竟应该是什么样，因为非线性SVM中的核函数都是正定核函数 (positive definite kernel functions)，他们都满足美世定律(Mercer’s theorem)，确保了高维空间中任意两个向量 的点积一定可以被低维空间中的这两个向量的某种计算来表示(多数时候是点积的某种变换)。<br>第二，使用核函数计算低维度中的向量关系比计算原本的要简单太多了。<br>第三，因为计算是在原始空间中进行，所以避免了维度诅咒的问题。</li>
@@ -856,7 +856,7 @@
           
             <ol>
 <li>聚类算法又叫做“无监督分类”，其目的是将数据划分成有意义或有用的组(或簇)。这种划分可以基于我们的业务 需求或建模需求来完成，也可以单纯地帮助我们探索数据的自然结构和分布。</li>
-<li><p>in sklearn<br><img src="https://upload-images.jianshu.io/upload_images/14827444-d90bc26a99b1db29.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
 </li>
 <li><p>KMeans聚类算法<br> KMeans算法将一组N个样本的特征矩阵X划分为K个无交集的簇，直观上来看是簇是一组一组聚集在一起的数据，在一个簇中的数据就认为是同一类。簇就是聚类的结果表现。<br> 簇中所有数据的均值通常被称为这个簇的“质心”(centroids)。在一个二维平面中，一簇数据点的质心的 横坐标就是这一簇数据点的横坐标的均值，质心的纵坐标就是这一簇数据点的纵坐标的均值。同理可推广至高维空间。<br> 流程：</p>
 <pre><code>- 随机抽取K个样本作为最初的质心
@@ -1022,9 +1022,9 @@
           
             <ol>
 <li>回归是一种应用广泛的预测建模技术，这种技术的核心在于预测的结果是连续型变量。</li>
-<li><p>线性回归是机器学习中最简单的回归算法，多元线性回归指的就是一个样本有多个特征的线性回归问题。对于一个 有 个特征的样本 而言，它的回归结果可以写作一个几乎人人熟悉的方程: y = w0+w1x1+w2x2+w3x3…..+wnxn<br>预测函数的本质就是我们需要构建的模型，而构造预测函数的核心就是找出模型的参数向量。通过最小化损失函数或损失函数的某种变化来将求解参数向量，以此将单纯的求解问题转化为一个最优化问题。在多元线性回归中，我们的损失函数如下定义:<br><img src="https://upload-images.jianshu.io/upload_images/14827444-7d1b47a1af888cac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>在这个平方结果下，我们的y和y^分别是我们的真实标签和预测值，也就是说，这个损失函数实在计算我们的真实标 签和预测值之间的距离。因此，我们认为这个损失函数衡量了我们构造的模型的预测结果和真实标签的差异，因此我们固然希望我们的预测结果和真实值差异越小越好。所以我们的求解目标就可以转化成RSS残差平方和:<br><img src="https://upload-images.jianshu.io/upload_images/14827444-5e1455d04f5b29fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>线性回归是机器学习中最简单的回归算法，多元线性回归指的就是一个样本有多个特征的线性回归问题。对于一个 有 个特征的样本 而言，它的回归结果可以写作一个几乎人人熟悉的方程: y = w0+w1x1+w2x2+w3x3…..+wnxn<br>预测函数的本质就是我们需要构建的模型，而构造预测函数的核心就是找出模型的参数向量。通过最小化损失函数或损失函数的某种变化来将求解参数向量，以此将单纯的求解问题转化为一个最优化问题。在多元线性回归中，我们的损失函数如下定义:<br><img src="0.png" alt="image.png"><br>在这个平方结果下，我们的y和y^分别是我们的真实标签和预测值，也就是说，这个损失函数实在计算我们的真实标 签和预测值之间的距离。因此，我们认为这个损失函数衡量了我们构造的模型的预测结果和真实标签的差异，因此我们固然希望我们的预测结果和真实值差异越小越好。所以我们的求解目标就可以转化成RSS残差平方和:<br><img src="1.png" alt="image.png"></p>
 </li>
-<li><p>最小二乘法：通过最小化真实值和预测值之间的RSS来求解参数的方法。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-c855d18c6665c5d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>最小二乘法：通过最小化真实值和预测值之间的RSS来求解参数的方法。<br><img src="2.png" alt="image.png"></p>
 </li>
 <li><p>linear_model.LinearRegression (fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)<br>参数：</p>
 <ul>
@@ -1039,14 +1039,14 @@
 </li>
 <li><p>评估</p>
 <ol>
-<li><p>是否预测了正确的值<br> 均方误差MSE：均方误差，本质是在RSS的基础上除以了样本总量，得到了每个样本量上的平均误差。<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-f94fe09897c4ea43.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>是否预测了正确的值<br> 均方误差MSE：均方误差，本质是在RSS的基础上除以了样本总量，得到了每个样本量上的平均误差。<br> <img src="3.png" alt="image.png"></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import mean_squared_error as MSE</span><br><span class="line">MSE(y_true,y_predict)</span><br></pre></td></tr></table></figure>
 <p> 再sklearn中，均方误差是个负数，代表一种损失。</p>
 </li>
 <li><p>是否拟合到了足够的信息</p>
 <ul>
 <li>R^2和</li>
-<li><p>可解释性方差分数(explained_variance_score，EVS)<br><img src="https://upload-images.jianshu.io/upload_images/14827444-003dfbbe4c83a7a7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>两者都衡量 1 - 我们的模型没有捕获到的信息 量占真实标签中所带的信息量的比例，所以，两者都是越接近1越好。<br>注意方法参数传入的顺序。</p>
+<li><p>可解释性方差分数(explained_variance_score，EVS)<br><img src="4.png" alt="image.png"><br>两者都衡量 1 - 我们的模型没有捕获到的信息 量占真实标签中所带的信息量的比例，所以，两者都是越接近1越好。<br>注意方法参数传入的顺序。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import r2_score r2_score(yhat,Ytest)</span><br><span class="line">r2 = reg.score(Xtest,Ytest)</span><br><span class="line"></span><br><span class="line">from sklearn.metrics import explained_variance_score as EVS </span><br><span class="line">EVS(Ytest,yhat)</span><br></pre></td></tr></table></figure>
 <p>R^2的值可能是个负数。证明模型拟合得非常糟糕</p>
 </li>
@@ -1198,7 +1198,7 @@
           
             <ol>
 <li>逻辑回归，是一种名为“回归”的线性分类器，其本质是由线性回 归变化而来的，一种广泛使用于分类问题中的广义回归算法。</li>
-<li>线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数<br><img src="https://upload-images.jianshu.io/upload_images/14827444-777f048a16949f00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0，当g(z)接近1时样本的标签为类别1，这样就得到了一个分 类模型。而这个联系函数对于逻辑回归来说，就是Sigmoid函数:<br><img src="https://upload-images.jianshu.io/upload_images/14827444-98c12302b0568f34.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
+<li>线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数<br><img src="0.png" alt="image.png"><br>通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0，当g(z)接近1时样本的标签为类别1，这样就得到了一个分 类模型。而这个联系函数对于逻辑回归来说，就是Sigmoid函数:<br><img src="1.png" alt="image.png"></li>
 </ol>
 <p>Sigmoid函数是一个S型的函数，当自变量z趋近正无穷时，因变量g(z)趋近于1，而当z趋近负无穷时，g(z)趋近于0，它能够将任何实数映射到(0,1)区间，使其可用于将任意值函数转换为更适合二分类的函数。 因为这个性质，Sigmoid函数也被当作是归一化的一种方法，是属于数据预处理中的“缩放”功能，可以将数据压缩到[0,1]之内。区别在于，MinMaxScaler归一化之后，是可以取到0和1的(最大值归一化后就是1，最小值归一化后就是0)，但Sigmoid函数只是无限趋近于0和1。</p>
 <p>g(z)的形似几率取对数的本质其实就是我们的线性回归z，我们实际上是在对线性回归模型的预测结果取 对数几率来让其的结果无限逼近0和1。因此，其对应的模型被称为”对数几率回归“(logistic Regression)，也就是逻辑回归。</p>
@@ -1210,7 +1210,7 @@
 <li>逻辑回归返回的分类结果不是固定的0，1，而是以小数形式呈现的类概率数字</li>
 </ul>
 </li>
-<li><p><img src="https://upload-images.jianshu.io/upload_images/14827444-bc2df40f11769ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p><img src="2.png" alt="image.png"></p>
 </li>
 </ol>
 <p>linear_model.LogisticRegression (penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’warn’, max_iter=100, multi_class=’warn’, verbose=0, warm_start=False, n_jobs=None)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LogisticRegression as LR</span><br><span class="line">lrl1 = LR(penalty=&quot;l1&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br><span class="line">lrl2 = LR(penalty=&quot;l2&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br></pre></td></tr></table></figure></p>
@@ -1230,7 +1230,7 @@
 <li><p>正则化是用来防止模型过拟合的过程，常用的有L1正则化和L2正则化两种选项，分别通过在损失函数后加上参数向 量 的L1范式和L2范式的倍数来实现。这个增加的范式，被称为“正则项”，也被称为”惩罚项”。损失函数改变，基 于损失函数的最优化来求解的参数取值必然改变，我们以此来调节模型拟合的程度。其中L1范数表现为参数向量中 的每个参数的绝对值之和，L2范数表现为参数向量中的每个参数的平方和的开方值。</p>
 </li>
 </ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-b356fd84ae4801d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="3.png" alt="image.png"></p>
 <p>L1正则化和L2正则化虽然都可以控制过拟合，但它们的效果并不相同。当正则化强度逐渐增大(即C逐渐变小)， 参数 的取值会逐渐变小，但L1正则化会将参数压缩为0，L2正则化只会让参数尽量小，不会取到0。</p>
 <p>参考：<br><a href="https://blog.csdn.net/jark_/article/details/78342644" target="_blank" rel="noopener">LogisticRegression - 参数说明</a></p>
 
@@ -1376,9 +1376,9 @@
           
             <ol>
 <li>降维算法中的”降维“，指的是降低特征矩阵中特征的数量。</li>
-<li><p>in sklearn<br><img src="https://upload-images.jianshu.io/upload_images/14827444-2ccde7c210997dc0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
 </li>
-<li><p>PCA使用的信息量衡量指标，就是样本方差，又称可解释性方差，方差越大，特征所带的信息量越多。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-22e095efbe3519b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>Var代表一个特征的方差，n代表样本量，xi代表一个特征中的每个样本取值，xhat代表这一列样本的均值。</p>
+<li><p>PCA使用的信息量衡量指标，就是样本方差，又称可解释性方差，方差越大，特征所带的信息量越多。<br><img src="1.png" alt="image.png"><br>Var代表一个特征的方差，n代表样本量，xi代表一个特征中的每个样本取值，xhat代表这一列样本的均值。</p>
 <ul>
 <li><a href="https://www.zhihu.com/question/20099757" target="_blank" rel="noopener">为什么方差的分母是n-1？</a></li>
 </ul>
@@ -1561,7 +1561,7 @@
         
           
             <h1 id="嵌入法"><a href="#嵌入法" class="headerlink" title="嵌入法"></a>嵌入法</h1><ol>
-<li><p>嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-e8559fb12502c8da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。<br><img src="0.png" alt="image.png"></p>
 </li>
 <li><p>sklearn.feature_selection.SelectFromModel (estimator, threshold=None, prefit=False, norm_order=1,<br>max_features=None)</p>
 <ul>
@@ -1972,16 +1972,16 @@
 <li>非线性的无量纲化</li>
 </ul>
 <ol>
-<li><p>数据归一化（异常值敏感）<br> 当数据(x)按照最小值中心化后，再按极差(最大值 - 最小值)缩放，数据移动了最小值个单位，并且会被收敛到 [0,1]之间。<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-b384a53ffde87fd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>数据归一化（异常值敏感）<br> 当数据(x)按照最小值中心化后，再按极差(最大值 - 最小值)缩放，数据移动了最小值个单位，并且会被收敛到 [0,1]之间。<br> <img src="0.png" alt="image.png"></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line">scaler = MinMaxScaler(feature_range=[5,10])   # scaler后5~10之间，默认 0~1</span><br><span class="line">result = scaler.fit(data)</span><br><span class="line">result = scaler.transform(data)</span><br><span class="line"># 一步达成</span><br><span class="line">result_ = scaler.fit_transform(data)</span><br><span class="line"># 逆转</span><br><span class="line">scaler.inverse_transform(result)</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>数据标准化(优先选用)<br> 当数据(x)按均值(μ)中心化后，再按标准差(σ)缩放，数据就会服从为均值为0，方差为1的正态分布(即标准正态分布)<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-a55b0e62a9be62e7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>数据标准化(优先选用)<br> 当数据(x)按均值(μ)中心化后，再按标准差(σ)缩放，数据就会服从为均值为0，方差为1的正态分布(即标准正态分布)<br> <img src="1.png" alt="image.png"></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import StandardScaler</span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">scaler.fit(data)</span><br><span class="line">print(scaler.mean_)</span><br><span class="line">print(scaler.var_)</span><br><span class="line">res = scaler.transform(data)</span><br><span class="line">res.mean()</span><br><span class="line">res.std()</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 </li>
 </ol>
-<pre><code>![image.png](https://upload-images.jianshu.io/upload_images/14827444-6813944bdf0ec95f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+<pre><code>![image.png](2.png)
 </code></pre><ol start="3">
 <li><p>处理缺失值</p>
 <ol>
@@ -2016,9 +2016,9 @@
 <li><p>preprocessing.OrdinalEncoder: 特征X专用，将分类特征转化为分类数值 (如果特征的值有关联性，处理有序变量)</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OrdinalEncoder</span><br><span class="line">x = data.Embarked</span><br><span class="line">le = OrdinalEncoder()</span><br><span class="line">data.Embarked=le.fit_transform(x.values.reshape(-1,1))</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>preprocessing.OneHotEncoder: 独热编码，创建哑变量 （特征的值无关关联性，处理名义变量）<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-fcab390cc996a08b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>preprocessing.OneHotEncoder: 独热编码，创建哑变量 （特征的值无关关联性，处理名义变量）<br> <img src="3.png" alt="image.png"></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line">xs = data.loc[:,[&apos;Sex&apos;,&apos;Embarked&apos;]]</span><br><span class="line">one= OneHotEncoder()</span><br><span class="line">res= one.fit(xs)</span><br><span class="line">columns = res.get_feature_names() #查看类型名称</span><br><span class="line">res= one.transform(xs).toarray() </span><br><span class="line">newdata = pd.concat([data,pd.DataFrame(res,columns=columns)],axis=1)</span><br></pre></td></tr></table></figure>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-cf8f36450f0adf93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="4.png" alt="image.png"></p>
 </li>
 </ol>
 </li>

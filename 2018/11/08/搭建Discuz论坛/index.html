@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="下载包文件：Discuz论坛 解压文件，实际代码目录为 /upload 配置Nginx 12345678910111213141516server &amp;#123;    charset utf-8;    client_max_body_size 128M;    listen 80;     server_name bbs.local.com;    root        /vagrant/b">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-8c3726d4057def02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-4cc4e7b70cfee588.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-11-21T10:10:38.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2018/11/08/搭建Discuz论坛/0.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2018/11/08/搭建Discuz论坛/1.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建Discuz论坛">
 <meta name="twitter:description" content="下载包文件：Discuz论坛 解压文件，实际代码目录为 /upload 配置Nginx 12345678910111213141516server &amp;#123;    charset utf-8;    client_max_body_size 128M;    listen 80;     server_name bbs.local.com;    root        /vagrant/b">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-8c3726d4057def02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2018/11/08/搭建Discuz论坛/0.png">
 
 
 
@@ -304,7 +304,7 @@
 
       
         <ol>
-<li>下载包文件：<a href="http://www.discuz.net/forum-2-1.html" target="_blank" rel="noopener">Discuz论坛</a><br><img src="https://upload-images.jianshu.io/upload_images/14827444-8c3726d4057def02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="选择UTF版本"></li>
+<li>下载包文件：<a href="http://www.discuz.net/forum-2-1.html" target="_blank" rel="noopener">Discuz论坛</a><br><img src="0.png" alt="选择UTF版本"></li>
 <li>解压文件，实际代码目录为 /upload</li>
 <li><p>配置Nginx</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    charset utf-8;</span><br><span class="line">    client_max_body_size 128M;</span><br><span class="line">    listen 80; </span><br><span class="line">    server_name bbs.local.com;</span><br><span class="line">    root        /vagrant/bbs/upload/;</span><br><span class="line">    index       index.php;  </span><br><span class="line">  </span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">        fastcgi_pass 127.0.0.1:9000;   # 查看php-fpm.conf 文件 [www] listen 属性</span><br><span class="line">        #fastcgi_pass unix:/var/run/php5-fpm.sock;</span><br><span class="line">        try_files $uri =404;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -318,7 +318,7 @@
 </ol>
 <p>需要检查文件权限及nginx进程用户是否有权限访问该目录</p>
 <ul>
-<li>ps -aux|grep Nginx 查看work 进程所属用户<br><img src="https://upload-images.jianshu.io/upload_images/14827444-4cc4e7b70cfee588.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="nginx"></li>
+<li>ps -aux|grep Nginx 查看work 进程所属用户<br><img src="1.png" alt="nginx"></li>
 <li><p>查看代码文件所属目录是否同一个用户/有访问权限<br>如果你使用vagrant 环境，vagrant 共享目录默认用户是vagrant 可以通过vagrant配置文件修改</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config.vm.synced_folder &quot;./&quot;, &quot;/vagrant&quot;,create:true, :owner=&gt;&quot;www&quot;, :group=&gt;&quot;www&quot;,:mount_options=&gt;[&quot;dmode=775&quot;,&quot;fmode=775&quot;]</span><br></pre></td></tr></table></figure>
 </li>

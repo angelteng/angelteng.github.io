@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="Redis的基本数据结构 首先，众所周知，Redis是单线程的。 有多快？Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。 为什么快？ 完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)； 数据结构">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-5334ee209b270e5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-04-25T09:08:32.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/04/25/Redis的性能/0.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis的性能">
 <meta name="twitter:description" content="Redis的基本数据结构 首先，众所周知，Redis是单线程的。 有多快？Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。 为什么快？ 完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)； 数据结构">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-5334ee209b270e5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/04/25/Redis的性能/0.png">
 
 
 
@@ -326,7 +326,7 @@
       
         <p><a href="https://angelteng.github.io/blog/2018/11/22/Redis原理/">Redis的基本数据结构</a></p>
 <p>首先，众所周知，Redis是单线程的。</p>
-<h1 id="有多快？"><a href="#有多快？" class="headerlink" title="有多快？"></a>有多快？</h1><p>Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-5334ee209b270e5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h1 id="有多快？"><a href="#有多快？" class="headerlink" title="有多快？"></a>有多快？</h1><p>Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。<br><img src="0.png" alt="image.png"></p>
 <h1 id="为什么快？"><a href="#为什么快？" class="headerlink" title="为什么快？"></a>为什么快？</h1><ol>
 <li>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</li>
 <li>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</li>

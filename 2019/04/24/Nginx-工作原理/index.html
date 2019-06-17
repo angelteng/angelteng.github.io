@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="Nginx 模块结构 Nginx 工作流程Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。  master进程一开始根据配置，来建立需要listen的网络socket fd，然后fork出多个worker进程。根据进程的特性，新建立的worker进程，也会和master进程一样，具有相同的设置。因此，其也会去监听相同ip端口的套接字socket fd。 当一个请求进来的时候">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-b1321442e1909834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-04-24T08:13:32.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/04/24/Nginx-工作原理/0.png">
+<meta property="og:updated_time" content="2019-06-17T09:59:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx 工作原理">
 <meta name="twitter:description" content="Nginx 模块结构 Nginx 工作流程Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。  master进程一开始根据配置，来建立需要listen的网络socket fd，然后fork出多个worker进程。根据进程的特性，新建立的worker进程，也会和master进程一样，具有相同的设置。因此，其也会去监听相同ip端口的套接字socket fd。 当一个请求进来的时候">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-b1321442e1909834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/04/24/Nginx-工作原理/0.png">
 
 
 
@@ -324,7 +324,7 @@
       
 
       
-        <h1 id="Nginx-模块结构"><a href="#Nginx-模块结构" class="headerlink" title="Nginx 模块结构"></a>Nginx 模块结构</h1><p><img src="https://upload-images.jianshu.io/upload_images/14827444-b1321442e1909834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+        <h1 id="Nginx-模块结构"><a href="#Nginx-模块结构" class="headerlink" title="Nginx 模块结构"></a>Nginx 模块结构</h1><p><img src="0.png" alt="image.png"></p>
 <h1 id="Nginx-工作流程"><a href="#Nginx-工作流程" class="headerlink" title="Nginx 工作流程"></a>Nginx 工作流程</h1><p>Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。</p>
 <ol>
 <li>master进程一开始根据配置，来建立需要listen的网络socket fd，然后fork出多个worker进程。根据进程的特性，新建立的worker进程，也会和master进程一样，具有相同的设置。因此，其也会去监听相同ip端口的套接字socket fd。</li>

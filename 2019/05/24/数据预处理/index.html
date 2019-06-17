@@ -86,15 +86,15 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="数据挖掘的流程  获取数据 数据预处理：从数据中检测，纠正或删除损坏，不准确或不适用于模型的记录过程。 特征工程：特征工程是将原始数据转换为更能代表预测模型的潜在问题的特征的过程，可以通过挑选最相关的特征，提取特征以及创造特征来实现。 建模 上线、验证   数据无量纲化在机器学习算法实践中，我们往往有着将不同规格的数据转换到同一规格，或不同分布的数据转换到某个特定分布 的需求，这种需求统称为将数">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-b384a53ffde87fd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-a55b0e62a9be62e7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-fcab390cc996a08b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-cf8f36450f0adf93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-05-24T09:31:01.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/24/数据预处理/0.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/24/数据预处理/1.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/24/数据预处理/3.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/24/数据预处理/4.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据预处理">
 <meta name="twitter:description" content="数据挖掘的流程  获取数据 数据预处理：从数据中检测，纠正或删除损坏，不准确或不适用于模型的记录过程。 特征工程：特征工程是将原始数据转换为更能代表预测模型的潜在问题的特征的过程，可以通过挑选最相关的特征，提取特征以及创造特征来实现。 建模 上线、验证   数据无量纲化在机器学习算法实践中，我们往往有着将不同规格的数据转换到同一规格，或不同分布的数据转换到某个特定分布 的需求，这种需求统称为将数">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-b384a53ffde87fd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/05/24/数据预处理/0.png">
 
 
 
@@ -324,16 +324,16 @@
 <li>非线性的无量纲化</li>
 </ul>
 <ol>
-<li><p>数据归一化（异常值敏感）<br> 当数据(x)按照最小值中心化后，再按极差(最大值 - 最小值)缩放，数据移动了最小值个单位，并且会被收敛到 [0,1]之间。<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-b384a53ffde87fd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>数据归一化（异常值敏感）<br> 当数据(x)按照最小值中心化后，再按极差(最大值 - 最小值)缩放，数据移动了最小值个单位，并且会被收敛到 [0,1]之间。<br> <img src="0.png" alt="image.png"></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line">scaler = MinMaxScaler(feature_range=[5,10])   # scaler后5~10之间，默认 0~1</span><br><span class="line">result = scaler.fit(data)</span><br><span class="line">result = scaler.transform(data)</span><br><span class="line"># 一步达成</span><br><span class="line">result_ = scaler.fit_transform(data)</span><br><span class="line"># 逆转</span><br><span class="line">scaler.inverse_transform(result)</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>数据标准化(优先选用)<br> 当数据(x)按均值(μ)中心化后，再按标准差(σ)缩放，数据就会服从为均值为0，方差为1的正态分布(即标准正态分布)<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-a55b0e62a9be62e7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>数据标准化(优先选用)<br> 当数据(x)按均值(μ)中心化后，再按标准差(σ)缩放，数据就会服从为均值为0，方差为1的正态分布(即标准正态分布)<br> <img src="1.png" alt="image.png"></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import StandardScaler</span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">scaler.fit(data)</span><br><span class="line">print(scaler.mean_)</span><br><span class="line">print(scaler.var_)</span><br><span class="line">res = scaler.transform(data)</span><br><span class="line">res.mean()</span><br><span class="line">res.std()</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 </li>
 </ol>
-<pre><code>![image.png](https://upload-images.jianshu.io/upload_images/14827444-6813944bdf0ec95f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+<pre><code>![image.png](2.png)
 </code></pre><ol start="3">
 <li><p>处理缺失值</p>
 <ol>
@@ -368,9 +368,9 @@
 <li><p>preprocessing.OrdinalEncoder: 特征X专用，将分类特征转化为分类数值 (如果特征的值有关联性，处理有序变量)</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OrdinalEncoder</span><br><span class="line">x = data.Embarked</span><br><span class="line">le = OrdinalEncoder()</span><br><span class="line">data.Embarked=le.fit_transform(x.values.reshape(-1,1))</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>preprocessing.OneHotEncoder: 独热编码，创建哑变量 （特征的值无关关联性，处理名义变量）<br> <img src="https://upload-images.jianshu.io/upload_images/14827444-fcab390cc996a08b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p>preprocessing.OneHotEncoder: 独热编码，创建哑变量 （特征的值无关关联性，处理名义变量）<br> <img src="3.png" alt="image.png"></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line">xs = data.loc[:,[&apos;Sex&apos;,&apos;Embarked&apos;]]</span><br><span class="line">one= OneHotEncoder()</span><br><span class="line">res= one.fit(xs)</span><br><span class="line">columns = res.get_feature_names() #查看类型名称</span><br><span class="line">res= one.transform(xs).toarray() </span><br><span class="line">newdata = pd.concat([data,pd.DataFrame(res,columns=columns)],axis=1)</span><br></pre></td></tr></table></figure>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-cf8f36450f0adf93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="4.png" alt="image.png"></p>
 </li>
 </ol>
 </li>

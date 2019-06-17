@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="####组成  ####渲染引擎:Trident, Gecko, Presto, Webkit, Blink ####流程  **DNS解析(迭代查询）######优化：   减少dns请求 dns预解析  httpdns防劫持 dns负载均衡**    浏览器以一个随机端口进入到网卡，进入TCP／IP协议栈，然后可能经过防火墙过滤， 建立TCP链接：######优化：用https／http2">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-830d8d2d96523c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-d187ee2ebfb4688a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-23655dd1db374e25.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-adc0940f024c5b4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-11-22T03:05:32.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2018/11/21/浏览器相关流程及优化/0.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2018/11/21/浏览器相关流程及优化/1.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2018/11/21/浏览器相关流程及优化/2.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2018/11/21/浏览器相关流程及优化/3.png">
+<meta property="og:updated_time" content="2019-06-17T09:59:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器相关流程及优化">
 <meta name="twitter:description" content="####组成  ####渲染引擎:Trident, Gecko, Presto, Webkit, Blink ####流程  **DNS解析(迭代查询）######优化：   减少dns请求 dns预解析  httpdns防劫持 dns负载均衡**    浏览器以一个随机端口进入到网卡，进入TCP／IP协议栈，然后可能经过防火墙过滤， 建立TCP链接：######优化：用https／http2">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-830d8d2d96523c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2018/11/21/浏览器相关流程及优化/0.png">
 
 
 
@@ -306,7 +306,7 @@
 
       
         <p>####组成</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-830d8d2d96523c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器"></p>
+<p><img src="0.png" alt="浏览器"></p>
 <p>####渲染引擎:<br>Trident, Gecko, Presto, Webkit, Blink</p>
 <p>####流程</p>
 <ol>
@@ -318,15 +318,15 @@
 <li>httpdns防劫持</li>
 <li>dns负载均衡**</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-d187ee2ebfb4688a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="DNS"></p>
+<p><img src="1.png" alt="DNS"></p>
 <ol start="2">
 <li><strong>浏览器以一个随机端口进入到网卡，进入TCP／IP协议栈，然后可能经过防火墙过滤，</strong></li>
-<li><strong>建立TCP链接：<br>######优化：<br>用https／http2</strong><br><img src="https://upload-images.jianshu.io/upload_images/14827444-23655dd1db374e25.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
+<li><strong>建立TCP链接：<br>######优化：<br>用https／http2</strong><br><img src="2.png" alt="tcp"></li>
 </ol>
 <ul>
 <li>第一次握手：客户端A将标志位SYN置为1,随机产生一个值为seq=J（J的取值范围为=1234567）的数据包到服务器，客户端A进入SYN_SENT状态，等待服务端B确认；</li>
 <li>第二次握手：服务端B收到数据包后由标志位SYN=1知道客户端A请求建立连接，服务端B将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给客户端A以确认连接请求，服务端B进入SYN_RCVD状态。</li>
-<li>第三次握手：客户端A收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给服务端B，服务端B检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，客户端A和服务端B进入ESTABLISHED状态，完成三次握手，随后客户端A与服务端B之间可以开始传输数据了<br><img src="https://upload-images.jianshu.io/upload_images/14827444-adc0940f024c5b4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tcp"></li>
+<li>第三次握手：客户端A收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给服务端B，服务端B检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，客户端A和服务端B进入ESTABLISHED状态，完成三次握手，随后客户端A与服务端B之间可以开始传输数据了<br><img src="3.png" alt="tcp"></li>
 </ul>
 <ol start="3">
 <li><strong>发送HTTP请求（**</strong>GET<strong> </strong>或者<strong> </strong>POST<strong> </strong>等，不常用的还有<strong> </strong>PUT<strong> </strong>和<strong> </strong>DELETE<strong> </strong>、<strong><strong>HEAD</strong></strong>、<strong><strong>OPTION</strong></strong>以及<strong> </strong>TRACE<strong> </strong>）：静态资源缓存，can，服务器负载均衡，服务器缓存，**</li>

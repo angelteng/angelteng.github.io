@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="随机森林是一种集成算法，集成算法的目标：考虑多个评估器的建模结果，汇总之后得到一个综合的结果，以此来获取比单个模型更好的回归或分类表现。 多个模型集成成为的模型叫做集成评估器(ensemble estimator)，组成集成评估器的每个模型都叫做基评估器 (base estimator)。通常来说，有三类集成算法:装袋法(Bagging)，提升法(Boosting)和stacking。 随机森林">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-1b107c7a033ad21a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-05-24T06:35:22.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/24/随机森林/0.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="随机森林">
 <meta name="twitter:description" content="随机森林是一种集成算法，集成算法的目标：考虑多个评估器的建模结果，汇总之后得到一个综合的结果，以此来获取比单个模型更好的回归或分类表现。 多个模型集成成为的模型叫做集成评估器(ensemble estimator)，组成集成评估器的每个模型都叫做基评估器 (base estimator)。通常来说，有三类集成算法:装袋法(Bagging)，提升法(Boosting)和stacking。 随机森林">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-1b107c7a033ad21a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/05/24/随机森林/0.png">
 
 
 
@@ -364,7 +364,7 @@
 <li><p>在sklearn中的使用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.ensemble import RandomForestClassifier</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>泛化误差<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1b107c7a033ad21a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>当模型太复杂，模型就会过拟合，泛化能力就不够，所以泛化误差大。当模型太简单，模型就会欠拟合，拟合能力就不够，所以误差也会大。只有当模型的复杂度刚刚好的才能够达到泛化误差最小的目标。<br>树模型是天生位于图的右上角的模型，随机森林是以树模型为基础，所以随机森林也是天生复杂度高的模型。随机森林的参数，都是向着一个目标去:减少模型的复杂度，把模型往图像的左边移动，防止过拟合。</p>
+<li><p>泛化误差<br><img src="0.png" alt="image.png"><br>当模型太复杂，模型就会过拟合，泛化能力就不够，所以泛化误差大。当模型太简单，模型就会欠拟合，拟合能力就不够，所以误差也会大。只有当模型的复杂度刚刚好的才能够达到泛化误差最小的目标。<br>树模型是天生位于图的右上角的模型，随机森林是以树模型为基础，所以随机森林也是天生复杂度高的模型。随机森林的参数，都是向着一个目标去:减少模型的复杂度，把模型往图像的左边移动，防止过拟合。</p>
 </li>
 <li><p>参数对误差的影响</p>
 </li>

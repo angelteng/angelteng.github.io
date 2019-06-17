@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="原因一：多核CPU的缓存当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-1dc8fc061e339eb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-04-15T06:36:48.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/04/15/线程安全/0.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全">
 <meta name="twitter:description" content="原因一：多核CPU的缓存当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-1dc8fc061e339eb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/04/15/线程安全/0.png">
 
 
 
@@ -323,7 +323,7 @@
       
 
       
-        <h1 id="原因一：多核CPU的缓存"><a href="#原因一：多核CPU的缓存" class="headerlink" title="原因一：多核CPU的缓存"></a>原因一：多核CPU的缓存</h1><p>当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。<br>按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的一部分。<br>当CPU要读取一个数据时，首先从一级缓存中查找，如果没有找到再从二级缓存中查找，如果还是没有就从三级缓存或内存中查找。<br>单核CPU只含有一套L1，L2，L3缓存；如果CPU含有多个核心，即多核CPU，则每个核心都含有一套L1（甚至和L2）缓存，而共享L3（或者和L2）缓存。<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1dc8fc061e339eb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+        <h1 id="原因一：多核CPU的缓存"><a href="#原因一：多核CPU的缓存" class="headerlink" title="原因一：多核CPU的缓存"></a>原因一：多核CPU的缓存</h1><p>当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。<br>按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的一部分。<br>当CPU要读取一个数据时，首先从一级缓存中查找，如果没有找到再从二级缓存中查找，如果还是没有就从三级缓存或内存中查找。<br>单核CPU只含有一套L1，L2，L3缓存；如果CPU含有多个核心，即多核CPU，则每个核心都含有一套L1（甚至和L2）缓存，而共享L3（或者和L2）缓存。<br><img src="0.png" alt="image.png"></p>
 <ul>
 <li>单线程。cpu核心的缓存只被一个线程访问。缓存独占，不会出现访问冲突等问题。</li>
 <li>单核CPU，多线程。进程中的多个线程会同时访问进程中的共享数据，CPU将某块内存加载到缓存后，不同线程在访问相同的物理地址的时候，都会映射到相同的缓存位置，这样即使发生线程的切换，缓存仍然不会失效。但由于任何时刻只能有一个线程在执行，因此不会出现缓存访问冲突。</li>

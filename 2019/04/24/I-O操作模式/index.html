@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="概念 流：一个流可以是文件，socket，pipe等等可以进行I/O操作的内核对象 I/O操作：流的操作（读/写）。缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-04-24T07:42:42.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/04/24/I-O操作模式/0.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="I&#x2F;O操作模式">
 <meta name="twitter:description" content="概念 流：一个流可以是文件，socket，pipe等等可以进行I/O操作的内核对象 I/O操作：流的操作（读/写）。缓存 I/O 又被称作标准 I/O，大多数文件系统的默认 I/O 操作都是缓存 I/O。在 Linux 的缓存 I/O 机制中，操作系统会将 I/O 的数据缓存在文件系统的页缓存（ page cache ）中，也就是说，数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/04/24/I-O操作模式/0.png">
 
 
 
@@ -342,7 +342,7 @@
 <li>信号驱动 I/O（ signal driven IO）</li>
 <li>异步 I/O（asynchronous IO）</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="0.png" alt="image.png"></p>
 <h3 id="I-O多路复用"><a href="#I-O多路复用" class="headerlink" title="I/O多路复用"></a>I/O多路复用</h3><p>select，poll，epoll都是IO多路复用的机制。一个进程可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。但select，poll，epoll本质上都是同步I/O。</p>
 <p>与阻塞I/O相比，多路复用需要使用两个system call (select 和 recvfrom)，而blocking IO只调用了一个system call (recvfrom)。但是，用select的优势在于它可以同时处理多个connection。</p>
 <p>epoll 操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int epoll_create(int size)；//创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大</span><br><span class="line">int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；//对指定描述符fd执行op操作</span><br><span class="line">int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);//等待epfd上的io事件，最多返回maxevents个事件。</span><br></pre></td></tr></table></figure></p>

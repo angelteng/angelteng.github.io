@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="什么是Socket在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。 Unix Domain Sock">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/191918-36ec0344bae9d79e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/697">
-<meta property="og:updated_time" content="2019-04-11T06:11:03.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/03/23/tcp-socket-与unix-domain-socket/0.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tcp socket 与unix domain socket">
 <meta name="twitter:description" content="什么是Socket在网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个Socket。Socket可以被定义描述为两个应用通信通道的端点，一个Socket 端点可以用Socket地址（地址IP、端口、协议组成）来描述。Socket作为一种进程通信机制，操作系统会分配唯一一个Socket标识，这个标识与通讯协议有关（不仅限于TCP或UDP）。 Unix Domain Sock">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/191918-36ec0344bae9d79e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/697">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/03/23/tcp-socket-与unix-domain-socket/0.png">
 
 
 
@@ -334,7 +334,7 @@
 <li>Unix Domain Socket套接字可以向服务器提供用户认证信息</li>
 </ul>
 <h1 id="TCP-Socket与Unix-Domain-Socket"><a href="#TCP-Socket与Unix-Domain-Socket" class="headerlink" title="TCP Socket与Unix Domain Socket"></a>TCP Socket与Unix Domain Socket</h1><p>无论时TCP Socket套接字还是Unix Domain Socket套接字，每个套接字都是唯一的。TCP Socket通过IP和端口描述，而Unix Domain Socket描述。<br>TCP属于传输层的协议，使用TCP Socket进行通讯时，需要经过传输层TCP/IP协议的解析。<br>而Unix Domain Socket可用于不同进程间的通讯和传递，使用Unix Domain Socket进行通讯时不需要经过传输层，也不需要使用TCP/IP协议。所以，理论上讲Unix Domain Socket具有更好的传输效率。</p>
-<h1 id="socket缓冲区"><a href="#socket缓冲区" class="headerlink" title="socket缓冲区"></a>socket缓冲区</h1><p><img src="https://upload-images.jianshu.io/upload_images/191918-36ec0344bae9d79e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/697" alt="TCP套接字的I/O缓冲区示意图"></p>
+<h1 id="socket缓冲区"><a href="#socket缓冲区" class="headerlink" title="socket缓冲区"></a>socket缓冲区</h1><p><img src="0.png" alt="TCP套接字的I/O缓冲区示意图"></p>
 <p>每个 socket 被创建后，都会分配两个缓冲区，输入缓冲区和输出缓冲区。write()/send() 并不立即向网络中传输数据，而是先将数据写入缓冲区中，再由TCP协议将数据从缓冲区发送到目标机器。一旦将数据写入到缓冲区，函数就可以成功返回，不管它们有没有到达目标机器，也不管它们何时被发送到网络，这些都是TCP协议负责的事情。TCP协议独立于 write()/send() 函数，数据有可能刚被写入缓冲区就发送到网络，也可能在缓冲区中不断积压，多次写入的数据被一次性发送到网络，这取决于当时的网络情况、当前线程是否空闲等诸多因素，不由程序员控制。read()/recv() 函数也是如此，也从输入缓冲区中读取数据，而不是直接从网络中读取。<br>大小：socket默认的是1024×8=8192字节<br>特性：</p>
 <ul>
 <li>I/O缓冲区在每个TCP套接字中单独存在；</li>

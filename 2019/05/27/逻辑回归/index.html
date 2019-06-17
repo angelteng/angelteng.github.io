@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="逻辑回归，是一种名为“回归”的线性分类器，其本质是由线性回 归变化而来的，一种广泛使用于分类问题中的广义回归算法。 线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-777f048a16949f00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-98c12302b0568f34.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-bc2df40f11769ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14827444-b356fd84ae4801d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-05-28T07:25:25.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/27/逻辑回归/0.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/27/逻辑回归/1.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/27/逻辑回归/2.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2019/05/27/逻辑回归/3.png">
+<meta property="og:updated_time" content="2019-06-17T09:58:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="逻辑回归">
 <meta name="twitter:description" content="逻辑回归，是一种名为“回归”的线性分类器，其本质是由线性回 归变化而来的，一种广泛使用于分类问题中的广义回归算法。 线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14827444-777f048a16949f00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2019/05/27/逻辑回归/0.png">
 
 
 
@@ -329,7 +329,7 @@
       
         <ol>
 <li>逻辑回归，是一种名为“回归”的线性分类器，其本质是由线性回 归变化而来的，一种广泛使用于分类问题中的广义回归算法。</li>
-<li>线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数<br><img src="https://upload-images.jianshu.io/upload_images/14827444-777f048a16949f00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0，当g(z)接近1时样本的标签为类别1，这样就得到了一个分 类模型。而这个联系函数对于逻辑回归来说，就是Sigmoid函数:<br><img src="https://upload-images.jianshu.io/upload_images/14827444-98c12302b0568f34.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
+<li>线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数<br><img src="0.png" alt="image.png"><br>通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0，当g(z)接近1时样本的标签为类别1，这样就得到了一个分 类模型。而这个联系函数对于逻辑回归来说，就是Sigmoid函数:<br><img src="1.png" alt="image.png"></li>
 </ol>
 <p>Sigmoid函数是一个S型的函数，当自变量z趋近正无穷时，因变量g(z)趋近于1，而当z趋近负无穷时，g(z)趋近于0，它能够将任何实数映射到(0,1)区间，使其可用于将任意值函数转换为更适合二分类的函数。 因为这个性质，Sigmoid函数也被当作是归一化的一种方法，是属于数据预处理中的“缩放”功能，可以将数据压缩到[0,1]之内。区别在于，MinMaxScaler归一化之后，是可以取到0和1的(最大值归一化后就是1，最小值归一化后就是0)，但Sigmoid函数只是无限趋近于0和1。</p>
 <p>g(z)的形似几率取对数的本质其实就是我们的线性回归z，我们实际上是在对线性回归模型的预测结果取 对数几率来让其的结果无限逼近0和1。因此，其对应的模型被称为”对数几率回归“(logistic Regression)，也就是逻辑回归。</p>
@@ -341,7 +341,7 @@
 <li>逻辑回归返回的分类结果不是固定的0，1，而是以小数形式呈现的类概率数字</li>
 </ul>
 </li>
-<li><p><img src="https://upload-images.jianshu.io/upload_images/14827444-bc2df40f11769ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<li><p><img src="2.png" alt="image.png"></p>
 </li>
 </ol>
 <p>linear_model.LogisticRegression (penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’warn’, max_iter=100, multi_class=’warn’, verbose=0, warm_start=False, n_jobs=None)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LogisticRegression as LR</span><br><span class="line">lrl1 = LR(penalty=&quot;l1&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br><span class="line">lrl2 = LR(penalty=&quot;l2&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br></pre></td></tr></table></figure></p>
@@ -361,7 +361,7 @@
 <li><p>正则化是用来防止模型过拟合的过程，常用的有L1正则化和L2正则化两种选项，分别通过在损失函数后加上参数向 量 的L1范式和L2范式的倍数来实现。这个增加的范式，被称为“正则项”，也被称为”惩罚项”。损失函数改变，基 于损失函数的最优化来求解的参数取值必然改变，我们以此来调节模型拟合的程度。其中L1范数表现为参数向量中 的每个参数的绝对值之和，L2范数表现为参数向量中的每个参数的平方和的开方值。</p>
 </li>
 </ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/14827444-b356fd84ae4801d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="3.png" alt="image.png"></p>
 <p>L1正则化和L2正则化虽然都可以控制过拟合，但它们的效果并不相同。当正则化强度逐渐增大(即C逐渐变小)， 参数 的取值会逐渐变小，但L1正则化会将参数压缩为0，L2正则化只会让参数尽量小，不会取到0。</p>
 <p>参考：<br><a href="https://blog.csdn.net/jark_/article/details/78342644" target="_blank" rel="noopener">LogisticRegression - 参数说明</a></p>
 
