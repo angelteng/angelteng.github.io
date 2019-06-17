@@ -229,6 +229,434 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/24/随机森林/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/24/随机森林/" itemprop="url">随机森林</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-24T10:59:56+08:00">
+                2019-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>随机森林是一种集成算法，集成算法的目标：考虑多个评估器的建模结果，汇总之后得到一个综合的结果，以此来获取比单个模型更好的回归或<br>分类表现。</li>
+<li>多个模型集成成为的模型叫做集成评估器(ensemble estimator)，组成集成评估器的每个模型都叫做基评估器 (base estimator)。通常来说，有三类集成算法:装袋法(Bagging)，提升法(Boosting)和stacking。</li>
+<li><p>随机森林是一种装袋法模型，装袋法的核心是构建多个独立的评估器，然后对其预测进行平均或多数表决原则决定集成评估器的效果。而提升法中，基评估器是相关的，是按顺序一一构建的。其核心思想是结合弱评估器的力量一次次对难以评估的样本 进行预测，从而构成一个强评估器。提升法的代表模型有Adaboost和梯度提升树。</p>
+</li>
+<li><p>随机森林的特点：</p>
+<ul>
+<li>在与其它现有的算法相比，其预测准确率很好</li>
+<li>在较大的数据集上计算速度依然很快</li>
+<li>不需要降维，算法本身是采取随机降维的</li>
+<li>他能处理有缺失值的数据集。算法内部有补缺失值的函数</li>
+<li>能给出变量的重要性</li>
+<li>能处理imbalanced data set</li>
+<li>能给出观测实例间的相似度矩阵，其实就是proximity啦，继而能做clustering 和 location outlier</li>
+<li>能对unlabeled data 进行无监督的学习，进行clustering</li>
+<li>生成的森林可以保留，应用在新的数据集上</li>
+</ul>
+</li>
+<li><p>控制评估器的参数</p>
+<ul>
+<li>criterion: 不纯度衡量指标</li>
+<li>max_depth: 树最大深度</li>
+<li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
+<li>min_samples_split: 一个分支至少含有min_samples_split个训练样本</li>
+<li>max_features： 限制分支时考虑特征个数</li>
+<li>min_impurity_decrease: 限制信息增益大小</li>
+</ul>
+</li>
+</ol>
+<p>重要参数</p>
+<pre><code>- n_estimators： 这是森林中树木的数量，即基基评估器的数量。这个参数对随机森林模型的精确性影响是单调的，n_estimators 越大，模型的效往往越好。但是相应的，任何模型都有决策边界，n_estimators达到一定的程度之后，随机森林 的精确性往往不在上升或开始波动。
+</code></pre><p>重要属性</p>
+<pre><code>- .estimators_是用来查看随机森林中所有树的列表的。
+- oob_score_指的是袋外得分。随机森林为了确保林中的每棵树都不尽相同，所以采用了对训练集进行有放回抽样的 方式来不断组成信的训练集，在这个程中，会有一些数据从来没有被随机挑选到，他们就被叫做“袋外数据”。
+- .feature_importances_和决策树中的.feature_importances_用法和含义都一致，是返回特征的重要性。
+- predict_proba()： 返回每个测试样本对应的被分到每一类标签的概率
+</code></pre><ol start="6">
+<li><p>在sklearn中的使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.ensemble import RandomForestClassifier</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>泛化误差<br><img src="https://upload-images.jianshu.io/upload_images/14827444-1b107c7a033ad21a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>当模型太复杂，模型就会过拟合，泛化能力就不够，所以泛化误差大。当模型太简单，模型就会欠拟合，拟合能力就不够，所以误差也会大。只有当模型的复杂度刚刚好的才能够达到泛化误差最小的目标。<br>树模型是天生位于图的右上角的模型，随机森林是以树模型为基础，所以随机森林也是天生复杂度高的模型。随机森林的参数，都是向着一个目标去:减少模型的复杂度，把模型往图像的左边移动，防止过拟合。</p>
+</li>
+<li><p>参数对误差的影响</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">n_estimators</td>
+<td style="text-align:left">提升至平稳，n_estimators↑，不影响单个模型的复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">max_depth</td>
+<td style="text-align:left">有增有减，默认最大深度，即最高复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">min_samples_leaf</td>
+<td style="text-align:left">有增有减，默认最小限制1，即最高复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">min_samples_split</td>
+<td style="text-align:left">有增有减，默认最小限制2，即最高复杂度</td>
+</tr>
+<tr>
+<td style="text-align:left">max_features</td>
+<td style="text-align:left">有增有减，默认auto，是特征总数的开平方，位于中间复杂度，max_features↓，模型更简单</td>
+</tr>
+<tr>
+<td style="text-align:left">criterion</td>
+<td style="text-align:left">有增有减，一般使用gini</td>
+</tr>
+</tbody>
+</table>
+<ol start="9">
+<li><p>调参</p>
+<ul>
+<li><p>学习曲线</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.model_selection import cross_val_score</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">scorel = []</span><br><span class="line">for i in range(0,200,10):</span><br><span class="line">    rfc = RandomForestClassifier(n_estimators=i+1,</span><br><span class="line">                                n_jobs=-1,</span><br><span class="line">                                random_state=90)</span><br><span class="line">    score = cross_val_score(rfc,data.data,data.target,cv=10).mean()</span><br><span class="line">    scorel.append(score)</span><br><span class="line">print(max(scorel),(scorel.index(max(scorel))*10)+1)</span><br><span class="line">plt.figure(figsize=[20,5])</span><br><span class="line">plt.plot(range(1,201,10),scorel)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>网格搜索</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.model_selection import GridSearchCV</span><br><span class="line">param_grid = &#123;&apos;max_depth&apos;:np.arange(1,20,1)&#125;</span><br><span class="line">rfc = RandomForestClassifier(n_estimators=39</span><br><span class="line">                     ,random_state=90</span><br><span class="line">                    )</span><br><span class="line">GS = GridSearchCV(rfc,param_grid,cv=10)</span><br><span class="line">GS.fit(data.data,data.target)</span><br><span class="line">GS.best_params_</span><br><span class="line">GS.best_score_</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>参考：<br><a href="http://edu.cda.cn/course/982/tasks" target="_blank" rel="noopener">菜菜的机器学习sklearn课堂</a><br><a href="http://www.cnblogs.com/litao1105/p/5021747.html" target="_blank" rel="noopener">随机森林算法－Deep Dive</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/决策树/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/23/决策树/" itemprop="url">决策树</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-23T17:55:30+08:00">
+                2019-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>决策树算法的核心是要解决两个问题: <ul>
+<li>如何从数据表中找出最佳节点和最佳分枝? </li>
+<li>如何让决策树停止生长，防止过拟合?</li>
+</ul>
+</li>
+<li>流程：<ul>
+<li>计算全部特征的不纯度</li>
+<li>选取不纯度指标最优的特征来分化</li>
+<li>在第一个特征分支下，计算全部特征不纯度</li>
+<li>选取不纯度指标最优的特征继续分化</li>
+</ul>
+</li>
+<li><p>sklearn中使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from sklearn import tree</span><br><span class="line">tree.DecisionTreeClassifier:分类树</span><br><span class="line">tree.DecisionTreeRegressor:回归树</span><br><span class="line">tree.export_graphviz:将生成的决策树导出为DOT格式，画图专用</span><br><span class="line">tree.ExtraTreeClassifier:高随机版本的分类树</span><br><span class="line">tree.ExtraTreeRegressor:高随机版本的回归树</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重要参数</p>
+<ul>
+<li>criterion: 不纯度的计算方法（不纯度越低、拟合效果越好）<ul>
+<li>entropy 信息熵</li>
+<li>gini    基尼系数（默认）</li>
+</ul>
+</li>
+<li>random_state: 随机模式，高纬度下随机性更明显<ul>
+<li>None （默认）</li>
+<li>任意整数</li>
+</ul>
+</li>
+<li>splitter： 随机选项<ul>
+<li>best： 优先选择更重要的特征进行分支</li>
+<li>random： 分支随机（防止过拟合）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>剪枝参数<br>在不加限制的情况下，一棵决策树会生长到衡量不纯度的指标最优，或者没有更多的特征可用为止，这样的决策树往往会过拟合。<ul>
+<li>max_depth: 限制最大深度</li>
+<li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
+<li>min_samples_split: 一个分支至少含有min_samples_split个训练样本</li>
+<li>max_features: 限制分枝时考虑的特征个数 </li>
+<li>min_impurity_decrease: 限制信息增益的大小</li>
+</ul>
+</li>
+<li>目标权重参数<ul>
+<li>class_weight：均衡标签样本的权重</li>
+<li>min_ weight_fraction_leaf：基于权重的剪枝参数</li>
+</ul>
+</li>
+<li>确定最优参数：<ul>
+<li>学习曲线</li>
+</ul>
+</li>
+</ol>
+<p>参考<br><a href="http://edu.cda.cn/course/982/tasks" target="_blank" rel="noopener">菜菜的机器学习sklearn课堂</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/机器学习链接/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1503,337 +1931,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/11/python-u-命令行参数/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/11/python-u-命令行参数/" itemprop="url">python -u 命令行参数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-11T14:13:41+08:00">
-                2019-04-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>关闭stdin/stdout/stderr缓冲区.<br>-u :</p>
-<ul>
-<li>unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x. </li>
-<li>Force  stdin,  stdout and stderr to be totally unbuffered.  On systems where it matters, also put stdin, stdout and stderr in binary mode.  Note that there is internal buffering  in  xreadlines(),  readlines() and  file-object  iterators  (“for  line in sys.stdin”) which is not influenced by this option.  To work around this, you will want to use “sys.stdin.readline()” inside a “while 1:” loop.</li>
-</ul>
-<p><a href="https://stackoverflow.com/questions/14258500/python-significance-of-u-option" target="_blank" rel="noopener">参考</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/01/python-sqlalchemy-缓存/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://upload-images.jianshu.io/upload_images/14827444-0de2e63e8fdaf1bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/01/python-sqlalchemy-缓存/" itemprop="url">python sqlalchemy 缓存</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-01T11:34:42+08:00">
-                2019-04-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>描述：<br>    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。</p>
-<h2 id="原因一：数据库的事务隔离"><a href="#原因一：数据库的事务隔离" class="headerlink" title="原因一：数据库的事务隔离"></a>原因一：数据库的事务隔离</h2><p>在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他们的区别如下表所示。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">隔离级别</th>
-<th>脏读</th>
-<th>不可重复读</th>
-<th>幻读</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">未提交读(RU)</td>
-<td>可能</td>
-<td>可能</td>
-<td>可能</td>
-</tr>
-<tr>
-<td style="text-align:left">已提交读(RC)</td>
-<td>不可能</td>
-<td>可能</td>
-<td>可能</td>
-</tr>
-<tr>
-<td style="text-align:left">可重复读(RR)</td>
-<td>不可能</td>
-<td>不可能</td>
-<td>可能</td>
-</tr>
-<tr>
-<td style="text-align:left">可串行化</td>
-<td>不可能</td>
-<td>不可能</td>
-<td>不可能</td>
-</tr>
-</tbody>
-</table>
-<p>对于MySQL来说，默认的事务隔离级别是RR，RR是可重复读的，因此可以解释这个现象。</p>
-<h2 id="原因二：Sqlaalchemy的会话隔离"><a href="#原因二：Sqlaalchemy的会话隔离" class="headerlink" title="原因二：Sqlaalchemy的会话隔离"></a>原因二：Sqlaalchemy的会话隔离</h2><p>看作者在stackoverflow的回答：<br>“<br>The usual cause for people thinking there’s a “cache” at play, besides the usual SQLAlchemy identity map which is local to a transaction, is that they are observing the effects of transaction isolation. SQLAlchemy’s session works by default in a transactional mode, meaning it waits until session.commit() is called in order to persist data to the database. During this time, other transactions in progress elsewhere will not see this data.</p>
-<p>However, due to the isolated nature of transactions, there’s an extra twist. Those other transactions in progress will not only not see your transaction’s data until it is committed, they also can’t see it in some cases until they are committed or rolled back also (which is the same effect your close() is having here). A transaction with an average degree of isolation will hold onto the state that it has loaded thus far, and keep giving you that same state local to the transaction even though the real data has changed - this is called repeatable reads in transaction isolation parlance.<br>”<br>SQLAlchemy的会话默认在事务模式下工作，这意味着它会等到调用session.commit()才将数据持久保存到数据库中。<br>由于事务的隔离性，正在进行的其他事务在提交之前不仅不会看到这个事务的数据，在它们被提交或回滚之前它们也无法在某些情况下看到它，这在事务隔离用语中称为可重复读取。</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>在MySQL的同一个事务中，多次查询同一行的数据得到的结果是相同的，这里既有SQLAlchemy本身“缓存”结果的原因，也受到数据库隔离级别的影响。如果要强制读取最新的结果，最简单的办法就是在查询前手动COMMIT一次。（commit不仅把所有本地修改写入到数据库，同时也提交了该事务）</p>
-<p>参考：<br><a href="https://www.jianshu.com/p/c0a8275cce99" target="_blank" rel="noopener">https://www.jianshu.com/p/c0a8275cce99</a><br><a href="https://stackoverflow.com/questions/10210080/how-to-disable-sqlalchemy-caching" target="_blank" rel="noopener">https://stackoverflow.com/questions/10210080/how-to-disable-sqlalchemy-caching</a><br><a href="https://stackoverflow.com/questions/12108913/how-to-avoid-caching-in-sqlalchemy" target="_blank" rel="noopener">https://stackoverflow.com/questions/12108913/how-to-avoid-caching-in-sqlalchemy</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1886,7 +1983,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1897,7 +1994,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1908,7 +2005,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
