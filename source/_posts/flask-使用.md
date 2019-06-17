@@ -23,7 +23,7 @@ Nginx 改为反向代理到127.0.0.1:5000
 ```
 
 2. 目录结构
-![目录](https://upload-images.jianshu.io/upload_images/14827444-5160a07159aed804.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![目录](0.png)
 [作者参考](https://lepture.com/en/2018/structure-of-a-flask-project)
 [论坛参考](https://www.v2ex.com/t/467423)
 图灵《 Flask Web 开发》董伟明《 Flask Web 开发实战》

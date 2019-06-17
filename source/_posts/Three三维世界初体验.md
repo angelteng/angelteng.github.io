@@ -14,8 +14,8 @@ categories: 前端
 原理：
 以物体的中心为起点，向各个顶点（vertices）发出射线，如果射线与其它的物体相交，则检查最近的一个交点与射线起点间的距离，如果这个距离比射线起点至物体顶点间的距离要小，则说明发生了碰撞。但是，当物体的中心在另一个物体内部时，是不能够检测到碰撞的。而且当两个物体能够互相穿过，且有较大部分重合时，检测效果也不理想。 
 
-![代码示例](https://upload-images.jianshu.io/upload_images/14827444-3b266c643b2f3f13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![碰撞实例](https://upload-images.jianshu.io/upload_images/14827444-99942b6d2eb3e777.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![代码示例](0.png)
+![碰撞实例](1.png)
 
 ```
     // 初始化Three
@@ -277,7 +277,7 @@ categories: 前端
 ```
 加入webpack管理，
 优化后完整代码：
-![3d](https://upload-images.jianshu.io/upload_images/14827444-f9f57f4633d3828f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![3d](2.png)
 
 ```
     var THREE = require('three');

@@ -6,7 +6,7 @@ tags:
 categories: 服务器
 ---
 # Nginx 模块结构
-![image.png](https://upload-images.jianshu.io/upload_images/14827444-b1321442e1909834.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](0.png)
 
 # Nginx 工作流程
 Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。

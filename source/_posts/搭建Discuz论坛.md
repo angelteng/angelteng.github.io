@@ -4,7 +4,7 @@ date: 2018-11-8 17:17:20
 tags: Python
 ---
 1. 下载包文件：[Discuz论坛](http://www.discuz.net/forum-2-1.html)
-![选择UTF版本](https://upload-images.jianshu.io/upload_images/14827444-8c3726d4057def02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![选择UTF版本](0.png)
 2. 解压文件，实际代码目录为 /upload
 3. 配置Nginx
 ```
@@ -37,7 +37,7 @@ server {
 ```
 需要检查文件权限及nginx进程用户是否有权限访问该目录
 - ps -aux|grep Nginx 查看work 进程所属用户
-![nginx](https://upload-images.jianshu.io/upload_images/14827444-4cc4e7b70cfee588.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![nginx](1.png)
 - 查看代码文件所属目录是否同一个用户/有访问权限
 如果你使用vagrant 环境，vagrant 共享目录默认用户是vagrant 可以通过vagrant配置文件修改
 ```

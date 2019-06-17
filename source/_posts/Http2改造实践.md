@@ -7,7 +7,7 @@ HTTP2特点：
 1.  新的二进制格式：HTTP1.x的解析是基于文本，HTTP2.0的协议解析决定采用二进制格式
 2.  多路复用
 
-![image.png](https://upload-images.jianshu.io/upload_images/14827444-a9336eb314e24f99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](0.png)
 
 3.  header压缩
 4.  服务端推送

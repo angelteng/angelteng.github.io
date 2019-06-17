@@ -35,7 +35,7 @@ if __name__ == "__main__":
 - 如果没有源模块它不会检查缓存
 5. 标准模块库，是一个依赖于底层平台的配置选项集合
 6. 包
-![包结构](https://upload-images.jianshu.io/upload_images/14827444-2af47c49f2897893.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![包结构](0.png)
 - 必须包含\__\_init\___.py
 - \__\_all\___ = ["echo", "surround", "reverse"]  指定*导入的子模块集合
 - 如果没有定义 \__\_all\___ ， from sound.effects import * 语句__不会__从 sound.effects 包中导入所有的子模块

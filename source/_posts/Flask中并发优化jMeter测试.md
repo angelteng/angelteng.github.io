@@ -29,7 +29,7 @@ postman的runner是串行的，上一个请求结束后才开始下一个请求�
 ```
 [入门教程](https://www.jianshu.com/p/0e4daecc8122)  
 [固定qps压力测试](https://www.cnblogs.com/fnng/archive/2012/12/22/2829479.html)
-![测试结果](https://upload-images.jianshu.io/upload_images/14827444-f9d76256d76fb2b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![测试结果](0.png)
 
 4. 使用htop查看服务器cpu使用情况
 ```
@@ -38,6 +38,6 @@ postman的runner是串行的，上一个请求结束后才开始下一个请求�
 >>> q #退出
 ```
 [入门教程](https://www.cnblogs.com/lazyfang/p/7650010.html)
-![htop](https://upload-images.jianshu.io/upload_images/14827444-417ad4f5c30a3ba1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![htop](1.png)
 
  

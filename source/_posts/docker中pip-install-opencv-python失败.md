@@ -53,7 +53,7 @@ If you're not attached to Alpine, I would suggest moving to a different base doc
     CMD ["uwsgi", "--ini", "uwsgi_docker.ini"]
 ```
 在部署docker过程中会遇到：
-![error](https://upload-images.jianshu.io/upload_images/14827444-c750540543c5fc4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![error](0.png)
 此时需要删掉uwsgi的配置 plugin=python
 最后uwsgi.ini配置：
 ```

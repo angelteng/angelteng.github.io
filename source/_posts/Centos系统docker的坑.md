@@ -20,9 +20,9 @@ The command '/bin/sh -c mv /app/docker/localtime /etc/localtime' returned a non-
 ```
 而同样的脚本在另外一个Ubuntu系统下没有这样的报错
 从 docker info中可以看到
-![不正常系统](https://upload-images.jianshu.io/upload_images/14827444-4a17653f35165366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![不正常系统](0.png)
 Centos7
-![正常系统](https://upload-images.jianshu.io/upload_images/14827444-a3433e310cc982f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![正常系统](1.png)
 Ubuntu16.04
 并且可以看到报错信息
 ```

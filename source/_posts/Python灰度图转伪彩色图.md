@@ -8,9 +8,9 @@ categories: Python
 因项目中算法给出分割图是灰度图，而前端需要展示彩色图，搜了下网上资料，参考了opencv写的[这篇](http://blog.sina.com.cn/s/blog_8924265b0101ext1.html)，改成了Python代码
 效果：
 原灰度图
-![灰度图](https://upload-images.jianshu.io/upload_images/14827444-b83e1508197f3373.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![灰度图](0.png)
 伪彩色图
-![彩色图](https://upload-images.jianshu.io/upload_images/14827444-74c7a847851bcac8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![彩色图](1.png)
 
 ```
     from PIL import Image

@@ -216,7 +216,7 @@ index = hash & dict->ht[x].sizemask;
 11. 主服务器在复制 EVALSHA 命令时， 必须确保所有从服务器都已经载入了 EVALSHA 命令指定的 SHA1 校验和所对应的 Lua 脚本， 如果不能确保这一点的话， 主服务器会将 EVALSHA 命令转换成等效的 EVAL 命令， 并通过传播 EVAL 命令来获得相同的脚本执行效果。
 
 # Redis与MC对比
-![对比](https://upload-images.jianshu.io/upload_images/14827444-a136b240901c9e77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![对比](0.png)
 [why redis](https://segmentfault.com/a/1190000015706221?utm_source=weekly&utm_medium=email&utm_campaign=email_weekly)
 
 

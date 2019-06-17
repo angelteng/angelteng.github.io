@@ -11,7 +11,7 @@ categories: 缓存
 
 # 有多快？
 Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。
-![image.png](https://upload-images.jianshu.io/upload_images/14827444-5334ee209b270e5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](0.png)
 
 # 为什么快？
 1. 完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；

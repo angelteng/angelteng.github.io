@@ -25,7 +25,7 @@ Websocket使用ws或wss的统一资源标志符，类似于HTTPS，其中wss表�
 [wiki](https://zh.wikipedia.org/wiki/HTTP/2)
 1. 新的二进制格式：HTTP1.x的解析是基于文本，HTTP2.0的协议解析决定采用二进制格式
 2. 多路复用
-￼![多路复用](https://upload-images.jianshu.io/upload_images/14827444-ad2e8696df76a798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+￼![多路复用](0.png)
 3. header压缩
 4. 服务端推送
 5. HTTP2.0其实可以支持非HTTPS的，但是现在主流的浏览器像chrome，firefox表示还是只支持基于 TLS 部署的HTTP2.0协议，所以要想升级成HTTP2.0还是先升级HTTPS为好

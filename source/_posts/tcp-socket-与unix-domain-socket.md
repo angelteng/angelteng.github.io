@@ -25,7 +25,7 @@ TCP属于传输层的协议，使用TCP Socket进行通讯时，需要经过传�
 而Unix Domain Socket可用于不同进程间的通讯和传递，使用Unix Domain Socket进行通讯时不需要经过传输层，也不需要使用TCP/IP协议。所以，理论上讲Unix Domain Socket具有更好的传输效率。
 
 # socket缓冲区
-![TCP套接字的I/O缓冲区示意图](https://upload-images.jianshu.io/upload_images/191918-36ec0344bae9d79e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/697)
+![TCP套接字的I/O缓冲区示意图](0.png)
 
 每个 socket 被创建后，都会分配两个缓冲区，输入缓冲区和输出缓冲区。write()/send() 并不立即向网络中传输数据，而是先将数据写入缓冲区中，再由TCP协议将数据从缓冲区发送到目标机器。一旦将数据写入到缓冲区，函数就可以成功返回，不管它们有没有到达目标机器，也不管它们何时被发送到网络，这些都是TCP协议负责的事情。TCP协议独立于 write()/send() 函数，数据有可能刚被写入缓冲区就发送到网络，也可能在缓冲区中不断积压，多次写入的数据被一次性发送到网络，这取决于当时的网络情况、当前线程是否空闲等诸多因素，不由程序员控制。read()/recv() 函数也是如此，也从输入缓冲区中读取数据，而不是直接从网络中读取。
 大小：socket默认的是1024×8=8192字节

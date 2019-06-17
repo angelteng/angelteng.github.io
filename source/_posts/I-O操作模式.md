@@ -22,7 +22,7 @@ categories: 底层
 - 信号驱动 I/O（ signal driven IO）
 - 异步 I/O（asynchronous IO）
 
-![image.png](https://upload-images.jianshu.io/upload_images/14827444-4c7a706a78c1ef03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](0.png)
 
 
 ### I/O多路复用
