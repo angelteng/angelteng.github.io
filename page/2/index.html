@@ -229,6 +229,370 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/逻辑回归/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/27/逻辑回归/" itemprop="url">逻辑回归</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T17:22:39+08:00">
+                2019-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>逻辑回归，是一种名为“回归”的线性分类器，其本质是由线性回 归变化而来的，一种广泛使用于分类问题中的广义回归算法。</li>
+<li>线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数<br><img src="0.png" alt="image.png"><br>通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0，当g(z)接近1时样本的标签为类别1，这样就得到了一个分 类模型。而这个联系函数对于逻辑回归来说，就是Sigmoid函数:<br><img src="1.png" alt="image.png"></li>
+</ol>
+<p>Sigmoid函数是一个S型的函数，当自变量z趋近正无穷时，因变量g(z)趋近于1，而当z趋近负无穷时，g(z)趋近于0，它能够将任何实数映射到(0,1)区间，使其可用于将任意值函数转换为更适合二分类的函数。 因为这个性质，Sigmoid函数也被当作是归一化的一种方法，是属于数据预处理中的“缩放”功能，可以将数据压缩到[0,1]之内。区别在于，MinMaxScaler归一化之后，是可以取到0和1的(最大值归一化后就是1，最小值归一化后就是0)，但Sigmoid函数只是无限趋近于0和1。</p>
+<p>g(z)的形似几率取对数的本质其实就是我们的线性回归z，我们实际上是在对线性回归模型的预测结果取 对数几率来让其的结果无限逼近0和1。因此，其对应的模型被称为”对数几率回归“(logistic Regression)，也就是逻辑回归。</p>
+<ol start="3">
+<li><p>优点：</p>
+<ul>
+<li>逻辑回归对线性关系的拟合效果好。</li>
+<li>逻辑回归计算快</li>
+<li>逻辑回归返回的分类结果不是固定的0，1，而是以小数形式呈现的类概率数字</li>
+</ul>
+</li>
+<li><p><img src="2.png" alt="image.png"></p>
+</li>
+</ol>
+<p>linear_model.LogisticRegression (penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’warn’, max_iter=100, multi_class=’warn’, verbose=0, warm_start=False, n_jobs=None)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LogisticRegression as LR</span><br><span class="line">lrl1 = LR(penalty=&quot;l1&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br><span class="line">lrl2 = LR(penalty=&quot;l2&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<pre><code>- penalty: &quot;l1&quot;/&quot;l2&quot;,指定使用哪一种正则化方式，不填写默认&quot;l2&quot;。 注意,若选择&quot;l1&quot;正则化，参数solver仅能够使用”liblinear&quot;，若使用“l2”正则化，参数solver中 所有的求解方式都可以使用。
+- C: C正则化强度的倒数，必须是一个大于0的浮点数，不填写默认1.0，即默认一倍正则项。 C越小，对损失函数的惩罚越重，正则化的效力越强，参数会逐渐被压缩得越来越小。
+- max_iter: 算法收敛最大迭代次数，int类型，默认为10。仅在正则化优化算法为newton-cg, sag和lbfgs才有用，算法收敛的最大迭代次数。
+- solver: 优化算法选择参数，只有五个可选参数，即newton-cg,lbfgs,liblinear,sag,saga。默认为liblinear。solver参数决定了我们对逻辑回归损失函数的优化方法，有四种算法可以选择，分别是： 
+    - liblinear：使用了开源的liblinear库实现，内部使用了坐标轴下降法来迭代优化损失函数。
+    - lbfgs：拟牛顿法的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。
+    - newton-cg：也是牛顿法家族的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。
+    - sag：即随机平均梯度下降，是梯度下降法的变种，和普通梯度下降法的区别是每次迭代仅仅用一部分的样本来计算梯度，适合于样本数据多的时候。
+    - saga：线性收敛的随机优化算法的的变重。
+</code></pre><ol start="5">
+<li><p>”损失函数“作为评估指标，来衡量参数的优劣，即这一组参数能否使模型在训练集上表现优异。即是说，我们在求解参数时，追求损失函数最小，让模型在训练数据上的拟合效果最优，即预测准确率尽量靠近100%。对逻辑回归中过拟合的控制，通过正则化实现。</p>
+</li>
+<li><p>正则化是用来防止模型过拟合的过程，常用的有L1正则化和L2正则化两种选项，分别通过在损失函数后加上参数向 量 的L1范式和L2范式的倍数来实现。这个增加的范式，被称为“正则项”，也被称为”惩罚项”。损失函数改变，基 于损失函数的最优化来求解的参数取值必然改变，我们以此来调节模型拟合的程度。其中L1范数表现为参数向量中 的每个参数的绝对值之和，L2范数表现为参数向量中的每个参数的平方和的开方值。</p>
+</li>
+</ol>
+<p><img src="3.png" alt="image.png"></p>
+<p>L1正则化和L2正则化虽然都可以控制过拟合，但它们的效果并不相同。当正则化强度逐渐增大(即C逐渐变小)， 参数 的取值会逐渐变小，但L1正则化会将参数压缩为0，L2正则化只会让参数尽量小，不会取到0。</p>
+<p>参考：<br><a href="https://blog.csdn.net/jark_/article/details/78342644" target="_blank" rel="noopener">LogisticRegression - 参数说明</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/降维算法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/27/降维算法/" itemprop="url">降维算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T16:33:20+08:00">
+                2019-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>降维算法中的”降维“，指的是降低特征矩阵中特征的数量。</li>
+<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
+</li>
+<li><p>PCA使用的信息量衡量指标，就是样本方差，又称可解释性方差，方差越大，特征所带的信息量越多。<br><img src="1.png" alt="image.png"><br>Var代表一个特征的方差，n代表样本量，xi代表一个特征中的每个样本取值，xhat代表这一列样本的均值。</p>
+<ul>
+<li><a href="https://www.zhihu.com/question/20099757" target="_blank" rel="noopener">为什么方差的分母是n-1？</a></li>
+</ul>
+</li>
+<li><p>矩阵分解：让数据能够被压缩到少数特征上并且总信息量不损失太多的技术。PCA和SVD是两种不同的降维算法，只是两种算法中矩阵分解的方法不同，信息量的衡量指标不同罢了。降维完成之后，PCA找到的每个新特征向量就叫做“主成分”，而被丢弃的特征 向量被认为信息量很少，这些信息很可能就是噪音。</p>
+<ul>
+<li>PCA使用方差作为信息量的衡量指标，并且特征值分解来找出空间V。</li>
+<li>SVD使用奇异值分解来找出空间V</li>
+</ul>
+</li>
+<li><p>降维与特征工程的区别：</p>
+<ul>
+<li>特征选择是从已存在的特征中选取携带信息最多的，选完之后的特征依然具有可解释性，我们依然知道这个特征在原数据的哪个位置，代表着原数据上的什么含义。</li>
+<li>降维算法，是将已存在的特征进行压缩，降维完毕后的特征不是原本的特征矩阵中的任何一个特征，而是通过某些方式组合起来的新特征。通常来说，在新的特征矩阵生成之前，我们无法知晓降维算法们都建立了怎样 的新特征向量，新特征矩阵生成之后也不具有可读性，我们无法判断新特征矩阵的特征是从原数据中的什么特征组合而来，新特征虽然带有原始数据的信息，却已经不是原数据上代表着的含义了。降维算法因此是特征创造(feature creation，或feature construction)的一种。</li>
+<li>可以想见，PCA一般不适用于探索特征和标签之间的关系的模型(如线性回归)，因为无法解释的新特征和标签之间的关系不具有意义。在线性回归模型中，我们使用特征选择。</li>
+</ul>
+</li>
+<li><p>sklearn.decomposition.PCA (n_components=None, copy=True, whiten=False, svd_solver=’auto’, tol=0.0， iterated_power=’auto’, random_state=None)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.decomposition import PCA</span><br><span class="line">#调用PCA</span><br><span class="line">pca = PCA(n_components=2) pca = pca.fit(X)</span><br><span class="line">X_dr = pca.transform(X)</span><br><span class="line"># 属性explained_variance，查看降维后每个新特征向量上所带的信息量大小(可解释性方差的大小) </span><br><span class="line">pca.explained_variance_</span><br><span class="line"># 属性explained_variance_ratio，查看降维后每个新特征向量所占的信息量占原始数据总信息量的百分比 </span><br><span class="line"># 又叫做可解释方差贡献率</span><br><span class="line">pca.explained_variance_ratio_</span><br><span class="line"># 降维后的总方差为原来方差的百分比</span><br><span class="line">pca.explained_variance_ratio_.sum()</span><br></pre></td></tr></table></figure>
+<p> 参数：</p>
+<ul>
+<li>n_components: n_components是我们降维后需要的维度，即降维后需要保留的特征数量，降维流程中第二步里需要确认的k值，一般输入[0, min(X.shape)]范围中的整数。</li>
+<li>svd_solver: 奇异值分解器。sklearn将降 维流程拆成了两部分:一部分是计算特征空间V，由奇异值分解完成，另一部分是映射数据和求解新特征矩阵，由主成分分析完成，实现了用SVD的性质减少计算量，却让信息量的评估指标是方差，具体流程如下图:</li>
+<li>random_state<br>接口：</li>
+<li>inverse_transform </li>
+</ul>
+</li>
+<li><p>选择最好的n_components:</p>
+<ul>
+<li><p>方法一：累积可解释方差贡献率曲线，选择拐点作为最优参数值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">pca_line = PCA().fit(X) plt.plot([1,2,3,4],np.cumsum(pca_line.explained_variance_ratio_)) </span><br><span class="line">plt.xticks([1,2,3,4]) #这是为了限制坐标轴显示为整数</span><br><span class="line">plt.xlabel(&quot;number of components after dimension reduction&quot;) </span><br><span class="line">plt.ylabel(&quot;cumulative explained variance&quot;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法二：最大似然估计自选超参数法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pca_mle = PCA(n_components=&quot;mle&quot;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法三：按信息量占比选超参数<br>输入[0,1]之间的浮点数，并且让参数svd_solver ==’full’，表示希望降维后的总解释性方差占比大于n_components 指定的百分比，即是说，希望保留百分之多少的信息量。比如说，如果我们希望保留97%的信息量，就可以输入 n_components = 0.97，PCA会自动选出能够让保留的信息量超过97%的特征数量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pca_f = PCA(n_components=0.97,svd_solver=&quot;full&quot;)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/特征工程-embedded嵌入法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -684,6 +1048,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1723,342 +2109,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/25/Redis的性能/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/25/Redis的性能/" itemprop="url">Redis的性能</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-25T16:54:27+08:00">
-                2019-04-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/缓存/" itemprop="url" rel="index">
-                    <span itemprop="name">缓存</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://angelteng.github.io/blog/2018/11/22/Redis原理/">Redis的基本数据结构</a></p>
-<p>首先，众所周知，Redis是单线程的。</p>
-<h1 id="有多快？"><a href="#有多快？" class="headerlink" title="有多快？"></a>有多快？</h1><p>Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。<br><img src="0.png" alt="image.png"></p>
-<h1 id="为什么快？"><a href="#为什么快？" class="headerlink" title="为什么快？"></a>为什么快？</h1><ol>
-<li>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</li>
-<li>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</li>
-<li>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</li>
-<li>使用<a href="https://angelteng.github.io/blog/2019/04/24/I-O操作模式/">多路I/O复用模型</a>，非阻塞IO；</li>
-<li>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</li>
-</ol>
-<h1 id="Redis的内存模型"><a href="#Redis的内存模型" class="headerlink" title="Redis的内存模型"></a>Redis的内存模型</h1><p>Redis的内存主要包括：对象内存+缓冲内存+自身内存+内存碎片。 </p>
-<ol>
-<li>对象内存<br> 对象内存是Redis内存中占用最大一块，存储着所有的用户的数据。Redis所有的数据都采用的是key-value型数据类型</li>
-<li><p>缓冲内存<br> 主要包括：客户端缓冲、复制积压缓冲区、AOF缓冲区 </p>
-<ul>
-<li>客户端缓冲：普通的客户端的连接（大量连接），从客户端（主要是复制的时候，异地跨机房，或者主节点下有多个从节点），订阅客户端（发布订阅功能，生产大于消费就会造成积压） </li>
-<li>复制积压缓冲：2.8版本之后提供的可重用的固定大小缓冲区用于实现部分复制功能，默认1MB，主要是在主从同步时用到。 </li>
-<li>AOF缓冲区：持久化用的，会先写入到缓冲区，然后根据响应的策略向磁盘进行同步，消耗的内存取决于写入的命令量和重写时间，通常很小。</li>
-</ul>
-</li>
-<li><p>内存碎片<br> 目前可选的分配器有jemalloc、glibc、tcmalloc默认jemalloc<br> 出现高内存碎片问题的情况：大量的更新操作，比如append、setrange；大量的过期键删除，释放的空间无法得到有效利用<br> 解决办法：数据对齐，安全重启（高可用/主从切换）。</p>
-</li>
-<li>自身内存<br> 主要指AOF/RDB重写时Redis创建的子进程内存的消耗，Linux具有写时复制技术（copy-on-write），父子进程会共享相同的物理内存页，当父进程写请求时会对需要修改的页复制出一份副本来完成写操作。</li>
-</ol>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><ul>
-<li>单进程多线程模型：MySQL、Memcached、Oracle</li>
-<li>多进程模型：Oracle</li>
-</ul>
-<p>参考：<br><a href="https://juejin.im/entry/5b7cfe976fb9a01a13366d95" target="_blank" rel="noopener">Redis是单线程的，但Redis为什么这么快？</a><br><a href="https://juejin.im/entry/5b93ce4d5188255c48349316" target="_blank" rel="noopener">理解Redis的内存</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/Nginx-工作原理/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/24/Nginx-工作原理/" itemprop="url">Nginx 工作原理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T15:49:01+08:00">
-                2019-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/服务器/" itemprop="url" rel="index">
-                    <span itemprop="name">服务器</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Nginx-模块结构"><a href="#Nginx-模块结构" class="headerlink" title="Nginx 模块结构"></a>Nginx 模块结构</h1><p><img src="0.png" alt="image.png"></p>
-<h1 id="Nginx-工作流程"><a href="#Nginx-工作流程" class="headerlink" title="Nginx 工作流程"></a>Nginx 工作流程</h1><p>Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。</p>
-<ol>
-<li>master进程一开始根据配置，来建立需要listen的网络socket fd，然后fork出多个worker进程。根据进程的特性，新建立的worker进程，也会和master进程一样，具有相同的设置。因此，其也会去监听相同ip端口的套接字socket fd。</li>
-<li>当一个请求进来的时候，所有的worker都会感知到。这样就会产生所谓的“惊群现象”。为了保证只会有一个进程成功注册到listenfd的读事件，nginx中实现了一个“accept_mutex”类似互斥锁，只有获取到这个锁的进程，才可以去注册读事件。其他进程全部accept 失败。</li>
-<li>监听成功的worker进程，读取请求，解析处理，响应数据返回给客户端，断开连接。即nginx用一个独立的worker进程来处理一个请求，一个worker进程可以处理多个请求。<br>因此，一个请求，完全由worker进程来处理，而且只在一个worker进程中处理。采用这种方式的好处：<ul>
-<li>节省锁带来的开销。对于每个worker进程来说，独立的进程，不需要加锁，所以省掉了锁带来的开销，同时在编程以及问题查上时，也会方便很多。</li>
-<li>独立进程，减少风险。</li>
-<li>采用独立的进程，可以让互相之间不会影响，一个进程退出后，其它进程还在工作，服务不会中断，master进程则很快重新启动新的worker进程。</li>
-<li>在一次请求里无需进程切换。</li>
-</ul>
-</li>
-</ol>
-<h1 id="Nginx的配置"><a href="#Nginx的配置" class="headerlink" title="Nginx的配置"></a>Nginx的配置</h1><ul>
-<li>worker_processes：worker角色的进程个数</li>
-<li>worker_connections：每一个worker进程能并发处理（发起）的最大连接数（包含所有连接数）</li>
-<li>Nginx作为http服务器的时候：max_clients（最大连接数） = worker_processes * worker_connections</li>
-<li>Nginx作为反向代理服务器的时候：max_clients（最大连接数） = worker_processes * worker_connections/4 （/4原因：因为浏览器默认会开启2个连接到nginx server，而且nginx还会为每个连接使用fds（file descriptor）从连接池建立connection到upstream后端。）</li>
-</ul>
-<p>参考：<br><a href="https://zhuanlan.zhihu.com/p/31196264" target="_blank" rel="noopener">nginx快速入门之基本原理篇</a><br><a href="https://www.jianshu.com/p/6215e5d24553" target="_blank" rel="noopener">理解Nginx工作原理</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/7/">7</a><a class="extend next" rel="next" href="/blog/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/8/">8</a><a class="extend next" rel="next" href="/blog/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2106,7 +2161,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2117,7 +2172,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2128,7 +2183,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

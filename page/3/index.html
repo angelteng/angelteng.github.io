@@ -229,6 +229,337 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/25/Redis的性能/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/25/Redis的性能/" itemprop="url">Redis的性能</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-25T16:54:27+08:00">
+                2019-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/缓存/" itemprop="url" rel="index">
+                    <span itemprop="name">缓存</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://angelteng.github.io/blog/2018/11/22/Redis原理/">Redis的基本数据结构</a></p>
+<p>首先，众所周知，Redis是单线程的。</p>
+<h1 id="有多快？"><a href="#有多快？" class="headerlink" title="有多快？"></a>有多快？</h1><p>Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。<br><img src="0.png" alt="image.png"></p>
+<h1 id="为什么快？"><a href="#为什么快？" class="headerlink" title="为什么快？"></a>为什么快？</h1><ol>
+<li>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</li>
+<li>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</li>
+<li>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</li>
+<li>使用<a href="https://angelteng.github.io/blog/2019/04/24/I-O操作模式/">多路I/O复用模型</a>，非阻塞IO；</li>
+<li>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</li>
+</ol>
+<h1 id="Redis的内存模型"><a href="#Redis的内存模型" class="headerlink" title="Redis的内存模型"></a>Redis的内存模型</h1><p>Redis的内存主要包括：对象内存+缓冲内存+自身内存+内存碎片。 </p>
+<ol>
+<li>对象内存<br> 对象内存是Redis内存中占用最大一块，存储着所有的用户的数据。Redis所有的数据都采用的是key-value型数据类型</li>
+<li><p>缓冲内存<br> 主要包括：客户端缓冲、复制积压缓冲区、AOF缓冲区 </p>
+<ul>
+<li>客户端缓冲：普通的客户端的连接（大量连接），从客户端（主要是复制的时候，异地跨机房，或者主节点下有多个从节点），订阅客户端（发布订阅功能，生产大于消费就会造成积压） </li>
+<li>复制积压缓冲：2.8版本之后提供的可重用的固定大小缓冲区用于实现部分复制功能，默认1MB，主要是在主从同步时用到。 </li>
+<li>AOF缓冲区：持久化用的，会先写入到缓冲区，然后根据响应的策略向磁盘进行同步，消耗的内存取决于写入的命令量和重写时间，通常很小。</li>
+</ul>
+</li>
+<li><p>内存碎片<br> 目前可选的分配器有jemalloc、glibc、tcmalloc默认jemalloc<br> 出现高内存碎片问题的情况：大量的更新操作，比如append、setrange；大量的过期键删除，释放的空间无法得到有效利用<br> 解决办法：数据对齐，安全重启（高可用/主从切换）。</p>
+</li>
+<li>自身内存<br> 主要指AOF/RDB重写时Redis创建的子进程内存的消耗，Linux具有写时复制技术（copy-on-write），父子进程会共享相同的物理内存页，当父进程写请求时会对需要修改的页复制出一份副本来完成写操作。</li>
+</ol>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><ul>
+<li>单进程多线程模型：MySQL、Memcached、Oracle</li>
+<li>多进程模型：Oracle</li>
+</ul>
+<p>参考：<br><a href="https://juejin.im/entry/5b7cfe976fb9a01a13366d95" target="_blank" rel="noopener">Redis是单线程的，但Redis为什么这么快？</a><br><a href="https://juejin.im/entry/5b93ce4d5188255c48349316" target="_blank" rel="noopener">理解Redis的内存</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/Nginx-工作原理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/24/Nginx-工作原理/" itemprop="url">Nginx 工作原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T15:49:01+08:00">
+                2019-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/服务器/" itemprop="url" rel="index">
+                    <span itemprop="name">服务器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Nginx-模块结构"><a href="#Nginx-模块结构" class="headerlink" title="Nginx 模块结构"></a>Nginx 模块结构</h1><p><img src="0.png" alt="image.png"></p>
+<h1 id="Nginx-工作流程"><a href="#Nginx-工作流程" class="headerlink" title="Nginx 工作流程"></a>Nginx 工作流程</h1><p>Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。</p>
+<ol>
+<li>master进程一开始根据配置，来建立需要listen的网络socket fd，然后fork出多个worker进程。根据进程的特性，新建立的worker进程，也会和master进程一样，具有相同的设置。因此，其也会去监听相同ip端口的套接字socket fd。</li>
+<li>当一个请求进来的时候，所有的worker都会感知到。这样就会产生所谓的“惊群现象”。为了保证只会有一个进程成功注册到listenfd的读事件，nginx中实现了一个“accept_mutex”类似互斥锁，只有获取到这个锁的进程，才可以去注册读事件。其他进程全部accept 失败。</li>
+<li>监听成功的worker进程，读取请求，解析处理，响应数据返回给客户端，断开连接。即nginx用一个独立的worker进程来处理一个请求，一个worker进程可以处理多个请求。<br>因此，一个请求，完全由worker进程来处理，而且只在一个worker进程中处理。采用这种方式的好处：<ul>
+<li>节省锁带来的开销。对于每个worker进程来说，独立的进程，不需要加锁，所以省掉了锁带来的开销，同时在编程以及问题查上时，也会方便很多。</li>
+<li>独立进程，减少风险。</li>
+<li>采用独立的进程，可以让互相之间不会影响，一个进程退出后，其它进程还在工作，服务不会中断，master进程则很快重新启动新的worker进程。</li>
+<li>在一次请求里无需进程切换。</li>
+</ul>
+</li>
+</ol>
+<h1 id="Nginx的配置"><a href="#Nginx的配置" class="headerlink" title="Nginx的配置"></a>Nginx的配置</h1><ul>
+<li>worker_processes：worker角色的进程个数</li>
+<li>worker_connections：每一个worker进程能并发处理（发起）的最大连接数（包含所有连接数）</li>
+<li>Nginx作为http服务器的时候：max_clients（最大连接数） = worker_processes * worker_connections</li>
+<li>Nginx作为反向代理服务器的时候：max_clients（最大连接数） = worker_processes * worker_connections/4 （/4原因：因为浏览器默认会开启2个连接到nginx server，而且nginx还会为每个连接使用fds（file descriptor）从连接池建立connection到upstream后端。）</li>
+</ul>
+<p>参考：<br><a href="https://zhuanlan.zhihu.com/p/31196264" target="_blank" rel="noopener">nginx快速入门之基本原理篇</a><br><a href="https://www.jianshu.com/p/6215e5d24553" target="_blank" rel="noopener">理解Nginx工作原理</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/I-O操作模式/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1560,320 +1891,11 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/30/docker中pip-install-opencv-python失败/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/30/docker中pip-install-opencv-python失败/" itemprop="url">docker部署uwsgi+flask问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T11:04:47+08:00">
-                2019-01-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/docker/" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>问题：<br>docker中pip install opencv-python失败.</p>
-<p>dockerFile中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">From Alpine</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">RUN pip3 install opencv-python</span><br></pre></td></tr></table></figure></p>
-<p>docker build 时出现报错，即使升级了pip之后:<br>Could not find a version that satisfies the requirement opencv-python (from version: )<br>No matching distribution found for opencv-python</p>
-<p>原因：<br><a href="https://stackoverflow.com/questions/50950588/trouble-installing-opencv-in-docker-container-using-pip" target="_blank" rel="noopener">from stackoverflow</a><br>I’ve just run into this issue as well. It turns out that this is not working because opencv-python does not have any prebuilt wheels for Alpine (the distribution you’re using as your base docker image).</p>
-<p>The conversation in this issue on the opencv-python package explains why this happens in greater detail. The TL;DR is: if you really need to use Alpine, you can try forcing the installation of the manylinux wheel for opencv-python, but this can break. Your best option if you need to keep Alpine is to build the module from source. Since you are running this on OpenFAAS, I suspect you will want to keep your size low, so building from source may be a good option for you.</p>
-<p>If you’re not attached to Alpine, I would suggest moving to a different base docker image. If you’re not sure which image to use as your base, I would recommend python:3.7-slim, since it will come with Python already installed (substitute 3.7 for whichever version you are using, but really. . . 3.7 is nice). With this container, you can simply run pip install opencv-python numpy scipy to have all three of your desired packages installed. The rest of your Dockerfile should work mostly unmodified; you will just need to install/uninstall curl using apt instead of apk.</p>
-<p>简单来说就是，Alpine中没有prebuild opencv-python,如果一定要用Alpine，可以强制下载编译，但是有可能出错。也可以更换使用 python:3.x-slim镜像。<br>最后Dockerfile:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.5.6-slim-stretch</span><br><span class="line">WORKDIR /app</span><br><span class="line">ADD ....</span><br><span class="line"></span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends apt-utils &amp;&amp; \</span><br><span class="line">apt-get install -y \</span><br><span class="line">        libc6-dev \</span><br><span class="line">        gcc \</span><br><span class="line">        mime-support vim libtiff5 libglib2.0-0 libsm6 libxext6 libxrender1 libxext-dev libpcre3 libpcre3-dev &amp;&amp; \</span><br><span class="line">pip3 install --no-cache-dir uWSGI \</span><br><span class="line">    &amp;&amp; apt-get remove -y \</span><br><span class="line">        gcc \</span><br><span class="line">        libc6-dev \</span><br><span class="line">    &amp;&amp; rm -rf /var/lib/apt/lists/* &amp;&amp; \</span><br><span class="line">pip3 install setuptools==39.1.0 &amp;&amp; \ </span><br><span class="line">pip3 install -r requirements.txt </span><br><span class="line"></span><br><span class="line">ENV LD_LIBRARY_PATH=/app/project/services/libs</span><br><span class="line">ENV PYTHONPATH=/app/project/services/libs</span><br><span class="line"></span><br><span class="line">CMD [&quot;uwsgi&quot;, &quot;--ini&quot;, &quot;uwsgi_docker.ini&quot;]</span><br></pre></td></tr></table></figure></p>
-<p>在部署docker过程中会遇到：<br><img src="0.png" alt="error"><br>此时需要删掉uwsgi的配置 plugin=python<br>最后uwsgi.ini配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line">socket = 0.0.0.0:5051</span><br><span class="line">chdir = /app</span><br><span class="line">wsgi-file = /app/app.py</span><br><span class="line">callable = app</span><br><span class="line">processes = 4</span><br><span class="line">threads = 2</span><br></pre></td></tr></table></figure></p>
-<p>nginx配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    charset utf-8;</span><br><span class="line">    client_max_body_size 128M;</span><br><span class="line"></span><br><span class="line">    listen 80;</span><br><span class="line"></span><br><span class="line">    server_name xxx.local.com;</span><br><span class="line">    root        /vagrant/xxx;</span><br><span class="line">    index       index.py;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        include         uwsgi_params;</span><br><span class="line">        uwsgi_pass      127.0.0.1:5051;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/29/Nginx通讯机制/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/29/Nginx通讯机制/" itemprop="url">Nginx通讯机制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-29T10:24:13+08:00">
-                2019-01-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/服务器/" itemprop="url" rel="index">
-                    <span itemprop="name">服务器</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="PHP-FPM与Nginx通讯机制"><a href="#PHP-FPM与Nginx通讯机制" class="headerlink" title="PHP-FPM与Nginx通讯机制"></a>PHP-FPM与Nginx通讯机制</h1><h2 id="CGI协议"><a href="#CGI协议" class="headerlink" title="CGI协议"></a>CGI协议</h2><ol>
-<li>通用网关接口（Common Gateway Interface/CGI），CGI描述了服务器和请求处理程序之间传输数据的一种标准。</li>
-<li>Common：比如Java的Servlet，Python的WSGI，理论上来说，所有支持标准输出，支持获取环境变量的编程语言都能用来编写CGI程序。</li>
-<li>Gateway：“协议翻译机”，通常与网关输入输出两端通信使用的是不同的协议。即一方是HTTP协议，另一方可能是其他协议，比如企业内部的自定义协议。CGI程序既是如此。</li>
-<li>Interface：CGI其实是构架在HTTP协议之上的。它描述的是另一个维度的共识标准。<br><img src="0.png" alt="CGI协议"></li>
-</ol>
-<h2 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h2><p>由于 CGI 的机制是每处理一个请求需要 fork 一个 CGI 进程，请求结束再kill掉这个进程，在实际应用上比较浪费资源，于是就出现了CGI 的改良版本 FastCGI，FastCGI 在请求处理完后，不会 kill 掉进程，而是继续处理多个请求，这样就大大提高了效率。</p>
-<h2 id="PHP-FPM"><a href="#PHP-FPM" class="headerlink" title="PHP-FPM"></a>PHP-FPM</h2><p>PHP-FPM 即 PHP-FastCGI Process Manager， 它是 FastCGI 的实现，并提供了进程管理的功能。进程包含 master 进程和 worker 进程两种；master 进程只有一个，负责监听端口，接收来自服务器的请求，而 worker 进程则一般有多个（具体数量根据实际需要进行配置），每个进程内部都会嵌入一个 PHP 解释器，是代码真正执行的地方。<br><img src="1.png" alt="PHP-FPM"></p>
-<p><a href="https://segmentfault.com/a/1190000018048956" target="_blank" rel="noopener">参考</a></p>
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p><img src="2.png" alt="uwsgi"></p>
-<ol>
-<li>WSGI: 它是用在 python web 框架编写的应用程序与web服务器之间的规范。它使得Web App可以与Web Server顺利通信。所有使用 WSGI 的服务器都可以运行使用 WSGI 规范的web 框架。它规定WSGI application应该实现为一个可调用对象。</li>
-<li>uWSGI: uWSGI: 是一个Web服务器(WSGI容器），它实现了WSGI协议、uwsgi、http等协议。用于接收前端服务器转发的动态请求并处理后发给 web 应用程序。</li>
-<li>uwsgi: uwsgi是uWSGI服务器实现的独有的协议。</li>
-</ol>
-<h2 id="FLASK"><a href="#FLASK" class="headerlink" title="FLASK"></a>FLASK</h2><p>Flask是一个web框架，而且Flask是基于werkzeug开发的，那werkzeug是什么呢？</p>
-<p>Werkzeug是一个WSGI工具包，他可以作为一个Web框架的底层库。werkzeug 不是一个web服务器，也不是一个web框架，而是一个工具包，官方的介绍说是一个 WSGI 工具包，它可以作为一个 Web 框架的底层库，因为它封装好了很多 Web 框架的东西，例如 Request，Response 等等。使用它可以减轻web框架开发工作量。我看过werkzeug的源码后发现，werkzeug也实现了WSGI容器的功能，而且利用python/http/server.py库实现了一个简易的http服务器。因此在调试的时候可以直接使用app.run()把服务器给运行起来。</p>
-<p><a href="https://blog.csdn.net/sodawaterer/article/details/71497086" target="_blank" rel="noopener">参考</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/7/">7</a><a class="extend next" rel="next" href="/blog/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/8/">8</a><a class="extend next" rel="next" href="/blog/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1921,7 +1943,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1932,7 +1954,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1943,7 +1965,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
