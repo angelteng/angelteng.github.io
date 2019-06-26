@@ -466,10 +466,12 @@
       
         
           
-            <ol>
+            <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ol>
 <li>实例变量有默认值，局部变量没有默认值。</li>
 <li>JAVA中都是值的（拷贝）传递。</li>
 <li>引用到对象的变量并不是对象的容器，而是类似指向对象的指针／地址。所有引用的大小都一样。</li>
+</ol>
+<h1 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h1><ol>
 <li>ArrayList&amp;一般数组区别：<ul>
 <li>一般数组创建时确定大小、以索引存放、使用特殊语法［］</li>
 <li>ArrayList是参数化的 ArrayList<string></string></li>
@@ -485,13 +487,6 @@
 <li>抽象类代表类必须要被extent，抽象方法代表方法必须要被覆盖。抽象方法没有实体。必须实现所有的抽象方法。</li>
 <li>编译器是根据引用类型（定义变量时指定的类型）判断哪个方法可以调用，而不是根据对象的实际类型。</li>
 <li>extent只能有1个，implement（接口）可以有多个。</li>
-<li>所有对象存活于可垃圾回收的堆（heap）中。</li>
-<li>变量存活空间：<ul>
-<li>如果在方法体内定义的，这时候就是在栈上分配的</li>
-<li>如果是类的成员变量，这时候就是在堆上分配的</li>
-<li>如果是类的静态成员变量，在<a href="https://blog.csdn.net/top_code/article/details/51288529" target="_blank" rel="noopener">方法区</a>(堆，各个线程共享的内存区域)上分配的</li>
-</ul>
-</li>
 <li>一个类可以有多个构造函数，但参数必须不一样。</li>
 <li>函数构造链：创建新对象时，所有继承下来的构造函数都会执行。</li>
 <li>调用父类构造函数super().使用this()调用对象本身的其他构造函数。两者不能同时使用。</li>
@@ -502,10 +497,22 @@
 <li>常量：静态的final变量 （常量名应全大写）</li>
 </ul>
 </li>
-<li>JAVA虚拟机只会从头开始往下找到第一个符合范围的异常处理块</li>
-<li><p>可以抛出多重异常 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void function name () throw PantException, LionException&#123;&#125;</span><br></pre></td></tr></table></figure>
+</ol>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><ol>
+<li>所有对象存活于可垃圾回收的堆（heap）中。</li>
+<li>变量存活空间：<ul>
+<li>如果在方法体内定义的，这时候就是在栈上分配的</li>
+<li>如果是类的成员变量，这时候就是在堆上分配的</li>
+<li>如果是类的静态成员变量，在<a href="https://blog.csdn.net/top_code/article/details/51288529" target="_blank" rel="noopener">方法区</a>(堆，各个线程共享的内存区域)上分配的</li>
+</ul>
 </li>
+</ol>
+<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><ol>
+<li>JAVA虚拟机只会从头开始往下找到第一个符合范围的异常处理块</li>
+<li>可以抛出多重异常 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void function name () throw PantException, LionException&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h1><ol>
 <li><p>序列化保存对象的状态</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileOutputStream fileStream = new FileOutputStream (“TEST.ser”);</span><br><span class="line">ObjectOutputStream os = new ObjectOutputStream(fileStream);</span><br><span class="line">os.writeObject(characterOne);</span><br><span class="line">os.close();</span><br></pre></td></tr></table></figure>
 </li>
@@ -514,6 +521,8 @@
 </li>
 <li><p>类如果可序列化，必须implements Serializable。如果某实例变量不应该被序列化，定义为transient。</p>
 </li>
+</ol>
+<h1 id="网络编程"><a href="#网络编程" class="headerlink" title="网络编程"></a>网络编程</h1><ol>
 <li>网络 java.net</li>
 <li><p>建立socket</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Socket s = new Socket(’127.0.0.0’,8888);</span><br><span class="line">InputStream steam = new InputStream(s.getInputStream());</span><br><span class="line">BufferReader reader = new BufferReader(stream);</span><br><span class="line">String msg = reader.readLine();</span><br></pre></td></tr></table></figure>
@@ -525,6 +534,8 @@
 </li>
 <li>线程命名 setName()</li>
 <li>synchronized修饰方法使其每次只能被一个线程存取。锁是在对象上。没有处理死锁机制。</li>
+</ol>
+<h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><ol>
 <li>集合<ul>
 <li>TreeSet:有序防重复 </li>
 <li>HashMap </li>
@@ -533,9 +544,11 @@
 <li>LinkedHaskMap:记住元素插入顺序</li>
 </ul>
 </li>
+</ol>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><ol>
 <li><p>泛型的类代表类的声明用到类型函数，泛型的方法代表方法的声明特征用到类型函数。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class GenericTest &#123;</span><br><span class="line">    // 这个类是个泛型类</span><br><span class="line">    public class Generic&lt;T&gt;&#123;     </span><br><span class="line">        private T key;</span><br><span class="line"></span><br><span class="line">        public Generic(T key) &#123;</span><br><span class="line">            this.key = key;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // 这是一个泛型方法。</span><br><span class="line">    // 首先在public与返回值之间的&lt;T&gt;必不可少，这表明这是一个泛型方法，并且声明了一个泛型T</span><br><span class="line">    // 这个T可以出现在这个泛型方法的任意位置.</span><br><span class="line">    // 泛型的数量也可以为任意多个 </span><br><span class="line">    public &lt;T,K&gt; K showKeyName(Generic&lt;T&gt; container)&#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><a href="https://www.runoob.com/java/java-generics.html" target="_blank" rel="noopener">Java 泛型</a></p>
+<p> <a href="https://www.runoob.com/java/java-generics.html" target="_blank" rel="noopener">Java 泛型</a></p>
 </li>
 <li>相等<ul>
 <li>引用的相等性 ＝＝</li>
