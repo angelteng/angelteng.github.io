@@ -229,6 +229,522 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/22/Redis原理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/22/Redis原理/" itemprop="url">Redis原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-22T10:16:51+08:00">
+                2018-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/缓存/" itemprop="url" rel="index">
+                    <span itemprop="name">缓存</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h4 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h4><p>简单动态字符串（SDS），比起 C 字符串， SDS 具有以下优点：</p>
+<ol>
+<li>常数复杂度O1获取字符串长度。</li>
+<li>杜绝缓冲区溢出。</li>
+<li>减少修改字符串长度时所需的内存重分配次数：空间预分配未使用空间，SDS修改后，长度少于1m酒会分配跟len相同大小的未使用空间，大于1m分配1m的未使用空间。</li>
+<li>二进制安全。</li>
+<li>兼容部分 C 字符串函数。</li>
+</ol>
+<h4 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h4><ol>
+<li>每个链表节点由一个 listNode 结构来表示， 每个节点都有一个指向前置节点和后置节点的指针， 所以 Redis 的链表实现是双端链表。</li>
+<li>每个链表使用一个 list 结构来表示， 这个结构带有表头节点指针、表尾节点指针、以及链表长度等信息。</li>
+<li>因为链表表头节点的前置节点和表尾节点的后置节点都指向 NULL ， 所以 Redis 的链表实现是无环链表。</li>
+<li>通过为链表设置不同的类型特定函数， Redis 的链表可以用于保存各种不同类型的值。</li>
+</ol>
+<h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><ol>
+<li>Redis 中的字典使用哈希表作为底层实现， 每个字典带有两个哈希表， 一个用于平时使用， 另一个仅在进行 rehash 时使用。</li>
+<li>当字典被用作数据库的底层实现， 或者哈希键的底层实现时， Redis 使用 MurmurHash2 算法来计算键的哈希值。</li>
+<li>哈希表使用链地址法来解决键冲突， 被分配到同一个索引上的多个键值对会连接成一个单向链表。</li>
+<li>在对哈希表进行扩展或者收缩操作时， 程序需要将现有哈希表包含的所有键值对 rehash 到新哈希表里面， 并且这个 rehash 过程并不是一次性地完成的， 而是渐进式地完成的。</li>
+<li>负载因子 ＝哈希表已保存节点数量 / 哈希表大小</li>
+<li>索引值计算</li>
+</ol>
+<ul>
+<li>使用字典设置的哈希函数，计算键 key 的哈希值<br>hash = dict-&gt;type-&gt;hashFunction(key);</li>
+<li>使用哈希表的 sizemask 属性和哈希值，计算出索引值</li>
+<li>根据情况不同， ht[x] 可以是 ht[0] 或者 ht[1]<br>index = hash &amp; dict-&gt;ht[x].sizemask;</li>
+</ul>
+<h4 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h4><ol>
+<li>跳跃表是有序集合的底层实现之一， 除此之外它在 Redis 中没有其他应用。</li>
+<li>Redis 的跳跃表实现由 zskiplist 和 zskiplistNode 两个结构组成， 其中 zskiplist 用于保存跳跃表信息（比如表头节点、表尾节点、长度）， 而 zskiplistNode 则用于表示跳跃表节点。</li>
+<li>每个跳跃表节点的层高都是 1 至 32 之间的随机数。</li>
+<li>在同一个跳跃表中， 多个节点可以包含相同的分值， 但每个节点的成员对象必须是唯一的。</li>
+<li>跳跃表中的节点按照分值大小进行排序， 当分值相同时， 节点按照成员对象的大小进行排序。</li>
+</ol>
+<h4 id="整数集合"><a href="#整数集合" class="headerlink" title="整数集合"></a>整数集合</h4><ol>
+<li>整数集合是集合键的底层实现之一。</li>
+<li>整数集合的底层实现为数组， 这个数组以有序、无重复的方式保存集合元素， 在有需要时， 程序会根据新添加元素的类型， 改变这个数组的类型。</li>
+<li>升级操作为整数集合带来了操作上的灵活性， 并且尽可能地节约了内存。</li>
+<li>整数集合只支持升级操作， 不支持降级操作。</li>
+</ol>
+<h4 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h4><ol>
+<li>压缩列表是一种为节约内存而开发的顺序型数据结构。</li>
+<li>压缩列表被用作列表键和哈希键的底层实现之一。</li>
+<li>压缩列表可以包含多个节点，每个节点可以保存一个字节数组或者整数值。</li>
+<li>添加新节点到压缩列表， 或者从压缩列表中删除节点， 可能会引发连锁更新操作， 但这种操作出现的几率并不高。</li>
+</ol>
+<h4 id="quicklist-v3-2新增）"><a href="#quicklist-v3-2新增）" class="headerlink" title="quicklist(v3.2新增）"></a>quicklist(v3.2新增）</h4><ol>
+<li>由ziplist组成的双向链表，链表中的每一个节点都以压缩列表ziplist的结构保存着数据，而ziplist有多个entry节点，保存着数据。</li>
+<li>quicklist宏观上是一个双向链表，因此，它具有一个双向链表的有点，进行插入或删除操作时非常方便，虽然复杂度为O(n)，但是不需要内存的复制，提高了效率，而且访问两端元素复杂度为O(1)。</li>
+<li>quicklist微观上是一片片entry节点，每一片entry节点内存连续且顺序存储，可以通过二分查找以 log2(n)log2(n)的复杂度进行定位</li>
+</ol>
+<h1 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h1><ol>
+<li>字符串对象的编码可以是int、raw、embstr</li>
+<li>列表对象的编码可以是ziplist、linkedlist（quick list？）</li>
+<li>哈希对象的编码可以是ziplist、hashtable</li>
+<li>集合对象的编码可以是intset（整数集合）、hashtable</li>
+<li>有序集合的编码可以是ziplist、skiplist</li>
+</ol>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><ol>
+<li>c语言不具备自动内存回收，redis构建了引用技术实现</li>
+<li>只对包含整数值字符串对象进行内存共享：1. 将数据库键值的值指针指向一个现有的值对象。2. 将被共享的值对象引用计数增加一</li>
+<li>redis在服务器初始化时，创建0到9999一万个字符串对象</li>
+<li>空转时长：对象记录了最后一次被访问时间</li>
+</ol>
+<h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1><ol>
+<li>初始化服务时候，根据dbnum（可配默认16）创建数据库</li>
+<li>键空间（字典）：保存了所有键值对</li>
+<li>命中次数（keyspace_hits) 不命中次数(keyspace_misses) ，INFO stats命令查看</li>
+<li>过期字典：保存了所有键的过期时间（毫秒级时间戳）</li>
+<li>persist 实际是把键从过期字典中删除</li>
+<li>过期删除策略：惰性删除（所有命令操作键时进行检查）＋定期删除（定期从一定数量数据库取一定数量随机键检查并删除过期键）</li>
+<li>RDB持久化（在指定的时间间隔内，执行指定次数的写操作，则会将内存中的数据写入到磁盘中），生成RDB文件时已过期键不会保存，载入RDB文件时，主服务器模式运行时，过期键将被忽略，从服务器模式运行时会载入所有键，但在主从同步时过期键将被删除。</li>
+<li>AOF持久化（采用日志的形式来记录每个写操作，并追加到文件中。Redis 重启的会根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作），当过期键被删除的时候，向AOF文件追加一条DEL命令。AOF重写时，过期键被检查而不会保存到AOF文件。</li>
+<li>数据库通知功能（notifyKeyspaceEvent)</li>
+</ol>
+<h1 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h1><h4 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h4><ol>
+<li>生成RDB文件命令：SAVE，阻赛Redis服务器进程，直到RDB文件创建完毕为止。BGSAVE，派生出一个子进程，由子进程负责生成RDB文件，服务器主进程基础处理命令请求。</li>
+<li>serverCron默认每隔100ms执行检查save选项保存条件（dirty,lastsave)是否满足，如满足执行BGSAVE</li>
+</ol>
+<h4 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h4><ol>
+<li>appendfsync选项。安全性always&gt;every sec&gt;no。 效率no&gt;everysec&gt;always</li>
+</ol>
+<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><ol>
+<li>redis是事件驱动程序，服务器处理事件分为时间事件、文件事件</li>
+<li>文件事件是对套接字操作的抽奖</li>
+<li>服务器在一半情况下只执行serverCron函数一个时间事件</li>
+<li>因为事件循环，时间事件的实际处理事件会比设定时间晚一些</li>
+</ol>
+<h1 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h1><ol>
+<li>服务器状态结构使用 clients 链表连接起多个客户端状态，新添加的客户端状态会被放到链表的末尾。</li>
+<li>客户端状态的 flags 属性使用不同标志来表示客户端的角色， 以及客户端当前所处的状态。</li>
+<li>输入缓冲区记录了客户端发送的命令请求， 这个缓冲区的大小不能超过 1 GB 。</li>
+<li>命令的参数和参数个数会被记录在客户端状态的 argv 和 argc 属性里面， 而 cmd 属性则记录了客户端要执行命令的实现函数。</li>
+<li>客户端有固定大小缓冲区和可变大小缓冲区两种缓冲区可用， 其中固定大小缓冲区的最大大小为 16 KB ， 而可变大小缓冲区的最大大小不能超过服务器设置的硬性限制值。</li>
+<li>输出缓冲区限制值有两种， 如果输出缓冲区的大小超过了服务器设置的硬性限制， 那么客户端会被立即关闭； 除此之外， 如果客户端在一定时间内， 一直超过服务器设置的软性限制， 那么客户端也会被关闭。</li>
+<li>当一个客户端通过网络连接连上服务器时， 服务器会为这个客户端创建相应的客户端状态。 网络连接关闭、 发送了不合协议格式的命令请求、 成为 CLIENT_KILL 命令的目标、 空转时间超时、 输出缓冲区的大小超出限制， 以上这些原因都会造成客户端被关闭。</li>
+<li>处理 Lua 脚本的伪客户端在服务器初始化时创建， 这个客户端会一直存在， 直到服务器关闭。</li>
+<li>载入 AOF 文件时使用的伪客户端在载入工作开始时动态创建， 载入工作完毕之后关闭。</li>
+</ol>
+<h1 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h1><ol>
+<li>一个命令请求从发送到完成主要包括以下步骤： <ul>
+<li>客户端将命令请求发送给服务器； </li>
+<li>服务器读取命令请求，并分析出命令参数； </li>
+<li>命令执行器根据参数查找命令的实现函数，然后执行实现函数并得出命令回复； </li>
+<li>服务器将命令回复返回给客户端。</li>
+</ul>
+</li>
+<li>serverCron 函数默认每隔 100 毫秒执行一次， 它的工作主要包括更新服务器状态信息， 处理服务器接收的 SIGTERM 信号， 管理客户端资源和数据库状态， 检查并执行持久化操作， 等等。</li>
+<li>服务器从启动到能够处理客户端的命令请求需要执行以下步骤： <ul>
+<li>初始化服务器状态； </li>
+<li>载入服务器配置； </li>
+<li>初始化服务器数据结构； </li>
+<li>还原数据库状态； </li>
+<li>执行事件循环。</li>
+</ul>
+</li>
+</ol>
+<h1 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h1><ol>
+<li>部分重同步通过复制偏移量、复制积压缓冲区、服务器运行 ID 三个部分来实现。</li>
+<li>在复制操作刚开始的时候， 从服务器会成为主服务器的客户端， 并通过向主服务器发送命令请求来执行复制步骤， 而在复制操作的后期， 主从服务器会互相成为对方的客户端。</li>
+<li>主服务器通过向从服务器传播命令来更新从服务器的状态， 保持主从服务器一致， 而从服务器则通过向主服务器发送命令(REPLACONFACK)来进行心跳检测， 以及命令丢失检测。</li>
+</ol>
+<h1 id="Sentinel"><a href="#Sentinel" class="headerlink" title="Sentinel"></a>Sentinel</h1><ol>
+<li>一个运行在特殊模式下的 Redis 服务器， 它使用了和普通模式不同的命令表， 所以 Sentinel 模式能够使用的命令和普通 Redis 服务器能够使用的命令不同。</li>
+<li>Sentinel 会读入用户指定的配置文件， 为每个要被监视的主服务器创建相应的实例结构， 并创建连向主服务器的命令连接和订阅连接， 其中命令连接用于向主服务器发送命令请求， 而订阅连接则用于接收指定频道的消息。</li>
+<li>Sentinel 通过向主服务器发送 INFO 命令来获得主服务器属下所有从服务器的地址信息， 并为这些从服务器创建相应的实例结构， 以及连向这些从服务器的命令连接和订阅连接。</li>
+<li>在一般情况下， Sentinel 以每十秒一次的频率向被监视的主服务器和从服务器发送 INFO 命令， 当主服务器处于下线状态， 或者 Sentinel 正在对主服务器进行故障转移操作时， Sentinel 向从服务器发送 INFO 命令的频率会改为每秒一次。</li>
+<li>对于监视同一个主服务器和从服务器的多个 Sentinel 来说， 它们会以每两秒一次的频率， 通过向被监视服务器的 <strong>sentinel</strong>:hello 频道发送消息来向其他 Sentinel 宣告自己的存在。</li>
+<li>每个 Sentinel 也会从 <strong>sentinel</strong>:hello 频道中接收其他 Sentinel 发来的信息， 并根据这些信息为其他 Sentinel 创建相应的实例结构， 以及命令连接。</li>
+<li>Sentinel 只会与主服务器和从服务器创建命令连接和订阅连接， Sentinel 与 Sentinel 之间则只创建命令连接。</li>
+<li>Sentinel 以每秒一次的频率向实例（包括主服务器、从服务器、其他 Sentinel）发送 PING 命令， 并根据实例对 PING 命令的回复来判断实例是否在线： 当一个实例在指定的时长中连续向 Sentinel 发送无效回复时， Sentinel 会将这个实例判断为主观下线。</li>
+<li>当 Sentinel 将一个主服务器判断为主观下线时， 它会向同样监视这个主服务器的其他 Sentinel 进行询问， 看它们是否同意这个主服务器已经进入主观下线状态。</li>
+<li>当 Sentinel 收集到足够多的主观下线投票之后， 它会将主服务器判断为客观下线， 并发起一次针对主服务器的故障转移操作。</li>
+<li>相似RAFT算法选取领头Sentinel</li>
+</ol>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><ol>
+<li>节点通过握手来将其他节点添加到自己所处的集群当中。</li>
+<li>集群中的 16384 个槽可以分别指派给集群中的各个节点， 每个节点都会记录哪些槽指派给了自己， 而哪些槽又被指派给了其他节点。</li>
+<li>节点在接到一个命令请求时， 会先检查这个命令请求要处理的键所在的槽是否由自己负责， 如果不是的话， 节点将向客户端返回一个 MOVED 错误， MOVED 错误携带的信息可以指引客户端转向至正在负责相关槽的节点。</li>
+<li>对 Redis 集群的重新分片工作是由客户端执行的， 重新分片的关键是将属于某个槽的所有键值对从一个节点转移至另一个节点。</li>
+<li>如果节点 A 正在迁移槽 i 至节点 B ， 那么当节点 A 没能在自己的数据库中找到命令指定的数据库键时， 节点 A 会向客户端返回一个 ASK 错误， 指引客户端到节点 B 继续查找指定的数据库键。</li>
+<li>MOVED 错误表示槽的负责权已经从一个节点转移到了另一个节点， 而 ASK 错误只是两个节点在迁移槽的过程中使用的一种临时措施。</li>
+<li>集群里的从节点用于复制主节点， 并在主节点下线时， 代替主节点继续处理命令请求。</li>
+<li>集群中的节点通过发送和接收消息来进行通讯， 常见的消息包括 MEET 、 PING 、 PONG 、 PUBLISH 、 FAIL 五种。</li>
+</ol>
+<h1 id="发布订阅模式"><a href="#发布订阅模式" class="headerlink" title="发布订阅模式"></a>发布订阅模式</h1><ol>
+<li>服务器状态在 pubsub_channels 字典保存了所有频道的订阅关系： SUBSCRIBE 命令负责将客户端和被订阅的频道关联到这个字典里面， 而 UNSUBSCRIBE 命令则负责解除客户端和被退订频道之间的关联。</li>
+<li>服务器状态在 pubsub_patterns 链表保存了所有模式的订阅关系： PSUBSCRIBE 命令负责将客户端和被订阅的模式记录到这个链表中， 而 UNSUBSCRIBE 命令则负责移除客户端和被退订模式在链表中的记录。</li>
+<li>PUBLISH 命令通过访问 pubsub_channels 字典来向频道的所有订阅者发送消息， 通过访问 pubsub_patterns 链表来向所有匹配频道的模式的订阅者发送消息。</li>
+<li>PUBSUB 命令的三个子命令都是通过读取 pubsub_channels 字典和 pubsub_patterns 链表中的信息来实现的。</li>
+</ol>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><ol>
+<li>事务提供了一种将多个命令打包， 然后一次性、有序地执行的机制。</li>
+<li>多个命令会被入队到事务队列中， 然后按先进先出（FIFO）的顺序执行。</li>
+<li>事务在执行过程中不会被中断， 当事务队列中的所有命令都被执行完毕之后， 事务才会结束。</li>
+<li>带有 WATCH 命令的事务会将客户端和被监视的键在数据库的 watched_keys 字典中进行关联， 当键被修改时， 程序会将所有监视被修改键的客户端的 REDIS_DIRTY_CAS 标志打开。</li>
+<li>只有在客户端的 REDIS_DIRTY_CAS 标志未被打开时， 服务器才会执行客户端提交的事务， 否则的话， 服务器将拒绝执行客户端提交的事务。</li>
+<li>Redis 的事务总是保证 ACID 中的原子性、一致性和隔离性， 当服务器运行在 AOF 持久化模式下， 并且 appendfsync 选项的值为 always 时， 事务也具有耐久性。</li>
+<li>Redis事务不支持事务回滚机制，即使实行期间出现了错误也会全部执行所有命令。</li>
+</ol>
+<h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><ol>
+<li>SORT 命令通过将被排序键包含的元素载入到数组里面， 然后对数组进行排序来完成对键进行排序的工作。</li>
+<li>在默认情况下， SORT 命令假设被排序键包含的都是数字值， 并且以数字值的方式来进行排序。</li>
+<li>如果 SORT 命令使用了 ALPHA 选项， 那么 SORT 命令假设被排序键包含的都是字符串值， 并且以字符串的方式来进行排序。</li>
+<li>SORT 命令的排序操作由快速排序算法实现。</li>
+<li>SORT 命令会根据用户是否使用了 DESC 选项来决定是使用升序对比还是降序对比来比较被排序的元素</li>
+<li>当 SORT 命令使用了 BY 选项时， 命令使用其他键的值作为权重来进行排序操作。</li>
+<li>当 SORT 命令使用了 LIMIT 选项时， 命令只保留排序结果集中 LIMIT 选项指定的元素。</li>
+<li>当 SORT 命令使用了 GET 选项时， 命令会根据排序结果集中的元素， 以及 GET 选项给定的模式， 查找并返回其他键的值， 而不是返回被排序的元素。</li>
+<li>当 SORT 命令使用了 STORE 选项时， 命令会将排序结果集保存在指定的键里面。</li>
+<li>当 SORT 命令同时使用多个选项时， 命令先执行排序操作（可用的选项为 ALPHA 、 ASC 或 DESC 、 BY ）， 然后执行 LIMIT 选项， 之后执行 GET 选项， 再之后执行 STORE 选项， 最后才将排序结果集返回给客户端。</li>
+<li>除了 GET 选项之外， 调整选项的摆放位置不会影响 SORT 命令的排序结果。</li>
+</ol>
+<h1 id="二进制位数组"><a href="#二进制位数组" class="headerlink" title="二进制位数组"></a>二进制位数组</h1><ol>
+<li>Redis 使用 SDS 来保存位数组。</li>
+<li>SDS 使用逆序来保存位数组， 这种保存顺序简化了 SETBIT 命令的实现， 使得 SETBIT 命令可以在不移动现有二进制位的情况下， 对位数组进行空间扩展。</li>
+<li>BITCOUNT 命令使用了查表算法和 variable-precision SWAR 算法来优化命令的执行效率。</li>
+<li>BITOP 命令的所有操作都使用 C 语言内置的位操作来实现。</li>
+</ol>
+<h1 id="慢日志"><a href="#慢日志" class="headerlink" title="慢日志"></a>慢日志</h1><ol>
+<li>Redis 的慢查询日志功能用于记录执行时间超过指定时长的命令。</li>
+<li>Redis 服务器将所有的慢查询日志保存在服务器状态的 slowlog 链表中， 每个链表节点都包含一个 slowlogEntry 结构， 每个 slowlogEntry 结构代表一条慢查询日志。</li>
+<li>打印和删除慢查询日志可以通过遍历 slowlog 链表来完成。</li>
+<li>slowlog 链表的长度就是服务器所保存慢查询日志的数量。</li>
+<li>新的慢查询日志会被添加到 slowlog 链表的表头， 如果日志的数量超过 slowlog-max-len 选项的值， 那么多出来的日志会被删除。</li>
+</ol>
+<h1 id="监视器"><a href="#监视器" class="headerlink" title="监视器"></a>监视器</h1><ol>
+<li>客户端可以通过执行 MONITOR 命令， 将客户端转换成监视器， 接收并打印服务器处理的每个命令请求的相关信息。</li>
+<li>当一个客户端从普通客户端变为监视器时， 该客户端的 REDIS_MONITOR 标识会被打开。</li>
+<li>服务器将所有监视器都记录在 monitors 链表中。</li>
+<li>每次处理命令请求时， 服务器都会遍历 monitors 链表， 将相关信息发送给监视器。</li>
+</ol>
+<h1 id="LUA"><a href="#LUA" class="headerlink" title="LUA"></a>LUA</h1><p>好处</p>
+<ol>
+<li>［原子操作］lua脚本式在redis中原子执行的，在执行过程中不会插入其他命令</li>
+<li>［可复用］lua脚本可以帮助开发和运维人员创造出自己定制的命令，并可以将这些命令常驻在Redis内存中，实现复用的效果。</li>
+<li>［高性能］lua脚本可以将多条命令一次性打包，有效的减少网络开销。</li>
+</ol>
+<p>要点：</p>
+<ol>
+<li>Redis 服务器在启动时， 会对内嵌的 Lua 环境执行一系列修改操作， 从而确保内嵌的 Lua 环境可以满足 Redis 在功能性、安全性等方面的需要。</li>
+<li>Redis 服务器专门使用一个伪客户端来执行 Lua 脚本中包含的 Redis 命令。</li>
+<li>Redis 使用脚本字典来保存所有被 EVAL 命令执行过， 或者被 SCRIPT_LOAD 命令载入过的 Lua 脚本， 这些脚本可以用于实现 SCRIPT_EXISTS 命令， 以及实现脚本复制功能。</li>
+<li>EVAL 命令为客户端输入的脚本在 Lua 环境中定义一个函数， 并通过调用这个函数来执行脚本。</li>
+<li>EVALSHA 命令通过直接调用 Lua 环境中已定义的函数来执行脚本。</li>
+<li>SCRIPT_FLUSH 命令会清空服务器 lua_scripts 字典中保存的脚本， 并重置 Lua 环境。</li>
+<li>SCRIPT_EXISTS 命令接受一个或多个 SHA1 校验和为参数， 并通过检查 lua_scripts 字典来确认校验和对应的脚本是否存在。</li>
+<li>SCRIPT_LOAD 命令接受一个 Lua 脚本为参数， 为该脚本在 Lua 环境中创建函数， 并将脚本保存到 lua_scripts 字典中。</li>
+<li>服务器在执行脚本之前， 会为 Lua 环境设置一个超时处理钩子， 当脚本出现超时运行情况时， 客户端可以通过向服务器发送 SCRIPT_KILL 命令来让钩子停止正在执行的脚本， 或者发送 SHUTDOWN nosave 命令来让钩子关闭整个服务器。</li>
+<li>主服务器复制 EVAL 、 SCRIPT_FLUSH 、 SCRIPT_LOAD 三个命令的方法和复制普通 Redis 命令一样 —— 只要将相同的命令传播给从服务器就可以了。</li>
+<li>主服务器在复制 EVALSHA 命令时， 必须确保所有从服务器都已经载入了 EVALSHA 命令指定的 SHA1 校验和所对应的 Lua 脚本， 如果不能确保这一点的话， 主服务器会将 EVALSHA 命令转换成等效的 EVAL 命令， 并通过传播 EVAL 命令来获得相同的脚本执行效果。</li>
+</ol>
+<h1 id="Redis与MC对比"><a href="#Redis与MC对比" class="headerlink" title="Redis与MC对比"></a>Redis与MC对比</h1><p><img src="0.png" alt="对比"><br><a href="https://segmentfault.com/a/1190000015706221?utm_source=weekly&amp;utm_medium=email&amp;utm_campaign=email_weekly" target="_blank" rel="noopener">why redis</a></p>
+<p>参考：<br><a href="http://origin.redisbook.com" target="_blank" rel="noopener">Redis 设计与实现（第一版）</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/21/设计可拓展框架/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/21/设计可拓展框架/" itemprop="url">设计可拓展框架</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T17:33:57+08:00">
+                2018-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/架构设计/" itemprop="url" rel="index">
+                    <span itemprop="name">架构设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>可拓展框架基本模式</p>
+<ol>
+<li>面向流程拆分：分层结构（通过分层强制约束两两依赖，缺点在于冗余的调用、性能）<br> 比如MVC分层</li>
+<li>面向服务拆分：SOA（服务＋ESB） 、微服务</li>
+<li>面向功能拆分：微内核架构</li>
+</ol>
+<p>微服务的基础设施：</p>
+<ol>
+<li>自动化测试</li>
+<li>自动化部署</li>
+<li>配置中心</li>
+<li>接口框架</li>
+<li>api网关</li>
+<li>服务发现</li>
+<li>服务路由</li>
+<li>服务容错</li>
+<li>服务监控</li>
+<li>服务跟踪</li>
+<li>服务安全</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/21/PHP项目中并发处理/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1441,310 +1957,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/15/Flask中并发优化jMeter测试/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/15/Flask中并发优化jMeter测试/" itemprop="url">Flask中并发优化jMeter测试</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-15T17:13:18+08:00">
-                2018-11-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>Queue的使用<br><a href="http://www.cnblogs.com/itogo/p/5635629.html" target="_blank" rel="noopener">参考</a><br>in Python3.x should use ‘pip install q’<br>in Python2.x should use ‘pip install queue’</p>
-</li>
-<li><p>关于模块：除了包含函数定义外，模块也可以包含可执行语句。这些语句一般用来初始化模块。他们仅在 <em>第一次</em> 被导入的地方执行一次。所以如果有需要预初始化对象并共享，可以在模块执行语句中写。</p>
-</li>
-<li><p>关于并发测试：<br>postman的runner是串行的，上一个请求结束后才开始下一个请求，只能算连续测试但不是并发测试。<br>推荐使用JMeter。<br>安装:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; brew install jmeter</span><br><span class="line"># 如果提示没有安装java</span><br><span class="line">&gt;&gt;&gt; brew install brew cask</span><br><span class="line">&gt;&gt;&gt; brew cask install java</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; open /usr/local/bin/jmeter</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://www.jianshu.com/p/0e4daecc8122" target="_blank" rel="noopener">入门教程</a><br><a href="https://www.cnblogs.com/fnng/archive/2012/12/22/2829479.html" target="_blank" rel="noopener">固定qps压力测试</a><br><img src="0.png" alt="测试结果"></p>
-<ol start="4">
-<li>使用htop查看服务器cpu使用情况<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; yum install htop</span><br><span class="line">&gt;&gt;&gt; htop #打开</span><br><span class="line">&gt;&gt;&gt; q #退出</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><a href="https://www.cnblogs.com/lazyfang/p/7650010.html" target="_blank" rel="noopener">入门教程</a><br><img src="1.png" alt="htop"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/14/asyncio报错/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/14/asyncio报错/" itemprop="url">asyncio报错</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-14T17:13:57+08:00">
-                2018-11-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在flask中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">.....</span><br><span class="line"> loop = asyncio.get_event_loop()</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
-<p>发现报错<br>RuntimeError: There is no current event loop in thread ‘Thread-2’.</p>
-<p>修改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">...</span><br><span class="line">new_loop = asyncio.new_event_loop()</span><br><span class="line">asyncio.set_event_loop(new_loop)</span><br><span class="line">loop = asyncio.get_event_loop()</span><br></pre></td></tr></table></figure></p>
-<p>原因：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 源码</span><br><span class="line">def get_event_loop(self):</span><br><span class="line">    &quot;&quot;&quot;Get the event loop.</span><br><span class="line">    This may be None or an instance of EventLoop.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    if (self._local._loop is None and</span><br><span class="line">            not self._local._set_called and</span><br><span class="line">            isinstance(threading.current_thread(), threading._MainThread)):</span><br><span class="line">        self.set_event_loop(self.new_event_loop())</span><br><span class="line"></span><br><span class="line">    if self._local._loop is None:</span><br><span class="line">        raise RuntimeError(&apos;There is no current event loop in thread %r.&apos;</span><br><span class="line">                            % threading.current_thread().name)</span><br><span class="line"></span><br><span class="line">    return self._local._loop</span><br></pre></td></tr></table></figure></p>
-<p>在主线程中，调用get_event_loop总能返回属于主线程的event loop对象，如果是处于非主线程中，还需要调用set_event_loop方法指定一个event loop对象，这样get_event_loop才会获取到被标记的event loop对象：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def set_event_loop(self, loop):</span><br><span class="line">    &quot;&quot;&quot;Set the event loop.&quot;&quot;&quot;</span><br><span class="line">    self._local._set_called = True</span><br><span class="line">    assert loop is None or isinstance(loop, AbstractEventLoop)</span><br><span class="line">    self._local._loop = loop</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://juejin.im/entry/5b3d99565188251b134e5355" target="_blank" rel="noopener">参考</a><br>由于Flask工作流程：<br>如果启动app时将threaded参数设定为True,flask才会以多线程的方式去处理每一个请求，<br>否则，所有请求是在一个工作线程（非主线程）运行。<a href="https://www.cnblogs.com/jamespei/p/7158107.html" target="_blank" rel="noopener">具体</a>。此时与直接命令行运行脚本不同，请留意。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1797,7 +2009,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

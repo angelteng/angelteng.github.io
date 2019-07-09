@@ -229,6 +229,374 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/09/OAuth2授权/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/07/09/OAuth2授权/" itemprop="url">OAuth2授权</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-09T14:06:19+08:00">
+                2019-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="OAuth是一个标准"><a href="#OAuth是一个标准" class="headerlink" title="OAuth是一个标准"></a>OAuth是一个标准</h1><p>开放授权（OAuth）是一个开放标准，允许用户让第三方应用访问该用户在某一网站上存储的私密的资源（如照片，视频，联系人列表），而无需将用户名和密码提供给第三方应用。<br>OAuth是OpenID的一个补充，但是完全不同的服务。</p>
+<h1 id="OAuth功能"><a href="#OAuth功能" class="headerlink" title="OAuth功能"></a>OAuth功能</h1><p>OAuth允许用户提供一个令牌，而不是用户名和密码来访问他们存放在特定服务提供者的数据。每一个令牌授权一个特定的网站（例如，视频编辑网站)在特定的时段（例如，接下来的2小时内）内访问特定的资源（例如仅仅是某一相册中的视频）。这样，OAuth让用户可以授权第三方网站访问他们存储在另外服务提供者的某些特定信息，而非所有内容。</p>
+<h1 id="OAuth四种授权方式"><a href="#OAuth四种授权方式" class="headerlink" title="OAuth四种授权方式"></a>OAuth四种授权方式</h1><ol>
+<li><p>Authorization Code</p>
+ <img src="/blog/2019/07/09/OAuth2授权/0.jpg">
+<ul>
+<li>（A）Client使用浏览器（用户代理）访问Authorization server。也就是用浏览器访问一个URL，这个URL是Authorization server提供的，访问的收Client需要提供（客户端标识，请求范围，本地状态和重定向URL）这些参数。</li>
+<li>（B）Authorization server验证Client在（A）中传递的参数信息，如果无误则提供一个页面供Resource owner登陆，登陆成功后选择Client可以访问Resource server的哪些资源以及读写权限。</li>
+<li>（C）在（B）无误后返回一个授权码（Authorization Code）给Client。</li>
+<li>（D）Client拿着（C）中获得的授权码（Authorization Code）和（客户端标识、重定向URL等信息）作为参数，请求Authorization server提供的获取访问令牌的URL。</li>
+<li>（E）Authorization server返回访问令牌和可选的刷新令牌以及令牌有效时间等信息给Client。</li>
+</ul>
+</li>
+<li><p>Implicit</p>
+ <img src="/blog/2019/07/09/OAuth2授权/1.jpg">
+<p> 和Authorzation Code类型下重要的区分就是省略了Authorization Response和Access Token Request。</p>
+</li>
+<li>Resource Owner Password Credentials Grant <img src="/blog/2019/07/09/OAuth2授权/2.jpg">
+ Client直接使用Resource owner提供的username和password来直接请求access_token（直接发起Access Token Request然后返回Access Token Response信息）。这种模式一般适用于Resource server高度信任第三方Client的情况下。</li>
+<li>Client Credentials Grant <img src="/blog/2019/07/09/OAuth2授权/3.jpg">
+ Client直接已自己的名义而不是Resource owner的名义去要求访问Resource server的一些受保护资源。</li>
+</ol>
+<h1 id="安全性问题"><a href="#安全性问题" class="headerlink" title="安全性问题"></a>安全性问题</h1><ol>
+<li>要求Authorization server进行有效的Client验证；<br> 包括client是否注册、client所属权限。</li>
+<li>client_serect,access_token,refresh_token,code等敏感信息的安全存储（不得泄露给第三方）、传输通道的安全性（TSL的要求）；<br> 必须使用HTTPS。</li>
+<li>维持refresh_token和第三方应用的绑定，刷新失效机制；</li>
+<li>维持Authorization Code和第三方应用的绑定，这也是state参数为什么是推荐的一点，以防止CSRF；<br> 同3，要求验证请求来源域名、重定向域名是否合法。<br> 必须使用state：客户端发出去, 授权服务器原样返回(对于授权服务器来说state是黑盒的东西,说也是可有可无的存在)，所以这个参数如何运用，全靠客户端。比如如果“李四”在客户端已经登录，那么客户端在发送state的时候就可以把“李四”的标识信息和随机数等其他信息加密后作为state。同时存入自己的cookie中。在接收到回调后先对比验证cookie，然后从里面取出“李四”。</li>
+</ol>
+<p>主要参考：<br><a href="https://www.cnblogs.com/linianhui/p/oauth2-authorization.html#auto_id_0" target="_blank" rel="noopener">[认证 &amp; 授权] 1. OAuth2授权</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/" itemprop="url">《Head first Servlet & JSP》笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-02T14:10:15+08:00">
+                2019-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Web应用体系结构"><a href="#Web应用体系结构" class="headerlink" title="Web应用体系结构"></a>Web应用体系结构</h1><ol>
+<li><p>Servlet 生命周期：</p>
+<ol>
+<li>servlet类加载</li>
+<li>servlet实例化</li>
+<li>调用init方法</li>
+<li>调用service方法</li>
+<li>调用destory方法</li>
+</ol>
+</li>
+<li><p>Servlet没有main方法，他们受控于另一个JAVA容器应用，如Tomcat。<br> Web服务器应用（ng、Apache）-&gt; Web容器应用(Tomcat) -&gt; Servlet</p>
+</li>
+<li><p>容器的作用：</p>
+<ol>
+<li>通信支持：管理与web服务器的通信。</li>
+<li>生命周期管理：控制Servlet的生命周期、垃圾回收。</li>
+<li>多线程支持：管理一个线程池，为每个Servlet请求创建一个新/分配的Java线程。</li>
+<li>声明方式实现安全：XML描述文件。</li>
+<li>JSP支持：将JSP翻译成JAVA。</li>
+</ol>
+</li>
+<li>MVC<img src="/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/0.png" title="mvc"></li>
+<li>J2EE 包含了Servlet规范、JSP规范、EJB规范，Web容器用于Web组件（Servlet、JSP），EJB容器用于业务组件。<ul>
+<li>独立的Web容器：Tomcat、Resin</li>
+<li>J2EE服务器：WebLogic、WebSphere</li>
+</ul>
+</li>
+</ol>
+<h1 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h1><ol>
+<li>容器调用流程<ul>
+<li>容器 –&gt; servlet.init() </li>
+<li>容器的线程 –&gt; service() –&gt; doGet()/doPost()…</li>
+</ul>
+</li>
+<li>service方法总是在自己的栈中调用</li>
+</ol>
+<h1 id="Request-and-Response"><a href="#Request-and-Response" class="headerlink" title="Request and Response"></a>Request and Response</h1><ol>
+<li>ServletRequest<ul>
+<li>getAttribute(String)</li>
+<li>genContentLength()</li>
+<li>getInputStream() 输入流</li>
+<li>getLocalPort()  请求最后发送到到端口（每个线程有不同到本地端口）</li>
+<li>getRemotePort() 客户端的端口</li>
+<li>getServerPort() 请求原来发送到的端口</li>
+<li>getParameter(String)</li>
+<li>getParameterValues(String)</li>
+<li>getParameterName</li>
+</ul>
+</li>
+<li><p>HttpServletRequest extends ServletRequest</p>
+<ul>
+<li>getContextPath()</li>
+<li>getCookies()</li>
+<li>getHeader()</li>
+<li>getMethod()</li>
+<li>getQueryString()</li>
+<li>getSession()</li>
+</ul>
+</li>
+<li><p>ServletResponse</p>
+<ul>
+<li>getBufferSize()</li>
+<li>setContentType()</li>
+<li>getOutputStream(): 输出字节 ServletOutputStream s = response.getOutputStream(); out.write(Byte);</li>
+<li>getWriter(): 输出字符 PrintWriter w = response.getWriter(); w.println(String);</li>
+<li>setContentLength()</li>
+</ul>
+</li>
+<li><p>HttpServletResponse extends ServletResponse</p>
+<ul>
+<li>addCookie()</li>
+<li>addHeader()</li>
+<li>encodeURL()</li>
+<li>sendError()</li>
+<li>setStatus()</li>
+<li>setRedirect()</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/25/Python-Requests库中Max-retries问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1634,348 +2002,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/29/聚类算法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/29/聚类算法/" itemprop="url">聚类算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-29T14:23:16+08:00">
-                2019-05-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>聚类算法又叫做“无监督分类”，其目的是将数据划分成有意义或有用的组(或簇)。这种划分可以基于我们的业务 需求或建模需求来完成，也可以单纯地帮助我们探索数据的自然结构和分布。</li>
-<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
-</li>
-<li><p>KMeans聚类算法<br> KMeans算法将一组N个样本的特征矩阵X划分为K个无交集的簇，直观上来看是簇是一组一组聚集在一起的数据，在一个簇中的数据就认为是同一类。簇就是聚类的结果表现。<br> 簇中所有数据的均值通常被称为这个簇的“质心”(centroids)。在一个二维平面中，一簇数据点的质心的 横坐标就是这一簇数据点的横坐标的均值，质心的纵坐标就是这一簇数据点的纵坐标的均值。同理可推广至高维空间。<br> 流程：</p>
-<pre><code>- 随机抽取K个样本作为最初的质心
-- 开始循环:
-- 将每个样本点分配到离他们最近的质心，生成K个簇
-- 对于每个簇，计算所有被分到该簇的样本点的平均值作为新的质心
-- 当质心的位置不再发生变化，迭代停止，聚类完成
-</code></pre></li>
-<li><p>簇内平方和（Inertia）：<br> Total Inertia越小，代表每个簇内样本越相似，聚类的效果就越好。因此 KMeans追求的是，求解能够让Inertia最小化的质心。<br> Inertia是基于欧几里得距离的计算公式得到的。<br> 簇内平方和/整体平方和是KMeans的损失函数。</p>
-</li>
-<li><p>cluster.KMeans (n_clusters=8, init=’k-means++’, n_init=10, max_iter=300, tol=0.0001, precompute_distances=’auto’, verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm=’auto’)</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.cluster import KMeans</span><br><span class="line">n_clusters = 3</span><br><span class="line"># kmean不需要建立模型或者预测数据，因此只要fit就可以查看结果</span><br><span class="line">cluster = KMeans(n_clusters=n_clusters, random_state=0).fit(X)</span><br><span class="line"># 查看聚好的类别，每个样本对应的类</span><br><span class="line">y_pred = cluster.labels_</span><br><span class="line"># 查看质心</span><br><span class="line">centroid = cluster.cluster_centers_</span><br><span class="line"># 查看总距离平方和</span><br><span class="line">inertia = cluster.inertia_</span><br></pre></td></tr></table></figure>
-<p> 参数：</p>
-<pre><code>- n_clusters：分的类数
-</code></pre></li>
-<li><p>模型评估指标<br> 通过衡量簇内差异来衡量聚类的效果，可以通过轮廓系数来判断。</p>
-<ul>
-<li>样本与其自身所在的簇中的其他样本的相似度a，等于样本与同一簇中所有其他点之间的平均距离</li>
-<li>样本与其他簇中的样本的相似度b，等于样本与下一个最近的簇中得所有点之间的平均距离<br>单个样本的轮廓系统为：s = (b-a) / max(b,a)<br>轮廓系数范围是(-1,1)，其中值越接近1表示样本与自己所在的簇中的样本很相似，并且与其他簇中的样本不相似，当样本点与簇外的样本更相似的时候，轮廓系数就为负。当轮廓系数为0时，则代表两个簇中的样本相 似度一致，两个簇本应该是一个簇。<br>缺点：再凸型函数表现虚高<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import silhouette_score</span><br><span class="line">from sklearn.metrics import silhouette_samples</span><br><span class="line">silhouette_score(X,cluster_.labels_) #总数</span><br><span class="line">silhouette_samples(X,y_pred) #每个样本</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/28/线性回归/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/28/线性回归/" itemprop="url">线性回归</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-28T17:13:30+08:00">
-                2019-05-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>回归是一种应用广泛的预测建模技术，这种技术的核心在于预测的结果是连续型变量。</li>
-<li><p>线性回归是机器学习中最简单的回归算法，多元线性回归指的就是一个样本有多个特征的线性回归问题。对于一个 有 个特征的样本 而言，它的回归结果可以写作一个几乎人人熟悉的方程: y = w0+w1x1+w2x2+w3x3…..+wnxn<br>预测函数的本质就是我们需要构建的模型，而构造预测函数的核心就是找出模型的参数向量。通过最小化损失函数或损失函数的某种变化来将求解参数向量，以此将单纯的求解问题转化为一个最优化问题。在多元线性回归中，我们的损失函数如下定义:<br><img src="0.png" alt="image.png"><br>在这个平方结果下，我们的y和y^分别是我们的真实标签和预测值，也就是说，这个损失函数实在计算我们的真实标 签和预测值之间的距离。因此，我们认为这个损失函数衡量了我们构造的模型的预测结果和真实标签的差异，因此我们固然希望我们的预测结果和真实值差异越小越好。所以我们的求解目标就可以转化成RSS残差平方和:<br><img src="1.png" alt="image.png"></p>
-</li>
-<li><p>最小二乘法：通过最小化真实值和预测值之间的RSS来求解参数的方法。<br><img src="2.png" alt="image.png"></p>
-</li>
-<li><p>linear_model.LinearRegression (fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)<br>参数：</p>
-<ul>
-<li>fit_intercept：是否计算此模型的截距，默认True</li>
-<li>normalize： 当fit_intercept设置为False时，将忽略此参数。如果为True，则特征矩阵X在进入回归之前 将会被减去均值(中心化)并除以L2范式(缩放)。如果你希望进行标准化，请在fit数据 之前使用preprocessing模块中的标准化专用类StandardScaler。默认False</li>
-<li>copy_X： 默认为True 如果为真，将在X.copy()上进行操作，否则的话原本的特征矩阵X可能被线性回归影响并覆盖。</li>
-<li>n_jobs： 整数或者None，默认为None 用于计算的作业数。只在多标签的回归和数据量足够大的时候才生效。<br>属性：</li>
-<li>coef_：线性回归方程中估计出的系数</li>
-<li>intercept_： 线性回归中的截距<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LinearRegression as LR</span><br><span class="line">reg = LR().fit(Xtrain, Ytrain)</span><br><span class="line">yhat = reg.predict(Xtest)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>评估</p>
-<ol>
-<li><p>是否预测了正确的值<br> 均方误差MSE：均方误差，本质是在RSS的基础上除以了样本总量，得到了每个样本量上的平均误差。<br> <img src="3.png" alt="image.png"></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import mean_squared_error as MSE</span><br><span class="line">MSE(y_true,y_predict)</span><br></pre></td></tr></table></figure>
-<p> 再sklearn中，均方误差是个负数，代表一种损失。</p>
-</li>
-<li><p>是否拟合到了足够的信息</p>
-<ul>
-<li>R^2和</li>
-<li><p>可解释性方差分数(explained_variance_score，EVS)<br><img src="4.png" alt="image.png"><br>两者都衡量 1 - 我们的模型没有捕获到的信息 量占真实标签中所带的信息量的比例，所以，两者都是越接近1越好。<br>注意方法参数传入的顺序。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import r2_score r2_score(yhat,Ytest)</span><br><span class="line">r2 = reg.score(Xtest,Ytest)</span><br><span class="line"></span><br><span class="line">from sklearn.metrics import explained_variance_score as EVS </span><br><span class="line">EVS(Ytest,yhat)</span><br></pre></td></tr></table></figure>
-<p>R^2的值可能是个负数。证明模型拟合得非常糟糕</p>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2028,7 +2054,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
