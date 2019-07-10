@@ -229,6 +229,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/28/numpy的使用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/28/numpy的使用/" itemprop="url">numpy的使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-28T16:27:06+08:00">
+                2018-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>向量、矩阵<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"># 创建矩阵</span><br><span class="line">matrix = np.array([[1, 4],</span><br><span class="line">                   [2, 5]])</span><br><span class="line"># 矩阵变形</span><br><span class="line">matrix.reshape(1,4)   </span><br><span class="line"># 矩阵的逆</span><br><span class="line">np.linalg.inv(matrix)</span><br><span class="line"># 返回对角线元素</span><br><span class="line">matrix.diagonal()</span><br><span class="line"># 创建矩阵的迹</span><br><span class="line">matrix.diagonal().sum()</span><br><span class="line"># 展开矩阵</span><br><span class="line">matrix.flatten()</span><br><span class="line"># 返回矩阵的秩</span><br><span class="line">np.linalg.matrix_rank(matrix)</span><br><span class="line"># 返回最大元素</span><br><span class="line">np.max(matrix)</span><br><span class="line"># 返回最小元素</span><br><span class="line">np.min(matrix)</span><br><span class="line"># 寻找每列的最大元素</span><br><span class="line">np.max(matrix, axis=0)</span><br><span class="line"># 查看行和列数</span><br><span class="line">matrix.shape</span><br><span class="line"># 查看元素数（行乘列）</span><br><span class="line">matrix.size</span><br><span class="line"># 查看维数</span><br><span class="line">matrix.ndim</span><br><span class="line"># 返回均值</span><br><span class="line">np.mean(matrix)</span><br><span class="line"># 返回方差</span><br><span class="line">np.var(matrix)</span><br><span class="line"># 返回标准差</span><br><span class="line">np.std(matrix)</span><br><span class="line"></span><br><span class="line">#将字典转换为矩阵</span><br><span class="line">from sklearn.feature_extraction import DictVectorizer</span><br><span class="line">data_dict = [&#123;&apos;Red&apos;: 2, &apos;Blue&apos;: 4&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 4, &apos;Blue&apos;: 3&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 1, &apos;Yellow&apos;: 2&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 2, &apos;Yellow&apos;: 2&#125;]</span><br><span class="line"></span><br><span class="line"># 创建 DictVectorizer 对象</span><br><span class="line">dictvectorizer = DictVectorizer(sparse=False)</span><br><span class="line"># 将字典转换为特征矩阵</span><br><span class="line">features = dictvectorizer.fit_transform(data_dict)</span><br><span class="line"># 查看特征矩阵的列名</span><br><span class="line">dictvectorizer.get_feature_names()</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/22/Redis原理/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1801,162 +1943,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/16/Flask项目组织/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/16/Flask项目组织/" itemprop="url">Flask项目组织</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-16T16:42:57+08:00">
-                2018-11-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>一个基于 WSGI 的 Python web 应用必须有一个实现实际的应用的中心调用对象。在 Flask 中，中心调用对象是一个 Flask类的实例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<ul>
-<li>保证实例的唯一性 </li>
-<li>当进行单元测试的时候，创建一个最小应用用于测试特定的功能，会用到多应用</li>
-<li>使用显式对象时，可以继承基类Flask， 以便于修改特定的功能</li>
-<li>Flask 需要包的名称。当你创建一个 Flask 实例时， 通常会传递 ___name___ 作为包的名称。 Flask 根据包的名称来载入也模块相关的正确资源。</li>
-<li>“显式比隐式更好”<br>[Flask设计思路]（<a href="https://dormousehole.readthedocs.io/en/latest/design.html）" target="_blank" rel="noopener">https://dormousehole.readthedocs.io/en/latest/design.html）</a></li>
-</ul>
-<ol start="2">
-<li>使用<a href="http://docs.jinkan.org/docs/flask/blueprints.html" target="_blank" rel="noopener">蓝图</a>进行模块化组织<br>Flask 用 蓝图（blueprints） 的概念来在一个应用中或跨应用制作应用组件和支持通用的模式。蓝图很好地简化了大型应用工作的方式，并提供给 Flask 扩展在应用上注册操作的核心方法。<br>例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># routes/identify.py</span><br><span class="line">from flask import Blueprint</span><br><span class="line"></span><br><span class="line">identify = Blueprint(&apos;identify&apos;, __name__)</span><br><span class="line"></span><br><span class="line">@identify.route(&apos;/check-pics-quality&apos;,methods=[&apos;POST&apos;, &apos;GET&apos;])</span><br><span class="line">def check_pics_quality():</span><br><span class="line">    pass;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># routes/__init__.py</span><br><span class="line">from .identify import identify</span><br><span class="line">def init_app(app):</span><br><span class="line">    app.register_blueprint(identify, url_prefix=&apos;/identify&apos;)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2009,7 +1995,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

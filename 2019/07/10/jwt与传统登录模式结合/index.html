@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python,Requests,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="查日志的时候发现如下报错：1234567891011121314Traceback (most recent call last):File &amp;quot;./app/business_api/business_api.py&amp;quot;, line 87, in callback_function    response = requests.post(&amp;apos;xxx&amp;apos;+json.du">
-<meta name="keywords" content="Python,Requests">
+<meta name="description" content="传统登录模式一般流程如下：  用户向服务器发送用户名和密码。 服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。 服务器向用户返回一个 session_id，写入用户的 Cookie。 用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。 服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。问题： 集群">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python Requests库中Max retries问题">
-<meta property="og:url" content="https://angelteng.github.io/blog/2019/06/25/Python-Requests库中Max-retries问题/index.html">
+<meta property="og:title" content="jwt与传统登录模式结合">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/07/10/jwt与传统登录模式结合/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="查日志的时候发现如下报错：1234567891011121314Traceback (most recent call last):File &amp;quot;./app/business_api/business_api.py&amp;quot;, line 87, in callback_function    response = requests.post(&amp;apos;xxx&amp;apos;+json.du">
+<meta property="og:description" content="传统登录模式一般流程如下：  用户向服务器发送用户名和密码。 服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。 服务器向用户返回一个 session_id，写入用户的 Cookie。 用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。 服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。问题： 集群">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-25T07:53:11.000Z">
+<meta property="og:updated_time" content="2019-07-10T08:31:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python Requests库中Max retries问题">
-<meta name="twitter:description" content="查日志的时候发现如下报错：1234567891011121314Traceback (most recent call last):File &amp;quot;./app/business_api/business_api.py&amp;quot;, line 87, in callback_function    response = requests.post(&amp;apos;xxx&amp;apos;+json.du">
+<meta name="twitter:title" content="jwt与传统登录模式结合">
+<meta name="twitter:description" content="传统登录模式一般流程如下：  用户向服务器发送用户名和密码。 服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。 服务器向用户返回一个 session_id，写入用户的 Cookie。 用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。 服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。问题： 集群">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2019/06/25/Python-Requests库中Max-retries问题/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/07/10/jwt与传统登录模式结合/">
 
 
 
 
 
-  <title>Python Requests库中Max retries问题 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>jwt与传统登录模式结合 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/25/Python-Requests库中Max-retries问题/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/10/jwt与传统登录模式结合/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python Requests库中Max retries问题</h1>
+          <h1 class="post-title" itemprop="name headline">jwt与传统登录模式结合</h1>
         
 
         <div class="post-meta">
@@ -262,8 +261,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-25T15:22:14+08:00">
-                2019-06-25
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-10T16:13:50+08:00">
+                2019-07-10
               </time>
             
 
@@ -272,28 +271,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -322,9 +299,31 @@
       
 
       
-        <p>查日志的时候发现如下报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">File &quot;./app/business_api/business_api.py&quot;, line 87, in callback_function</span><br><span class="line">    response = requests.post(&apos;xxx&apos;+json.dumps(results), timeout=self.timeout)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 116, in post</span><br><span class="line">    return request(&apos;post&apos;, url, data=data, json=json, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 60, in request</span><br><span class="line">    return session.request(method=method, url=url, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 524, in request</span><br><span class="line">    resp = self.send(prep, **send_kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 637, in send</span><br><span class="line">    r = adapter.send(request, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/adapters.py&quot;, line 516, in send</span><br><span class="line">    raise ConnectionError(e, request=request)</span><br><span class="line">requests.exceptions.ConnectionError: HTTPSConnectionPool(host=&apos;xxx&apos;, port=8094): Max retries exceeded with url: xxx (Caused by NewConnectionError(&apos;&lt;urllib3.connection.VerifiedHTTPSConnection object at 0x7f882011f390&gt;: Failed to establish a new connection: [Errno -3] Try again&apos;,))</span><br></pre></td></tr></table></figure></p>
-<p>网上查了一下“Max retries” ，一般出现在爬虫的场景，http连接数过多，因为requests默认使用了keep-alive，所以要在header增加{“Connect”:”close”}，但是出现问题的场景是后台服务，从阿里云监控上看该时段的tcp连接数也没有很大的波峰。<br>参考了<a href="https://fanchao01.github.io/blog/2016/07/30/pythonlib-request3/" target="_blank" rel="noopener">requests的高级功能-重试机制</a>这篇文章所说，requests是有重试机制的，使用重试会导致返回的错误为MaxRetriesError，而不是确切的异常。<br>网上暂时没查到[Errno -3] Try again 这个错误具体原因。</p>
-<p>其他参考：<br><a href="https://www.jwlchina.cn/2016/10/29/关于python爬虫的深坑：requests抛出异常Max%20retries%20exceeded%20with%20url/" target="_blank" rel="noopener">关于python爬虫的深坑：requests抛出异常Max retries exceeded with url</a><br><a href="https://eclipsesv.com/2017/01/29/requests库error/" target="_blank" rel="noopener">requests库的Failed to establish a new connection</a></p>
+        <h1 id="传统登录模式"><a href="#传统登录模式" class="headerlink" title="传统登录模式"></a>传统登录模式</h1><p>一般流程如下：</p>
+<ol>
+<li>用户向服务器发送用户名和密码。</li>
+<li>服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。</li>
+<li>服务器向用户返回一个 session_id，写入用户的 Cookie。</li>
+<li>用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。</li>
+<li>服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。<br>问题：</li>
+<li>集群部署下数据共享问题。</li>
+<li>如果用户直接点击了攻击者发的链接，因为用户浏览器带了登录cookie，使得攻击能成功。</li>
+</ol>
+<h1 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h1><p>JWT 的原理是，服务器认证以后，生成一个 JSON 对象，发回给用户。用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名。服务器就不保存任何 session 数据了，也就是说，服务器变成无状态了。</p>
+<h1 id="jwt特点"><a href="#jwt特点" class="headerlink" title="jwt特点"></a>jwt特点</h1><ol>
+<li>JWT 默认是不加密，但也是可以加密的。生成原始 Token 以后，可以用密钥再加密一次。</li>
+<li>JWT 不加密的情况下，不能将秘密数据写入 JWT。</li>
+<li>JWT 不仅可以用于认证，也可以用于交换信息。有效使用 JWT，可以降低服务器查询数据库的次数。</li>
+<li>JWT 的最大缺点是，由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。</li>
+<li>JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限。为了减少盗用，JWT 的有效期应该设置得比较短。对于一些比较重要的权限，使用时应该再次对用户进行认证。</li>
+<li>为了减少盗用，JWT 不应该使用 HTTP 协议明码传输，要使用 HTTPS 协议传输。</li>
+</ol>
+<h1 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h1><p>针对4.提到的缺点。增加：</p>
+<ol>
+<li>生成的token存入redis或持久层，实现集群下数据共享，及中途废止token，更改权限等功能，服务器进行验证时先验证redis/持久层的token，再进行解密验证。</li>
+<li>客户端、服务端不存储token进cookie，服务端返回给客户端时存储进localstorage，验证时在header 增加Authorize 参数传输。</li>
+</ol>
+<p>参考：<br><a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html" target="_blank" rel="noopener">JSON Web Token 入门教程</a></p>
 
       
     </div>
@@ -340,14 +339,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
-          
-            <a href="/blog/tags/Requests/" rel="tag"># Requests</a>
-          
-        </div>
-      
 
       
       
@@ -357,8 +348,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/06/24/《Head-First-Java》笔记/" rel="next" title="《Head First Java》笔记">
-                <i class="fa fa-chevron-left"></i> 《Head First Java》笔记
+              <a href="/blog/2019/07/09/OAuth2授权/" rel="next" title="OAuth2授权">
+                <i class="fa fa-chevron-left"></i> OAuth2授权
               </a>
             
           </div>
@@ -366,10 +357,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/" rel="prev" title="《Head first Servlet & JSP》笔记">
-                《Head first Servlet & JSP》笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -421,8 +408,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -484,6 +480,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#传统登录模式"><span class="nav-number">1.</span> <span class="nav-text">传统登录模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jwt"><span class="nav-number">2.</span> <span class="nav-text">jwt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jwt特点"><span class="nav-number">3.</span> <span class="nav-text">jwt特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#改进"><span class="nav-number">4.</span> <span class="nav-text">改进</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
