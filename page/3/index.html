@@ -229,201 +229,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/决策树/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/23/决策树/" itemprop="url">决策树</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-23T17:55:30+08:00">
-                2019-05-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>决策树算法的核心是要解决两个问题: <ul>
-<li>如何从数据表中找出最佳节点和最佳分枝? </li>
-<li>如何让决策树停止生长，防止过拟合?</li>
-</ul>
-</li>
-<li>流程：<ul>
-<li>计算全部特征的不纯度</li>
-<li>选取不纯度指标最优的特征来分化</li>
-<li>在第一个特征分支下，计算全部特征不纯度</li>
-<li>选取不纯度指标最优的特征继续分化</li>
-</ul>
-</li>
-<li><p>sklearn中使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from sklearn import tree</span><br><span class="line">tree.DecisionTreeClassifier:分类树</span><br><span class="line">tree.DecisionTreeRegressor:回归树</span><br><span class="line">tree.export_graphviz:将生成的决策树导出为DOT格式，画图专用</span><br><span class="line">tree.ExtraTreeClassifier:高随机版本的分类树</span><br><span class="line">tree.ExtraTreeRegressor:高随机版本的回归树</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重要参数</p>
-<ul>
-<li>criterion: 不纯度的计算方法（不纯度越低、拟合效果越好）<ul>
-<li>entropy 信息熵</li>
-<li>gini    基尼系数（默认）</li>
-</ul>
-</li>
-<li>random_state: 随机模式，高纬度下随机性更明显<ul>
-<li>None （默认）</li>
-<li>任意整数</li>
-</ul>
-</li>
-<li>splitter： 随机选项<ul>
-<li>best： 优先选择更重要的特征进行分支</li>
-<li>random： 分支随机（防止过拟合）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>剪枝参数<br>在不加限制的情况下，一棵决策树会生长到衡量不纯度的指标最优，或者没有更多的特征可用为止，这样的决策树往往会过拟合。<ul>
-<li>max_depth: 限制最大深度</li>
-<li>min_samples_leaf：一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本</li>
-<li>min_samples_split: 一个分支至少含有min_samples_split个训练样本</li>
-<li>max_features: 限制分枝时考虑的特征个数 </li>
-<li>min_impurity_decrease: 限制信息增益的大小</li>
-</ul>
-</li>
-<li>目标权重参数<ul>
-<li>class_weight：均衡标签样本的权重</li>
-<li>min_ weight_fraction_leaf：基于权重的剪枝参数</li>
-</ul>
-</li>
-<li>确定最优参数：<ul>
-<li>学习曲线</li>
-</ul>
-</li>
-</ol>
-<p>参考<br><a href="http://edu.cda.cn/course/982/tasks" target="_blank" rel="noopener">菜菜的机器学习sklearn课堂</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/机器学习链接/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1845,6 +1650,190 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/01/python-sqlalchemy-缓存/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/01/python-sqlalchemy-缓存/" itemprop="url">python sqlalchemy "缓存"问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-01T11:34:42+08:00">
+                2019-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>描述：<br>    在同一个会话中，使用两次同样的sql查询，即使数据改变了，返回的值相同。</p>
+<h2 id="原因一：数据库的事务隔离"><a href="#原因一：数据库的事务隔离" class="headerlink" title="原因一：数据库的事务隔离"></a>原因一：数据库的事务隔离</h2><p>在数据库系统中，事务隔离级别(isolation level)决定了数据在系统中的可见性。隔离级别从低到高分为四种：未提交读(Read uncommitted)，已提交读(Read committed)，可重复读(Repeatable read)，可串行化(Serializable)。他们的区别如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">未提交读(RU)</td>
+<td>可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">已提交读(RC)</td>
+<td>不可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">可重复读(RR)</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td style="text-align:left">可串行化</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>不可能</td>
+</tr>
+</tbody>
+</table>
+<p>对于MySQL来说，默认的事务隔离级别是RR，RR是可重复读的，因此可以解释这个现象。</p>
+<h2 id="原因二：Sqlaalchemy的会话隔离"><a href="#原因二：Sqlaalchemy的会话隔离" class="headerlink" title="原因二：Sqlaalchemy的会话隔离"></a>原因二：Sqlaalchemy的会话隔离</h2><p>看作者在stackoverflow的回答：<br>“<br>The usual cause for people thinking there’s a “cache” at play, besides the usual SQLAlchemy identity map which is local to a transaction, is that they are observing the effects of transaction isolation. SQLAlchemy’s session works by default in a transactional mode, meaning it waits until session.commit() is called in order to persist data to the database. During this time, other transactions in progress elsewhere will not see this data.</p>
+<p>However, due to the isolated nature of transactions, there’s an extra twist. Those other transactions in progress will not only not see your transaction’s data until it is committed, they also can’t see it in some cases until they are committed or rolled back also (which is the same effect your close() is having here). A transaction with an average degree of isolation will hold onto the state that it has loaded thus far, and keep giving you that same state local to the transaction even though the real data has changed - this is called repeatable reads in transaction isolation parlance.<br>”<br>SQLAlchemy的会话默认在事务模式下工作，这意味着它会等到调用session.commit()才将数据持久保存到数据库中。<br>由于事务的隔离性，正在进行的其他事务在提交之前不仅不会看到这个事务的数据，在它们被提交或回滚之前它们也无法在某些情况下看到它，这在事务隔离用语中称为可重复读取。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>在MySQL的同一个事务中，多次查询同一行的数据得到的结果是相同的，这里既有SQLAlchemy本身“缓存”结果的原因，也受到数据库隔离级别的影响。如果要强制读取最新的结果，最简单的办法就是在查询前手动COMMIT一次。（commit不仅把所有本地修改写入到数据库，同时也提交了该事务）</p>
+<p>参考：<br><a href="https://www.jianshu.com/p/c0a8275cce99" target="_blank" rel="noopener">https://www.jianshu.com/p/c0a8275cce99</a><br><a href="https://stackoverflow.com/questions/10210080/how-to-disable-sqlalchemy-caching" target="_blank" rel="noopener">https://stackoverflow.com/questions/10210080/how-to-disable-sqlalchemy-caching</a><br><a href="https://stackoverflow.com/questions/12108913/how-to-avoid-caching-in-sqlalchemy" target="_blank" rel="noopener">https://stackoverflow.com/questions/12108913/how-to-avoid-caching-in-sqlalchemy</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1897,7 +1886,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
