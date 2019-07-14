@@ -277,7 +277,7 @@ tags:
 1. asyncio API协程在定义体必须使用yield from
 2. @asyncio.coroutine装饰器定义协程函数
 3. Task对象可以取消，取消后在协程当前yield处抛出asyncio.CancelledError，协程可以捕获异常，延迟取消，拒绝取消。
-4. Task对象勇于驱动协程 
+4. Task对象用于驱动协程 
     ```python
         task = asyncio.async(methos('think'))
     ```
