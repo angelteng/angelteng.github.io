@@ -63,6 +63,7 @@ tags:
     - 新增键有可能导致扩容，从而改变键的顺序
 9. set、frozenset也依赖散列表
 10. PHP的数组其实是个有序的映射
+11. Python3.6之后字典的底层数据结构发生了变化，[参考](https://juejin.im/post/5d296e2af265da1bb31c6609)
 
 # 文本和字节序列
 1. Python3中的str对象获取的元素是Unicode字符
