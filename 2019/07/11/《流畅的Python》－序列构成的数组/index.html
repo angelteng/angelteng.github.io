@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、bytes   具">
+<meta name="description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《流畅的Python》－序列构成的数组">
+<meta property="og:title" content="《流畅的Python》笔记">
 <meta property="og:url" content="https://angelteng.github.io/blog/2019/07/11/《流畅的Python》－序列构成的数组/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、bytes   具">
+<meta property="og:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-12T09:31:46.000Z">
+<meta property="og:updated_time" content="2019-07-15T01:59:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《流畅的Python》－序列构成的数组">
-<meta name="twitter:description" content="序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、bytes   具">
+<meta name="twitter:title" content="《流畅的Python》笔记">
+<meta name="twitter:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
 
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>《流畅的Python》－序列构成的数组 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>《流畅的Python》笔记 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">《流畅的Python》－序列构成的数组</h1>
+          <h1 class="post-title" itemprop="name headline">《流畅的Python》笔记</h1>
         
 
         <div class="post-meta">
@@ -299,7 +299,7 @@
       
 
       
-        <ol>
+        <h1 id="序列构成的数组"><a href="#序列构成的数组" class="headerlink" title="序列构成的数组"></a>序列构成的数组</h1><ol>
 <li><p>序列类型</p>
 <ul>
 <li>容器序列（可以存放不同数据类型）：list、tuple、collection.deque</li>
@@ -337,12 +337,259 @@
 </ul>
 </li>
 <li><p>bisect 管理已排序的列表</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 搜索</span><br><span class="line">bisect(hystack,needle)</span><br><span class="line"># 插入</span><br><span class="line">bisect.insert</span><br><span class="line">bisect.insort</span><br></pre></td></tr></table></figure>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 搜索</span></span><br><span class="line">bisect(hystack,needle)</span><br><span class="line"><span class="comment"># 插入</span></span><br><span class="line">bisect.insert</span><br><span class="line">bisect.insort</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>数组 array.array</p>
 </li>
 <li>内存视图 memoryview：不复制内容的情况下操作同一个数组的不同切片</li>
 <li>双向队列 collection.deque</li>
+</ol>
+<h1 id="字典和集合"><a href="#字典和集合" class="headerlink" title="字典和集合"></a>字典和集合</h1><ol>
+<li>标准库所有的映射类型都是利用dict，dict要求键必须是可散列的数据类型。</li>
+<li>update 批量更新</li>
+<li><p>setdefault处理找不到的值</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_dict.setdefault(key,[]).append(new_value)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>collection.defaultdict 为找不到的键创建默认值</p>
+</li>
+<li>所有映射类型在处理找不到的键时，会涉及<strong>missing</strong>方法，该方法只会被<strong>getitem</strong>调用</li>
+<li>创建自定义映射类型的时候，继承collections.UserDict比继承dict更好。</li>
+<li>不可变映射类型 types.MappingProxyType,创建了一个只读的映射视图.</li>
+<li>集合实现了很多中缀运算</li>
+<li>散列表是个稀疏数组，里面的单元叫说表元，每个表元包含键的引用、值的引用，表元大小一致，可以通过偏移量读取某个表元。</li>
+<li>计算键的散列值－&gt; 利用散列值的一部分定位散列表中的一个表元，如果散列冲突，再使用另一个部分定位表元。<br> 因此：<ul>
+<li>键必须是可散列的</li>
+<li>字典在内存上开销巨大</li>
+<li>键查询很快</li>
+<li>键的次序是乱的</li>
+<li>新增键有可能导致扩容，从而改变键的顺序</li>
+</ul>
+</li>
+<li>set、frozenset也依赖散列表</li>
+<li>PHP的数组其实是个有序的映射</li>
+<li>Python3.6之后字典的底层数据结构发生了变化，<a href="https://juejin.im/post/5d296e2af265da1bb31c6609" target="_blank" rel="noopener">参考</a></li>
+</ol>
+<h1 id="文本和字节序列"><a href="#文本和字节序列" class="headerlink" title="文本和字节序列"></a>文本和字节序列</h1><ol>
+<li>Python3中的str对象获取的元素是Unicode字符</li>
+<li>Unicode标准中，字符的标志（码位），字符的具体表述取决于所用的编码。把码位转换成字节序列的过程是编码，反之则为解码。</li>
+<li>二进制序列的切片始终是同一类型的二进制序列。</li>
+<li>二进制的方法与str的方法类似，特别的有 fromhex()</li>
+<li>struct模块，把打包的字节序列转换程不同类型字段组成的元组。</li>
+<li>memoryview用于共享内存，memory对象的切片是一个新的memoryview对象，不会复制字节序列。</li>
+<li>错误<ul>
+<li>UnicodeEncodeError：目标编码没有定义某个字符</li>
+<li>UnicodeDecodeError：无法转换字节序列</li>
+<li>SyntaxError：加载的.py模块中含有UTF－8之外的数据，而且没有声明编码。</li>
+</ul>
+</li>
+<li>BOM：字节序标记，指明编码时使用Intel CPU的小字节序。</li>
+<li>unicodedata.normalize：规范化Unicode. NFC是最好的规范。</li>
+<li>大小写折叠：str.casefold() str.lower()</li>
+</ol>
+<h1 id="一等函数"><a href="#一等函数" class="headerlink" title="一等函数"></a>一等函数</h1><ol>
+<li>高阶函数：接受函数作为参数，或者把函数作为结果返回。</li>
+<li>匿名函数Lambda</li>
+<li>实现<strong>call</strong>实例方法，可以使任何对象表现得像函数。</li>
+<li>函数使用<strong>dict</strong>属性存储赋予它的用户属性。__defaults__保存定位参数和关键字参数的默认值，__kwdefaults__保存关键字参数默认值。__code__保存参数的名称。__annotation__保存注释。</li>
+<li><p>定义函数时，如果想指定仅限关键字参数，要把它们放在前面有＊的参数后面.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(a,*,b)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>提取函数的信息：inspect.signature</p>
+</li>
+<li>冻结参数: functools.partial</li>
+<li>设计模式：<ul>
+<li>对接口编程，而不是对实现编程</li>
+<li>优先使用对象组合，而不是类继承</li>
+</ul>
+</li>
+</ol>
+<h1 id="装饰器与闭包"><a href="#装饰器与闭包" class="headerlink" title="装饰器与闭包"></a>装饰器与闭包</h1><ol>
+<li>装饰器的特点：<ul>
+<li>能把被装饰的函数替换成别的函数</li>
+<li>装饰器在加载模块时立即执行</li>
+</ul>
+</li>
+<li><p>变量作用域</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">b=<span class="number">6</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> b</span><br><span class="line">    print(a)</span><br><span class="line">    print(b)</span><br><span class="line">    b = <span class="number">9</span> <span class="comment"># Python在编译函数时，发现b被赋值了，如果没有定义global，会判断b时局部变量而报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自由变量：未在本地作用域中绑定的变量。闭包会保留定义函数时存在的自由变量的绑定。只有嵌套在其他函数中的函数才可能需要处理不在全局作用域中的外部变量。</p>
+</li>
+<li><p>nonlocal：把变量标记为自由变量</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_averager</span><span class="params">()</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">averager</span><span class="params">(new_value)</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> count,total</span><br><span class="line">        count = count +<span class="number">1</span></span><br><span class="line">        total = total + new_value</span><br><span class="line">        <span class="keyword">return</span> total / count</span><br><span class="line">    <span class="keyword">return</span> averager</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>functools.wraps，把相关属性从真实被装饰函数复制到装饰后返回的函数中，从而保持<strong>name</strong>和<strong>doc</strong>等不变。</p>
+</li>
+<li>functools.lru_cache: 实现LRU缓存，把耗时的函数结果保存起来。</li>
+<li>functools.singledispatch 实现单分派泛函数 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@singledispatch</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">htmlize</span><span class="params">(obj)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="meta">@htmlize.register(str):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_</span><span class="params">(text)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="meta">@htmlize.register(tuple):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_</span><span class="params">(tup)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="对象引用、可变性、垃圾回收"><a href="#对象引用、可变性、垃圾回收" class="headerlink" title="对象引用、可变性、垃圾回收"></a>对象引用、可变性、垃圾回收</h1><ol>
+<li>Python中的变量类似JAVA引用变量。是一个标识。</li>
+<li>is比较对象的标识，＝＝比较对象的值。is更快因为不能重载。</li>
+<li>默认做浅复制，比如构造方法或[:]，深复制用deepcopy</li>
+<li>Python中唯一支持的参数传递模式是共享传参(call by share)，各个形式参数获得实参中各个引用的副本。因此，函数可能会改变参数传入的可变对象。</li>
+<li>不要使用可变类型作为参数的默认值，因为默认值在定义时计算，因此默认值成为了函数的属性，会被后续的函数调用中共享。</li>
+<li>del删除名称，而不是对象。</li>
+<li>CPython中垃圾回收使用引用计算算法。</li>
+<li>弱引用(weakref WeakValueDictionary)不会增加对象的引用数量</li>
+<li>对于不可变类型（比如元组），使用t[:]，不创建副本，而是返回同一个对象的引用。</li>
+<li>对于字符串字面量，会有“驻留”去共享字符串字面量。即字符串值相同的两个变量，共享了一个对象引用。</li>
+<li>对于*= +=，如果左边的变量绑定了不可变对象，会创建新对象，如果是可变对象，就就地修改。</li>
+</ol>
+<h1 id="符合Python风格的对象"><a href="#符合Python风格的对象" class="headerlink" title="符合Python风格的对象"></a>符合Python风格的对象</h1><ol>
+<li>classmethod常用于定义备选构造方法。</li>
+<li>staticmethod可有可无。</li>
+<li>私有属性 <strong>mood，实际做了名称改写，变成了 _Dog</strong>mood</li>
+<li><strong>slots</strong>类属性让解释器以元组存储实例而不用字典，以节省内存。<ul>
+<li>每个子类都要定义<strong>slots</strong>属性</li>
+<li>实例只能拥有<strong>slots</strong>定义了的属性，除非把<strong>dict</strong>加入<strong>slots</strong></li>
+<li>如果不把<strong>weakref</strong>加入<strong>slots</strong>，无法被弱引用</li>
+</ul>
+</li>
+<li>类属性可以为实例属性提供默认值</li>
+<li>类属性是公开，会被继承，经常用于创建一个子类，定制类的数据属性。</li>
+</ol>
+<h1 id="序列的修改、散列、切片"><a href="#序列的修改、散列、切片" class="headerlink" title="序列的修改、散列、切片"></a>序列的修改、散列、切片</h1><ol>
+<li>使类表现得像序列：实现<strong>getitem</strong>和<strong>len</strong>方法。</li>
+<li>动态存取属性：<strong>getattr</strong>和<strong>setattr</strong></li>
+<li>zip拆包元组并重新组合</li>
+</ol>
+<h1 id="接口：从协议到抽象基类"><a href="#接口：从协议到抽象基类" class="headerlink" title="接口：从协议到抽象基类"></a>接口：从协议到抽象基类</h1><ol>
+<li>从鸭子类型代表动态协议。－－让动态类型语言实现多态</li>
+<li>虽然没有interface关键字，每个类都有接口，类的实现或继承公开的属性（方法／数据属性），包括特殊方法。</li>
+<li><p>使用猴子补丁在运行时实现协议：</p>
+<ul>
+<li>猴子补丁：在运行时修改类／模块，而不改动源码。</li>
+<li>内置类型不能打猴子补丁。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_cart</span><span class="params">(deck,position,card)</span>:</span></span><br><span class="line">    deck._cards[position]=card</span><br><span class="line">FrenchDeck.__setitem = set_card  <span class="comment">#Monkey Patch</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>协议是动态的，只要对象部分实现了协议，就可以当成是该类型那样使用。</p>
+</li>
+<li>白鹅类型：只要cls是抽象基类，即cls的元类是abc.ABCMeta，就可以使用isinstance(obj,cls)<ul>
+<li>即便不继承，也有办法把一个类注册为抽象基类的虚拟子类。只要实现了抽象基类定义的接口。</li>
+<li>注册虚拟子类的方式实在抽象基类上调用register方法。但是注册的类不会从抽象基类中继承任何方法或属性。</li>
+</ul>
+</li>
+<li>大部分标准库中的抽象基类在collection.abc模块中国年定义。</li>
+<li>抽象基类可以有实现代码，即使实现了，子类也必须覆盖抽象方法，但可以通过super()调用抽象方法。</li>
+<li><p>声明抽象基类最简单的方式是继承abc.ABC或其他抽象基类。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tombola</span><span class="params">(metaclass=abc.ABCMeta)</span>:</span></span><br><span class="line"><span class="meta">    @abstractmentd</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">methoss</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态识别子类<strong>subclasshook</strong></p>
+</li>
+</ol>
+<h1 id="继承的优缺点"><a href="#继承的优缺点" class="headerlink" title="继承的优缺点"></a>继承的优缺点</h1><ol>
+<li>子类化内置类型时，内置类型不会调用用户定义的类覆盖的特殊方法。这种行为违背了面向对象编程的其中一个原则：始终应该从实例所属的类开始搜索方法。</li>
+<li>内置类型的方法调用的其他类的方法，如果被覆盖，也不会被调用。</li>
+<li><p>多重继承中，确定使用哪个类的方法，必须使用类名限定方法调用来避免歧义。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span><span class="params">(B,C)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">function</span><span class="params">(self)</span>:</span></span><br><span class="line">        B.method1(self)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解析顺序<strong>mro</strong>，该顺序即考虑继承图也考虑子类声明时列出的超类的顺序。</p>
+</li>
+<li>处理继承建议：<ul>
+<li>区分接口继承、实现继承。<ul>
+<li>继承接口，创建子类型，实现“是什么”关系</li>
+<li>继承实现，通过重用避免代码重复。</li>
+</ul>
+</li>
+<li>使用抽象基类显式表示接口</li>
+<li>通过混入重用代码，混入类mixin class</li>
+<li>在名称中明确指明混入 XViewMixin</li>
+<li>抽象基类可以作为混入，反过来不成立</li>
+<li>不要子类化多个具体类</li>
+<li>为用户提供聚合类</li>
+<li>优先使用对象组合，而不是继承</li>
+</ul>
+</li>
+</ol>
+<h1 id="正确重载运算符"><a href="#正确重载运算符" class="headerlink" title="正确重载运算符"></a>正确重载运算符</h1><ol>
+<li>规定：<ol>
+<li>不能重载内置类型运算符</li>
+<li>不能新建运算符</li>
+<li>某些运算符不能重载，包括is and or not</li>
+</ol>
+</li>
+<li>一元运算符<ol>
+<li>－ __neg__</li>
+<li><ul>
+<li>__pos__</li>
+</ul>
+</li>
+<li>~ __invert__</li>
+<li>＊ <strong>mul</strong>和<strong>rmul</strong></li>
+<li>+= __iadd__(就地计算）或<strong>add</strong></li>
+</ol>
+</li>
+<li>反向方法:__add__和<strong>radd</strong> </li>
+<li>如果由于类型不兼容倒是运算符特殊方法无法返回有效结果，应该返回NotImplemented，这样Python会尝试使用反向方法。</li>
+<li><strong>eq</strong>正向反向都一样，只是参数顺序对调</li>
+</ol>
+<h1 id="可迭代的对象、迭代器、生成器"><a href="#可迭代的对象、迭代器、生成器" class="headerlink" title="可迭代的对象、迭代器、生成器"></a>可迭代的对象、迭代器、生成器</h1><ol>
+<li>对比：迭代器用于从集合取出元素。生成器用于凭空生成元素，所有的生成器都是迭代器。</li>
+<li>序列可以迭代的原因：实现iter函数。如果没有<strong>iter</strong>，则会调用<strong>getitem</strong>方法。</li>
+<li>检查对象x能否迭代：iter(x,stop),stop是哨符，当可调用对象返回这个值时，触发迭代器抛出StopInteration异常。</li>
+<li>Python从可迭代对象获取迭代器。标准迭代器有<strong>iter</strong>和<strong>next</strong>方法。</li>
+<li>迭代器：实现了无参数的<strong>next</strong>方法，返回序列中下一个元素，如果没有元素了，抛出StopIteration异常。</li>
+<li>可迭代对象的<strong>iter</strong>方法，每次都实例化一个新的迭代器，迭代器本身实现<strong>next</strong>方法返回单个元素，<strong>iter</strong>方法返回自身。</li>
+<li>生成器，只要函数定义体中有yield关键字</li>
+<li>re.finditer时re.findall惰性版本，返回了一个生成器。</li>
+<li>yield from创建了通道，把内层生成器直接与外层生成器的客户端联系起来。</li>
+</ol>
+<h1 id="上下文管理器和else"><a href="#上下文管理器和else" class="headerlink" title="上下文管理器和else"></a>上下文管理器和else</h1><ol>
+<li>with：设置一个临时上下文，交给上下文管理器对象控制，并负责清理上下文。上下文管理器对象协议包括<strong>enter</strong>和<strong>exit</strong></li>
+<li>for/else, while/else, try/else，这里的else类似于then的用法。</li>
+<li>如果<strong>exit</strong>返回None，True以外的值，with中任何异常会向上冒泡。</li>
+<li>模块contextlib中，@contextmanager把简单的生成器函数变成上下文管理器，yield前所有的代码在with开始时调用，yield后代码在with结束时调用。此时yield与迭代无关。</li>
+</ol>
+<h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><ol>
+<li><p>yield作为控制流程的方法。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">x</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="number">1</span>)</span><br><span class="line">    x = <span class="keyword">yield</span></span><br><span class="line">    print(x)</span><br><span class="line">y = X() </span><br><span class="line">next(y) <span class="comment"># 预激协程</span></span><br><span class="line">y.send(<span class="number">42</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>异常处理：generator.throw 终止协程generator.close</p>
+</li>
+<li>协程的返回值捕捉需要被except中获取err.value</li>
+<li>yield from 主要功能是打开双向通道<ol>
+<li>子生成器产出的值都直接传给委派生成器的调用方</li>
+<li>使用send（）方法发给委派生成器的值都直接传给子生成器。如果值时None，会调用子生成器的<strong>next</strong>方法，如果不是None，会调用子生成器的send（）</li>
+<li>生成器退出时，生成器／子生成器中的return expr表达式触发StopInteration(expr)异常抛出</li>
+<li>yield from表达式的值时子生成器终止时传给StopIteration异常的第一个参数</li>
+</ol>
+</li>
+</ol>
+<h1 id="使用future处理并发"><a href="#使用future处理并发" class="headerlink" title="使用future处理并发"></a>使用future处理并发</h1><ol>
+<li>concurrent.future模块主要有ThreadPoolExcutor、ProcessPoolExcutor类。</li>
+<li>future类有concurrent.future.Future和asyncio.Future。两者都有<ol>
+<li>.done() </li>
+<li>.add_done_callback() </li>
+<li>.result(),但 concurrent.future.Future会阻塞直到有返回值，asyncio.Future则会抛出异常。</li>
+</ol>
+</li>
+<li>concurrent.future。as_completed返回迭代器，在future运行结束后产出future</li>
+<li>CPython本身不是线程安全，因此有全局解释锁GIL，一次只允许使用一个线程执行Python字节码</li>
+<li>Excutor.map可以并发运行多个可调用对象</li>
+</ol>
+<h1 id="使用asyncio处理并发"><a href="#使用asyncio处理并发" class="headerlink" title="使用asyncio处理并发"></a>使用asyncio处理并发</h1><ol>
+<li>asyncio API协程在定义体必须使用yield from</li>
+<li>@asyncio.coroutine装饰器定义协程函数</li>
+<li>Task对象可以取消，取消后在协程当前yield处抛出asyncio.CancelledError，协程可以捕获异常，延迟取消，拒绝取消。</li>
+<li><p>Task对象用于驱动协程 </p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task = asyncio.<span class="keyword">async</span>(methos(<span class="string">'think'</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>线程与协程区别：调度程序在任何时候都可能中断线程，但协程默认做好全方位保护。</p>
+</li>
+<li>asycio只支持TCP、UDP，HTTP使用aiohttp</li>
+<li>避免阻塞的方法：<ol>
+<li>在单独线程中运行各个阻塞操作 －－ 内存问题</li>
+<li>把每个阻塞型操作转换成非阻塞的异步调用<ol>
+<li>callback</li>
+<li>协程：必须使用事件循环显式排定协程的执行时间，或者在其他排定了执行时间的协程中使用yield from把它激活。</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>访问本地文件会阻塞，调用asyncio.run_in_excutor，底层时用线程处理了。</li>
+<li>异步框架：tornado</li>
 </ol>
 
       
@@ -428,8 +675,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -491,6 +747,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序列构成的数组"><span class="nav-number">1.</span> <span class="nav-text">序列构成的数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字典和集合"><span class="nav-number">2.</span> <span class="nav-text">字典和集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本和字节序列"><span class="nav-number">3.</span> <span class="nav-text">文本和字节序列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一等函数"><span class="nav-number">4.</span> <span class="nav-text">一等函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器与闭包"><span class="nav-number">5.</span> <span class="nav-text">装饰器与闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象引用、可变性、垃圾回收"><span class="nav-number">6.</span> <span class="nav-text">对象引用、可变性、垃圾回收</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#符合Python风格的对象"><span class="nav-number">7.</span> <span class="nav-text">符合Python风格的对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列的修改、散列、切片"><span class="nav-number">8.</span> <span class="nav-text">序列的修改、散列、切片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口：从协议到抽象基类"><span class="nav-number">9.</span> <span class="nav-text">接口：从协议到抽象基类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#继承的优缺点"><span class="nav-number">10.</span> <span class="nav-text">继承的优缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正确重载运算符"><span class="nav-number">11.</span> <span class="nav-text">正确重载运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可迭代的对象、迭代器、生成器"><span class="nav-number">12.</span> <span class="nav-text">可迭代的对象、迭代器、生成器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上下文管理器和else"><span class="nav-number">13.</span> <span class="nav-text">上下文管理器和else</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#协程"><span class="nav-number">14.</span> <span class="nav-text">协程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用future处理并发"><span class="nav-number">15.</span> <span class="nav-text">使用future处理并发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用asyncio处理并发"><span class="nav-number">16.</span> <span class="nav-text">使用asyncio处理并发</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
