@@ -293,4 +293,70 @@ tags:
 9. 异步框架：tornado
     
 # 元编程
-1. 
+1. 特性：在不改变类接口的前提下，使用存取方法修改数据属性。管理实例属性的类属性。
+2. 是否有效标识符：s.isidentifier()
+3. 构造实例的特殊方法__new__，该方法返回一个实例，作为第一个参数传给__init__。
+4. 使用装饰器 @property, @[prop_name].setter, @[prop_name].getter
+5. property构造方法，可以使用函数调用而不是装饰器。
+    ```python
+        property(fget=None, fset=None, fdel=None, doc=None)
+    ```
+6. 特例都是类属性，但是特例管理的是实例属性的存取，
+   1. 实例和类有同名属性，实例会覆盖类属性。
+   2. 实例属性不会覆盖类特性
+   3. 新添的类特性会覆盖实例属性
+7. 特性工厂
+    ```python
+        def factory(prop_name):
+            def prop_getter(instance):
+                return instance.__dict__[prop_name]
+            def prop_setter(instance):
+                pass
+            return property(prop_getter,prop_setter)
+    ```
+8. 属性的内置函数
+   1. dir
+   2. getattr
+   3. setattr
+   4. hasattr
+   5. vars:返回__dict__属性
+9.  直接通过__dict__属性读写的属性不会触发这些特殊方法。
+    
+# 属性描述符
+1. 描述符是实现类特定协议的类，包括__get__,\_\_set__,\_\_delete__
+2. 描述符的作用：创建一个实例，作为另一个类的类属性。
+    ```python
+        class Factory:
+            def __init__(self,prop_name):
+                self.prop_name = prop_name
+            # self是描述符实例，instance是托管实例
+            def __set__(self,instance,values):
+                pass
+            # owner是托管类的引用
+            def __get__(self,instance,owner):
+                pass
+    ```
+3. 描述符与特性工厂
+   1. 描述符可以用子类扩展
+   2. 相比于闭包，类属性、实例属性保持状态更容易理解
+4. 实现__set__方法的描述符是覆盖性描述符，会覆盖实例属性的复制操作。
+5. 没有__get__方法的覆盖性描述符，只有读操作时，实例属性会覆盖描述符。
+6. 没有实现__set__方法的描述符是非覆盖性描述符。
+7. 读类属性可以由依附在托管类上定义的__get__方法的描述符处理，但是写操作不会。
+8. 描述符使用
+   1. 使用特性以保持简单
+   2. 只读描述符必须有__set__
+   3. 用于验证的描述符可以只有__set__
+   4. 仅用__get__方法的描述符实现高效缓存
+   5. 非特殊方法可以被实例属性遮盖
+   
+# 类元编程
+1. 类元编程是指在运行时创建或定制类的操作。
+2. type是一个类，传入三个参数可以创建一个类，type的实例也是类。
+    ```python
+        MyClass= type('MyClass',(MySuperClass,MyMin),{'x':42,'y':50})
+    ```
+3. 类装饰器与函数装饰器类似，但子类不会继承类装饰器
+4. 类的定义体属于“顶层代码”在导入时运行。包括嵌套类。
+5. object是type的实例，type是object的子类。
+6. 元类的特殊方法__prepare__，在__new__前被调用，使用类定义体中的属性创建映射。
