@@ -1,7 +1,9 @@
 ---
 title: 《流畅的Python》笔记
 date: 2019-07-11 21:35:29
-tags:
+tags: 
+- Python
+categories: Python
 ---
 # 序列构成的数组
 1. 序列类型
