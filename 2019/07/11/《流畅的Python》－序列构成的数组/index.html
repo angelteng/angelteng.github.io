@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Python,">
 
 
 
@@ -80,13 +80,14 @@
 
 
 <meta name="description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
+<meta name="keywords" content="Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《流畅的Python》笔记">
 <meta property="og:url" content="https://angelteng.github.io/blog/2019/07/11/《流畅的Python》－序列构成的数组/index.html">
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-15T01:59:51.000Z">
+<meta property="og:updated_time" content="2019-07-17T03:11:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《流畅的Python》笔记">
 <meta name="twitter:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
@@ -271,6 +272,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -591,6 +614,70 @@
 <li>访问本地文件会阻塞，调用asyncio.run_in_excutor，底层时用线程处理了。</li>
 <li>异步框架：tornado</li>
 </ol>
+<h1 id="元编程"><a href="#元编程" class="headerlink" title="元编程"></a>元编程</h1><ol>
+<li>特性：在不改变类接口的前提下，使用存取方法修改数据属性。管理实例属性的类属性。</li>
+<li>是否有效标识符：s.isidentifier()</li>
+<li>构造实例的特殊方法<strong>new</strong>，该方法返回一个实例，作为第一个参数传给<strong>init</strong>。</li>
+<li>使用装饰器 @property, @[prop_name].setter, @[prop_name].getter</li>
+<li><p>property构造方法，可以使用函数调用而不是装饰器。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">property(fget=<span class="keyword">None</span>, fset=<span class="keyword">None</span>, fdel=<span class="keyword">None</span>, doc=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>特例都是类属性，但是特例管理的是实例属性的存取，</p>
+<ol>
+<li>实例和类有同名属性，实例会覆盖类属性。</li>
+<li>实例属性不会覆盖类特性</li>
+<li>新添的类特性会覆盖实例属性</li>
+</ol>
+</li>
+<li><p>特性工厂</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">factory</span><span class="params">(prop_name)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prop_getter</span><span class="params">(instance)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> instance.__dict__[prop_name]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prop_setter</span><span class="params">(instance)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> property(prop_getter,prop_setter)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>属性的内置函数</p>
+<ol>
+<li>dir</li>
+<li>getattr</li>
+<li>setattr</li>
+<li>hasattr</li>
+<li>vars:返回<strong>dict</strong>属性</li>
+</ol>
+</li>
+<li>直接通过<strong>dict</strong>属性读写的属性不会触发这些特殊方法。</li>
+</ol>
+<h1 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h1><ol>
+<li>描述符是实现类特定协议的类，包括<strong>get</strong>,__set__,__delete__</li>
+<li><p>描述符的作用：创建一个实例，作为另一个类的类属性。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Factory</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,prop_name)</span>:</span></span><br><span class="line">        self.prop_name = prop_name</span><br><span class="line">    <span class="comment"># self是描述符实例，instance是托管实例</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self,instance,values)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># owner是托管类的引用</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self,instance,owner)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>描述符与特性工厂</p>
+<ol>
+<li>描述符可以用子类扩展</li>
+<li>相比于闭包，类属性、实例属性保持状态更容易理解</li>
+</ol>
+</li>
+<li>实现<strong>set</strong>方法的描述符是覆盖性描述符，会覆盖实例属性的复制操作。</li>
+<li>没有<strong>get</strong>方法的覆盖性描述符，只有读操作时，实例属性会覆盖描述符。</li>
+<li>没有实现<strong>set</strong>方法的描述符是非覆盖性描述符。</li>
+<li>读类属性可以由依附在托管类上定义的<strong>get</strong>方法的描述符处理，但是写操作不会。</li>
+<li>描述符使用<ol>
+<li>使用特性以保持简单</li>
+<li>只读描述符必须有<strong>set</strong></li>
+<li>用于验证的描述符可以只有<strong>set</strong></li>
+<li>仅用<strong>get</strong>方法的描述符实现高效缓存</li>
+<li>非特殊方法可以被实例属性遮盖</li>
+</ol>
+</li>
+</ol>
+<h1 id="类元编程"><a href="#类元编程" class="headerlink" title="类元编程"></a>类元编程</h1><ol>
+<li>类元编程是指在运行时创建或定制类的操作。</li>
+<li><p>type是一个类，传入三个参数可以创建一个类，type的实例也是类。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyClass= type(<span class="string">'MyClass'</span>,(MySuperClass,MyMin),&#123;<span class="string">'x'</span>:<span class="number">42</span>,<span class="string">'y'</span>:<span class="number">50</span>&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>类装饰器与函数装饰器类似，但子类不会继承类装饰器</p>
+</li>
+<li>类的定义体属于“顶层代码”在导入时运行。包括嵌套类。</li>
+<li>object是type的实例，type是object的子类。</li>
+<li>元类的特殊方法<strong>prepare</strong>，在<strong>new</strong>前被调用，使用类定义体中的属性创建映射。</li>
+</ol>
 
       
     </div>
@@ -605,6 +692,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
       
 
       
@@ -757,7 +850,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序列构成的数组"><span class="nav-number">1.</span> <span class="nav-text">序列构成的数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字典和集合"><span class="nav-number">2.</span> <span class="nav-text">字典和集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本和字节序列"><span class="nav-number">3.</span> <span class="nav-text">文本和字节序列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一等函数"><span class="nav-number">4.</span> <span class="nav-text">一等函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器与闭包"><span class="nav-number">5.</span> <span class="nav-text">装饰器与闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象引用、可变性、垃圾回收"><span class="nav-number">6.</span> <span class="nav-text">对象引用、可变性、垃圾回收</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#符合Python风格的对象"><span class="nav-number">7.</span> <span class="nav-text">符合Python风格的对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列的修改、散列、切片"><span class="nav-number">8.</span> <span class="nav-text">序列的修改、散列、切片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口：从协议到抽象基类"><span class="nav-number">9.</span> <span class="nav-text">接口：从协议到抽象基类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#继承的优缺点"><span class="nav-number">10.</span> <span class="nav-text">继承的优缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正确重载运算符"><span class="nav-number">11.</span> <span class="nav-text">正确重载运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可迭代的对象、迭代器、生成器"><span class="nav-number">12.</span> <span class="nav-text">可迭代的对象、迭代器、生成器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上下文管理器和else"><span class="nav-number">13.</span> <span class="nav-text">上下文管理器和else</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#协程"><span class="nav-number">14.</span> <span class="nav-text">协程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用future处理并发"><span class="nav-number">15.</span> <span class="nav-text">使用future处理并发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用asyncio处理并发"><span class="nav-number">16.</span> <span class="nav-text">使用asyncio处理并发</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序列构成的数组"><span class="nav-number">1.</span> <span class="nav-text">序列构成的数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字典和集合"><span class="nav-number">2.</span> <span class="nav-text">字典和集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本和字节序列"><span class="nav-number">3.</span> <span class="nav-text">文本和字节序列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一等函数"><span class="nav-number">4.</span> <span class="nav-text">一等函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器与闭包"><span class="nav-number">5.</span> <span class="nav-text">装饰器与闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象引用、可变性、垃圾回收"><span class="nav-number">6.</span> <span class="nav-text">对象引用、可变性、垃圾回收</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#符合Python风格的对象"><span class="nav-number">7.</span> <span class="nav-text">符合Python风格的对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列的修改、散列、切片"><span class="nav-number">8.</span> <span class="nav-text">序列的修改、散列、切片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口：从协议到抽象基类"><span class="nav-number">9.</span> <span class="nav-text">接口：从协议到抽象基类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#继承的优缺点"><span class="nav-number">10.</span> <span class="nav-text">继承的优缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正确重载运算符"><span class="nav-number">11.</span> <span class="nav-text">正确重载运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可迭代的对象、迭代器、生成器"><span class="nav-number">12.</span> <span class="nav-text">可迭代的对象、迭代器、生成器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上下文管理器和else"><span class="nav-number">13.</span> <span class="nav-text">上下文管理器和else</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#协程"><span class="nav-number">14.</span> <span class="nav-text">协程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用future处理并发"><span class="nav-number">15.</span> <span class="nav-text">使用future处理并发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用asyncio处理并发"><span class="nav-number">16.</span> <span class="nav-text">使用asyncio处理并发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#元编程"><span class="nav-number">17.</span> <span class="nav-text">元编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#属性描述符"><span class="nav-number">18.</span> <span class="nav-text">属性描述符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类元编程"><span class="nav-number">19.</span> <span class="nav-text">类元编程</span></a></li></ol></div>
             
 
           </div>
