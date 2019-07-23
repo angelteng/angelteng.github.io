@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
+<meta name="description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memoryview 不可变序列: tuple、str、by">
 <meta name="keywords" content="Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《流畅的Python》笔记">
 <meta property="og:url" content="https://angelteng.github.io/blog/2019/07/11/《流畅的Python》－序列构成的数组/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
+<meta property="og:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memoryview 不可变序列: tuple、str、by">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-17T03:11:45.000Z">
+<meta property="og:updated_time" content="2019-07-23T02:00:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《流畅的Python》笔记">
-<meta name="twitter:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memeryview 不可变序列: tuple、str、by">
+<meta name="twitter:description" content="序列构成的数组 序列类型  容器序列（可以存放不同数据类型）：list、tuple、collection.deque 扁平序列： str、bytes、bytearray、memeryview、array.array   按是否能被修改  可变序列： list、bytearray、array.array、collection.deque 、memoryview 不可变序列: tuple、str、by">
 
 
 
@@ -331,7 +331,7 @@
 </li>
 <li><p>按是否能被修改</p>
 <ul>
-<li>可变序列： list、bytearray、array.array、collection.deque 、memeryview</li>
+<li>可变序列： list、bytearray、array.array、collection.deque 、memoryview</li>
 <li>不可变序列: tuple、str、bytes</li>
 </ul>
 </li>
@@ -341,18 +341,15 @@
 <li><p>切片</p>
 <ul>
 <li>切片总是忽略最后一个元素</li>
-<li>s[a:b:c] c是间隔<br>－ 切片时调用 <strong>getitem</strong>(slice(start,end,step))</li>
+<li>s[a:b:c] c是间隔<br>－ 切片时调用<strong>getitem</strong>(slice(start,end,step))</li>
 </ul>
 </li>
-<li><ul>
-<li>*<ul>
+<li>+ *<ul>
 <li>都不修改原有对象</li>
 <li>＊是个浅复制，因此如果序列里含有对象的话，复制出来的是同一个对象的引用，比如[[]]*3</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>+= 使用 <strong>iadd</strong>（不改变原有对象） 如果不存在，则会调用 <strong>add</strong>（创建了新对象）。*= 对应 <strong>imul</strong>同理。</li>
+<li>+= 使用<strong>iadd</strong>（不改变原有对象） 如果不存在，则会调用<strong>add</strong>（创建了新对象）。*= 对应 <strong>imul</strong>同理。</li>
 <li>如果元组含有可变对象（eg. (1,2,[1,2]) ），改变了可变对象会抛出错误但是仍会执行。</li>
 <li>排序<ul>
 <li>list.sort 就地排序</li>
@@ -535,12 +532,9 @@
 </li>
 <li>一元运算符<ol>
 <li>－ __neg__</li>
-<li><ul>
-<li>__pos__</li>
-</ul>
-</li>
+<li>+ __pos__</li>
 <li>~ __invert__</li>
-<li>＊ <strong>mul</strong>和<strong>rmul</strong></li>
+<li>* __mul__和<strong>rmul</strong></li>
 <li>+= __iadd__(就地计算）或<strong>add</strong></li>
 </ol>
 </li>
@@ -718,6 +712,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/blog/2019/07/22/Hadoop安装使用/" rel="prev" title="Hadoop安装使用">
+                Hadoop安装使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -795,7 +793,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
