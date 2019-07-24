@@ -11,7 +11,7 @@ categories: Python
     - 扁平序列： str、bytes、bytearray、memeryview、array.array
 
 2. 按是否能被修改
-    - 可变序列： list、bytearray、array.array、collection.deque 、memeryview
+    - 可变序列： list、bytearray、array.array、collection.deque 、memoryview
     - 不可变序列: tuple、str、bytes
 
 3. 具名元组 collections.nametuple
@@ -22,11 +22,11 @@ categories: Python
 4. 切片
     - 切片总是忽略最后一个元素
     - s[a:b:c] c是间隔
-    － 切片时调用 __getitem__(slice(start,end,step))
-5. + *
+    － 切片时调用__getitem__(slice(start,end,step))
+5. \+ *
     - 都不修改原有对象
     - ＊是个浅复制，因此如果序列里含有对象的话，复制出来的是同一个对象的引用，比如[[]]*3
-6. += 使用 __iadd__（不改变原有对象） 如果不存在，则会调用 __add__（创建了新对象）。*= 对应 __imul__同理。
+6. += 使用__iadd__（不改变原有对象） 如果不存在，则会调用__add__（创建了新对象）。*= 对应 __imul__同理。
 7. 如果元组含有可变对象（eg. (1,2,[1,2]) ），改变了可变对象会抛出错误但是仍会执行。
 8.  排序
     - list.sort 就地排序
@@ -222,9 +222,9 @@ categories: Python
    3. 某些运算符不能重载，包括is and or not
 2. 一元运算符
    1. － \_\_neg__
-   2. + \_\_pos__
+   2. \+ \_\_pos__
    3. ~ \_\_invert__
-   4. ＊ __mul__和__rmul__
+   4. \* \_\_mul__和__rmul__
    5. += \_\_iadd__(就地计算）或__add__
 3. 反向方法:\_\_add__和__radd__ 
 4. 如果由于类型不兼容倒是运算符特殊方法无法返回有效结果，应该返回NotImplemented，这样Python会尝试使用反向方法。
