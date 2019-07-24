@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://angelteng.github.io/blog/2019/07/09/OAuth2授权/2.jpg">
 <meta property="og:image" content="https://angelteng.github.io/blog/2019/07/09/OAuth2授权/3.jpg">
 <meta property="og:image" content="https://angelteng.github.io/blog/2019/07/09/OAuth2授权/5.jpg">
-<meta property="og:updated_time" content="2019-07-17T09:27:35.000Z">
+<meta property="og:updated_time" content="2019-07-24T02:09:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于OAuth2 + jwt授权系统设计">
 <meta name="twitter:description" content="Oauth2是什么OAuth是一个标准开放授权（OAuth）是一个开放标准，允许用户让第三方应用访问该用户在某一网站上存储的私密的资源（如照片，视频，联系人列表），而无需将用户名和密码提供给第三方应用。OAuth是OpenID的一个补充，但是完全不同的服务。 OAuth功能OAuth允许用户提供一个令牌，而不是用户名和密码来访问他们存放在特定服务提供者的数据。每一个令牌授权一个特定的网站（例如，视">
@@ -360,7 +360,6 @@
 <ol>
 <li>生成的token存入redis或持久层，实现集群下数据共享，及中途废止token，更改权限等功能，服务器进行验证时先验证redis/持久层的token，再进行解密验证。</li>
 <li>客户端、服务端不存储token进cookie，服务端返回给客户端时存储进localstorage，验证时在header 增加Authorize 参数传输。</li>
-<li>返回的access_token不应明文传输</li>
 </ol>
 <h1 id="设计流程"><a href="#设计流程" class="headerlink" title="设计流程"></a>设计流程</h1><img src="/blog/2019/07/09/OAuth2授权/5.jpg">
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>主要参考：<br><a href="https://www.cnblogs.com/linianhui/p/oauth2-authorization.html#auto_id_0" target="_blank" rel="noopener">[认证 &amp; 授权] 1. OAuth2授权</a></p>
@@ -501,7 +500,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

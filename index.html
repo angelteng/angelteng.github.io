@@ -553,9 +553,24 @@
 <li>YARN 是 Hadoop 架构升级后，目前广泛使用的资源管理器。<img src="/blog/2019/07/22/Hadoop安装使用/0.jpg">
 </li>
 </ul>
-<h2 id="NameNode"><a href="#NameNode" class="headerlink" title="NameNode"></a>NameNode</h2><p>NameNode 是管理文件系统命名空间的主服务器，用于管理客户端对文件的访问，执行文件系统命名空间操作，如打开，关闭和重命名文件和目录。它还确定了Block 到 DataNode 的映射。<br>NameNode 做着有关块复制的所有决定，它定期从群集中的每个 DataNode 接收 Heartbeat 和 Blockreport。收到 Heartbeat 意味着 DataNode正常运行，Blockreport 包含 DataNode 上所有块的列表。</p>
-<h2 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h2><p>DataNode 通常是群集中每个节点一个，用于存储数据，负责提供来自文件系统客户端的读写请求。并且还会根据 NameNode 的指令执行块创建，删除和复制。</p>
-<p>参考:<br><a href="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Pseudo-Distributed_Operation" target="_blank" rel="noopener">Hadoop: Setting up a Single Node Cluster.</a><br><a href="https://zhuanlan.zhihu.com/p/50224788" target="_blank" rel="noopener">Hadoop – 1. 从零搭建HDFS</a><br><a href="https://juejin.im/post/5b8e94c1e51d451a447a97ae" target="_blank" rel="noopener">Hadoop入门（一）之Hadoop伪分布式环境搭建</a></p>
+<h2 id="NameNode"><a href="#NameNode" class="headerlink" title="NameNode"></a>NameNode</h2><ul>
+<li>NameNode 是管理文件系统命名空间的主服务器，用于管理客户端对文件的访问，执行文件系统命名空间操作，如打开，关闭和重命名文件和目录。它还确定了Block 到 DataNode 的映射。</li>
+<li>NameNode 做着有关块复制的所有决定，它定期从群集中的每个 DataNode 接收 Heartbeat 和 Blockreport。收到 Heartbeat 意味着 DataNode正常运行，Blockreport 包含 DataNode 上所有块的列表。</li>
+<li>文件系统的元数据（MetaData）也存储在 NameNode 中，NameNode 使用名为 EditLog 的事务日志来持久记录文件系统元数据发生的每个更改。</li>
+<li>整个文件系统命名空间（包括块到文件和文件系统属性的映射）存储在名为 FsImage 的文件中。 FsImage 也作为文件存储在 NameNode 的本地文件系统中。<h2 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h2>DataNode 通常是群集中每个节点一个，用于存储数据，负责提供来自文件系统客户端的读写请求。并且还会根据 NameNode 的指令执行块创建，删除和复制。</li>
+</ul>
+<h1 id="Hadoop生态圈"><a href="#Hadoop生态圈" class="headerlink" title="Hadoop生态圈"></a>Hadoop生态圈</h1><img src="/blog/2019/07/22/Hadoop安装使用/1.jpg">
+<img src="/blog/2019/07/22/Hadoop安装使用/2.jpg">
+<ul>
+<li>HBase：来源于Google的BigTable；是一个高可靠性、高性能、面向列、可伸缩的分布式数据库。</li>
+<li>Hive：是一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，通过类SQL语句快速实现简单的MapReduce统计，不必开发专门的MapReduce应用，十分适合数据仓库的统计分析。</li>
+<li>Pig：是一个基于Hadoop的大规模数据分析工具，它提供的SQL-LIKE语言叫Pig Latin，该语言的编译器会把类SQL的数据分析请求转换为一系列经过优化处理的MapReduce运算。</li>
+<li>ZooKeeper：来源于Google的Chubby；它主要是用来解决分布式应用中经常遇到的一些数据管理问题，简化分布式应用协调及其管理的难度。</li>
+<li>Ambari：Hadoop管理工具，可以快捷地监控、部署、管理集群。</li>
+<li>Sqoop：用于在Hadoop与传统的数据库间进行数据的传递。</li>
+<li>Mahout：一个可扩展的机器学习和数据挖掘库。</li>
+</ul>
+<p>参考:<br><a href="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Pseudo-Distributed_Operation" target="_blank" rel="noopener">Hadoop: Setting up a Single Node Cluster.</a><br><a href="https://zhuanlan.zhihu.com/p/50224788" target="_blank" rel="noopener">Hadoop – 1. 从零搭建HDFS</a><br><a href="https://juejin.im/post/5b8e94c1e51d451a447a97ae" target="_blank" rel="noopener">Hadoop入门（一）之Hadoop伪分布式环境搭建</a><br><a href="https://www.zhihu.com/question/23036370" target="_blank" rel="noopener">hadoop和大数据的关系？和spark的关系？</a></p>
 
           
         
@@ -1220,7 +1235,6 @@
 <ol>
 <li>生成的token存入redis或持久层，实现集群下数据共享，及中途废止token，更改权限等功能，服务器进行验证时先验证redis/持久层的token，再进行解密验证。</li>
 <li>客户端、服务端不存储token进cookie，服务端返回给客户端时存储进localstorage，验证时在header 增加Authorize 参数传输。</li>
-<li>返回的access_token不应明文传输</li>
 </ol>
 <h1 id="设计流程"><a href="#设计流程" class="headerlink" title="设计流程"></a>设计流程</h1><img src="/blog/2019/07/09/OAuth2授权/5.jpg">
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>主要参考：<br><a href="https://www.cnblogs.com/linianhui/p/oauth2-authorization.html#auto_id_0" target="_blank" rel="noopener">[认证 &amp; 授权] 1. OAuth2授权</a></p>
@@ -2439,7 +2453,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
