@@ -229,6 +229,336 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/22/服务性能分析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/22/服务性能分析/" itemprop="url">服务性能分析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-22T14:37:15+08:00">
+                2019-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ol>
+<li>并发数： 也叫并发连接数，指网络设备所能处理的最大会话数量。这里的会话数是指请求-&gt;响应一次会话。</li>
+<li>吞吐量：用户请求是由一个个数据包组成，网络设备（防火墙/路由器/交换机）对每个数据包的处理要耗费资源。吞吐量是指在不丢包的情况下单位时间内通过网络设备的数据包数量。</li>
+<li>网络层面并发数和吞吐量的关系：<br>并发数x包长度=吞吐量</li>
+<li>TPS：Transactions Per Second（每秒事务处理数），指服务器每秒处理的事务次数。一般用于评估数据库、交易系统的基准性能。</li>
+<li>QPS：Queries Per Second（查询量/秒），是服务器每秒能够处理的查询次数，例如域名服务器、Mysql查询性能。</li>
+<li>QPS（TPS）= 并发数/平均响应时间</li>
+</ol>
+<p>并发数高，吞吐量不一定高。<br>如果谈的是网络设备，参照：并发数x包长度=吞吐量，吞吐量依赖于并发数和包长度。<br>如果谈的是服务器及完整整体性能，需要明确吞吐量的度量指标，假定以吞吐量以QPS作为度量指标，如果并发数高，但平均响应也很高的话，则QPS可能降低。</p>
+<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><p>请求响应时间=请求发送耗时+请求解析耗时+请求处理耗时+处理结果返回耗时<br>从性能优化角度出发，就需要我们尽力保持和降低系统的99%RT（即一段时间内请求响应时间从低到高排序，低于99%响应时间的上限边界值(比如容忍值是3s)）的同时，提高单位时间内的处理能力。</p>
+<p>step 1:<br>测试指标</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指标名称</th>
+<th>指标数值</th>
+<th>指标说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">TPS</td>
+<td>100</td>
+<td>每秒事务数，很重要的一个指标，衡量系统的处理能力</td>
+</tr>
+<tr>
+<td style="text-align:left">RT</td>
+<td>95%、99%、99.99%</td>
+<td>百分比请求的响应时间，即n%以内的RT请求响应时间是多少，百分比越高，RT越低，系统越稳定</td>
+</tr>
+<tr>
+<td style="text-align:left">error</td>
+<td>0.1%、0.01%</td>
+<td>错误率，即可接受的请求失败的占比</td>
+</tr>
+<tr>
+<td style="text-align:left">Cache</td>
+<td>90%、95%</td>
+<td>缓存命中率：命中率越高，使用缓存的收益越高，系统的性能越好</td>
+</tr>
+<tr>
+<td style="text-align:left">CPU</td>
+<td>75%、90%</td>
+<td>CPU使用率，一般来说75%是一个阈值，超过85%就需要重点关注</td>
+</tr>
+</tbody>
+</table>
+<p>step 2:<br>《jmeter测试指南》</p>
+<p>step 3:<br>分析<br><a href="https://www.cnblogs.com/imyalost/p/9611566.html" target="_blank" rel="noopener">常见的性能测试缺陷</a></p>
+<p>参考<br><a href="https://www.zhihu.com/question/36734171" target="_blank" rel="noopener">衡量网站性能时，并发数与吞吐量为何要分别考量？</a><br><a href="https://zhuanlan.zhihu.com/p/41189928" target="_blank" rel="noopener">性能测试基础-常见性能指标详解</a><br><a href="https://www.cnblogs.com/imyalost/category/848600.html" target="_blank" rel="noopener">*性能测试</a><br><a href="https://blog.csdn.net/timchen525/article/details/80113749" target="_blank" rel="noopener">JMeter压测上对于并发的认识误区</a><br><a href="https://www.jianshu.com/p/2fff42a9dfcf" target="_blank" rel="noopener">什么是QPS，TPS，吞吐量</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/15/线程安全/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/15/线程安全/" itemprop="url">线程安全</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-15T14:12:31+08:00">
+                2019-04-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
+                    <span itemprop="name">底层</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="原因一：多核CPU的缓存"><a href="#原因一：多核CPU的缓存" class="headerlink" title="原因一：多核CPU的缓存"></a>原因一：多核CPU的缓存</h1><p>当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。<br>按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的一部分。<br>当CPU要读取一个数据时，首先从一级缓存中查找，如果没有找到再从二级缓存中查找，如果还是没有就从三级缓存或内存中查找。<br>单核CPU只含有一套L1，L2，L3缓存；如果CPU含有多个核心，即多核CPU，则每个核心都含有一套L1（甚至和L2）缓存，而共享L3（或者和L2）缓存。<br><img src="0.png" alt="image.png"></p>
+<ul>
+<li>单线程。cpu核心的缓存只被一个线程访问。缓存独占，不会出现访问冲突等问题。</li>
+<li>单核CPU，多线程。进程中的多个线程会同时访问进程中的共享数据，CPU将某块内存加载到缓存后，不同线程在访问相同的物理地址的时候，都会映射到相同的缓存位置，这样即使发生线程的切换，缓存仍然不会失效。但由于任何时刻只能有一个线程在执行，因此不会出现缓存访问冲突。</li>
+<li>多核CPU，多线程。每个核都至少有一个L1 缓存。多个线程访问进程中的某个共享内存，且这多个线程分别在不同的核心上执行，则每个核心都会在各自的caehe中保留一份共享内存的缓冲。由于多核是可以并行的，可能会出现多个线程同时写各自的缓存的情况，而各自的cache之间的数据就有可能不同。这就是缓存一致性问题。</li>
+</ul>
+<h1 id="原因二：处理器优化和指令重排"><a href="#原因二：处理器优化和指令重排" class="headerlink" title="原因二：处理器优化和指令重排"></a>原因二：处理器优化和指令重排</h1><p>那就是为了使处理器内部的运算单元能够尽量的被充分利用，处理器可能会对输入代码进行乱序执行处理。这就是处理器优化。<br>除了现在很多流行的处理器会对代码进行优化乱序处理，很多编程语言的编译器也会有类似的优化，比如Java虚拟机的即时编译器（JIT）也会做指令重排。</p>
+<h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><p>并发编程中的线程安全，必须保证三个条件：</p>
+<ol>
+<li>原子性：是指在一个操作中就是cpu不可以在中途暂停然后再调度，既不被中断操作，要不执行完成，要不就不执行。</li>
+<li>可见性：是指当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值。</li>
+<li>有序性：即程序执行的顺序按照代码的先后顺序执行。</li>
+</ol>
+<h1 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h1><p>为了保证共享内存的正确性（可见性、有序性、原子性），内存模型定义了共享内存系统中多线程程序读写操作行为的规范。通过这些规则来规范对内存的读写操作，从而保证指令执行的正确性。</p>
+<h1 id="Python中的线程安全"><a href="#Python中的线程安全" class="headerlink" title="Python中的线程安全"></a>Python中的线程安全</h1><p>python中由于GIL（Global Interpreter Lock）的存在，即使开了多线程，同一个时间也只有一个线程在执行，但Python不是线程安全的。<br>GIL:任何python线程在执行之前都需要先获得GIL锁，然后每执行一部分代码，解释器就会自动释放GIL锁，其他线程就可以竞争这个锁，只有得到才能执行程序。对于CPU密集型程序，GIL锁的影响在于，有了它的存在，开启多线程无法利用多核优势，也就是只能用到一个核CPU来运行代码，要想用到多个核只能开启多进程（或者使用不带有GIL锁的解释器）。</p>
+<ol>
+<li>使用线程锁： threading.Lock() / threading.RLock()</li>
+<li>使用原子操作</li>
+</ol>
+<p>参考<br><a href="https://juejin.im/post/5cad4adc5188251b1f4d87d2" target="_blank" rel="noopener">再有人问你Java内存模型是什么，就把这篇文章发给他</a><br><a href="https://juejin.im/post/5b129a1be51d45068a6c91d4" target="_blank" rel="noopener">列表与队列——谈谈线程安全</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/11/python-u-命令行参数/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1521,334 +1851,6 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/18/机器学习基石学习笔记（三）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/18/机器学习基石学习笔记（三）/" itemprop="url">机器学习基石学习笔记（三）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-18T11:10:18+08:00">
-                2019-01-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/14/机器学习基石学习笔记（二）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/14/机器学习基石学习笔记（二）/" itemprop="url">机器学习基石学习笔记（二）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-14T10:48:57+08:00">
-                2019-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Why-can-machines-learn"><a href="#Why-can-machines-learn" class="headerlink" title="Why can machines learn?"></a>Why can machines learn?</h1><h2 id="No-Free-Lunch定理"><a href="#No-Free-Lunch定理" class="headerlink" title="No Free Lunch定理"></a>No Free Lunch定理</h2><p>No Free Lunch定理表明，没有一个学习算法可以在任何领域总是产生最准确的学习器。不管采用何种学习算法，至少存在一个目标函数，能够使得随机猜测算法是更好的算法。<br>NFL说明了无法保证一个机器学习算法在D以外的数据集上一定能分类或预测正确，除非加上一些假设条件。</p>
-<h2 id="机器学习中假设与目标函数相等的可能性"><a href="#机器学习中假设与目标函数相等的可能性" class="headerlink" title="机器学习中假设与目标函数相等的可能性"></a>机器学习中假设与目标函数相等的可能性</h2><ol>
-<li>机器学习中hypothesis与目标函数相等的可能性，类比于罐子中橙色球的概率问题；罐子里的一颗颗弹珠类比于机器学习样本空间的x；橙色的弹珠类比于h(x)与f不相等；绿色的弹珠类比于h(x)与f相等；从罐子中抽取的N个球类比于机器学习的训练样本D，且这两种抽样的样本与总体样本之间都是独立同分布的。所以呢，如果样本N够大，且是独立同分布的，那么，从样本中h(x)!=f(x)的概率就能推导在抽样样本外的所有样本中h(x)!=f(x)的概率是多少。</li>
-<li>$E_{in}(h)$表示在抽样样本中，h(x)与$y_n$不相等的概率；$E_{out}(h)$表示实际所有样本中，h(x)与f(x)不相等的概率是多少。如果$E_{in}$很小，那么他们错误概率满足PAC，他们很接近。</li>
-<li>M是hypothesis的个数，N是样本D的数量，ϵ是参数。该union bound表明，当M有限，且N足够大的时候，Bad Data出现的概率就更低了，即能保证D对于所有的h都有$E_{in}~~E_{out}$，满足PAC，演算法A的选择不受限制。那么满足这种union bound的情况，我们就可以和之前一样，选取一个合理的演算法（PLA/pocket），选择使$E_{in}$最小的$h_m$作为矩g，一般能够保证$g≈f$，即有不错的泛化能力。<br>所以，如果hypothesis的个数M是有限的，N足够大，那么通过演算法A任意选择一个矩g，都有$E_{in}≈E_{out}$成立；同时，如果找到一个矩g，使<br>$E_{in}≈0$，PAC就能保证$E_{out}≈0$。至此，就证明了机器学习是可行的。<br><img src="0.png" alt="PAC"><br><img src="1.png" alt="learning possible"></li>
-</ol>
-<h2 id="M对机器学习可行性的影响"><a href="#M对机器学习可行性的影响" class="headerlink" title="M对机器学习可行性的影响"></a>M对机器学习可行性的影响</h2><ol>
-<li>从之前课程可以归纳出机器学习可行需要满足：<ul>
-<li>$E_{in}(g)≈E_{out}(g)$</li>
-<li>$E_{in}(g)$ 足够小</li>
-</ul>
-</li>
-<li>hypothesis set的个数M是有限的，但是当M很小时，不一定找到满足（2）的M，当M很大时，同样由霍夫丁不等式，$E_{in}(g)$与$E_{out}(g)$可能相差很大</li>
-<li>shatter : $m_H(H) = 2^N$ 即，exists N input can be shatter.也就是说对于inputs的所有情况都能列举出来。例如对N个输入，如果能够将$2^N$种情况都列出来，则称该N个输入能够被假设集H shatter。</li>
-<li>二分类（dichotomy)，dichotomy就是将空间中的点（例如二维平面）用一条直线分成正类（蓝色o）和负类（红色x），它的上界是$2^N$。</li>
-<li>成长函数（growth function），记为$m_H(H)$，成长函数的定义是：对于由N个点组成的不同集合中，某集合对应的dichotomy最大，那么这个dichotomy值就$m_H(H)$，它的上界是$2^N$。</li>
-<li>break point，满足$m_H(H)=2^K$的k的最小值就是break point。那么令有k个点，如果k大于等于break point时，它的成长函数一定小于2的k次方。</li>
-<li>Vapnik-Chervonenkis(VC) bound<br><img src="2.png" alt="Vapnik-Chervonenkis(VC) bound"></li>
-</ol>
-<h2 id="VC-Dimension"><a href="#VC-Dimension" class="headerlink" title="VC Dimension"></a>VC Dimension</h2><ol>
-<li>假设空间H有break point k，那么它的成长函数是有界的，它的上界称为Bound function。根据数学归纳法，Bound function也是有界的，且上界为$N^{k-1}$<br><img src="3.png" alt="image.png"><br>那么 vc bound可以转化为<br><img src="4.png" alt="vc bound"><br>这个式子的值只与k、N有关。</li>
-<li>VC Dimension：就是某假设集H能够shatter的最多inputs的个数，即最大完全正确的分类能力（注意，只要存在一种分布的inputs能够正确分类也满足）。根据之前break point的定义：假设集不能被shatter任何分布类型的inputs的最少个数。则VC Dimension等于break point的个数减一。即：<br>$$ d_{vc} = ‘min k’-1 $$</li>
-<li>$ d_{vc} = d+1$</li>
-<li>VC Dimension代表了假设空间的分类能力，即反映了H的自由度，产生dichotomy的数量，也就等于features的个数，但也不是绝对的。</li>
-<li>将$d_{vc}$代表k，此时vc bound 为<br><img src="5.png" alt="vc bound"><br><img src="6.png" alt="ϵ的值"><br>ϵ表现了假设空间H的泛化能力，ϵ越小，泛化能力越大。<br>那么，可以得到<br><img src="7.png" alt="ein"><br>上述不等式的右边第二项称为模型复杂度，其模型复杂度与样本数量N、假设空间$H(d_{vc})$、ϵ有关。$E_{out}$由$E_{in}$共同决定。下面绘出$E_{out}$、model complexity、$E_{in}$随$d_{vc}$变化的关系：<br><img src="8.png" alt="eout"></li>
-<li>样本复杂度（Sample Complexity），如果选定$d_{vc}$，样本D的数量N大约是$d_{vc}$的10000倍。这个数值太大了，实际中往往不需要这么多的样本数量，大概只需要$d_{vc}$的10倍就够了。</li>
-</ol>
-<h2 id="Noise-and-Error"><a href="#Noise-and-Error" class="headerlink" title="Noise and Error"></a>Noise and Error</h2><h3 id="错误衡量"><a href="#错误衡量" class="headerlink" title="错误衡量"></a>错误衡量</h3><p><img src="9.png" alt="Noise"></p>
-<ol>
-<li><p>错误衡量三个特性</p>
-<ul>
-<li>out-of-sample：样本外的未知数据</li>
-<li>pointwise：对每个数据点x进行测试</li>
-<li>classification：看prediction与target是否一致，classification error通常称为0/1 error</li>
-</ul>
-</li>
-<li><p>PointWise error实际上就是对数据集的每个点计算错误并计算平均<br><img src="10.png" alt="PointWise"><br>pointwise error一般可以分成两类：0/1 error和squared error。<br><img src="11.png" alt="PointWise"></p>
-</li>
-<li>Ideal Mini-Target由P(y∣x)和err共同决定。<br>0/1 error中的mini-target是取P(y|x)最大的那个类，而squared error中的mini-target是取所有类的加权平方和。<br><img src="12.png" alt="Ideal"></li>
-</ol>
-<h3 id="Algorithmic-Error-Measure"><a href="#Algorithmic-Error-Measure" class="headerlink" title="Algorithmic Error Measure"></a>Algorithmic Error Measure</h3><ol>
-<li>Error有两种：false accept和false reject。false accept意思是误把负类当成正类，false reject是误把正类当成负类。</li>
-<li>机器学习演算法A的cost function error估计有多种方法，真实的err一般难以计算，常用的方法可以采用plausible或者friendly<br><img src="13.png" alt="err"></li>
-</ol>
-<h3 id="Weighted-Classification"><a href="#Weighted-Classification" class="headerlink" title="Weighted Classification"></a>Weighted Classification</h3><p>机器学习的Cost Function即来自于这些error，也就是算法里面的迭代的目标函数，通过优化使得Error（Ein）不断变小。<br>cost function中，false accept和false reject赋予不同的权重，在演算法中体现。对不同权重的错误惩罚，可以选用virtual copying的方法。<br><img src="14.png" alt="Weighted Classification"></p>
-<p><a href="https://blog.csdn.net/zyghs/article/details/78762070" target="_blank" rel="noopener">hw</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1901,7 +1903,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">78</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -229,6 +229,308 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/25/Flask源码学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/07/25/Flask源码学习/" itemprop="url">Flask源码学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-25T14:01:39+08:00">
+                2019-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="WSGI规范"><a href="#WSGI规范" class="headerlink" title="WSGI规范"></a>WSGI规范</h1><p>WSGI(Web Server Gateway Interface):proposes a simple and universal interface between web servers and web applications or frameworks<br><a href="https://legacy.python.org/dev/peps/pep-0333/" target="_blank" rel="noopener">PEP_333</a>有这个标准的详细说明<br>规定：</p>
+<ol>
+<li><p>每个Application必须是个可调用对象，接收两个参数environ（包含了环境信息的字典）、start_response（开始响应请求的函数），并且返回 iterable。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># environ 和 start_response 由 HTTP Server 提供并实现</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">application</span><span class="params">(environ, start_response)</span>:</span></span><br><span class="line">    <span class="comment"># Application 内部在返回前调用 start_response</span></span><br><span class="line">    start_response(<span class="string">'200 OK'</span>, [(<span class="string">'Content-Type'</span>, <span class="string">'text/html'</span>)])</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&lt;h1&gt;Hello, web!&lt;/h1&gt;'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Server需要准备environ参数、定义start_response函数、调用Application的可调用对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, sys</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_with_cgi</span><span class="params">(application)</span>:</span></span><br><span class="line">    environ = dict(os.environ.items())</span><br><span class="line">    environ[<span class="string">'wsgi.input'</span>]        = sys.stdin</span><br><span class="line">    environ[<span class="string">'wsgi.errors'</span>]       = sys.stderr</span><br><span class="line">    environ[<span class="string">'wsgi.version'</span>]      = (<span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">    environ[<span class="string">'wsgi.multithread'</span>]  = <span class="keyword">False</span></span><br><span class="line">    environ[<span class="string">'wsgi.multiprocess'</span>] = <span class="keyword">True</span></span><br><span class="line">    environ[<span class="string">'wsgi.run_once'</span>]     = <span class="keyword">True</span></span><br><span class="line">    environ[<span class="string">'wsgi.url_scheme'</span>] = <span class="string">'http'</span></span><br><span class="line"></span><br><span class="line">    headers_set = []</span><br><span class="line">    headers_sent = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write</span><span class="params">(data)</span>:</span></span><br><span class="line">        sys.stdout.write(data)</span><br><span class="line">        sys.stdout.flush()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start_response</span><span class="params">(status, response_headers, exc_info=None)</span>:</span></span><br><span class="line">        headers_set[:] = [status, response_headers]</span><br><span class="line">        <span class="keyword">return</span> write</span><br><span class="line"></span><br><span class="line">    result = application(environ, start_response)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Middleware: Middleware 对服务器程序和应用是透明的，它像一个代理/管道一样，把接收到的请求进行一些处理，然后往后传递，一直传递到客户端程序，最后把程序的客户端处理的结果再返回。比如：</p>
+<ul>
+<li>根据 url 把请求给到不同的客户端程序（url routing）</li>
+<li>允许多个客户端程序/web 框架同时运行，就是把接到的同一个请求传递给多个程序。</li>
+<li>负载均衡和远程处理：把请求在网络上传输</li>
+<li>应答的过滤处理</li>
+</ul>
+</li>
+</ol>
+<h1 id="从Flask-run-开始"><a href="#从Flask-run-开始" class="headerlink" title="从Flask run 开始"></a>从Flask run 开始</h1><p>在 app.py 中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self, host=None, port=None, debug=None, load_dotenv=True, **options)</span>:</span></span><br><span class="line">    ........</span><br><span class="line"></span><br><span class="line">    _host = <span class="string">"127.0.0.1"</span></span><br><span class="line">    _port = <span class="number">5000</span></span><br><span class="line">    server_name = self.config.get(<span class="string">"SERVER_NAME"</span>)</span><br><span class="line">    sn_host, sn_port = <span class="keyword">None</span>, <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> server_name:</span><br><span class="line">        sn_host, _, sn_port = server_name.partition(<span class="string">":"</span>)</span><br><span class="line"></span><br><span class="line">    host = host <span class="keyword">or</span> sn_host <span class="keyword">or</span> _host</span><br><span class="line">    port = int(next((p <span class="keyword">for</span> p <span class="keyword">in</span> (port, sn_port) <span class="keyword">if</span> p <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>), _port))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">from</span> werkzeug.serving <span class="keyword">import</span> run_simple</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 注意第三个参数是self,也就是这个Flask的实例对象</span></span><br><span class="line">        run_simple(host, port, self, **options) <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        self._got_first_request = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">.....</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_simple</span><span class="params">(hostname, port, application, use_reloader=False, use_debugger=False, use_evalex=True, extra_files=None, reloader_interval=<span class="number">1</span>, reloader_type=<span class="string">"auto"</span>, threaded=False, processes=<span class="number">1</span>, request_handler=None, static_files=None, passthrough_errors=False, ssl_context=None,)</span>:</span></span><br><span class="line">    .......</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            fd = int(os.environ[<span class="string">"WERKZEUG_SERVER_FD"</span>])</span><br><span class="line">        <span class="keyword">except</span> (LookupError, ValueError):</span><br><span class="line">            fd = <span class="keyword">None</span></span><br><span class="line">        srv = make_server(</span><br><span class="line">            hostname,</span><br><span class="line">            port,</span><br><span class="line">            application,</span><br><span class="line">            threaded,</span><br><span class="line">            processes,</span><br><span class="line">            request_handler,</span><br><span class="line">            passthrough_errors,</span><br><span class="line">            ssl_context,</span><br><span class="line">            fd=fd,</span><br><span class="line">        )                   <span class="comment"># &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">        <span class="keyword">if</span> fd <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            log_startup(srv.socket)</span><br><span class="line">        srv.serve_forever()</span><br><span class="line"></span><br><span class="line">    inner()</span><br><span class="line"></span><br><span class="line">.......</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_server</span><span class="params">(host=None, port=None, app=None, threaded=False, processes=<span class="number">1</span>, request_handler=None, passthrough_errors=False, ssl_context=None, fd=None,)</span>:</span></span><br><span class="line">   <span class="comment"># 省略多线程/ 多进程情况</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> BaseWSGIServer(   <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">        host, port, app, request_handler, passthrough_errors, ssl_context, fd=fd</span><br><span class="line">    )</span><br><span class="line">..........</span><br><span class="line"><span class="comment"># 调用了Python的HTTPServer模块</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseWSGIServer</span><span class="params">(HTTPServer, object)</span>:</span></span><br><span class="line">    .........</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">serve_forever</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.shutdown_signal = <span class="keyword">False</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            HTTPServer.serve_forever(self)   <span class="comment"># 最终调用HTTPServer.serve_forever方法</span></span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.server_close()</span><br></pre></td></tr></table></figure></p>
+<p>整体流程为：<br>flask.run –&gt; app.run –&gt; werkzeug.run_simple  –&gt; werkzeug.BaseWSGIServer –&gt; Python.HTTPServer.serve_forever</p>
+<h1 id="路由匹配"><a href="#路由匹配" class="headerlink" title="路由匹配"></a>路由匹配</h1><p>使用 @app.route装饰器与app.add_url_rule是一样的<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">route</span><span class="params">(self, rule, **options)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(f)</span>:</span></span><br><span class="line">        endpoint = options.pop(<span class="string">"endpoint"</span>, <span class="keyword">None</span>)</span><br><span class="line">        self.add_url_rule(rule, endpoint, f, **options)</span><br><span class="line">        <span class="keyword">return</span> f</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_url_rule</span><span class="params">(self, rule, endpoint=None, view_func=None, provide_automatic_options=None, **options)</span>:</span></span><br><span class="line">    <span class="comment"># endpoint是视图函数的名字</span></span><br><span class="line">    <span class="keyword">if</span> endpoint <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        endpoint = _endpoint_from_view_func(view_func)</span><br><span class="line">    </span><br><span class="line">    methods = options.pop(<span class="string">"methods"</span>, <span class="keyword">None</span>)</span><br><span class="line">    <span class="comment"># url_rule_class 是werkzeug.routeing.Rule的实例</span></span><br><span class="line">    rule = self.url_rule_class(rule, methods=methods, **options)</span><br><span class="line">    rule.provide_automatic_options = provide_automatic_options</span><br><span class="line">    <span class="comment"># url_map 是werkzeug.routeing.Map的实例</span></span><br><span class="line">    self.url_map.add(rule)</span><br><span class="line">    <span class="keyword">if</span> view_func <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="comment"># view_functions是一个字典</span></span><br><span class="line">        old_func = self.view_functions.get(endpoint)</span><br><span class="line">        <span class="keyword">if</span> old_func <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span> <span class="keyword">and</span> old_func != view_func:</span><br><span class="line">            <span class="keyword">raise</span> AssertionError(</span><br><span class="line">                <span class="string">"View function mapping is overwriting an "</span></span><br><span class="line">                <span class="string">"existing endpoint function: %s"</span> % endpoint</span><br><span class="line">            )</span><br><span class="line">        self.view_functions[endpoint] = view_func</span><br></pre></td></tr></table></figure></p>
+<p>werkzeug 的 url_map类似：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">m = Map([</span><br><span class="line">    Rule(<span class="string">'/'</span>, endpoint=<span class="string">'index'</span>),</span><br><span class="line">    Rule(<span class="string">'/downloads/'</span>, endpoint=<span class="string">'downloads/index'</span>),</span><br><span class="line">    Rule(<span class="string">'/downloads/&lt;int:id&gt;'</span>, endpoint=<span class="string">'downloads/show'</span>)</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
+<p>view_functions就是个字典：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;end_point_1&quot; : view_function_1,</span><br><span class="line">    &quot;end_point_2&quot; : view_function_2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>因此endpoint是一个连接rule跟view_function的重要的桥梁<br>上面说明了路由添加管理，下面来看路由分发过程：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dispatch_request</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># 先取请求上下文的信息</span></span><br><span class="line">    req = _request_ctx_stack.top.request</span><br><span class="line">    <span class="keyword">if</span> req.routing_exception <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        self.raise_routing_exception(req)</span><br><span class="line">    <span class="comment"># 从上下文中获取url_rule</span></span><br><span class="line">    rule = req.url_rule</span><br><span class="line">    <span class="comment"># if we provide automatic options for this URL and the</span></span><br><span class="line">    <span class="comment"># request came with the OPTIONS method, reply automatically</span></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">        getattr(rule, <span class="string">"provide_automatic_options"</span>, <span class="keyword">False</span>)</span><br><span class="line">        <span class="keyword">and</span> req.method == <span class="string">"OPTIONS"</span></span><br><span class="line">    ):</span><br><span class="line">        <span class="keyword">return</span> self.make_default_options_response()</span><br><span class="line">    <span class="comment"># otherwise dispatch to the handler for that endpoint</span></span><br><span class="line">    <span class="comment"># 从view_functions字典中取对应url_rule.endpoint的方法运行</span></span><br><span class="line">    <span class="keyword">return</span> self.view_functions[rule.endpoint](**req.view_args)</span><br></pre></td></tr></table></figure></p>
+<p>然后来看看请求上下文做了什么，在flask/ctx.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RequestContext</span><span class="params">(object)</span>:</span>    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, app, environ, request=None, session=None)</span>:</span></span><br><span class="line">        self.app = app</span><br><span class="line">        <span class="keyword">if</span> request <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            request = app.request_class(environ)</span><br><span class="line">        self.request = request</span><br><span class="line">        self.url_adapter = <span class="keyword">None</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 创建了url_adapter</span></span><br><span class="line">            self.url_adapter = app.create_url_adapter(self.request) <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">        <span class="keyword">except</span> HTTPException <span class="keyword">as</span> e:</span><br><span class="line">            self.request.routing_exception = e</span><br><span class="line">        self.flashes = <span class="keyword">None</span></span><br><span class="line">        self.session = session</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Binds the request context to the current context."""</span></span><br><span class="line">        top = _request_ctx_stack.top</span><br><span class="line">        <span class="comment"># Before we push the request context we have to ensure that there</span></span><br><span class="line">        <span class="comment"># is an application context.</span></span><br><span class="line">        app_ctx = _app_ctx_stack.top</span><br><span class="line">        <span class="keyword">if</span> app_ctx <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> app_ctx.app != self.app:</span><br><span class="line">            app_ctx = self.app.app_context()</span><br><span class="line">            app_ctx.push() <span class="comment">#如果没有app上下文，推送一个</span></span><br><span class="line">            self._implicit_app_ctx_stack.append(app_ctx)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self._implicit_app_ctx_stack.append(<span class="keyword">None</span>)</span><br><span class="line">        <span class="comment"># 把当前请求上下文推送到栈</span></span><br><span class="line">        _request_ctx_stack.push(self) </span><br><span class="line">        <span class="keyword">if</span> self.url_adapter <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="comment"># 匹配路由</span></span><br><span class="line">            self.match_request() <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">match_request</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Can be overridden by a subclass to hook into the matching</span></span><br><span class="line"><span class="string">        of the request.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = self.url_adapter.match(return_rule=<span class="keyword">True</span>) <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">            self.request.url_rule, self.request.view_args = result</span><br><span class="line">        <span class="keyword">except</span> HTTPException <span class="keyword">as</span> e:</span><br><span class="line">            self.request.routing_exception = e</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_url_adapter</span><span class="params">(self, request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> request <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="comment"># If subdomain matching is disabled (the default), use the</span></span><br><span class="line">        <span class="comment"># default subdomain in all cases. This should be the default</span></span><br><span class="line">        <span class="comment"># in Werkzeug but it currently does not have that feature.</span></span><br><span class="line">        subdomain = (</span><br><span class="line">            (self.url_map.default_subdomain <span class="keyword">or</span> <span class="keyword">None</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> self.subdomain_matching</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">None</span></span><br><span class="line">        )</span><br><span class="line">        <span class="comment"># 把url_map绑定到wsgi到environ变量上</span></span><br><span class="line">        <span class="keyword">return</span> self.url_map.bind_to_environ(  <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">            request.environ,</span><br><span class="line">            server_name=self.config[<span class="string">"SERVER_NAME"</span>],</span><br><span class="line">            subdomain=subdomain,</span><br><span class="line">        )</span><br></pre></td></tr></table></figure></p>
+<p>werkzeug.routeing.match的方法注释里就有很简单的例子,逻辑是用compile的正则表达式去匹配给出的真实路径信息，把所有的匹配组件转换成对应的值，保存在字典中（这就是传递给视图函数的参数列表）并返回。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">m = Map([</span><br><span class="line">    Rule(<span class="string">'/'</span>, endpoint=<span class="string">'index'</span>),</span><br><span class="line">    Rule(<span class="string">'/downloads/'</span>, endpoint=<span class="string">'downloads/index'</span>),</span><br><span class="line">    Rule(<span class="string">'/downloads/&lt;int:id&gt;'</span>, endpoint=<span class="string">'downloads/show'</span>)</span><br><span class="line">    ])</span><br><span class="line">urls = m.bind(<span class="string">"example.com"</span>, <span class="string">"/"</span>)</span><br><span class="line">urls.match(<span class="string">"/"</span>, <span class="string">"GET"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>(<span class="string">'index'</span>, &#123;&#125;)</span><br><span class="line">urls.match(<span class="string">"/downloads/42"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>(<span class="string">'downloads/show'</span>, &#123;<span class="string">'id'</span>: <span class="number">42</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>整体流程：</p>
+<ol>
+<li>通过@app.route或者app.add_url_rule注册应用url对应的处理函数</li>
+<li>每次请求过来的时候，推送请求上下文到栈，然后调用路由匹配的逻辑，把路由结果保存起来</li>
+<li>dispatch_request分发保存的路由结果，调用对应的视图函数</li>
+</ol>
+<h1 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h1><p>在拿request信息的时候，我们会像这样引入一个全局变量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from flask import request</span><br></pre></td></tr></table></figure></p>
+<p>但是在不同的进程/线程/协程中，request的值是不一样的。</p>
+<ol>
+<li>进程比较好理解，进程间本来就是资源独立的。</li>
+<li>在线程/协程中，可以实现类似thread.local，实现一个字典，然后不同的线程id对应不同的值<br>flask/global.py 这里保存了这些上下文的信息<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> werkzeug.local <span class="keyword">import</span> LocalProxy</span><br><span class="line"><span class="keyword">from</span> werkzeug.local <span class="keyword">import</span> LocalStack</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_lookup_req_object</span><span class="params">(name)</span>:</span></span><br><span class="line">    top = _request_ctx_stack.top</span><br><span class="line">    <span class="keyword">if</span> top <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(_request_ctx_err_msg)</span><br><span class="line">    <span class="keyword">return</span> getattr(top, name)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_lookup_app_object</span><span class="params">(name)</span>:</span></span><br><span class="line">    top = _app_ctx_stack.top</span><br><span class="line">    <span class="keyword">if</span> top <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(_app_ctx_err_msg)</span><br><span class="line">    <span class="keyword">return</span> getattr(top, name)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_find_app</span><span class="params">()</span>:</span></span><br><span class="line">    top = _app_ctx_stack.top</span><br><span class="line">    <span class="keyword">if</span> top <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(_app_ctx_err_msg)</span><br><span class="line">    <span class="keyword">return</span> top.app</span><br><span class="line"></span><br><span class="line"><span class="comment"># context locals</span></span><br><span class="line">_request_ctx_stack = LocalStack()   <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">_app_ctx_stack = LocalStack()       <span class="comment">#&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line">current_app = LocalProxy(_find_app)</span><br><span class="line">request = LocalProxy(partial(_lookup_req_object, <span class="string">"request"</span>))</span><br><span class="line">session = LocalProxy(partial(_lookup_req_object, <span class="string">"session"</span>))</span><br><span class="line">g = LocalProxy(partial(_lookup_app_object, <span class="string">"g"</span>))</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>LocalStack是werkzegu.local的一个栈实现，提供了隔离的栈访问。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LocalStack</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._local = Local()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">_lookup</span><span class="params">()</span>:</span></span><br><span class="line">            rv = self.top</span><br><span class="line">            <span class="keyword">if</span> rv <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">raise</span> RuntimeError(<span class="string">"object unbound"</span>)</span><br><span class="line">            <span class="keyword">return</span> rv</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> LocalProxy(_lookup)</span><br></pre></td></tr></table></figure></p>
+<p>Local主要实现了线程id/协程id对应字典，提供了多线程或者多协程隔离的属性访问。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">from</span> greenlet <span class="keyword">import</span> getcurrent <span class="keyword">as</span> get_ident</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">from</span> thread <span class="keyword">import</span> get_ident</span><br><span class="line">    <span class="keyword">except</span> ImportError:</span><br><span class="line">        <span class="keyword">from</span> _thread <span class="keyword">import</span> get_ident</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Local</span><span class="params">(object)</span>:</span></span><br><span class="line">    __slots__ = (<span class="string">"__storage__"</span>, <span class="string">"__ident_func__"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 变量的值的值都存在__storage__里</span></span><br><span class="line">        object.__setattr__(self, <span class="string">"__storage__"</span>, &#123;&#125;)  </span><br><span class="line">        object.__setattr__(self, <span class="string">"__ident_func__"</span>, get_ident)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> iter(self.__storage__.items())</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, proxy)</span>:</span></span><br><span class="line">        <span class="string">"""Create a proxy for a name."""</span></span><br><span class="line">        <span class="keyword">return</span> LocalProxy(self, proxy)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__release_local__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__storage__.pop(self.__ident_func__(), <span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 取值、设值、删值的时候，都是通过__ident_func__获取线程/协程对象id，再在这个id字典下对变量进行操作</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getattr__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> self.__storage__[self.__ident_func__()][name]</span><br><span class="line">        <span class="keyword">except</span> KeyError:</span><br><span class="line">            <span class="keyword">raise</span> AttributeError(name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setattr__</span><span class="params">(self, name, value)</span>:</span></span><br><span class="line">        ident = self.__ident_func__()</span><br><span class="line">        storage = self.__storage__</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            storage[ident][name] = value</span><br><span class="line">        <span class="keyword">except</span> KeyError:</span><br><span class="line">            storage[ident] = &#123;name: value&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__delattr__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">del</span> self.__storage__[self.__ident_func__()][name]</span><br><span class="line">        <span class="keyword">except</span> KeyError:</span><br><span class="line">            <span class="keyword">raise</span> AttributeError(name)</span><br></pre></td></tr></table></figure></p>
+<p>LocalProxy是一个Local对象的代理，负责把所有对自己的操作转发给内部的Local对象。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LocalProxy</span><span class="params">(object)</span>:</span></span><br><span class="line">    __slots__ = (<span class="string">'__local'</span>, <span class="string">'__dict__'</span>, <span class="string">'__name__'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, local, name=None)</span>:</span></span><br><span class="line">        <span class="comment"># 把通过参数传递进来的 Local 实例保存在 __local 属性中</span></span><br><span class="line">        object.__setattr__(self, <span class="string">'_LocalProxy__local'</span>, local)  </span><br><span class="line">        object.__setattr__(self, <span class="string">'__name__'</span>, name)</span><br><span class="line">   </span><br><span class="line">    <span class="comment"># 通过_get_current_object() 方法获取当前线程或者协程对应的对象。</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_get_current_object</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Return the current object."""</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> hasattr(self.__local, <span class="string">'__release_local__'</span>):</span><br><span class="line">            <span class="keyword">return</span> self.__local()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> getattr(self.__local, self.__name__)</span><br><span class="line">        <span class="keyword">except</span> AttributeError:</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(<span class="string">'no object bound to %s'</span> % self.__name__)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getattr__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> name == <span class="string">'__members__'</span>:</span><br><span class="line">            <span class="keyword">return</span> dir(self._get_current_object())</span><br><span class="line">        <span class="keyword">return</span> getattr(self._get_current_object(), name)</span><br></pre></td></tr></table></figure></p>
+<p>因此，</p>
+<ol>
+<li>每次有请求过来的时候，flask会先创建当前线程或者进程需要处理的两个重要上下文对象，把它们保存到隔离的栈里面，这样视图函数进行处理的时候就能直接从栈上获取这些信息。</li>
+<li>为什么区分app上下文、请求上下文：一个请求对应一个app上下文、一个请求上下文，但是在测试或者 python shell 中运行的时候，用户可以单独创建 请求上下文或者app上下文，这种灵活度方便用户的不同的使用场景。</li>
+<li>为什么用栈结构：在多个App的时候，无论有多少个App，只要主动去Push它的app context，context stack就会累积起来，这样，栈顶永远是当前操作的 App Context。当一个 App Context 结束的时候，相应的栈顶元素也随之出栈。如果在执行过程中抛出了异常，对应的 App Context 中注册的 teardown函数被传入带有异常信息的参数。因此，只有栈结构才能保存多个 Context 并在其中定位出哪个才是“当前”。</li>
+</ol>
+<p>参考：<br><a href="https://cizixs.com/2017/01/13/flask-insight-context/" target="_blank" rel="noopener">flask 源码解析</a><br><a href="https://www.jianshu.com/p/7a7efbb7205f" target="_blank" rel="noopener">Flask的Context(上下文)学习笔记</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/24/《Flask-Web开发实战》/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/07/24/《Flask-Web开发实战》/" itemprop="url">《Flask Web开发实战》笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-24T10:26:27+08:00">
+                2019-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><ol>
+<li><p>pipenv 使用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pipenv install <span class="comment">#创建.venv/ pipfile pipfile.lock</span></span><br><span class="line">pipenv install flask</span><br><span class="line">pipenv shell <span class="comment"># source .venv/bin/activate</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态路由</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route('/greet',defaluts = &#123;"name":"defaultname"&#125;)</span></span><br><span class="line"><span class="meta">@app.route('/greet/&lt;name&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"welcome %s"</span> % name</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Flask内置了简单的开发服务器（由Werkzeug提供），旧的app.run()方法已不建议使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">flask run</span><br><span class="line"><span class="string">""""</span></span><br><span class="line"><span class="string">查找规则：</span></span><br><span class="line"><span class="string">1. 当前目录下寻找app.py wsgi.py，并从中寻找名为app/application的实例</span></span><br><span class="line"><span class="string">2. 从环境变量读取FLASK_APP的模块名/导入路径，寻找名为app/application的实例</span></span><br><span class="line"><span class="string">3. 如果安装了python-dotenv，启动时会从.flaskenv .env加载环境变量</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检测文件变化 watchdog</p>
+</li>
+<li>flask的扩展包 falsk_xxxx</li>
+<li>flask自定义命令<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># flask hello</span></span><br><span class="line"><span class="meta">@app.cli.command()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">    click.echo(<span class="string">'Hello'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/23/《Python高性能编程》/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -248,7 +550,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/2019/07/23/《Python高性能编程》/" itemprop="url">《Python高性能编程》</a></h1>
+                <a class="post-title-link" href="/blog/2019/07/23/《Python高性能编程》/" itemprop="url">《Python高性能编程》笔记</a></h1>
         
 
         <div class="post-meta">
@@ -377,7 +679,16 @@
 </ul>
 </li>
 <li>CPU 密集型：多核 CPU 进行多进程<ul>
-<li>Multiprocessing</li>
+<li>Multiprocessing<ul>
+<li>multiprocessing.Pool</li>
+<li>内存共享<ul>
+<li>multiprocessing.Manager()</li>
+<li>redis等中间件</li>
+<li>mmap</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
@@ -2033,352 +2344,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/19/分布式锁/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/06/19/分布式锁/" itemprop="url">分布式锁</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-19T14:07:46+08:00">
-                2019-06-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/系统/" itemprop="url" rel="index">
-                    <span itemprop="name">系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="分布式锁含义"><a href="#分布式锁含义" class="headerlink" title="分布式锁含义"></a>分布式锁含义</h1><p>分布式锁，是控制分布式系统之间同步访问共享资源的一种方式。在分布式系统中，常常需要协调他们的动作。如果不同的系统或是同一个系统的不同主机之间共享了一个或一组资源，那么访问这些资源的时候，往往需要互斥来防止彼此干扰来保证一致性，在这种情况下，便需要使用到分布式锁。</p>
-<h1 id="分布式锁特点"><a href="#分布式锁特点" class="headerlink" title="分布式锁特点"></a>分布式锁特点</h1><ol>
-<li>互斥性：在任意一个时刻，只有一个客户端持有锁，但是分布式锁需要保证在不同节点的不同线程的互斥。</li>
-<li>可重入性： 同一个节点上的同一个线程如果获取了锁之后那么也可以再次获取这个锁。</li>
-<li>锁超时：即便持有锁的客户端崩溃或者其他意外事件，锁仍然可以被获取。</li>
-<li>高效，高可用：加锁和解锁需要高效，同时也需要保证高可用防止分布式锁失效，可以增加降级。</li>
-<li>支持阻塞和非阻塞(可选）：和ReentrantLock一样支持lock和trylock以及tryLock(long timeOut)。</li>
-<li>支持公平锁和非公平锁(可选)：公平锁的意思是按照请求加锁的顺序获得锁，非公平锁就相反是无序的。这个一般来说实现的比较少。</li>
-</ol>
-<h1 id="分布式锁的实现"><a href="#分布式锁的实现" class="headerlink" title="分布式锁的实现"></a>分布式锁的实现</h1><h2 id="MySql"><a href="#MySql" class="headerlink" title="MySql"></a>MySql</h2><ol>
-<li>基于表主键唯一做分布式锁（乐观锁）：利用主键唯一的特性，如果有多个请求同时提交到数据库的话，数据库会保证只有一个操作可以成功，那么我们就可以认为操作成功的那个线程获得了该方法的锁，当方法执行完毕之后，想要释放锁的话，删除这条数据库记录即可。</li>
-<li>基于表字段版本号做分布式锁（悲观锁）</li>
-<li>基于数据库排他锁做分布式锁：在查询语句后面增加for update，数据库会在查询过程中给数据库表增加排他锁 (注意： InnoDB 引擎在加锁的时候，只有通过索引进行检索的时候才会使用行级锁，否则会使用表级锁。这里我们希望使用行级锁，就要给要执行的方法字段名添加索引，值得注意的是，这个索引一定要创建成唯一索引，否则会出现多个重载方法之间无法同时被访问的问题。重载方法的话建议把参数类型也加上。)。当某条记录被加上排他锁之后，其他线程无法再在该行记录上增加排他锁。我们可以认为获得排他锁的线程即可获得分布式锁，当获取到锁之后，可以执行方法的业务逻辑，执行完方法之后，通过connection.commit()操作来释放锁。但是如果MySQL 认为全表扫效率更高，比如对一些很小的表，它就不会使用索引，这种情况下 InnoDB 将使用表锁，而不是行锁，会有问题；排他锁也会占用数据库连接数。</li>
-</ol>
-<h2 id="Memcache-add"><a href="#Memcache-add" class="headerlink" title="Memcache(add)"></a>Memcache(add)</h2><h2 id="ZooKeeper-临时节点"><a href="#ZooKeeper-临时节点" class="headerlink" title="ZooKeeper(临时节点)"></a>ZooKeeper(临时节点)</h2><h2 id="Redis（setnx），衍生开源库Redisson"><a href="#Redis（setnx），衍生开源库Redisson" class="headerlink" title="Redis（setnx），衍生开源库Redisson"></a>Redis（setnx），衍生开源库Redisson</h2><ol>
-<li><p>原生redis（setnx）：</p>
-<ol>
-<li><p>value=当前线程id，同时设置过期时间。如果设置失败，判断值是否当前线程id</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set lockName value ex 5 nx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>释放锁的时候需要先比对锁值是否等于当前线程id，是才del锁。（保证原子操作，lua）</p>
-</li>
-<li>保证锁过期时间大于业务处理时间。（开一个线程刷新过期时间）</li>
-</ol>
-</li>
-<li><p>Redisson库:</p>
-<img src="/blog/2019/06/19/分布式锁/1.jpg" title="redisson">
-<h2 id="自研分布式锁-如谷歌的Chubby。"><a href="#自研分布式锁-如谷歌的Chubby。" class="headerlink" title="自研分布式锁:如谷歌的Chubby。"></a>自研分布式锁:如谷歌的Chubby。</h2></li>
-</ol>
-<h1 id="分布式锁的安全问题"><a href="#分布式锁的安全问题" class="headerlink" title="分布式锁的安全问题"></a>分布式锁的安全问题</h1><ol>
-<li>长时间的GC pause <img src="/blog/2019/06/19/分布式锁/0.jpg" title="gc_pause">
- 利用自增序列的方案。</li>
-<li>时钟发生跳跃<br> 对于Redis服务器如果其时间发生了向跳跃，那么肯定会影响我们锁的过期时间，那么我们的锁过期时间就不是我们预期的了，也会出现client1和client2获取到同一把锁，那么也会出现不安全。<br> 通过人为调整、NTP自动调整。</li>
-<li>长时间的网络I/O<br> 和GC的STW很像，也就是我们这个获取了锁之后我们进行网络调用，其调用时间由可能比我们锁的过期时间都还长，那么也会出现不安全的问题。<br> 可以通过控制网络调用的超时时间解决这个问题。</li>
-</ol>
-<p>参考：<br><a href="https://juejin.im/post/5b737b9b518825613d3894f4#heading-11" target="_blank" rel="noopener">redis系列：分布式锁</a><br><a href="https://juejin.im/post/5bbb0d8df265da0abd3533a5#heading-21" target="_blank" rel="noopener">再有人问你分布式锁，这篇文章扔给他</a><br><a href="https://juejin.im/post/5bf3f15851882526a643e207" target="_blank" rel="noopener">拜托，面试请不要再问我Redis分布式锁的实现原理！【石杉的架构笔记】</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/18/Flask-vs-Django/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/06/18/Flask-vs-Django/" itemprop="url">Flask vs Django</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-18T11:47:10+08:00">
-                2019-06-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>两个框架同样都是Python web framework。</p>
-<ol>
-<li><p>项目规模</p>
-<ul>
-<li>Flask是一个面向简单需求小型应用的“微框架（microframework）”。</li>
-<li>Django更多面向大型应用。</li>
-</ul>
-</li>
-<li><p>SQL ORM</p>
-<ul>
-<li>FLASK 不包含ORM，流行选用SQLAlchemy</li>
-<li>Django包含ORM</li>
-</ul>
-</li>
-<li><p>bootstrapping</p>
-<ul>
-<li>Flask没有，分离使用blurprint</li>
-<li>Django有，内置在django-admin中.<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject hello_django</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>易用性</p>
-<ul>
-<li>Flask只要几行代码就能跑起一个demo，同样如果要扩展功能就要自己加库，更加灵活。</li>
-<li>Django的demo 用脚手架生成也就好几个文件，setting更是多，但是基本功能都都自带，可以开箱即用。</li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2431,7 +2396,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">78</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
