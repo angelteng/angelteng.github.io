@@ -1,5 +1,5 @@
 ---
-title: 《Python高性能编程》
+title: 《Python高性能编程》笔记
 date: 2019-07-23 10:53:39
 tags: 
 - Python
@@ -57,6 +57,11 @@ Numpy 在矢量操作上的缺陷是一次只能处理一个操作。例如，�
     - Asyncio
 2. CPU 密集型：多核 CPU 进行多进程
     - Multiprocessing
+        - multiprocessing.Pool
+        - 内存共享
+            - multiprocessing.Manager()
+            - redis等中间件
+            - mmap
 
 # 集群与现场教训
 1. 集群带来的问题：

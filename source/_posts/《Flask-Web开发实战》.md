@@ -1,5 +1,5 @@
 ---
-title: 《Flask Web开发实战》
+title: 《Flask Web开发实战》笔记
 date: 2019-07-24 10:26:27
 tags: 
 - Python
