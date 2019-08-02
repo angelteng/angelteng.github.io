@@ -229,6 +229,402 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/24/《Head-First-Java》笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/06/24/《Head-First-Java》笔记/" itemprop="url">《Head First Java》笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-24T10:35:24+08:00">
+                2019-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ol>
+<li>实例变量有默认值，局部变量没有默认值。</li>
+<li>JAVA中都是值的（拷贝）传递。</li>
+<li>引用到对象的变量并不是对象的容器，而是类似指向对象的指针／地址。所有引用的大小都一样。</li>
+</ol>
+<h1 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h1><ol>
+<li>ArrayList&amp;一般数组区别：<ul>
+<li>一般数组创建时确定大小、以索引存放、使用特殊语法［］</li>
+<li>ArrayList是参数化的 ArrayList<string></string></li>
+</ul>
+</li>
+<li>final：<ul>
+<li>final的变量代表你不能改变它的值。</li>
+<li>final的Method代表你不能覆盖这个方法</li>
+<li>final的类代表你不能继承它</li>
+</ul>
+</li>
+<li>方法的重载与多态无关，两个方法名称相同但参数不同。</li>
+<li>抽象类代表类必须要被extent，抽象方法代表方法必须要被覆盖。抽象方法没有实体。必须实现所有的抽象方法。</li>
+<li>编译器是根据引用类型（定义变量时指定的类型）判断哪个方法可以调用，而不是根据对象的实际类型。</li>
+<li>extent只能有1个，implement（接口）可以有多个。</li>
+<li>一个类可以有多个构造函数，但参数必须不一样。</li>
+<li>函数构造链：创建新对象时，所有继承下来的构造函数都会执行。</li>
+<li>调用父类构造函数super().使用this()调用对象本身的其他构造函数。两者不能同时使用。</li>
+<li>静态变量：所有实例都共享的，且只会在类第一次载入的时候初始化。<ul>
+<li>静态变量 == Python类变量， 非静态变量即实例变量。</li>
+<li>静态变量会在该类的任何对象创建之前就完成初始化</li>
+<li>静态变量会在该类的任何静态方法执行之前就初始化</li>
+<li>常量：静态的final变量 （常量名应全大写）</li>
+</ul>
+</li>
+</ol>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><ol>
+<li>所有对象存活于可垃圾回收的堆（heap）中。</li>
+<li>变量存活空间：<ul>
+<li>如果在方法体内定义的，这时候就是在栈上分配的</li>
+<li>如果是类的成员变量，这时候就是在堆上分配的</li>
+<li>如果是类的静态成员变量，在<a href="https://blog.csdn.net/top_code/article/details/51288529" target="_blank" rel="noopener">方法区</a>(堆，各个线程共享的内存区域)上分配的</li>
+</ul>
+</li>
+</ol>
+<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><ol>
+<li>JAVA虚拟机只会从头开始往下找到第一个符合范围的异常处理块</li>
+<li>可以抛出多重异常 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void function name () throw PantException, LionException&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h1><ol>
+<li><p>序列化保存对象的状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileOutputStream fileStream = new FileOutputStream (“TEST.ser”);</span><br><span class="line">ObjectOutputStream os = new ObjectOutputStream(fileStream);</span><br><span class="line">os.writeObject(characterOne);</span><br><span class="line">os.close();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>反序列化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileInputStream fileStream = new FileInputStream(“TEST.ser”);</span><br><span class="line">ObjectInputStream os = new ObjectInputStream(fileStream);</span><br><span class="line">Object one = os.readObject();</span><br><span class="line">GameChara one = (GameChara) one;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>类如果可序列化，必须implements Serializable。如果某实例变量不应该被序列化，定义为transient。</p>
+</li>
+</ol>
+<h1 id="网络编程"><a href="#网络编程" class="headerlink" title="网络编程"></a>网络编程</h1><ol>
+<li>网络 java.net</li>
+<li><p>建立socket</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Socket s = new Socket(’127.0.0.0’,8888);</span><br><span class="line">InputStream steam = new InputStream(s.getInputStream());</span><br><span class="line">BufferReader reader = new BufferReader(stream);</span><br><span class="line">String msg = reader.readLine();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>建立socket Server</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket ser = new ServerSocket(8888)</span><br><span class="line">Socket s = ser.accept()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>线程Thread 需要一个实现Runnable接口的类，类需要实现run()方法</p>
+</li>
+<li>线程命名 setName()</li>
+<li>synchronized修饰方法使其每次只能被一个线程存取。锁是在对象上。没有处理死锁机制。</li>
+</ol>
+<h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><ol>
+<li>集合<ul>
+<li>TreeSet:有序防重复 </li>
+<li>HashMap </li>
+<li>LinkedList：针对经常插入删除 </li>
+<li>HashSet </li>
+<li>LinkedHaskMap:记住元素插入顺序</li>
+</ul>
+</li>
+</ol>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><ol>
+<li><p>泛型的类代表类的声明用到类型函数，泛型的方法代表方法的声明特征用到类型函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class GenericTest &#123;</span><br><span class="line">    // 这个类是个泛型类</span><br><span class="line">    public class Generic&lt;T&gt;&#123;     </span><br><span class="line">        private T key;</span><br><span class="line"></span><br><span class="line">        public Generic(T key) &#123;</span><br><span class="line">            this.key = key;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // 这是一个泛型方法。</span><br><span class="line">    // 首先在public与返回值之间的&lt;T&gt;必不可少，这表明这是一个泛型方法，并且声明了一个泛型T</span><br><span class="line">    // 这个T可以出现在这个泛型方法的任意位置.</span><br><span class="line">    // 泛型的数量也可以为任意多个 </span><br><span class="line">    public &lt;T,K&gt; K showKeyName(Generic&lt;T&gt; container)&#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <a href="https://www.runoob.com/java/java-generics.html" target="_blank" rel="noopener">Java 泛型</a></p>
+</li>
+<li>相等<ul>
+<li>引用的相等性 ＝＝</li>
+<li>对象的相等性 equals() ，必须要覆盖hashCode()方法保证两个对象有相同的hashcode</li>
+</ul>
+</li>
+<li>TreeSet集合中的元素必须实现comparable类型，或者使用重载，取用comparator参数构造函数创建TreeSet</li>
+<li><p>万用字符 &lt;?&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void takeThing(ArrayList&lt;? extent Animal&gt; list)</span><br><span class="line">// 相当于</span><br><span class="line">public &lt;T extent Animal&gt; void takeThing (ArrayList&lt;T&gt; list)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&lt;&gt; 使编译器验证类型安全，不用到运行时才去验证</p>
+</li>
+</ol>
+<p>参考：<br>《Head First JAVA》<br><a href="https://juejin.im/post/5d0fa403f265da1bb67a2335" target="_blank" rel="noopener">重学Java-一个Java对象到底占多少内存</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/21/Python描述符/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/06/21/Python描述符/" itemprop="url">Python描述符</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-21T16:13:40+08:00">
+                2019-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="描述符"><a href="#描述符" class="headerlink" title="描述符"></a>描述符</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ol>
+<li>一个描述符是一个有“绑定行为”的对象属性(object attribute)，它的访问控制会被描述器协议方法重写。</li>
+<li>任何定义了 __get__, __set__ 或者 __delete__ 任一方法的类称为描述符类，其实例对象便是一个描述符，这些方法称为描述符协议。<ul>
+<li>同时定义了 __get__ 和 __set__ 的描述符称为 数据描述符(data descriptor)；仅定义了 __get__ 的称为 非数据描述符(non-data descriptor) 。</li>
+<li>两者区别在于：如果 obj.__dict__ 中有与描述符同名的属性，若描述符是数据描述符，则优先调用描述符，若是非数据描述符，则优先使用 obj.__dict__ 中属性。</li>
+</ul>
+</li>
+<li>当对一个实例属性进行访问时，Python 1、类属性，2、数据描述符，3、实例属性，4、非数据描述符，5、__getattr__()顺序进行查找，如果查找到目标属性并发现是一个描述符，Python 会调用描述符协议来改变默认的控制行为。</li>
+<li>描述符是 @property，@classmethod，@staticmethod 和 super 的底层实现机制。</li>
+</ol>
+<h2 id="描述符方法"><a href="#描述符方法" class="headerlink" title="描述符方法"></a>描述符方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">__get__(self, instance, owner)</span><br><span class="line">__set__(self, instance, value)</span><br><span class="line">__delete__(self, instance)</span><br></pre></td></tr></table></figure>
+<h3 id="1-使用类方法创建描述符"><a href="#1-使用类方法创建描述符" class="headerlink" title="1. 使用类方法创建描述符"></a>1. 使用类方法创建描述符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Descriptor(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self._name = &apos;&apos;</span><br><span class="line"></span><br><span class="line">    def __get__(self, instance, owner):</span><br><span class="line">        print(&quot;Getting: %s&quot; % self._name)</span><br><span class="line">        return self._name</span><br><span class="line"></span><br><span class="line">    def __set__(self, instance, name):</span><br><span class="line">        print(&quot;Setting: %s&quot; % name)</span><br><span class="line">        self._name = name.title()</span><br><span class="line"></span><br><span class="line">    def __delete__(self, instance):</span><br><span class="line">        print(&quot;Deleting: %s&quot; %self._name)</span><br><span class="line">        del self._name</span><br><span class="line"> </span><br><span class="line">class Person(object):</span><br><span class="line">    name = Descriptor()</span><br></pre></td></tr></table></figure>
+<h3 id="2-使用属性类型创建描述符"><a href="#2-使用属性类型创建描述符" class="headerlink" title="2. 使用属性类型创建描述符"></a>2. 使用属性类型创建描述符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Person(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self._name = &apos;&apos;</span><br><span class="line"></span><br><span class="line">    def fget(self):</span><br><span class="line">        print(&quot;Getting: %s&quot; % self._name)</span><br><span class="line">        return self._name</span><br><span class="line"></span><br><span class="line">    def fset(self, value):</span><br><span class="line">        print(&quot;Setting: %s&quot; % value)</span><br><span class="line">        self._name = value.title()</span><br><span class="line"></span><br><span class="line">    def fdel(self):</span><br><span class="line">        print(&quot;Deleting: %s&quot; %self._name)</span><br><span class="line">        del self._name</span><br><span class="line"></span><br><span class="line">    # property() 的语法是 property(fget=None, fset=None, fdel=None, doc=None)</span><br><span class="line">    name = property(fget, fset, fdel, &quot;I&apos;m the property.&quot;)</span><br></pre></td></tr></table></figure>
+<h3 id="3-使用属性修饰符（proprty）创建描述符"><a href="#3-使用属性修饰符（proprty）创建描述符" class="headerlink" title="3. 使用属性修饰符（proprty）创建描述符"></a>3. 使用属性修饰符（proprty）创建描述符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Person(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self._name = &apos;&apos;</span><br><span class="line"></span><br><span class="line">    @property</span><br><span class="line">    def name(self):</span><br><span class="line">        print &quot;Getting: %s&quot; % self._name</span><br><span class="line">        return self._name</span><br><span class="line"></span><br><span class="line">    @name.setter</span><br><span class="line">    def name(self, value):</span><br><span class="line">        print &quot;Setting: %s&quot; % value</span><br><span class="line">        self._name = value.title()</span><br><span class="line"></span><br><span class="line">    @name.deleter</span><br><span class="line">    def name(self):</span><br><span class="line">        print &quot;&gt;Deleting: %s&quot; % self._name</span><br><span class="line">        del self._name</span><br></pre></td></tr></table></figure>
+<h2 id="staticMethod-原理"><a href="#staticMethod-原理" class="headerlink" title="staticMethod 原理"></a>staticMethod 原理</h2><p>@staticmethod : when this method is called, we don’t pass an instance of the class to it (as we normally do with methods). This means you can put a function inside a class but you can’t access the instance of that class (this is useful when your method does not use the instance).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class StaticMethod(object):</span><br><span class="line">    def __init__(self, f):</span><br><span class="line">        self.f = f</span><br><span class="line">    </span><br><span class="line">    def __get__(self, obj, objtype=None):</span><br><span class="line">        return self.f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class E(object):</span><br><span class="line">    @StaticMethod</span><br><span class="line">    def f( x):</span><br><span class="line">        return x</span><br><span class="line">        </span><br><span class="line">print(E.f(&apos;staticMethod Test&apos;))</span><br><span class="line">ee = E()</span><br><span class="line">print(ee.f(&apos;ee static&apos;))</span><br></pre></td></tr></table></figure></p>
+<h2 id="classmethod-原理"><a href="#classmethod-原理" class="headerlink" title="classmethod 原理"></a>classmethod 原理</h2><p>A class method receives the class as implicit first argument, just like an instance method receives the instance. To declare a class method, use this idiom.<br>A class method can be called either on the class (such as C.f()) or on an instance (such as C().f()). The instance is ignored except for its class. If a class method is called for a derived class, the derived class object is passed as the implied first argument.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class ClassMethod(object):</span><br><span class="line">    def __init__(self, f):</span><br><span class="line">        self.f = f</span><br><span class="line">    </span><br><span class="line">    def __get__(self, obj, owner=None):</span><br><span class="line">        if owner is None:</span><br><span class="line">            owner = type(obj)</span><br><span class="line">        </span><br><span class="line">        def newfunc(*args):</span><br><span class="line">            return self.f(owner, *args)</span><br><span class="line">        </span><br><span class="line">        return newfunc</span><br><span class="line"></span><br><span class="line">class E(object):</span><br><span class="line">    name = &apos;name&apos;</span><br><span class="line">    @ClassMethod</span><br><span class="line">    def f(cls,x):</span><br><span class="line">        return x + cls.name</span><br><span class="line"></span><br><span class="line">print(E.f(&apos;classMethod Test&apos;))</span><br></pre></td></tr></table></figure></p>
+<p>参考:<br><a href="https://www.ibm.com/developerworks/cn/opensource/os-pythondescriptors/index.html" target="_blank" rel="noopener">Python 描述符简介</a><br><a href="https://zhuanlan.zhihu.com/p/42485483" target="_blank" rel="noopener">Python 描述符(Descriptor) 附实例</a><br><a href="https://juejin.im/post/5cc4fbc0f265da0380437706" target="_blank" rel="noopener">【案例讲解】Python为什么要使用描述符？</a><br><a href="https://www.cnblogs.com/chenyangyao/p/python_descriptor.html" target="_blank" rel="noopener">python描述符(descriptor)、属性(property)、函数（类）装饰器(decorator )原理实例详解</a><br><a href="https://segmentfault.com/a/1190000013425128" target="_blank" rel="noopener">python装饰器、描述符模拟源码实现</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/19/分布式锁/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1614,357 +2010,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/降维算法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/27/降维算法/" itemprop="url">降维算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T16:33:20+08:00">
-                2019-05-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>降维算法中的”降维“，指的是降低特征矩阵中特征的数量。</li>
-<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
-</li>
-<li><p>PCA使用的信息量衡量指标，就是样本方差，又称可解释性方差，方差越大，特征所带的信息量越多。<br><img src="1.png" alt="image.png"><br>Var代表一个特征的方差，n代表样本量，xi代表一个特征中的每个样本取值，xhat代表这一列样本的均值。</p>
-<ul>
-<li><a href="https://www.zhihu.com/question/20099757" target="_blank" rel="noopener">为什么方差的分母是n-1？</a></li>
-</ul>
-</li>
-<li><p>矩阵分解：让数据能够被压缩到少数特征上并且总信息量不损失太多的技术。PCA和SVD是两种不同的降维算法，只是两种算法中矩阵分解的方法不同，信息量的衡量指标不同罢了。降维完成之后，PCA找到的每个新特征向量就叫做“主成分”，而被丢弃的特征 向量被认为信息量很少，这些信息很可能就是噪音。</p>
-<ul>
-<li>PCA使用方差作为信息量的衡量指标，并且特征值分解来找出空间V。</li>
-<li>SVD使用奇异值分解来找出空间V</li>
-</ul>
-</li>
-<li><p>降维与特征工程的区别：</p>
-<ul>
-<li>特征选择是从已存在的特征中选取携带信息最多的，选完之后的特征依然具有可解释性，我们依然知道这个特征在原数据的哪个位置，代表着原数据上的什么含义。</li>
-<li>降维算法，是将已存在的特征进行压缩，降维完毕后的特征不是原本的特征矩阵中的任何一个特征，而是通过某些方式组合起来的新特征。通常来说，在新的特征矩阵生成之前，我们无法知晓降维算法们都建立了怎样 的新特征向量，新特征矩阵生成之后也不具有可读性，我们无法判断新特征矩阵的特征是从原数据中的什么特征组合而来，新特征虽然带有原始数据的信息，却已经不是原数据上代表着的含义了。降维算法因此是特征创造(feature creation，或feature construction)的一种。</li>
-<li>可以想见，PCA一般不适用于探索特征和标签之间的关系的模型(如线性回归)，因为无法解释的新特征和标签之间的关系不具有意义。在线性回归模型中，我们使用特征选择。</li>
-</ul>
-</li>
-<li><p>sklearn.decomposition.PCA (n_components=None, copy=True, whiten=False, svd_solver=’auto’, tol=0.0， iterated_power=’auto’, random_state=None)</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.decomposition import PCA</span><br><span class="line">#调用PCA</span><br><span class="line">pca = PCA(n_components=2) pca = pca.fit(X)</span><br><span class="line">X_dr = pca.transform(X)</span><br><span class="line"># 属性explained_variance，查看降维后每个新特征向量上所带的信息量大小(可解释性方差的大小) </span><br><span class="line">pca.explained_variance_</span><br><span class="line"># 属性explained_variance_ratio，查看降维后每个新特征向量所占的信息量占原始数据总信息量的百分比 </span><br><span class="line"># 又叫做可解释方差贡献率</span><br><span class="line">pca.explained_variance_ratio_</span><br><span class="line"># 降维后的总方差为原来方差的百分比</span><br><span class="line">pca.explained_variance_ratio_.sum()</span><br></pre></td></tr></table></figure>
-<p> 参数：</p>
-<ul>
-<li>n_components: n_components是我们降维后需要的维度，即降维后需要保留的特征数量，降维流程中第二步里需要确认的k值，一般输入[0, min(X.shape)]范围中的整数。</li>
-<li>svd_solver: 奇异值分解器。sklearn将降 维流程拆成了两部分:一部分是计算特征空间V，由奇异值分解完成，另一部分是映射数据和求解新特征矩阵，由主成分分析完成，实现了用SVD的性质减少计算量，却让信息量的评估指标是方差，具体流程如下图:</li>
-<li>random_state<br>接口：</li>
-<li>inverse_transform </li>
-</ul>
-</li>
-<li><p>选择最好的n_components:</p>
-<ul>
-<li><p>方法一：累积可解释方差贡献率曲线，选择拐点作为最优参数值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">pca_line = PCA().fit(X) plt.plot([1,2,3,4],np.cumsum(pca_line.explained_variance_ratio_)) </span><br><span class="line">plt.xticks([1,2,3,4]) #这是为了限制坐标轴显示为整数</span><br><span class="line">plt.xlabel(&quot;number of components after dimension reduction&quot;) </span><br><span class="line">plt.ylabel(&quot;cumulative explained variance&quot;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>方法二：最大似然估计自选超参数法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pca_mle = PCA(n_components=&quot;mle&quot;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>方法三：按信息量占比选超参数<br>输入[0,1]之间的浮点数，并且让参数svd_solver ==’full’，表示希望降维后的总解释性方差占比大于n_components 指定的百分比，即是说，希望保留百分之多少的信息量。比如说，如果我们希望保留97%的信息量，就可以输入 n_components = 0.97，PCA会自动选出能够让保留的信息量超过97%的特征数量。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pca_f = PCA(n_components=0.97,svd_solver=&quot;full&quot;)</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/特征工程-embedded嵌入法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/27/特征工程-embedded嵌入法/" itemprop="url">特征工程_embedded嵌入法与包装法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T11:19:56+08:00">
-                2019-05-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="嵌入法"><a href="#嵌入法" class="headerlink" title="嵌入法"></a>嵌入法</h1><ol>
-<li><p>嵌入法是一种让算法自己决定使用哪些特征的方法，即特征选择和算法训练同时进行。在使用嵌入法时，我们先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据权值系数从大到小选择特征。并且，由于考虑特征对模型的贡献，因此无关的特征（需要相关性过滤的特征）和无区分度的特征（需要方差过滤的特征）都会因为缺乏对模型的贡献而被删除掉，可谓是过滤法的进化版。<br><img src="0.png" alt="image.png"></p>
-</li>
-<li><p>sklearn.feature_selection.SelectFromModel (estimator, threshold=None, prefit=False, norm_order=1,<br>max_features=None)</p>
-<ul>
-<li>estimator　　　　　　　　<br>  使用的模型评估器，只要是带feature_importances_或者coef_属性，或带有l1和l2惩罚项的模型都可以使用</li>
-<li>threshold<br>  特征重要性的阈值，重要性低于这个阈值的特征都将被删除</li>
-<li>prefit<br>  默认False，判断是否将实例化后的模型直接传递给构造函数。如果为True，则必须直接调用fit和transform，不能使用fit_transform，并且SelectFromModel不能与cross_val_score，GridSearchCV和克隆估计器的类似实用程序一起使用。</li>
-<li>norm_order<br>  k可输入非零整数，正无穷，负无穷，默认值为1<br>  在评估器的coef_属性高于一维的情况下，用于过滤低于阈值的系数的向量的范数的阶数</li>
-<li><p>max_features<br>  在阈值设定下，要选择的最大特征数。要禁用阈值并仅根据max_features选择，请设置threshold = -np.inf</p>
-<p>随机森林中的应用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import SelectFromModel</span><br><span class="line">from sklearn.ensemble import RandomForestClassifier as RFC</span><br><span class="line">RFC_ = RFC(n_estimators =10,random_state=0)</span><br><span class="line">X_embedded = SelectFromModel(RFC_,threshold=0.005).fit_transform(X,y)</span><br><span class="line"># 可以使用学习曲线确认threshold最佳值</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>在嵌入法下，我们很容易就能够实现特征选择的目标：减少计算量，提升模型表现。因此，比起要思考很多统计量的过滤法来说，嵌入法可能是更有效的一种方法。然而，在算法本身很复杂的时候，过滤法的计算远远比嵌入法要快，所以大型数据中，我们还是会优先考虑过滤法。</p>
-</li>
-</ol>
-<p>参考：<br><a href="https://www.cnblogs.com/zhange000/articles/10751525.html" target="_blank" rel="noopener">特征选择-嵌入</a></p>
-<h1 id="包装法"><a href="#包装法" class="headerlink" title="包装法"></a>包装法</h1><p>包装法，根据目标函数（通常是预测效果评分），每次选择若干特征，或者排除若干特征。</p>
-<ol>
-<li>递归特征消除法<br> 递归消除特征法使用一个基模型来进行多轮训练，每轮训练后，消除若干权值系数的特征，再基于新的特征集进行下一轮训练。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.feature_selection import RFE</span><br><span class="line">from sklearn.linear_model import LogisticRegression</span><br><span class="line"></span><br><span class="line">#递归特征消除法，返回特征选择后的数据</span><br><span class="line">#参数estimator为基模型</span><br><span class="line">#参数n_features_to_select为选择的特征个数</span><br><span class="line">RFE(estimator=LogisticRegression(), n_features_to_select=2).fit_transform(iris.data,iris.target)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2017,7 +2062,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">78</span>
+                  <span class="site-state-item-count">80</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2039,7 +2084,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
