@@ -229,6 +229,176 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/25/Redis的性能/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/25/Redis的性能/" itemprop="url">Redis的性能</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-25T16:54:27+08:00">
+                2019-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/缓存/" itemprop="url" rel="index">
+                    <span itemprop="name">缓存</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://angelteng.github.io/blog/2018/11/22/Redis原理/">Redis的基本数据结构</a></p>
+<p>首先，众所周知，Redis是单线程的。</p>
+<h1 id="有多快？"><a href="#有多快？" class="headerlink" title="有多快？"></a>有多快？</h1><p>Redis采用的是基于内存的采用的是单进程单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。<br><img src="0.png" alt="image.png"></p>
+<h1 id="为什么快？"><a href="#为什么快？" class="headerlink" title="为什么快？"></a>为什么快？</h1><ol>
+<li>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</li>
+<li>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</li>
+<li>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</li>
+<li>使用<a href="https://angelteng.github.io/blog/2019/04/24/I-O操作模式/">多路I/O复用模型</a>，非阻塞IO；</li>
+<li>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</li>
+</ol>
+<h1 id="Redis的内存模型"><a href="#Redis的内存模型" class="headerlink" title="Redis的内存模型"></a>Redis的内存模型</h1><p>Redis的内存主要包括：对象内存+缓冲内存+自身内存+内存碎片。 </p>
+<ol>
+<li>对象内存<br> 对象内存是Redis内存中占用最大一块，存储着所有的用户的数据。Redis所有的数据都采用的是key-value型数据类型</li>
+<li><p>缓冲内存<br> 主要包括：客户端缓冲、复制积压缓冲区、AOF缓冲区 </p>
+<ul>
+<li>客户端缓冲：普通的客户端的连接（大量连接），从客户端（主要是复制的时候，异地跨机房，或者主节点下有多个从节点），订阅客户端（发布订阅功能，生产大于消费就会造成积压） </li>
+<li>复制积压缓冲：2.8版本之后提供的可重用的固定大小缓冲区用于实现部分复制功能，默认1MB，主要是在主从同步时用到。 </li>
+<li>AOF缓冲区：持久化用的，会先写入到缓冲区，然后根据响应的策略向磁盘进行同步，消耗的内存取决于写入的命令量和重写时间，通常很小。</li>
+</ul>
+</li>
+<li><p>内存碎片<br> 目前可选的分配器有jemalloc、glibc、tcmalloc默认jemalloc<br> 出现高内存碎片问题的情况：大量的更新操作，比如append、setrange；大量的过期键删除，释放的空间无法得到有效利用<br> 解决办法：数据对齐，安全重启（高可用/主从切换）。</p>
+</li>
+<li>自身内存<br> 主要指AOF/RDB重写时Redis创建的子进程内存的消耗，Linux具有写时复制技术（copy-on-write），父子进程会共享相同的物理内存页，当父进程写请求时会对需要修改的页复制出一份副本来完成写操作。</li>
+</ol>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><ul>
+<li>单进程多线程模型：MySQL、Memcached、Oracle</li>
+<li>多进程模型：Oracle</li>
+</ul>
+<p>参考：<br><a href="https://juejin.im/entry/5b7cfe976fb9a01a13366d95" target="_blank" rel="noopener">Redis是单线程的，但Redis为什么这么快？</a><br><a href="https://juejin.im/entry/5b93ce4d5188255c48349316" target="_blank" rel="noopener">理解Redis的内存</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/Nginx-工作原理/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1721,161 +1891,11 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/30/docker中pip-install-opencv-python失败/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/30/docker中pip-install-opencv-python失败/" itemprop="url">docker部署uwsgi+flask问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T11:04:47+08:00">
-                2019-01-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/docker/" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>问题：<br>docker中pip install opencv-python失败.</p>
-<p>dockerFile中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">From Alpine</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">RUN pip3 install opencv-python</span><br></pre></td></tr></table></figure></p>
-<p>docker build 时出现报错，即使升级了pip之后:<br>Could not find a version that satisfies the requirement opencv-python (from version: )<br>No matching distribution found for opencv-python</p>
-<p>原因：<br><a href="https://stackoverflow.com/questions/50950588/trouble-installing-opencv-in-docker-container-using-pip" target="_blank" rel="noopener">from stackoverflow</a><br>I’ve just run into this issue as well. It turns out that this is not working because opencv-python does not have any prebuilt wheels for Alpine (the distribution you’re using as your base docker image).</p>
-<p>The conversation in this issue on the opencv-python package explains why this happens in greater detail. The TL;DR is: if you really need to use Alpine, you can try forcing the installation of the manylinux wheel for opencv-python, but this can break. Your best option if you need to keep Alpine is to build the module from source. Since you are running this on OpenFAAS, I suspect you will want to keep your size low, so building from source may be a good option for you.</p>
-<p>If you’re not attached to Alpine, I would suggest moving to a different base docker image. If you’re not sure which image to use as your base, I would recommend python:3.7-slim, since it will come with Python already installed (substitute 3.7 for whichever version you are using, but really. . . 3.7 is nice). With this container, you can simply run pip install opencv-python numpy scipy to have all three of your desired packages installed. The rest of your Dockerfile should work mostly unmodified; you will just need to install/uninstall curl using apt instead of apk.</p>
-<p>简单来说就是，Alpine中没有prebuild opencv-python,如果一定要用Alpine，可以强制下载编译，但是有可能出错。也可以更换使用 python:3.x-slim镜像。<br>最后Dockerfile:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.5.6-slim-stretch</span><br><span class="line">WORKDIR /app</span><br><span class="line">ADD ....</span><br><span class="line"></span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends apt-utils &amp;&amp; \</span><br><span class="line">apt-get install -y \</span><br><span class="line">        libc6-dev \</span><br><span class="line">        gcc \</span><br><span class="line">        mime-support vim libtiff5 libglib2.0-0 libsm6 libxext6 libxrender1 libxext-dev libpcre3 libpcre3-dev &amp;&amp; \</span><br><span class="line">pip3 install --no-cache-dir uWSGI \</span><br><span class="line">    &amp;&amp; apt-get remove -y \</span><br><span class="line">        gcc \</span><br><span class="line">        libc6-dev \</span><br><span class="line">    &amp;&amp; rm -rf /var/lib/apt/lists/* &amp;&amp; \</span><br><span class="line">pip3 install setuptools==39.1.0 &amp;&amp; \ </span><br><span class="line">pip3 install -r requirements.txt </span><br><span class="line"></span><br><span class="line">ENV LD_LIBRARY_PATH=/app/project/services/libs</span><br><span class="line">ENV PYTHONPATH=/app/project/services/libs</span><br><span class="line"></span><br><span class="line">CMD [&quot;uwsgi&quot;, &quot;--ini&quot;, &quot;uwsgi_docker.ini&quot;]</span><br></pre></td></tr></table></figure></p>
-<p>在部署docker过程中会遇到：<br><img src="0.png" alt="error"><br>此时需要删掉uwsgi的配置 plugin=python<br>最后uwsgi.ini配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line">socket = 0.0.0.0:5051</span><br><span class="line">chdir = /app</span><br><span class="line">wsgi-file = /app/app.py</span><br><span class="line">callable = app</span><br><span class="line">processes = 4</span><br><span class="line">threads = 2</span><br></pre></td></tr></table></figure></p>
-<p>nginx配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    charset utf-8;</span><br><span class="line">    client_max_body_size 128M;</span><br><span class="line"></span><br><span class="line">    listen 80;</span><br><span class="line"></span><br><span class="line">    server_name xxx.local.com;</span><br><span class="line">    root        /vagrant/xxx;</span><br><span class="line">    index       index.py;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        include         uwsgi_params;</span><br><span class="line">        uwsgi_pass      127.0.0.1:5051;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/8/">8</a><a class="extend next" rel="next" href="/blog/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1923,7 +1943,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-count">81</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

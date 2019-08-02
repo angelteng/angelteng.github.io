@@ -229,6 +229,133 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/02/Spring-boot集成Mysql与Redis/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/08/02/Spring-boot集成Mysql与Redis/" itemprop="url">Spring boot集成Mysql与Redis</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-02T14:01:09+08:00">
+                2019-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h1><p>pom.xml添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>application.properties 添加mysql连接配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Mysql配置</span><br><span class="line">spring.jpa.hibernate.ddl-auto=update</span><br><span class="line">spring.datasource.url=jdbc:mysql://localhost:3306/dbname</span><br><span class="line">spring.datasource.username=username</span><br><span class="line">spring.datasource.password=pwd</span><br></pre></td></tr></table></figure></p>
+<p>添加一个model<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.persistence.Entity;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GeneratedValue;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GenerationType;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Id;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Entity</span> <span class="comment">// This tells Hibernate to make a table out of this class</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Users</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span>(strategy=GenerationType.AUTO)</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUsername</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUsername</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.username = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPassword</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPassword</span><span class="params">(String pwd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.password = pwd;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用Spring boot JPA，集成CRUD接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.example.demo.model.Users;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.repository.CrudRepository;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository</span></span><br><span class="line"><span class="comment">// CRUD refers Create, Read, Update, Delete</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UsersRepository</span> <span class="keyword">extends</span> <span class="title">CrudRepository</span>&lt;<span class="title">Users</span>, <span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">List&lt;Users&gt; <span class="title">findByUsername</span><span class="params">(String username)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在controller中使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/find-by-username/&#123;username&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> List <span class="title">findByUsername</span><span class="params">(@PathVariable(<span class="string">"username"</span>)</span> String username) </span>&#123;</span><br><span class="line">    List&lt;Users&gt; userList = usersRepository.findByUsername(username);</span><br><span class="line">    <span class="keyword">return</span> userList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>pom.xml中添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>application.properties中添加Redis连接配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># Redis数据库索引（默认为0）</span><br><span class="line">spring.redis.database=0</span><br><span class="line"># Redis服务器地址</span><br><span class="line">spring.redis.host=192.168.33.10</span><br><span class="line"># Redis服务器连接端口</span><br><span class="line">spring.redis.port=6379</span><br><span class="line"># Redis服务器连接密码（默认为空）</span><br><span class="line">spring.redis.password=</span><br><span class="line"># 连接池最大连接数（使用负值表示没有限制）</span><br><span class="line">spring.redis.jedis.pool.max-active=8</span><br><span class="line"># 连接池最大阻塞等待时间（使用负值表示没有限制）</span><br><span class="line">spring.redis.jedis.pool.max-wait=-1</span><br><span class="line"># 连接池中的最大空闲连接</span><br><span class="line">spring.redis.jedis.pool.max-idle=8</span><br><span class="line"># 连接池中的最小空闲连接</span><br><span class="line">spring.redis.jedis.pool.min-idle=0</span><br><span class="line"># 连接超时时间（毫秒）</span><br><span class="line">spring.redis.timeout=3000</span><br></pre></td></tr></table></figure></p>
+<p>controller中使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> RedisTemplate&lt;String, String&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/setredis"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">setRedis</span><span class="params">()</span></span>&#123;</span><br><span class="line">    redisTemplate.opsForValue().set(<span class="string">"javaset"</span>,<span class="string">"1"</span>);</span><br><span class="line">    String ans = redisTemplate.opsForValue().get(<span class="string">"javaset"</span>);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/01/Spring入门/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2175,155 +2302,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/25/Python-Requests库中Max-retries问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/06/25/Python-Requests库中Max-retries问题/" itemprop="url">Python Requests库中Max retries问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-25T15:22:14+08:00">
-                2019-06-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>查日志的时候发现如下报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">File &quot;./app/business_api/business_api.py&quot;, line 87, in callback_function</span><br><span class="line">    response = requests.post(&apos;xxx&apos;+json.dumps(results), timeout=self.timeout)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 116, in post</span><br><span class="line">    return request(&apos;post&apos;, url, data=data, json=json, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 60, in request</span><br><span class="line">    return session.request(method=method, url=url, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 524, in request</span><br><span class="line">    resp = self.send(prep, **send_kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 637, in send</span><br><span class="line">    r = adapter.send(request, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/adapters.py&quot;, line 516, in send</span><br><span class="line">    raise ConnectionError(e, request=request)</span><br><span class="line">requests.exceptions.ConnectionError: HTTPSConnectionPool(host=&apos;xxx&apos;, port=8094): Max retries exceeded with url: xxx (Caused by NewConnectionError(&apos;&lt;urllib3.connection.VerifiedHTTPSConnection object at 0x7f882011f390&gt;: Failed to establish a new connection: [Errno -3] Try again&apos;,))</span><br></pre></td></tr></table></figure></p>
-<p>网上查了一下“Max retries” ，一般出现在爬虫的场景，http连接数过多，因为requests默认使用了keep-alive，所以要在header增加{“Connect”:”close”}，但是出现问题的场景是后台服务，从阿里云监控上看该时段的tcp连接数也没有很大的波峰。<br>参考了<a href="https://fanchao01.github.io/blog/2016/07/30/pythonlib-request3/" target="_blank" rel="noopener">requests的高级功能-重试机制</a>这篇文章所说，requests是有重试机制的，使用重试会导致返回的错误为MaxRetriesError，而不是确切的异常。<br>网上暂时没查到[Errno -3] Try again 这个错误具体原因。</p>
-<p>其他参考：<br><a href="https://www.jwlchina.cn/2016/10/29/关于python爬虫的深坑：requests抛出异常Max%20retries%20exceeded%20with%20url/" target="_blank" rel="noopener">关于python爬虫的深坑：requests抛出异常Max retries exceeded with url</a><br><a href="https://eclipsesv.com/2017/01/29/requests库error/" target="_blank" rel="noopener">requests库的Failed to establish a new connection</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/8/">8</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2371,7 +2354,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-count">81</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -229,6 +229,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/25/Python-Requests库中Max-retries问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/06/25/Python-Requests库中Max-retries问题/" itemprop="url">Python Requests库中Max retries问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-25T15:22:14+08:00">
+                2019-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>查日志的时候发现如下报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">File &quot;./app/business_api/business_api.py&quot;, line 87, in callback_function</span><br><span class="line">    response = requests.post(&apos;xxx&apos;+json.dumps(results), timeout=self.timeout)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 116, in post</span><br><span class="line">    return request(&apos;post&apos;, url, data=data, json=json, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 60, in request</span><br><span class="line">    return session.request(method=method, url=url, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 524, in request</span><br><span class="line">    resp = self.send(prep, **send_kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 637, in send</span><br><span class="line">    r = adapter.send(request, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/adapters.py&quot;, line 516, in send</span><br><span class="line">    raise ConnectionError(e, request=request)</span><br><span class="line">requests.exceptions.ConnectionError: HTTPSConnectionPool(host=&apos;xxx&apos;, port=8094): Max retries exceeded with url: xxx (Caused by NewConnectionError(&apos;&lt;urllib3.connection.VerifiedHTTPSConnection object at 0x7f882011f390&gt;: Failed to establish a new connection: [Errno -3] Try again&apos;,))</span><br></pre></td></tr></table></figure></p>
+<p>网上查了一下“Max retries” ，一般出现在爬虫的场景，http连接数过多，因为requests默认使用了keep-alive，所以要在header增加{“Connect”:”close”}，但是出现问题的场景是后台服务，从阿里云监控上看该时段的tcp连接数也没有很大的波峰。<br>参考了<a href="https://fanchao01.github.io/blog/2016/07/30/pythonlib-request3/" target="_blank" rel="noopener">requests的高级功能-重试机制</a>这篇文章所说，requests是有重试机制的，使用重试会导致返回的错误为MaxRetriesError，而不是确切的异常。<br>网上暂时没查到[Errno -3] Try again 这个错误具体原因。</p>
+<p>其他参考：<br><a href="https://www.jwlchina.cn/2016/10/29/关于python爬虫的深坑：requests抛出异常Max%20retries%20exceeded%20with%20url/" target="_blank" rel="noopener">关于python爬虫的深坑：requests抛出异常Max retries exceeded with url</a><br><a href="https://eclipsesv.com/2017/01/29/requests库error/" target="_blank" rel="noopener">requests库的Failed to establish a new connection</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/24/《Head-First-Java》笔记/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1832,189 +1976,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/逻辑回归/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/27/逻辑回归/" itemprop="url">逻辑回归</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T17:22:39+08:00">
-                2019-05-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>逻辑回归，是一种名为“回归”的线性分类器，其本质是由线性回 归变化而来的，一种广泛使用于分类问题中的广义回归算法。</li>
-<li>线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数<br><img src="0.png" alt="image.png"><br>通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0，当g(z)接近1时样本的标签为类别1，这样就得到了一个分 类模型。而这个联系函数对于逻辑回归来说，就是Sigmoid函数:<br><img src="1.png" alt="image.png"></li>
-</ol>
-<p>Sigmoid函数是一个S型的函数，当自变量z趋近正无穷时，因变量g(z)趋近于1，而当z趋近负无穷时，g(z)趋近于0，它能够将任何实数映射到(0,1)区间，使其可用于将任意值函数转换为更适合二分类的函数。 因为这个性质，Sigmoid函数也被当作是归一化的一种方法，是属于数据预处理中的“缩放”功能，可以将数据压缩到[0,1]之内。区别在于，MinMaxScaler归一化之后，是可以取到0和1的(最大值归一化后就是1，最小值归一化后就是0)，但Sigmoid函数只是无限趋近于0和1。</p>
-<p>g(z)的形似几率取对数的本质其实就是我们的线性回归z，我们实际上是在对线性回归模型的预测结果取 对数几率来让其的结果无限逼近0和1。因此，其对应的模型被称为”对数几率回归“(logistic Regression)，也就是逻辑回归。</p>
-<ol start="3">
-<li><p>优点：</p>
-<ul>
-<li>逻辑回归对线性关系的拟合效果好。</li>
-<li>逻辑回归计算快</li>
-<li>逻辑回归返回的分类结果不是固定的0，1，而是以小数形式呈现的类概率数字</li>
-</ul>
-</li>
-<li><p><img src="2.png" alt="image.png"></p>
-</li>
-</ol>
-<p>linear_model.LogisticRegression (penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’warn’, max_iter=100, multi_class=’warn’, verbose=0, warm_start=False, n_jobs=None)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LogisticRegression as LR</span><br><span class="line">lrl1 = LR(penalty=&quot;l1&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br><span class="line">lrl2 = LR(penalty=&quot;l2&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br></pre></td></tr></table></figure></p>
-<p>参数：</p>
-<pre><code>- penalty: &quot;l1&quot;/&quot;l2&quot;,指定使用哪一种正则化方式，不填写默认&quot;l2&quot;。 注意,若选择&quot;l1&quot;正则化，参数solver仅能够使用”liblinear&quot;，若使用“l2”正则化，参数solver中 所有的求解方式都可以使用。
-- C: C正则化强度的倒数，必须是一个大于0的浮点数，不填写默认1.0，即默认一倍正则项。 C越小，对损失函数的惩罚越重，正则化的效力越强，参数会逐渐被压缩得越来越小。
-- max_iter: 算法收敛最大迭代次数，int类型，默认为10。仅在正则化优化算法为newton-cg, sag和lbfgs才有用，算法收敛的最大迭代次数。
-- solver: 优化算法选择参数，只有五个可选参数，即newton-cg,lbfgs,liblinear,sag,saga。默认为liblinear。solver参数决定了我们对逻辑回归损失函数的优化方法，有四种算法可以选择，分别是： 
-    - liblinear：使用了开源的liblinear库实现，内部使用了坐标轴下降法来迭代优化损失函数。
-    - lbfgs：拟牛顿法的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。
-    - newton-cg：也是牛顿法家族的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。
-    - sag：即随机平均梯度下降，是梯度下降法的变种，和普通梯度下降法的区别是每次迭代仅仅用一部分的样本来计算梯度，适合于样本数据多的时候。
-    - saga：线性收敛的随机优化算法的的变重。
-</code></pre><ol start="5">
-<li><p>”损失函数“作为评估指标，来衡量参数的优劣，即这一组参数能否使模型在训练集上表现优异。即是说，我们在求解参数时，追求损失函数最小，让模型在训练数据上的拟合效果最优，即预测准确率尽量靠近100%。对逻辑回归中过拟合的控制，通过正则化实现。</p>
-</li>
-<li><p>正则化是用来防止模型过拟合的过程，常用的有L1正则化和L2正则化两种选项，分别通过在损失函数后加上参数向 量 的L1范式和L2范式的倍数来实现。这个增加的范式，被称为“正则项”，也被称为”惩罚项”。损失函数改变，基 于损失函数的最优化来求解的参数取值必然改变，我们以此来调节模型拟合的程度。其中L1范数表现为参数向量中 的每个参数的绝对值之和，L2范数表现为参数向量中的每个参数的平方和的开方值。</p>
-</li>
-</ol>
-<p><img src="3.png" alt="image.png"></p>
-<p>L1正则化和L2正则化虽然都可以控制过拟合，但它们的效果并不相同。当正则化强度逐渐增大(即C逐渐变小)， 参数 的取值会逐渐变小，但L1正则化会将参数压缩为0，L2正则化只会让参数尽量小，不会取到0。</p>
-<p>参考：<br><a href="https://blog.csdn.net/jark_/article/details/78342644" target="_blank" rel="noopener">LogisticRegression - 参数说明</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/8/">8</a><a class="extend next" rel="next" href="/blog/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2062,7 +2028,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-count">81</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
