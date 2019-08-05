@@ -229,6 +229,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/28/线性回归/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/28/线性回归/" itemprop="url">线性回归</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-28T17:13:30+08:00">
+                2019-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>回归是一种应用广泛的预测建模技术，这种技术的核心在于预测的结果是连续型变量。</li>
+<li><p>线性回归是机器学习中最简单的回归算法，多元线性回归指的就是一个样本有多个特征的线性回归问题。对于一个 有 个特征的样本 而言，它的回归结果可以写作一个几乎人人熟悉的方程: y = w0+w1x1+w2x2+w3x3…..+wnxn<br>预测函数的本质就是我们需要构建的模型，而构造预测函数的核心就是找出模型的参数向量。通过最小化损失函数或损失函数的某种变化来将求解参数向量，以此将单纯的求解问题转化为一个最优化问题。在多元线性回归中，我们的损失函数如下定义:<br><img src="0.png" alt="image.png"><br>在这个平方结果下，我们的y和y^分别是我们的真实标签和预测值，也就是说，这个损失函数实在计算我们的真实标 签和预测值之间的距离。因此，我们认为这个损失函数衡量了我们构造的模型的预测结果和真实标签的差异，因此我们固然希望我们的预测结果和真实值差异越小越好。所以我们的求解目标就可以转化成RSS残差平方和:<br><img src="1.png" alt="image.png"></p>
+</li>
+<li><p>最小二乘法：通过最小化真实值和预测值之间的RSS来求解参数的方法。<br><img src="2.png" alt="image.png"></p>
+</li>
+<li><p>linear_model.LinearRegression (fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)<br>参数：</p>
+<ul>
+<li>fit_intercept：是否计算此模型的截距，默认True</li>
+<li>normalize： 当fit_intercept设置为False时，将忽略此参数。如果为True，则特征矩阵X在进入回归之前 将会被减去均值(中心化)并除以L2范式(缩放)。如果你希望进行标准化，请在fit数据 之前使用preprocessing模块中的标准化专用类StandardScaler。默认False</li>
+<li>copy_X： 默认为True 如果为真，将在X.copy()上进行操作，否则的话原本的特征矩阵X可能被线性回归影响并覆盖。</li>
+<li>n_jobs： 整数或者None，默认为None 用于计算的作业数。只在多标签的回归和数据量足够大的时候才生效。<br>属性：</li>
+<li>coef_：线性回归方程中估计出的系数</li>
+<li>intercept_： 线性回归中的截距<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LinearRegression as LR</span><br><span class="line">reg = LR().fit(Xtrain, Ytrain)</span><br><span class="line">yhat = reg.predict(Xtest)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>评估</p>
+<ol>
+<li><p>是否预测了正确的值<br> 均方误差MSE：均方误差，本质是在RSS的基础上除以了样本总量，得到了每个样本量上的平均误差。<br> <img src="3.png" alt="image.png"></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import mean_squared_error as MSE</span><br><span class="line">MSE(y_true,y_predict)</span><br></pre></td></tr></table></figure>
+<p> 再sklearn中，均方误差是个负数，代表一种损失。</p>
+</li>
+<li><p>是否拟合到了足够的信息</p>
+<ul>
+<li>R^2和</li>
+<li><p>可解释性方差分数(explained_variance_score，EVS)<br><img src="4.png" alt="image.png"><br>两者都衡量 1 - 我们的模型没有捕获到的信息 量占真实标签中所带的信息量的比例，所以，两者都是越接近1越好。<br>注意方法参数传入的顺序。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import r2_score r2_score(yhat,Ytest)</span><br><span class="line">r2 = reg.score(Xtest,Ytest)</span><br><span class="line"></span><br><span class="line">from sklearn.metrics import explained_variance_score as EVS </span><br><span class="line">EVS(Ytest,yhat)</span><br></pre></td></tr></table></figure>
+<p>R^2的值可能是个负数。证明模型拟合得非常糟糕</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/逻辑回归/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1944,171 +2120,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/28/使用多进程服务器gunicorn中多线程问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/28/使用多进程服务器gunicorn中多线程问题/" itemprop="url">使用多进程服务器gunicorn中多线程问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-28T14:49:15+08:00">
-                2019-04-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/后端/" itemprop="url" rel="index">
-                    <span itemprop="name">后端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h1><p>场景：<br>gunicorn + flask<br>gunicorn.conf:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">worker = 1  # 1个工作进程</span><br><span class="line">worker_class = &quot;geventwebsocket.gunicorn.workers.GeventWebSocketWorker&quot; # 因为使用了websocket</span><br></pre></td></tr></table></figure></p>
-<p>在flask 入口处新增了一个子线程做redis的监听工作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import threading</span><br><span class="line">def listen_redis():</span><br><span class="line">    while True:</span><br><span class="line">        print(threading.currentThread())</span><br><span class="line">        .....</span><br><span class="line">        print(&apos;get redis&apos;)</span><br><span class="line">t = threading.Thread(target=listen_redis)</span><br><span class="line">t.start()</span><br></pre></td></tr></table></figure></p>
-<p>问题1: 在使用gunicron运行的时候，发现子进程也运行了listen_redis的循环。<br>问题2: 同时由两个线程进行while true的操作，发现有时候一个while true断了再也不工作了。</p>
-<h1 id="问题跟踪："><a href="#问题跟踪：" class="headerlink" title="问题跟踪："></a>问题跟踪：</h1><p>在查看gunicron的源码可以发现：<br>/venv/lib/python3.x/site-packages/gunicorn/arbiter.py<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># line: 575</span><br><span class="line">def spawn_worker(self):</span><br><span class="line">    self.worker_age += 1</span><br><span class="line">    worker = self.worker_class(self.worker_age, self.pid, self.LISTENERS,</span><br><span class="line">                               self.app, self.timeout / 2.0,</span><br><span class="line">                               self.cfg, self.log)</span><br><span class="line">    self.cfg.pre_fork(self, worker)</span><br><span class="line">    pid = os.fork()  #是在fork之后出现的“多余的子线程”</span><br><span class="line">    if pid != 0:</span><br><span class="line">        worker.pid = pid</span><br><span class="line">        self.WORKERS[pid] = worker</span><br><span class="line">        return pid</span><br></pre></td></tr></table></figure></p>
-<p>通过print(threading.currentThread())可以看到log：<br>主进程的循环打印出来：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Thread(Thread-2, started 140048726495560)&gt;</span><br></pre></td></tr></table></figure></p>
-<p>而子进程的循环打印出来的是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;_DummyThread(DummyThread-4, started daemon 140048726495560)&gt;</span><br></pre></td></tr></table></figure></p>
-<p>可以确定的是，多了一个不是由threading创建的“虚拟线程”</p>
-<p>然后查看gunicron对线程做了什么的时候发现<a href="https://github.com/benoitc/gunicorn/issues/1836" target="_blank" rel="noopener">这个问题</a><br>虽然不是同一个问题，但是这个说到了 monkey_patch对threading做了补丁<br>然后发现在 __init__.py 使用了猴子补丁，是为了websocket，使用了geventwebsocket模式，详情可以看<a href="https://flask-socketio.readthedocs.io/en/latest/#gunicorn-web-server" target="_blank" rel="noopener">flask-socketio文档</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If eventlet or gevent are used, then monkey patching the Python standard library is normally required to force the message queue package to use coroutine friendly functions and classes.</span><br></pre></td></tr></table></figure></p>
-<p>然后把猴子补丁改成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all(thread=False)</span><br></pre></td></tr></table></figure></p>
-<p>之后，发现“虚拟线程”没有被创建了。<br>但是偶尔会有下面报错，不影响正常功能，暂时不知道原因：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Exception ignored in: &lt;module &apos;gevent.threading&apos; from &apos;/demo/venv/lib/python3.5/site-packages/gevent/threading.py&apos;&gt;</span><br><span class="line">AttributeError: module &apos;gevent.threading&apos; has no attribute &apos;_after_fork&apos;</span><br></pre></td></tr></table></figure></p>
-<h1 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h1><ol>
-<li>首先明确的是，os.fork()创建出来对子进程并不会继承父进程的子线程。在<a href="http://linux.die.net/man/2/fork" target="_blank" rel="noopener">fork(2)-Linux Man Page</a>，中的描述：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The child process is created with a single thread--the one that called fork(). The entire virtual address space of the parent is replicated in the child, including the states of mutexes, condition variables, and other pthreads objects; the use of pthread_atfork(3) may be helpful for dealing with problems that this can cause.</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>也就是说，在Linux中，fork的时候只复制当前线程到子进程。</p>
-<ol start="2">
-<li><p>那么，monkey_patch究竟做了什么?<br>monkeypatch修改了threading标准库中的_start_new_thread方法, Condition类等，创建了一个greenlet而不是真正的线程，然后就会在fork的时候被复制了。因此，也可以在gunicron的配置文件中，在on_starting的hook中创建真正的线程。<br>gevent是第三方库，通过greenlet实现协程，其基本思想是：当一个greenlet遇到IO操作时，比如访问网络，就自动切换到其他的greenlet，等到IO操作完成，再在适当的时候切换回来继续执行。由于IO操作非常耗时，经常使程序处于等待状态，有了gevent为我们自动切换协程，就保证总有greenlet在运行，而不是等待IO。<br>事实上，gunicron在使用gevent的时候，已经monkey patch了一次，如果patch多次，将会求多次中参数为True的并集。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># venv/lib/python3.5/site-packages/gunicorn/workers/ggevent.py:65</span><br><span class="line">def patch(self):</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.noisy = False</span><br><span class="line"></span><br><span class="line"># if the new version is used make sure to patch subprocess</span><br><span class="line">if gevent.version_info[0] == 0:</span><br><span class="line">    monkey.patch_all()  # 默认值socket=True, dns=True, time=True, select=True, thread=True, os=True, ssl=True， httplib=False, subprocess=True, sys=False, aggressive=True, Event=False, builtins=True, signal=True</span><br><span class="line">else:</span><br><span class="line">    monkey.patch_all(subprocess=True)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>问题2: 从gevent的<a href="http://sdiehl.github.io/gevent-tutorial/" target="_blank" rel="noopener">文档</a>，可以知道，同一时间，只能有一个greenlet在运行，所以如果一个greenlet阻塞了，另一个greentlet就不可能运行，可以通过在while true末尾添加gevent.sleep(0.1)，把控制权（有可能）交给另外一个greenlet。</p>
-</li>
-</ol>
-<h1 id="最终方案："><a href="#最终方案：" class="headerlink" title="最终方案："></a>最终方案：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 方案一：阻塞事件使用线程</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all(thread=False)</span><br><span class="line"></span><br><span class="line">from threading</span><br><span class="line">ta = threading.Thread(target=task)</span><br><span class="line">ta.start</span><br><span class="line"></span><br><span class="line">while true:</span><br><span class="line">    ....</span><br><span class="line">    # gevent.sleep(0.1)</span><br><span class="line"></span><br><span class="line"># 方案二：阻塞事件使用进程</span><br><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all()</span><br><span class="line"></span><br><span class="line">from multiprocess import Process</span><br><span class="line">p = Process(target=task)</span><br><span class="line">p.start()</span><br><span class="line"></span><br><span class="line">while true:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<p>参考:<br><a href="https://www.cnblogs.com/liyuan989/p/4279210.html" target="_blank" rel="noopener">谨慎使用多线程中的fork</a><br><a href="https://segmentfault.com/a/1190000013096677" target="_blank" rel="noopener">eventlet 之 monkeypatch 带来的若干兼容性问题实例分析</a><br><a href="https://github.com/benoitc/gunicorn/issues/1056" target="_blank" rel="noopener">monkey.patch_all and gunicorn with more than 1 worker</a><br><a href="http://xiaorui.cc/2016/04/27/源码分析之gevent-monkey-patch_all实现原理/" target="_blank" rel="noopener">源码分析之gevent monkey.patch_all实现原理</a><br><a href="http://www.361way.com/python-gevent/5329.html" target="_blank" rel="noopener">python异步 I/O模块gevent</a><br><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001407503089986d175822da68d4d6685fbe849a0e0ca35000" target="_blank" rel="noopener">gevent-廖雪峰</a><br><a href="https://github.com/Junnplus/blog/issues/9" target="_blank" rel="noopener">gunicorn源码解析</a><br><a href="http://xiaorui.cc/2017/02/16/深入理解uwsgi和gunicorn网络模型上/" target="_blank" rel="noopener">深入理解uwsgi和gunicorn网络模型[上]</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2161,7 +2172,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2183,7 +2194,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
