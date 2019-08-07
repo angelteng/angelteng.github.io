@@ -4,6 +4,7 @@ date: 2019-08-02 14:01:09
 tags:
 - Spring
 - JAVA
+categories: JAVA
 ---
 # Mysql
 pom.xml添加依赖
