@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Spring boot,JAVA,">
+  <meta name="keywords" content="JAVA,Spring boot,">
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="pom.xml添加依赖 12345&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.kafka&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-kafka&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;2.2.7.RELEASE&amp;lt;/version&amp;gt;&amp;lt">
-<meta name="keywords" content="Spring boot,JAVA">
+<meta name="keywords" content="JAVA,Spring boot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring boot 集成Kafka">
 <meta property="og:url" content="https://angelteng.github.io/blog/2019/08/05/Spring-boot-整合Kafka/index.html">
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="pom.xml添加依赖 12345&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.kafka&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-kafka&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;2.2.7.RELEASE&amp;lt;/version&amp;gt;&amp;lt">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-05T14:31:54.000Z">
+<meta property="og:updated_time" content="2019-08-07T02:14:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring boot 集成Kafka">
 <meta name="twitter:description" content="pom.xml添加依赖 12345&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.kafka&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-kafka&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;2.2.7.RELEASE&amp;lt;/version&amp;gt;&amp;lt">
@@ -338,6 +338,7 @@
 <li>消费者<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.consumer.ConsumerRecord;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.kafka.annotation.KafkaListener;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@KafkaListener</span>(topics = &#123;<span class="string">"test_tipic"</span>&#125;)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listen</span><span class="params">(ConsumerRecord&lt;?, ?&gt; record)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Optional&lt;?&gt; kafkaMessage = Optional.ofNullable(record.value());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (kafkaMessage.isPresent()) &#123;</span><br><span class="line"></span><br><span class="line">            Object message = kafkaMessage.get();</span><br><span class="line">            System.out.println(message);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<p>参考：<br><a href="http://www.54tianzhisheng.cn/2018/01/05/SpringBoot-Kafka/" target="_blank" rel="noopener">Spring Boot系列文章（一）：SpringBoot Kafka 整合使用</a></p>
 
       
     </div>
@@ -355,9 +356,9 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Spring-boot/" rel="tag"># Spring boot</a>
-          
             <a href="/blog/tags/JAVA/" rel="tag"># JAVA</a>
+          
+            <a href="/blog/tags/Spring-boot/" rel="tag"># Spring boot</a>
           
         </div>
       
@@ -379,6 +380,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/08/07/Spring-boot集成Websocket/" rel="prev" title="Spring boot集成Websocket">
+                Spring boot集成Websocket <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -448,7 +453,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-count">83</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
