@@ -68,3 +68,27 @@ categories: JAVA
     - setStatus()
     - setRedirect()
     
+4. HttpServletResponse常用setContentType()和getWrite()/getOutputStream()
+
+# 初始化
+1. getServletContext().getInitParameter("email") ,对应用中所有的servlet跟jsp都可用 ,非线程安全。
+   ```xml
+    <web-app>
+        <context-param>
+            <param-name>email</param-name>
+            <param-value>sdfsd</param-value>
+        </context-param>
+    </web_app>
+   ```
+2. getServletConfig().getInitParamter("email")，只对该servlet可用
+   ```xml
+    <web-app>
+        <servlet>
+            <init-param>
+                <param-name>email</param-name>
+                <param-value>sdfsd</param-value>
+            </init-param>
+        </servlet>
+    </web_app>
+   ```
+3. 监听Webapp，ServletContextListener

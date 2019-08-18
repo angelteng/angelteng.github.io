@@ -93,6 +93,53 @@ spring-boot-starter-parent是一个特殊的启动器，提供有用的Maven默�
     - @Configuration：允许在上下文中注册额外的beans或导入其他配置类
 4. @SpringBootApplication注释等效于使用@Configuration、@EnableAutoConfiguration、@ComponentScan及其默认属性。
 
+# Spring Boot注解
+1. @Configuration 等同于spring的XML配置文件；使用Java代码可以检查类型安全。
+2. @EnableAutoConfiguration 自动配置。
+3. @ComponentScan 组件扫描，可自动发现和装配一些Bean。
+4. @Component可配合CommandLineRunner使用，在程序启动后执行一些基础任务。
+5. @RestController注解是@Controller和@ResponseBody的合集,表示这是个控制器bean,并且是将函数的返回值直 接填入HTTP响应体中,是REST风格的控制器。
+6. @Autowired自动导入。
+7. @PathVariable获取参数。
+8. @JsonBackReference解决嵌套外链问题。
+9. @RepositoryRestResourcepublic配合spring-boot-starter-data-rest使用。
+10. @Import：用来导入其他配置类。
+11. @ImportResource：用来加载xml配置文件。
+12. @Service：一般用于修饰service层的组件。
+13. @Repository：使用@Repository注解可以确保DAO或者repositories提供异常转译，这个注解修饰的DAO或者repositories类会被ComponetScan发现并配置，同时也不需要为它们提供XML配置项。
+14. @Bean：用@Bean标注方法等价于XML中配置的bean。
+15. @Value：注入Spring boot application.properties配置的属性的值
+16. @Inject：等价于默认的@Autowired，只是没有required属性；
+17. @Qualifier：当有多个同一类型的Bean时，可以用@Qualifier(“name”)来指定。与@Autowired配合使用。@Qualifier限定描述符除了能根据名字进行注入，但能进行更细粒度的控制如何选择候选者。
+18. @Resource(name=”name”,type=”type”)：没有括号内内容的话，默认byName。与@Autowired干类似的事。
+
+## JPA注解
+1. @Entity：@Table(name=”“)：表明这是一个实体类。一般用于jpa这两个注解一般一块使用，但是如果表名和实体类名相同的话，@Table可以省略
+2. @MappedSuperClass:用在确定是父类的entity上。父类的属性子类可以继承。
+3. @NoRepositoryBean:一般用作父类的repository，有这个注解，spring不会去实例化该repository。
+4. @Column：如果字段名与列名相同，则可以省略。
+5. @Id：表示该属性为主键。
+6. @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = “repair_seq”)：表示主键生成策略是sequence（可以为Auto、IDENTITY、native等，Auto表示可在多个数据库间切换），指定sequence的名字是repair_seq。
+7. @SequenceGeneretor(name = “repair_seq”, sequenceName = “seq_repair”, allocationSize = 1)：name为sequence的名称，以便使用，sequenceName为数据库的sequence名称，两个名称可以一致。
+8. @Transient：表示该属性并非一个到数据库表的字段的映射,ORM框架将忽略该属性。如果一个属性并非数据库表的字段映射,就务必将其标示为@Transient,否则,ORM框架默认其注解为@Basic。@Basic(fetch=FetchType.LAZY)：标记可以指定实体属性的加载方式
+9. @JsonIgnore：作用是json序列化时将Java bean中的一些属性忽略掉,序列化和反序列化都受影响。
+10. @JoinColumn（name=”loginId”）:一对一：本表中指向另一个表的外键。一对多：另一个表指向本表的外键。
+11. @OneToOne、@OneToMany、@ManyToOne：对应hibernate配置文件中的一对一，一对多，多对一。
+
+## SpringMVC注解
+1. @RequestMapping：@RequestMapping(“/path”)表示该控制器处理所有“/path”的UR L请求。RequestMapping是一个用来处理请求地址映射的注解，可用于类或方法上。 
+2. @RequestParam：用在方法的参数前面。 
+    ```java
+        @RequestParam 
+        String a =request.getParameter(“a”)。
+    ```
+3. @PathVariable:路径变量。
+
+## 异常注解
+1. @ControllerAdvice：包含@Component。可以被扫描到。统一处理异常。
+2. @ExceptionHandler（Exception.class）：用在方法上面表示遇到这个异常就执行以下方法。
+
+
 参考：
 [Spring Boot 中文文档](https://springcloud.cc/spring-boot.html#using-boot-structuring-your-code)
 [面试官问我：spring、springboot、springcloud的区别，我笑了](https://blog.csdn.net/weixin_44175121/article/details/90297426)
