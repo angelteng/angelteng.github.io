@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="问题描述：场景：gunicorn + flaskgunicorn.conf:12worker = 1  # 1个工作进程worker_class = &amp;quot;geventwebsocket.gunicorn.workers.GeventWebSocketWorker&amp;quot; # 因为使用了websocket 在flask 入口处新增了一个子线程做redis的监听工作12345678impo">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-30T07:51:52.000Z">
+<meta property="og:updated_time" content="2019-08-13T06:45:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用多进程服务器gunicorn中多线程问题">
 <meta name="twitter:description" content="问题描述：场景：gunicorn + flaskgunicorn.conf:12worker = 1  # 1个工作进程worker_class = &amp;quot;geventwebsocket.gunicorn.workers.GeventWebSocketWorker&amp;quot; # 因为使用了websocket 在flask 入口处新增了一个子线程做redis的监听工作12345678impo">
@@ -329,7 +329,7 @@
 <p>通过print(threading.currentThread())可以看到log：<br>主进程的循环打印出来：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Thread(Thread-2, started 140048726495560)&gt;</span><br></pre></td></tr></table></figure></p>
 <p>而子进程的循环打印出来的是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;_DummyThread(DummyThread-4, started daemon 140048726495560)&gt;</span><br></pre></td></tr></table></figure></p>
 <p>可以确定的是，多了一个不是由threading创建的“虚拟线程”</p>
-<p>然后查看gunicron对线程做了什么的时候发现<a href="https://github.com/benoitc/gunicorn/issues/1836" target="_blank" rel="noopener">这个问题</a><br>虽然不是同一个问题，但是这个说到了 monkey_patch对threading做了补丁<br>然后发现在 __init__.py 使用了猴子补丁，是为了websocket，使用了geventwebsocket模式，详情可以看<a href="https://flask-socketio.readthedocs.io/en/latest/#gunicorn-web-server" target="_blank" rel="noopener">flask-socketio文档</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If eventlet or gevent are used, then monkey patching the Python standard library is normally required to force the message queue package to use coroutine friendly functions and classes.</span><br></pre></td></tr></table></figure></p>
+<p>然后查看gunicron对线程做了什么的时候发现<a href="https://github.com/benoitc/gunicorn/issues/1836" target="_blank" rel="noopener">这个问题</a><br>虽然不是同一个问题，但是这个说到了 monkey_patch对threading做了补丁<br>然后发现在 __init__.py 使用了猴子补丁，是为了websocket，使用了multiple workers时需要共享client connect，详情可以看<a href="https://flask-socketio.readthedocs.io/en/latest/#Using Multiple Workers¶" target="_blank" rel="noopener">flask-socketio文档</a>Using Multiple Workers这一章。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If eventlet or gevent are used, then monkey patching the Python standard library is normally required to force the message queue package to use coroutine friendly functions and classes.</span><br></pre></td></tr></table></figure></p>
 <p>然后把猴子补丁改成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from gevent import monkey</span><br><span class="line">monkey.patch_all(thread=False)</span><br></pre></td></tr></table></figure></p>
 <p>之后，发现“虚拟线程”没有被创建了。<br>但是偶尔会有下面报错，不影响正常功能，暂时不知道原因：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Exception ignored in: &lt;module &apos;gevent.threading&apos; from &apos;/demo/venv/lib/python3.5/site-packages/gevent/threading.py&apos;&gt;</span><br><span class="line">AttributeError: module &apos;gevent.threading&apos; has no attribute &apos;_after_fork&apos;</span><br></pre></td></tr></table></figure></p>
 <h1 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h1><ol>
@@ -469,7 +469,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
