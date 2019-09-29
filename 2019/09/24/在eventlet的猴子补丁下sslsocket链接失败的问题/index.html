@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Flask,Python,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="基础 pipenv 使用 123pipenv install #创建.venv/ pipfile pipfile.lockpipenv install flaskpipenv shell # source .venv/bin/activate  动态路由 1234@app.route(&apos;/greet&apos;,defaluts = &amp;#123;&quot;name&quot;:&quot;defaultname&quot;&amp;#125;)@app">
-<meta name="keywords" content="Flask,Python">
+<meta name="description" content="某项目有一个发邮件的需求，由于项目搭建的Web Server使用了eventlet的monkey patch为了多进程下使用websocket。发现在建立ssl socket时会报错1wrap_socket() got an unexpected keyword argument &amp;apos;_context&amp;apos; 在github查找eventlet的issue。发现python 3.7 -">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《Flask Web开发实战》笔记">
-<meta property="og:url" content="https://angelteng.github.io/blog/2019/07/24/《Flask-Web开发实战》/index.html">
+<meta property="og:title" content="在eventlet的猴子补丁下sslsocket链接失败的问题">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/09/24/在eventlet的猴子补丁下sslsocket链接失败的问题/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="基础 pipenv 使用 123pipenv install #创建.venv/ pipfile pipfile.lockpipenv install flaskpipenv shell # source .venv/bin/activate  动态路由 1234@app.route(&apos;/greet&apos;,defaluts = &amp;#123;&quot;name&quot;:&quot;defaultname&quot;&amp;#125;)@app">
+<meta property="og:description" content="某项目有一个发邮件的需求，由于项目搭建的Web Server使用了eventlet的monkey patch为了多进程下使用websocket。发现在建立ssl socket时会报错1wrap_socket() got an unexpected keyword argument &amp;apos;_context&amp;apos; 在github查找eventlet的issue。发现python 3.7 -">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-24T05:48:16.000Z">
+<meta property="og:updated_time" content="2019-09-29T03:03:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《Flask Web开发实战》笔记">
-<meta name="twitter:description" content="基础 pipenv 使用 123pipenv install #创建.venv/ pipfile pipfile.lockpipenv install flaskpipenv shell # source .venv/bin/activate  动态路由 1234@app.route(&apos;/greet&apos;,defaluts = &amp;#123;&quot;name&quot;:&quot;defaultname&quot;&amp;#125;)@app">
+<meta name="twitter:title" content="在eventlet的猴子补丁下sslsocket链接失败的问题">
+<meta name="twitter:description" content="某项目有一个发邮件的需求，由于项目搭建的Web Server使用了eventlet的monkey patch为了多进程下使用websocket。发现在建立ssl socket时会报错1wrap_socket() got an unexpected keyword argument &amp;apos;_context&amp;apos; 在github查找eventlet的issue。发现python 3.7 -">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/2019/07/24/《Flask-Web开发实战》/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/09/24/在eventlet的猴子补丁下sslsocket链接失败的问题/">
 
 
 
 
 
-  <title>《Flask Web开发实战》笔记 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>在eventlet的猴子补丁下sslsocket链接失败的问题 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -233,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/24/《Flask-Web开发实战》/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/09/24/在eventlet的猴子补丁下sslsocket链接失败的问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -250,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">《Flask Web开发实战》笔记</h1>
+          <h1 class="post-title" itemprop="name headline">在eventlet的猴子补丁下sslsocket链接失败的问题</h1>
         
 
         <div class="post-meta">
@@ -262,8 +261,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-24T10:26:27+08:00">
-                2019-07-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T17:29:25+08:00">
+                2019-09-24
               </time>
             
 
@@ -300,22 +299,9 @@
       
 
       
-        <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><ol>
-<li><p>pipenv 使用</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pipenv install <span class="comment">#创建.venv/ pipfile pipfile.lock</span></span><br><span class="line">pipenv install flask</span><br><span class="line">pipenv shell <span class="comment"># source .venv/bin/activate</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>动态路由</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route('/greet',defaluts = &#123;"name":"defaultname"&#125;)</span></span><br><span class="line"><span class="meta">@app.route('/greet/&lt;name&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"welcome %s"</span> % name</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Flask内置了简单的开发服务器（由Werkzeug提供），旧的app.run()方法已不建议使用。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">flask run</span><br><span class="line"><span class="string">""""</span></span><br><span class="line"><span class="string">查找规则：</span></span><br><span class="line"><span class="string">1. 当前目录下寻找app.py wsgi.py，并从中寻找名为app/application的实例</span></span><br><span class="line"><span class="string">2. 从环境变量读取FLASK_APP的模块名/导入路径，寻找名为app/application的实例</span></span><br><span class="line"><span class="string">3. 如果安装了python-dotenv，启动时会从.flaskenv .env加载环境变量</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>检测文件变化 watchdog</p>
-</li>
-<li>flask的扩展包 falsk_xxxx</li>
-<li>flask自定义命令<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># flask hello</span></span><br><span class="line"><span class="meta">@app.cli.command()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">    click.echo(<span class="string">'Hello'</span>)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
+        <p>某项目有一个发邮件的需求，由于项目搭建的Web Server使用了eventlet的monkey patch为了多进程下使用websocket。<br>发现在建立ssl socket时会报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrap_socket() got an unexpected keyword argument &apos;_context&apos;</span><br></pre></td></tr></table></figure></p>
+<p>在github查找eventlet的issue。发现<a href="https://github.com/eventlet/eventlet/issues/526" target="_blank" rel="noopener">python 3.7 - wrap_socket() got an unexpected keyword argument ‘_context’</a>这个bug还是open的。</p>
+<p>解决：<br>起了新进程，用消息队列通讯，实现发送邮件需求。</p>
 
       
     </div>
@@ -331,14 +317,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/blog/tags/Flask/" rel="tag"># Flask</a>
-          
-            <a href="/blog/tags/Python/" rel="tag"># Python</a>
-          
-        </div>
-      
 
       
       
@@ -348,8 +326,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/07/23/《Python高性能编程》/" rel="next" title="《Python高性能编程》笔记">
-                <i class="fa fa-chevron-left"></i> 《Python高性能编程》笔记
+              <a href="/blog/2019/09/03/编码器信号类型/" rel="next" title="编码器信号类型">
+                <i class="fa fa-chevron-left"></i> 编码器信号类型
               </a>
             
           </div>
@@ -357,10 +335,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2019/07/25/Flask源码学习/" rel="prev" title="Flask源码学习">
-                Flask源码学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -412,17 +386,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -484,22 +449,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础"><span class="nav-number">1.</span> <span class="nav-text">基础</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
