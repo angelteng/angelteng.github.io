@@ -58,7 +58,7 @@ gunicorn.conf:
 
 然后查看gunicron对线程做了什么的时候发现[这个问题](https://github.com/benoitc/gunicorn/issues/1836)
 虽然不是同一个问题，但是这个说到了 monkey_patch对threading做了补丁
-然后发现在 \__init\__.py 使用了猴子补丁，是为了websocket，使用了geventwebsocket模式，详情可以看[flask-socketio文档](https://flask-socketio.readthedocs.io/en/latest/#gunicorn-web-server)
+然后发现在 \__init\__.py 使用了猴子补丁，是为了websocket，使用了multiple workers时需要共享client connect，详情可以看[flask-socketio文档](https://flask-socketio.readthedocs.io/en/latest/#Using Multiple Workers¶)Using Multiple Workers这一章。
 ```
     If eventlet or gevent are used, then monkey patching the Python standard library is normally required to force the message queue package to use coroutine friendly functions and classes.
 ```
