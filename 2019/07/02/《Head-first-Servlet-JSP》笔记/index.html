@@ -88,7 +88,7 @@
 <meta property="og:description" content="Web应用体系结构 Servlet 生命周期：  servlet类加载 servlet实例化 调用init方法 调用service方法 调用destory方法   Servlet没有main方法，他们受控于另一个JAVA容器应用，如Tomcat。 Web服务器应用（ng、Apache）-&amp;gt; Web容器应用(Tomcat) -&amp;gt; Servlet  容器的作用：  通信支持：管理与web服">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://angelteng.github.io/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/0.png">
-<meta property="og:updated_time" content="2019-08-02T02:17:36.000Z">
+<meta property="og:updated_time" content="2019-10-08T08:15:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Head first Servlet &amp; JSP》笔记">
 <meta name="twitter:description" content="Web应用体系结构 Servlet 生命周期：  servlet类加载 servlet实例化 调用init方法 调用service方法 调用destory方法   Servlet没有main方法，他们受控于另一个JAVA容器应用，如Tomcat。 Web服务器应用（ng、Apache）-&amp;gt; Web容器应用(Tomcat) -&amp;gt; Servlet  容器的作用：  通信支持：管理与web服">
@@ -402,6 +402,18 @@
 <li>setRedirect()</li>
 </ul>
 </li>
+<li><p>HttpServletResponse常用setContentType()和getWrite()/getOutputStream()</p>
+</li>
+</ol>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><ol>
+<li><p>getServletContext().getInitParameter(“email”) ,对应用中所有的servlet跟jsp都可用 ,非线程安全。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>email<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>sdfsd<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web_app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>getServletConfig().getInitParamter(“email”)，只对该servlet可用</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>email<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>sdfsd<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web_app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>监听Webapp，ServletContextListener</p>
+</li>
 </ol>
 
       
@@ -524,7 +536,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -579,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Web应用体系结构"><span class="nav-number">1.</span> <span class="nav-text">Web应用体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet"><span class="nav-number">2.</span> <span class="nav-text">Servlet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Request-and-Response"><span class="nav-number">3.</span> <span class="nav-text">Request and Response</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Web应用体系结构"><span class="nav-number">1.</span> <span class="nav-text">Web应用体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet"><span class="nav-number">2.</span> <span class="nav-text">Servlet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Request-and-Response"><span class="nav-number">3.</span> <span class="nav-text">Request and Response</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化"><span class="nav-number">4.</span> <span class="nav-text">初始化</span></a></li></ol></div>
             
 
           </div>

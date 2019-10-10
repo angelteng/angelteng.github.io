@@ -229,6 +229,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/08/搭建Discuz论坛/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/08/搭建Discuz论坛/" itemprop="url">搭建Discuz论坛</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-08T17:17:20+08:00">
+                2018-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>下载包文件：<a href="http://www.discuz.net/forum-2-1.html" target="_blank" rel="noopener">Discuz论坛</a><br><img src="0.png" alt="选择UTF版本"></li>
+<li>解压文件，实际代码目录为 /upload</li>
+<li><p>配置Nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    charset utf-8;</span><br><span class="line">    client_max_body_size 128M;</span><br><span class="line">    listen 80; </span><br><span class="line">    server_name bbs.local.com;</span><br><span class="line">    root        /vagrant/bbs/upload/;</span><br><span class="line">    index       index.php;  </span><br><span class="line">  </span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">        fastcgi_pass 127.0.0.1:9000;   # 查看php-fpm.conf 文件 [www] listen 属性</span><br><span class="line">        #fastcgi_pass unix:/var/run/php5-fpm.sock;</span><br><span class="line">        try_files $uri =404;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如nginx报错 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#nging/error.log</span><br><span class="line">2018/11/08 12:13:29 [error] 14591#14591: *339 FastCGI sent in stderr: &quot;Primary script unknown&quot; while reading response header from upstream, client: , server: wiki.ainnovation.com, request: &quot;GET /shaAdmin/index.php HTTP/1.1&quot;, upstream: &quot;fastcgi://unix:/var/run/php/php7.2-fpm.sock:&quot;, host: &quot;&quot;</span><br><span class="line">检查fastcgi_pass属性配置</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如Nginx 报404</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2018/11/08 08:41:49 [error] 13474#13474: *1 &quot;/home/abc/bbs/index.php&quot; is not found (2: No such file or directory), client: 106.120.83.206, server:, request: &quot;GET / HTTP/1.1&quot;, host: &quot;&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>需要检查文件权限及nginx进程用户是否有权限访问该目录</p>
+<ul>
+<li>ps -aux|grep Nginx 查看work 进程所属用户<br><img src="1.png" alt="nginx"></li>
+<li><p>查看代码文件所属目录是否同一个用户/有访问权限<br>如果你使用vagrant 环境，vagrant 共享目录默认用户是vagrant 可以通过vagrant配置文件修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config.vm.synced_folder &quot;./&quot;, &quot;/vagrant&quot;,create:true, :owner=&gt;&quot;www&quot;, :group=&gt;&quot;www&quot;,:mount_options=&gt;[&quot;dmode=775&quot;,&quot;fmode=775&quot;]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改nginx 进程使用用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">user www;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="5">
+<li><p>如你数据库使用阿里云/腾讯云，可能会出现报错<br>页面报错信息： discuz Table ‘xxxxx.forum_post’ doesn’t exist<br>数据库报错信息： 报错：#1075 - Incorrect table definition; there can be only one auto column and it must be defined as a key<br>可按以下sql手动创建表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS `pre_forum_post` (</span><br><span class="line">  `pid` int(10) unsigned NOT NULL,</span><br><span class="line">  `fid` mediumint(8) unsigned NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `tid` mediumint(8) unsigned NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `first` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `author` varchar(15) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `authorid` mediumint(8) unsigned NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `subject` varchar(80) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `dateline` int(10) unsigned NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `message` mediumtext NOT NULL,</span><br><span class="line">  `useip` varchar(15) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `port` smallint(6) unsigned NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `invisible` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `anonymous` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `usesig` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `htmlon` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `bbcodeoff` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `smileyoff` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `parseurloff` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `attachment` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `rate` smallint(6) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `ratetimes` tinyint(3) unsigned NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `status` int(10) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `tags` varchar(255) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `comment` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `replycredit` int(10) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `position` int(8) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  PRIMARY KEY (`position`,`tid`),</span><br><span class="line">  UNIQUE KEY `pid` (`pid`),</span><br><span class="line">  KEY `fid` (`fid`),</span><br><span class="line">  KEY `authorid` (`authorid`,`invisible`),</span><br><span class="line">  KEY `dateline` (`dateline`),</span><br><span class="line">  KEY `invisible` (`invisible`),</span><br><span class="line">  KEY `displayorder` (`tid`,`invisible`,`dateline`),</span><br><span class="line">  KEY `first` (`tid`,`first`)</span><br><span class="line">) ENGINE=INNODB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改论坛首页头部<br>文件位于：/template/default/commom/header.htm</p>
+</li>
+<li>修改论坛logo<br>文件位于：/static/image/common/logo.png</li>
+<li>技巧：</li>
+</ol>
+<ul>
+<li>用户组编辑器控制/访问：界面-用户组-编辑-（论坛相关-帖子设置）</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/07/Python的类/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1067,7 +1221,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

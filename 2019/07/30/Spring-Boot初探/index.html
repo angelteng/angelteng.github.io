@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Code war of Angel">
 <meta property="og:description" content="概念 Spring是一个生态体系（也可以说是技术体系），是集大成者，它包含了Spring Framework、Spring Boot、Spring Cloud等（还包括Spring Cloud data flow、spring data、spring integration、spring batch、spring security、spring hateoas）。 Spring Framework">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-02T02:21:47.000Z">
+<meta property="og:updated_time" content="2019-10-08T08:15:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot初探">
 <meta name="twitter:description" content="概念 Spring是一个生态体系（也可以说是技术体系），是集大成者，它包含了Spring Framework、Spring Boot、Spring Cloud等（还包括Spring Cloud data flow、spring data、spring integration、spring batch、spring security、spring hateoas）。 Spring Framework">
@@ -344,6 +344,51 @@
 </li>
 <li>@SpringBootApplication注释等效于使用@Configuration、@EnableAutoConfiguration、@ComponentScan及其默认属性。</li>
 </ol>
+<h1 id="Spring-Boot注解"><a href="#Spring-Boot注解" class="headerlink" title="Spring Boot注解"></a>Spring Boot注解</h1><ol>
+<li>@Configuration 等同于spring的XML配置文件；使用Java代码可以检查类型安全。</li>
+<li>@EnableAutoConfiguration 自动配置。</li>
+<li>@ComponentScan 组件扫描，可自动发现和装配一些Bean。</li>
+<li>@Component可配合CommandLineRunner使用，在程序启动后执行一些基础任务。</li>
+<li>@RestController注解是@Controller和@ResponseBody的合集,表示这是个控制器bean,并且是将函数的返回值直 接填入HTTP响应体中,是REST风格的控制器。</li>
+<li>@Autowired自动导入。</li>
+<li>@PathVariable获取参数。</li>
+<li>@JsonBackReference解决嵌套外链问题。</li>
+<li>@RepositoryRestResourcepublic配合spring-boot-starter-data-rest使用。</li>
+<li>@Import：用来导入其他配置类。</li>
+<li>@ImportResource：用来加载xml配置文件。</li>
+<li>@Service：一般用于修饰service层的组件。</li>
+<li>@Repository：使用@Repository注解可以确保DAO或者repositories提供异常转译，这个注解修饰的DAO或者repositories类会被ComponetScan发现并配置，同时也不需要为它们提供XML配置项。</li>
+<li>@Bean：用@Bean标注方法等价于XML中配置的bean。</li>
+<li>@Value：注入Spring boot application.properties配置的属性的值</li>
+<li>@Inject：等价于默认的@Autowired，只是没有required属性；</li>
+<li>@Qualifier：当有多个同一类型的Bean时，可以用@Qualifier(“name”)来指定。与@Autowired配合使用。@Qualifier限定描述符除了能根据名字进行注入，但能进行更细粒度的控制如何选择候选者。</li>
+<li>@Resource(name=”name”,type=”type”)：没有括号内内容的话，默认byName。与@Autowired干类似的事。</li>
+</ol>
+<h2 id="JPA注解"><a href="#JPA注解" class="headerlink" title="JPA注解"></a>JPA注解</h2><ol>
+<li>@Entity：@Table(name=”“)：表明这是一个实体类。一般用于jpa这两个注解一般一块使用，但是如果表名和实体类名相同的话，@Table可以省略</li>
+<li>@MappedSuperClass:用在确定是父类的entity上。父类的属性子类可以继承。</li>
+<li>@NoRepositoryBean:一般用作父类的repository，有这个注解，spring不会去实例化该repository。</li>
+<li>@Column：如果字段名与列名相同，则可以省略。</li>
+<li>@Id：表示该属性为主键。</li>
+<li>@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = “repair_seq”)：表示主键生成策略是sequence（可以为Auto、IDENTITY、native等，Auto表示可在多个数据库间切换），指定sequence的名字是repair_seq。</li>
+<li>@SequenceGeneretor(name = “repair_seq”, sequenceName = “seq_repair”, allocationSize = 1)：name为sequence的名称，以便使用，sequenceName为数据库的sequence名称，两个名称可以一致。</li>
+<li>@Transient：表示该属性并非一个到数据库表的字段的映射,ORM框架将忽略该属性。如果一个属性并非数据库表的字段映射,就务必将其标示为@Transient,否则,ORM框架默认其注解为@Basic。@Basic(fetch=FetchType.LAZY)：标记可以指定实体属性的加载方式</li>
+<li>@JsonIgnore：作用是json序列化时将Java bean中的一些属性忽略掉,序列化和反序列化都受影响。</li>
+<li>@JoinColumn（name=”loginId”）:一对一：本表中指向另一个表的外键。一对多：另一个表指向本表的外键。</li>
+<li>@OneToOne、@OneToMany、@ManyToOne：对应hibernate配置文件中的一对一，一对多，多对一。</li>
+</ol>
+<h2 id="SpringMVC注解"><a href="#SpringMVC注解" class="headerlink" title="SpringMVC注解"></a>SpringMVC注解</h2><ol>
+<li>@RequestMapping：@RequestMapping(“/path”)表示该控制器处理所有“/path”的UR L请求。RequestMapping是一个用来处理请求地址映射的注解，可用于类或方法上。 </li>
+<li><p>@RequestParam：用在方法的参数前面。 </p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestParam</span> </span><br><span class="line">String a =request.getParameter(“a”)。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>@PathVariable:路径变量。</p>
+</li>
+</ol>
+<h2 id="异常注解"><a href="#异常注解" class="headerlink" title="异常注解"></a>异常注解</h2><ol>
+<li>@ControllerAdvice：包含@Component。可以被扫描到。统一处理异常。</li>
+<li>@ExceptionHandler（Exception.class）：用在方法上面表示遇到这个异常就执行以下方法。</li>
+</ol>
 <p>参考：<br><a href="https://springcloud.cc/spring-boot.html#using-boot-structuring-your-code" target="_blank" rel="noopener">Spring Boot 中文文档</a><br><a href="https://blog.csdn.net/weixin_44175121/article/details/90297426" target="_blank" rel="noopener">面试官问我：spring、springboot、springcloud的区别，我笑了</a></p>
 
       
@@ -468,7 +513,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -523,7 +568,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跟着文档开始"><span class="nav-number">2.</span> <span class="nav-text">跟着文档开始</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot的使用"><span class="nav-number">3.</span> <span class="nav-text">Spring Boot的使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跟着文档开始"><span class="nav-number">2.</span> <span class="nav-text">跟着文档开始</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot的使用"><span class="nav-number">3.</span> <span class="nav-text">Spring Boot的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot注解"><span class="nav-number">4.</span> <span class="nav-text">Spring Boot注解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JPA注解"><span class="nav-number">4.1.</span> <span class="nav-text">JPA注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringMVC注解"><span class="nav-number">4.2.</span> <span class="nav-text">SpringMVC注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常注解"><span class="nav-number">4.3.</span> <span class="nav-text">异常注解</span></a></li></ol></li></ol></div>
             
 
           </div>
