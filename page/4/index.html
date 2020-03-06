@@ -229,6 +229,237 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/24/数据预处理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/24/数据预处理/" itemprop="url">数据预处理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-24T14:51:48+08:00">
+                2019-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>数据挖掘的流程</p>
+<ul>
+<li>获取数据</li>
+<li>数据预处理：从数据中检测，纠正或删除损坏，不准确或不适用于模型的记录过程。</li>
+<li>特征工程：特征工程是将原始数据转换为更能代表预测模型的潜在问题的特征的过程，可以通过挑选最相关的特征，提取特征以及创造特征来实现。</li>
+<li>建模</li>
+<li>上线、验证</li>
+</ul>
+</li>
+<li><p>数据无量纲化<br>在机器学习算法实践中，我们往往有着将不同规格的数据转换到同一规格，或不同分布的数据转换到某个特定分布 的需求，这种需求统称为将数据“无量纲化”。</p>
+<ul>
+<li>线性的无量纲化<ul>
+<li>中心化</li>
+<li>缩放</li>
+</ul>
+</li>
+<li>非线性的无量纲化</li>
+</ul>
+<ol>
+<li><p>数据归一化（异常值敏感）<br> 当数据(x)按照最小值中心化后，再按极差(最大值 - 最小值)缩放，数据移动了最小值个单位，并且会被收敛到 [0,1]之间。<br> <img src="0.png" alt="image.png"></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line">scaler = MinMaxScaler(feature_range=[5,10])   # scaler后5~10之间，默认 0~1</span><br><span class="line">result = scaler.fit(data)</span><br><span class="line">result = scaler.transform(data)</span><br><span class="line"># 一步达成</span><br><span class="line">result_ = scaler.fit_transform(data)</span><br><span class="line"># 逆转</span><br><span class="line">scaler.inverse_transform(result)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数据标准化(优先选用)<br> 当数据(x)按均值(μ)中心化后，再按标准差(σ)缩放，数据就会服从为均值为0，方差为1的正态分布(即标准正态分布)<br> <img src="1.png" alt="image.png"></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import StandardScaler</span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">scaler.fit(data)</span><br><span class="line">print(scaler.mean_)</span><br><span class="line">print(scaler.var_)</span><br><span class="line">res = scaler.transform(data)</span><br><span class="line">res.mean()</span><br><span class="line">res.std()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>![image.png](2.png)
+</code></pre><ol start="3">
+<li><p>处理缺失值</p>
+<ol>
+<li><p>impute.SimpleImputer(missing_values=nan, strategy=’mean’, fill_value=None, verbose=0, copy=True)</p>
+<ul>
+<li>missing_values ：缺失数据的值</li>
+<li>strategy：填补策略<ul>
+<li>mean：均值填补(仅对数值型特征可用) </li>
+<li>median：中值填补(仅对数值型特征可用) </li>
+<li>most_frequent：众数填补(对数值型和字符型特征都可用) </li>
+<li>constant：参考参数“fill_value”中的值(对数值型和字符型特征都可用)</li>
+</ul>
+</li>
+<li>fill_value：填补值</li>
+<li><p>copy： 创建副本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.impute import SimpleImputer</span><br><span class="line">im = SimpleImputer(strategy=&apos;median&apos;)</span><br><span class="line">im.fit(age)</span><br><span class="line">im.transform(age)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>使用pandas处理</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data.loc[:,&quot;Age&quot;] = data.loc[:,&quot;Age&quot;].fillna(data.loc[:,&quot;Age&quot;].median())</span><br><span class="line">data.dropna(axis=0,inplace=True) #删除行</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>处理分类型特征<br> 编码： 文字型数据转化为数字型数据。<br> 哑变量：它是人为虚设的变量，来反映某个变量的相互独立的不同属性。（比如身份：学生、工人、教师）</p>
+<ol>
+<li><p>preprocessing.LabelEncoder: 标签y专用，将分类转化为分类数值</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import LabelEncoder</span><br><span class="line">y = data.Survived</span><br><span class="line">le = LabelEncoder()</span><br><span class="line">data.Survived=le.fit_transform(y)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>preprocessing.LabelBinarizer: 标签y专用，将分类转化为哑变量</p>
+</li>
+<li><p>preprocessing.OrdinalEncoder: 特征X专用，将分类特征转化为分类数值 (如果特征的值有关联性，处理有序变量)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OrdinalEncoder</span><br><span class="line">x = data.Embarked</span><br><span class="line">le = OrdinalEncoder()</span><br><span class="line">data.Embarked=le.fit_transform(x.values.reshape(-1,1))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>preprocessing.OneHotEncoder: 独热编码，创建哑变量 （特征的值无关关联性，处理名义变量）<br> <img src="3.png" alt="image.png"></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line">xs = data.loc[:,[&apos;Sex&apos;,&apos;Embarked&apos;]]</span><br><span class="line">one= OneHotEncoder()</span><br><span class="line">res= one.fit(xs)</span><br><span class="line">columns = res.get_feature_names() #查看类型名称</span><br><span class="line">res= one.transform(xs).toarray() </span><br><span class="line">newdata = pd.concat([data,pd.DataFrame(res,columns=columns)],axis=1)</span><br></pre></td></tr></table></figure>
+<p><img src="4.png" alt="image.png"></p>
+</li>
+</ol>
+</li>
+<li><p>处理连续性变量<br> 二值化：根据阈值将数据二值化，分为0/1。<br> 分段：连续型变量划分为分类变量的类，能够将连续型变量排序后按顺序分箱后编码。</p>
+<ol>
+<li><p>preprocessing.Binarizer: 根据阈值将数据二值化</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Binarizer</span><br><span class="line">x = data2.Age.values.reshape(-1,1)</span><br><span class="line">bins = Binarizer(threshold=30) # 阈值=30</span><br><span class="line">res = bins.fit_transform(x)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>preprocessing.KBinsDiscretizer: 将连续性变量排序后分箱<br> 参数：</p>
+<pre><code>- n_bins: 每个特征中分箱的个数。默认5。
+- encode: 编码方式
+    - onehot: 哑变量，返回一个稀疏数组
+    - ordinal: 每个特征中每个箱都被编码为一个整数
+    - onehot-dense: 哑变量，返回密集数组
+- strategy: 定义箱框的方式
+    - uniform: 等宽分箱
+    - quantile: 等位分箱，每个箱内样本数量相同（默认）
+    - kmeans: 按聚类分箱
+</code></pre> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import KBinsDiscretizer</span><br><span class="line">X = data.Age.values.reshape(-1,1)</span><br><span class="line">est = KBinsDiscretizer(n_bins=3, encode=&apos;ordinal&apos;, strategy=&apos;uniform&apos;)</span><br><span class="line">est.fit_transform(X)</span><br><span class="line">#查看转换后分的箱:变成了一列中的三箱 set(est.fit_transform(X).ravel())</span><br><span class="line">est = KBinsDiscretizer(n_bins=3, encode=&apos;onehot&apos;, strategy=&apos;uniform&apos;) #查看转换后分的箱:变成了哑变量</span><br><span class="line">est.fit_transform(X).toarray()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/24/随机森林/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1770,167 +2001,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/15/线程安全/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/04/15/线程安全/" itemprop="url">线程安全</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-15T14:12:31+08:00">
-                2019-04-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/底层/" itemprop="url" rel="index">
-                    <span itemprop="name">底层</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="原因一：多核CPU的缓存"><a href="#原因一：多核CPU的缓存" class="headerlink" title="原因一：多核CPU的缓存"></a>原因一：多核CPU的缓存</h1><p>当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。<br>按照数据读取顺序和与CPU结合的紧密程度，CPU缓存可以分为一级缓存（L1），二级缓存（L3），部分高端CPU还具有三级缓存（L3），每一级缓存中所储存的全部数据都是下一级缓存的一部分。<br>当CPU要读取一个数据时，首先从一级缓存中查找，如果没有找到再从二级缓存中查找，如果还是没有就从三级缓存或内存中查找。<br>单核CPU只含有一套L1，L2，L3缓存；如果CPU含有多个核心，即多核CPU，则每个核心都含有一套L1（甚至和L2）缓存，而共享L3（或者和L2）缓存。<br><img src="0.png" alt="image.png"></p>
-<ul>
-<li>单线程。cpu核心的缓存只被一个线程访问。缓存独占，不会出现访问冲突等问题。</li>
-<li>单核CPU，多线程。进程中的多个线程会同时访问进程中的共享数据，CPU将某块内存加载到缓存后，不同线程在访问相同的物理地址的时候，都会映射到相同的缓存位置，这样即使发生线程的切换，缓存仍然不会失效。但由于任何时刻只能有一个线程在执行，因此不会出现缓存访问冲突。</li>
-<li>多核CPU，多线程。每个核都至少有一个L1 缓存。多个线程访问进程中的某个共享内存，且这多个线程分别在不同的核心上执行，则每个核心都会在各自的caehe中保留一份共享内存的缓冲。由于多核是可以并行的，可能会出现多个线程同时写各自的缓存的情况，而各自的cache之间的数据就有可能不同。这就是缓存一致性问题。</li>
-</ul>
-<h1 id="原因二：处理器优化和指令重排"><a href="#原因二：处理器优化和指令重排" class="headerlink" title="原因二：处理器优化和指令重排"></a>原因二：处理器优化和指令重排</h1><p>那就是为了使处理器内部的运算单元能够尽量的被充分利用，处理器可能会对输入代码进行乱序执行处理。这就是处理器优化。<br>除了现在很多流行的处理器会对代码进行优化乱序处理，很多编程语言的编译器也会有类似的优化，比如Java虚拟机的即时编译器（JIT）也会做指令重排。</p>
-<h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><p>并发编程中的线程安全，必须保证三个条件：</p>
-<ol>
-<li>原子性：是指在一个操作中就是cpu不可以在中途暂停然后再调度，既不被中断操作，要不执行完成，要不就不执行。</li>
-<li>可见性：是指当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值。</li>
-<li>有序性：即程序执行的顺序按照代码的先后顺序执行。</li>
-</ol>
-<h1 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h1><p>为了保证共享内存的正确性（可见性、有序性、原子性），内存模型定义了共享内存系统中多线程程序读写操作行为的规范。通过这些规则来规范对内存的读写操作，从而保证指令执行的正确性。</p>
-<h1 id="Python中的线程安全"><a href="#Python中的线程安全" class="headerlink" title="Python中的线程安全"></a>Python中的线程安全</h1><p>python中由于GIL（Global Interpreter Lock）的存在，即使开了多线程，同一个时间也只有一个线程在执行，但Python不是线程安全的。<br>GIL:任何python线程在执行之前都需要先获得GIL锁，然后每执行一部分代码，解释器就会自动释放GIL锁，其他线程就可以竞争这个锁，只有得到才能执行程序。对于CPU密集型程序，GIL锁的影响在于，有了它的存在，开启多线程无法利用多核优势，也就是只能用到一个核CPU来运行代码，要想用到多个核只能开启多进程（或者使用不带有GIL锁的解释器）。</p>
-<ol>
-<li>使用线程锁： threading.Lock() / threading.RLock()</li>
-<li>使用原子操作</li>
-</ol>
-<p>参考<br><a href="https://juejin.im/post/5cad4adc5188251b1f4d87d2" target="_blank" rel="noopener">再有人问你Java内存模型是什么，就把这篇文章发给他</a><br><a href="https://juejin.im/post/5b129a1be51d45068a6c91d4" target="_blank" rel="noopener">列表与队列——谈谈线程安全</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1983,7 +2053,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">86</span>
+                  <span class="site-state-item-count">87</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2005,7 +2075,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -2042,7 +2112,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
