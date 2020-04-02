@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MYSQL,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基本 基本架构  ￼ Mysql长链接使内存使用涨得快： 定期断开长连接。 如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。   redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开">
+<meta name="keywords" content="MYSQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《MYSQL实战45讲》笔记">
+<meta property="og:url" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/index.html">
+<meta property="og:site_name" content="Code war of Angel">
+<meta property="og:description" content="基本 基本架构  ￼ Mysql长链接使内存使用涨得快： 定期断开长连接。 如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。   redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/0.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/1.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png">
+<meta property="og:updated_time" content="2020-04-02T03:40:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《MYSQL实战45讲》笔记">
+<meta name="twitter:description" content="基本 基本架构  ￼ Mysql长链接使内存使用涨得快： 定期断开长连接。 如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。   redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/">
+
+
+
+
+
+  <title>《MYSQL实战45讲》笔记 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Code war of Angel</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2020/03/31/《MYSQL实战45讲》笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《MYSQL实战45讲》笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-31T11:34:28+08:00">
+                2020-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h1><ol>
+<li>基本架构 <img src="/blog/2020/03/31/《MYSQL实战45讲》笔记/0.png">
+￼</li>
+<li>Mysql长链接使内存使用涨得快：<ul>
+<li>定期断开长连接。</li>
+<li>如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。</li>
+</ul>
+</li>
+<li>redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开头循环写。<br>￼   <img src="/blog/2020/03/31/《MYSQL实战45讲》笔记/1.png"><ul>
+<li>write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。</li>
+<li>InnoDB 用redo log保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为 crash-safe。</li>
+<li>innodb_flush_log_at_trx_commit 这个参数设置成 1 的时候，表示每次事务的 redo log 都直接持久化到磁盘。</li>
+</ul>
+</li>
+<li>binlog（归档日志）：Server层日志。逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。binlog 是可以追加写入的，写完一个文件新增一个文件。sync_binlog 这个参数设置成 1 的时候，表示每次事务的 binlog 都持久化到磁盘。</li>
+<li>两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。<ul>
+<li>执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。</li>
+<li>执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。</li>
+<li>引擎将这行新数据更新到内存中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。</li>
+<li>执行器生成这个操作的 binlog，并把 binlog 写入磁盘。</li>
+<li>执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。</li>
+</ul>
+</li>
+<li><p>WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。</p>
+</li>
+<li><p>change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。</p>
+<ul>
+<li>何时触发merge：访问这个数据页会；系统有后台线程会定期 merge；在数据库正常关闭（shutdown）的过程中。</li>
+</ul>
+</li>
+<li><p>脏页：当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。脏页什么时候引起flush写入磁盘：</p>
+<ul>
+<li>InnoDB 的 redo log 写满了。这时候系统会停止所有更新操作，把 checkpoint 往前推进，redo log 留出空间可以继续写。</li>
+<li>系统内存不足。当需要新的内存页，而内存不够用的时候，就要淘汰一些数据页，空出内存给别的数据页使用。如果淘汰的是“脏页”，就要先将脏页写到磁盘。</li>
+<li>系统“空闲”的时候。</li>
+<li>MySQL 正常关闭的时候。</li>
+</ul>
+</li>
+<li>InnoDB 刷脏页的控制策略：<ul>
+<li>innodb_io_capacity 参数会告诉 InnoDB 你的磁盘能力。这个值我建议你设置成磁盘的 IOPS。</li>
+<li>innodb_max_dirty_pages_pct 是脏页比例上限，默认值是 75%。</li>
+<li>合理地设置 innodb_io_capacity 的值，并且平时要多关注脏页比例，不要让它经常接近 75%。</li>
+<li>innodb_flush_neighbors=0，只刷自己脏页，不刷邻居。</li>
+</ul>
+</li>
+<li>如果你创建的表没有主键，或者把一个表的主键删掉了，那么 InnoDB 会自己生成一个长度为 6 字节的 rowid 来作为主键。</li>
+</ol>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><ol>
+<li>事务支持是在引擎层实现的。数据表中的一行记录，其实可能有多个版本 (row)，每个版本有自己的 row trx_id。 <img src="/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png"></li>
+<li>显式启动事务语句， begin 或 start transaction。配套的提交语句是 commit，回滚语句是 rollback。set autocommit=1，自动提交。</li>
+<li>begin/start transaction 命令并不是一个事务的起点，在执行到它们之后的第一个操作 InnoDB 表的语句，事务才真正启动。start transaction with consistent snapshot会马上启动一个事务。</li>
+<li>视图：InnoDB 在实现 MVCC 时用到的一致性读视图，即 consistent read view，用于支持 RC（Read Committed，读提交）和 RR（Repeatable Read，可重复读）隔离级别的实现。</li>
+<li>一致性视图：InnoDB 为每个事务构造了一个数组，用来保存这个事务启动瞬间，当前正在“活跃”（启动但未提交）的所有事务 ID。数组里面事务 ID 的最小值记为低水位，当前系统里面已经创建过的事务 ID 的最大值加 1 记为高水位。这个视图数组和高水位，就组成了当前事务的一致性视图（read-view）。<img src="/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png">
+<ul>
+<li>如果落在绿色部分，表示这个版本是已提交的事务或者是当前事务自己生成的，这个数据是可见的；</li>
+<li>如果落在红色部分，表示这个版本是由将来启动的事务生成的，是肯定不可见的；</li>
+<li>如果落在黄色部分，那就包括两种情况<ul>
+<li>若 row trx_id 在数组中，表示这个版本是由还没提交的事务生成的，不可见；</li>
+<li>若 row trx_id 不在数组中，表示这个版本是已经提交了的事务生成的，可见。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”（current read）。select 语句如果加锁（lock in share mode / for update），也是当前读。</li>
+<li>可重复读的核心就是一致性读（consistent read）；而事务更新数据的时候，只能用当前读。如果当前的记录的行锁被其他事务占用的话，就需要进入锁等待。</li>
+<li>唯一索引的更新就不能使用 change buffer，实际上也只有普通索引可以使用。因为唯一索引更新时需要将数据页读入内存，判断到没有冲突。</li>
+<li>收缩表空间：只是 delete 掉表里面不用的数据的话，只是把记录的位置，或者数据页标记为了“可复用”，但磁盘文件的大小是不会变的。重建表方法：<ul>
+<li>alter table A engine=InnoDB</li>
+<li>Online DDL    </li>
+</ul>
+</li>
+<li>count在Inndb需要把数据一行一行地从引擎里面读出来，然后累积计数。按照效率排序的话，count(字段)&lt; count(主键 id)&lt; count(1)~ count(*)。</li>
+<li>幻读：指的是一个事务在前后两次查询同一个范围的时候，后一次查询看到了前一次查询没有看到的行。幻读仅专指“新插入的行”。在可重复读隔离级别下，普通的查询是快照读，是不会看到别的事务插入的数据的。因此，幻读在“当前读”下才会出现。</li>
+</ol>
+<h1 id="索引与排序"><a href="#索引与排序" class="headerlink" title="索引与排序"></a>索引与排序</h1><ol>
+<li>索引：<ul>
+<li>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。</li>
+<li>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</li>
+<li>主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</li>
+</ul>
+</li>
+<li>覆盖索引：索引 k 已经“覆盖了”我们的查询需求，不再需要回表查整行记录，我们称为覆盖索引。</li>
+<li>最左前缀原则：最左前缀可以是联合索引的最左 N 个字段，也可以是字符串索引的最左 M 个字符。</li>
+<li>索引下推：可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</li>
+<li>索引基数采样统计：InnoDB 默认会选择 N 个数据页，统计这些页面上的不同值，得到一个平均值，然后乘以这个索引的页面数，就得到了这个索引的基数。</li>
+<li>索引统计信息不准确导致的问题，以用 analyze table 来解决。</li>
+<li>字符串创建索引也可用前缀索引，定义好长度，就可以做到既节省空间，又不用额外增加太多的查询成本。前缀的区分度不够好的情况时：<ul>
+<li>倒序存储。</li>
+<li>使用 hash 字段。</li>
+</ul>
+</li>
+<li>全字段排序：<ul>
+<li>初始化 sort_buffer，确定放入 name、city、age 这三个字段；</li>
+<li>从索引 city 找到第一个满足 city=’杭州’条件的主键 id，也就是图中的 ID_X；</li>
+<li>到主键 id 索引取出整行，取 name、city、age 三个字段的值，存入 sort_buffer 中；</li>
+<li>从索引 city 取下一个记录的主键 id；</li>
+<li>重复步骤 3、4 直到 city 的值不满足查询条件为止，对应的主键 id 也就是图中的 ID_Y；</li>
+<li>对 sort_buffer 中的数据按照字段 name 做快速排序（可能在内存中完成，也可能需要使用外部排序（归并排序算法），这取决于排序所需的内存和参数 sort_buffer_size）；按照排序结果取前 1000 行返回给客户端。</li>
+</ul>
+</li>
+<li>rowid排序：如果 MySQL 实在是担心排序内存太小，会影响排序效率，才会采用 rowid 排序算法。<ul>
+<li>初始化 sort_buffer，确定放入两个字段，即 name 和 id；</li>
+<li>从索引 city 找到第一个满足 city=’杭州’条件的主键 id，也就是图中的 ID_X；</li>
+<li>到主键 id 索引取出整行，取 name、id 这两个字段，存入 sort_buffer 中；</li>
+<li>从索引 city 取下一个记录的主键 id；重复步骤 3、4 直到不满足 city=’杭州’条件为止，也就是图中的 ID_Y；</li>
+<li>对 sort_buffer 中的数据按照字段 name 进行排序；遍历排序结果，取前 1000 行，并按照 id 的值回到原表中取出 city、name 和 age 三个字段返回给客户端。</li>
+</ul>
+</li>
+<li>order by rand() 使用了内存临时表，内存临时表排序的时候使用了 rowid 排序方法。</li>
+<li>如果临时表大小超过了 tmp_table_size，那么内存临时表就会转成磁盘临时表。</li>
+<li>对索引字段做函数操作，可能会破坏索引值的有序性，因此优化器就决定放弃走树搜索功能。可能导致全索引扫描。比如隐式类型转换、字符编码转换。</li>
+</ol>
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><ol>
+<li>全局锁：<ul>
+<li>命令是 Flush tables with read lock (FTWRL)。</li>
+<li>典型使用场景是，做全库逻辑备份。</li>
+</ul>
+</li>
+<li>表级锁：有两种，表锁、元数据锁。<ul>
+<li>元数据锁MDL不需要显式使用，在访问一个表的时候会被自动加上。</li>
+<li>当对一个表做增删改查操作的时候，加MDL读锁；当要对表做结构变更操作的时候，加MDL写锁。</li>
+</ul>
+</li>
+<li>行锁：<ul>
+<li>两阶段锁协议： 在InnoDB事务中，行锁是在需要的时候才加上的，但并不是不需要了就立刻释放，而是要等到事务结束时才释放。</li>
+</ul>
+</li>
+<li>死锁：<ul>
+<li>设置超时：innodb_lock_wait_timeout</li>
+<li>发起死锁检测：innodb_deadlock_detect=on</li>
+<li>死锁检测要耗费大量的 CPU 资源</li>
+<li>热点行更新导致的性能问题：控制并发度；通过将一行改成逻辑上的多行来减少锁冲突。</li>
+</ul>
+</li>
+<li>间隙锁：产生幻读的原因是，行锁只能锁住行，但是新插入记录这个动作，要更新的是记录之间的“间隙”。因此，为了解决幻读问题，InnoDB 只好引入间隙锁 (Gap Lock)。<ul>
+<li>跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作。间隙锁之间都不存在冲突关系。</li>
+<li>间隙锁和行锁合称 next-key lock，每个 next-key lock 是前开后闭区间。</li>
+<li>间隙锁的引入，可能会导致同样的语句锁住更大的范围，这其实是影响了并发度的。</li>
+<li>你如果把隔离级别设置为读提交的话，就没有间隙锁了。需要把 binlog 格式设置为 binlog_format=row。</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/MYSQL/" rel="tag"># MYSQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2020/03/06/json格式化性能优化/" rel="next" title="json格式化性能优化">
+                <i class="fa fa-chevron-left"></i> json格式化性能优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://angelteng.github.io/blog/images/angel.jpg" alt="Angel Teng">
+            
+              <p class="site-author-name" itemprop="name">Angel Teng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/category/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本"><span class="nav-number">1.</span> <span class="nav-text">基本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务"><span class="nav-number">2.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引与排序"><span class="nav-number">3.</span> <span class="nav-text">索引与排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁"><span class="nav-number">4.</span> <span class="nav-text">锁</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
