@@ -369,6 +369,11 @@ AOP中的术语
 Spring JDBC 框架负责所有数据库的低层细节，从开始打开连接，准备和执行 SQL 语句，处理异常，处理事务，到最后关闭连接。
 
 ## Spring 事务管理
-Spring 事务抽象的关键是由 org.springframework.transaction.PlatformTransactionManager 接口定义
+Spring 事务抽象的关键是由 org.springframework.transaction.PlatformTransactionManager 接口定义。
+
+## Spring MVC
+
+
+
 参考:
 [W3C School](https://www.w3cschool.cn/wkspring/omps1mm6.html)
