@@ -15,30 +15,42 @@ tags: MYSQL
 ￼   {% asset_img 1.png%}
     - write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。
     - InnoDB 用redo log保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为 crash-safe。
-    - innodb_flush_log_at_trx_commit 这个参数设置成 1 的时候，表示每次事务的 redo log 都直接持久化到磁盘。
+    - innodb_flush_log_at_trx_commit 设置为 0 的时候，表示每次事务提交时都只是把 redo log 留在 redo log buffer 中 ;设置为 1 的时候，表示每次事务提交时都将 redo log 直接持久化到磁盘；设置为 2 的时候，表示每次事务提交时都只是把 redo log 写到 page cache。
+    - InnoDB 有一个后台线程，每隔 1 秒，就会把 redo log buffer 中的日志，调用 write 写到文件系统的 page cache，然后调用 fsync 持久化到磁盘。
+    - redo log buffer 占用的空间即将达到 innodb_log_buffer_size 一半的时候，后台线程会主动写盘。
+    - 并行的事务提交的时候，顺带将这个事务的 redo log buffer 持久化到磁盘。
+    - 如果把 innodb_flush_log_at_trx_commit 设置成 1，那么 redo log 在 prepare 阶段就要持久化一次
+    - 每秒一次后台轮询刷盘，再加上崩溃恢复这个逻辑，InnoDB 就认为 redo log 在 commit 的时候就不需要 fsync 了，只会 write 到文件系统的 page cache 中就够了。
 4.  binlog（归档日志）：Server层日志。逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。binlog 是可以追加写入的，写完一个文件新增一个文件。sync_binlog 这个参数设置成 1 的时候，表示每次事务的 binlog 都持久化到磁盘。
-5. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
+   - sync_binlog=0 的时候，表示每次提交事务都只 write，不 fsync；sync_binlog=1 的时候，表示每次提交事务都会执行 fsync；sync_binlog=N(N>1) 的时候，表示每次提交事务都 write，但累积 N 个事务后才 fsync。
+5. MySQL 的“双 1”配置，指的就是 sync_binlog 和 innodb_flush_log_at_trx_commit 都设置成 1。也就是说，一个事务完整提交前，需要等待两次刷盘，一次是 redo log（prepare 阶段），一次是 binlog。
+6. binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。而 redo log 并没有这个要求。
+   {% asset_img 4.png%}
+7. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
     - 执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。
     - 执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。
     - 引擎将这行新数据更新到内存中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。
     - 执行器生成这个操作的 binlog，并把 binlog 写入磁盘。
     - 执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。
-6. WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。
+8. WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。
 
-7. change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。
+9.  change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。
     - 何时触发merge：访问这个数据页会；系统有后台线程会定期 merge；在数据库正常关闭（shutdown）的过程中。
 
-8. 脏页：当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。脏页什么时候引起flush写入磁盘：
+10. 脏页：当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。脏页什么时候引起flush写入磁盘：
     - InnoDB 的 redo log 写满了。这时候系统会停止所有更新操作，把 checkpoint 往前推进，redo log 留出空间可以继续写。
     - 系统内存不足。当需要新的内存页，而内存不够用的时候，就要淘汰一些数据页，空出内存给别的数据页使用。如果淘汰的是“脏页”，就要先将脏页写到磁盘。
     - 系统“空闲”的时候。
     - MySQL 正常关闭的时候。
-9. InnoDB 刷脏页的控制策略：
+11. InnoDB 刷脏页的控制策略：
     - innodb_io_capacity 参数会告诉 InnoDB 你的磁盘能力。这个值我建议你设置成磁盘的 IOPS。
     - innodb_max_dirty_pages_pct 是脏页比例上限，默认值是 75%。
     - 合理地设置 innodb_io_capacity 的值，并且平时要多关注脏页比例，不要让它经常接近 75%。
     - innodb_flush_neighbors=0，只刷自己脏页，不刷邻居。
-10. 如果你创建的表没有主键，或者把一个表的主键删掉了，那么 InnoDB 会自己生成一个长度为 6 字节的 rowid 来作为主键。
+12. 如果你创建的表没有主键，或者把一个表的主键删掉了，那么 InnoDB 会自己生成一个长度为 6 字节的 rowid 来作为主键。
+13. 
+
+
 
 # 事务
 1. 事务支持是在引擎层实现的。数据表中的一行记录，其实可能有多个版本 (row)，每个版本有自己的 row trx_id。
