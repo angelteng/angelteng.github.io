@@ -22,34 +22,49 @@ tags: MYSQL
     - 如果把 innodb_flush_log_at_trx_commit 设置成 1，那么 redo log 在 prepare 阶段就要持久化一次
     - 每秒一次后台轮询刷盘，再加上崩溃恢复这个逻辑，InnoDB 就认为 redo log 在 commit 的时候就不需要 fsync 了，只会 write 到文件系统的 page cache 中就够了。
 4.  binlog（归档日志）：Server层日志。逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。binlog 是可以追加写入的，写完一个文件新增一个文件。sync_binlog 这个参数设置成 1 的时候，表示每次事务的 binlog 都持久化到磁盘。
-   - sync_binlog=0 的时候，表示每次提交事务都只 write，不 fsync；sync_binlog=1 的时候，表示每次提交事务都会执行 fsync；sync_binlog=N(N>1) 的时候，表示每次提交事务都 write，但累积 N 个事务后才 fsync。
-5. MySQL 的“双 1”配置，指的就是 sync_binlog 和 innodb_flush_log_at_trx_commit 都设置成 1。也就是说，一个事务完整提交前，需要等待两次刷盘，一次是 redo log（prepare 阶段），一次是 binlog。
-6. binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。而 redo log 并没有这个要求。
+      - sync_binlog=0 的时候，表示每次提交事务都只 write，不 fsync；sync_binlog=1 的时候，表示每次提交事务都会执行 fsync；sync_binlog=N(N>1) 的时候，表示每次提交事务都 write，但累积 N 个事务后才 fsync。
+6. MySQL 的“双 1”配置，指的就是 sync_binlog 和 innodb_flush_log_at_trx_commit 都设置成 1。也就是说，一个事务完整提交前，需要等待两次刷盘，一次是 redo log（prepare 阶段），一次是 binlog。
+7. binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。而 redo log 并没有这个要求。
    {% asset_img 4.png%}
-7. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
+8. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
     - 执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。
     - 执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。
     - 引擎将这行新数据更新到内存中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。
     - 执行器生成这个操作的 binlog，并把 binlog 写入磁盘。
     - 执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。
-8. WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。
+9. WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。
 
-9.  change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。
+10. change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。
     - 何时触发merge：访问这个数据页会；系统有后台线程会定期 merge；在数据库正常关闭（shutdown）的过程中。
 
-10. 脏页：当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。脏页什么时候引起flush写入磁盘：
+11. 脏页：当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。脏页什么时候引起flush写入磁盘：
     - InnoDB 的 redo log 写满了。这时候系统会停止所有更新操作，把 checkpoint 往前推进，redo log 留出空间可以继续写。
     - 系统内存不足。当需要新的内存页，而内存不够用的时候，就要淘汰一些数据页，空出内存给别的数据页使用。如果淘汰的是“脏页”，就要先将脏页写到磁盘。
     - 系统“空闲”的时候。
     - MySQL 正常关闭的时候。
-11. InnoDB 刷脏页的控制策略：
+12. InnoDB 刷脏页的控制策略：
     - innodb_io_capacity 参数会告诉 InnoDB 你的磁盘能力。这个值我建议你设置成磁盘的 IOPS。
     - innodb_max_dirty_pages_pct 是脏页比例上限，默认值是 75%。
     - 合理地设置 innodb_io_capacity 的值，并且平时要多关注脏页比例，不要让它经常接近 75%。
     - innodb_flush_neighbors=0，只刷自己脏页，不刷邻居。
-12. 如果你创建的表没有主键，或者把一个表的主键删掉了，那么 InnoDB 会自己生成一个长度为 6 字节的 rowid 来作为主键。
-13. 
-
+13. 如果你创建的表没有主键，或者把一个表的主键删掉了，那么 InnoDB 会自己生成一个长度为 6 字节的 rowid 来作为主键。
+14. join算法：
+    1.  Index Nested-Loop Join（NLJ）：先遍历表 驱动表t1，然后根据从表 t1 中取出的每行数据中的 a 值，去被驱动表 t2 根据索引中查找满足条件的记录。
+    2.  Block Nested-Loop Join（BNL）：把驱动表 t1 的数据读入线程内存 join_buffer 中，再扫描被驱动表 t2，把表 t2 中的每一行取出来，跟 join_buffer 中的数据做对比（内存操作），满足 join 条件的，作为结果集的一部分返回。
+        - join_buffer 的大小是由参数 join_buffer_size 设定的，默认值是 256k。
+        - 如果放不下驱动表 t1 的所有数据话，策略就是分段放。
+    3. Batched Key Access(BKA)：NLJ的优化，把表 t1 的数据取出来一部分，先放到一个临时内存join_buffer。在用BNL算法处理。
+    4. 如果可以使用 Index Nested-Loop Join 算法，也就是说可以用上被驱动表上的索引，其实是没问题的；如果使用 Block Nested-Loop Join 算法，扫描行数就会过多。尤其是在大表上的 join 操作，这样可能要扫描被驱动表很多次，会占用大量的系统资源。所以这种 join 尽量不要用。
+    5. 在决定哪个表做驱动表的时候，应该是两个表按照各自的条件过滤，过滤完成之后，计算参与 join 的各个字段的总数据量，数据量小的那个表，就是“小表”，应该作为驱动表。
+    6. 大表 join 操作虽然对 IO 有影响，但是在语句执行结束后，对 IO 的影响也就结束了。但是，对 Buffer Pool 的影响就是持续性的，需要依靠后续的查询请求慢慢恢复内存命中率。
+15. MySQL 是“边读边发的”，取数据发数据流程：
+    1.  获取一行，写到 net_buffer 中。这块内存的大小是由参数 net_buffer_length 定义的，默认是 16k。
+    2.  重复获取行，直到 net_buffer 写满，调用网络接口发出去。
+    3.  如果发送成功，就清空 net_buffer，然后继续取下一行，并写入 net_buffer。
+    4.  如果发送函数返回 EAGAIN 或 WSAEWOULDBLOCK，就表示本地网络栈（socket send buffer）写满了，进入等待。直到网络栈重新可写，再继续发送。
+    5.  对于正常的线上业务来说，如果一个查询的返回结果不会很多的话，我都建议你使用 mysql_store_result 这个接口，直接把查询结果保存到本地内存。如果返回数据很多，使用mysql_use_result。
+16. 一个稳定服务的线上系统，要保证响应时间符合要求的话，内存命中率要在 99% 以上。（执行 show engine innodb status，查询Buffer pool hit rate）。
+17. InnoDB 内存管理用的是最近最少使用 (Least Recently Used, LRU) 算法。优化：按照 5:3 的比例把整个 LRU 链表分成了 young 区域和 old 区域。处于 old 区域的数据页，每次被访问的时候，若这个数据页在 LRU 链表中存在的时间超过了 1 秒，才把它移动到链表头部。
 
 
 # 事务
