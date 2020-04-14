@@ -11,27 +11,8 @@ tags: MYSQL
 2. Mysql长链接使内存使用涨得快：
     - 定期断开长连接。
     - 如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。
-3. redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开头循环写。
-￼   {% asset_img 1.png%}
-    - write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。
-    - InnoDB 用redo log保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为 crash-safe。
-    - innodb_flush_log_at_trx_commit 设置为 0 的时候，表示每次事务提交时都只是把 redo log 留在 redo log buffer 中 ;设置为 1 的时候，表示每次事务提交时都将 redo log 直接持久化到磁盘；设置为 2 的时候，表示每次事务提交时都只是把 redo log 写到 page cache。
-    - InnoDB 有一个后台线程，每隔 1 秒，就会把 redo log buffer 中的日志，调用 write 写到文件系统的 page cache，然后调用 fsync 持久化到磁盘。
-    - redo log buffer 占用的空间即将达到 innodb_log_buffer_size 一半的时候，后台线程会主动写盘。
-    - 并行的事务提交的时候，顺带将这个事务的 redo log buffer 持久化到磁盘。
-    - 如果把 innodb_flush_log_at_trx_commit 设置成 1，那么 redo log 在 prepare 阶段就要持久化一次
-    - 每秒一次后台轮询刷盘，再加上崩溃恢复这个逻辑，InnoDB 就认为 redo log 在 commit 的时候就不需要 fsync 了，只会 write 到文件系统的 page cache 中就够了。
-4.  binlog（归档日志）：Server层日志。逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。binlog 是可以追加写入的，写完一个文件新增一个文件。sync_binlog 这个参数设置成 1 的时候，表示每次事务的 binlog 都持久化到磁盘。
-      - sync_binlog=0 的时候，表示每次提交事务都只 write，不 fsync；sync_binlog=1 的时候，表示每次提交事务都会执行 fsync；sync_binlog=N(N>1) 的时候，表示每次提交事务都 write，但累积 N 个事务后才 fsync。
-6. MySQL 的“双 1”配置，指的就是 sync_binlog 和 innodb_flush_log_at_trx_commit 都设置成 1。也就是说，一个事务完整提交前，需要等待两次刷盘，一次是 redo log（prepare 阶段），一次是 binlog。
-7. binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。而 redo log 并没有这个要求。
-   {% asset_img 4.png%}
-8. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
-    - 执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。
-    - 执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。
-    - 引擎将这行新数据更新到内存中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。
-    - 执行器生成这个操作的 binlog，并把 binlog 写入磁盘。
-    - 执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。
+
+
 9. WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。
 
 10. change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。
@@ -65,7 +46,66 @@ tags: MYSQL
     5.  对于正常的线上业务来说，如果一个查询的返回结果不会很多的话，我都建议你使用 mysql_store_result 这个接口，直接把查询结果保存到本地内存。如果返回数据很多，使用mysql_use_result。
 16. 一个稳定服务的线上系统，要保证响应时间符合要求的话，内存命中率要在 99% 以上。（执行 show engine innodb status，查询Buffer pool hit rate）。
 17. InnoDB 内存管理用的是最近最少使用 (Least Recently Used, LRU) 算法。优化：按照 5:3 的比例把整个 LRU 链表分成了 young 区域和 old 区域。处于 old 区域的数据页，每次被访问的时候，若这个数据页在 LRU 链表中存在的时间超过了 1 秒，才把它移动到链表头部。
+18. 自增id不连续原因：
+    - 唯一键冲突
+    - 事务回滚
+    - 批量插入数据
+19. 在生产上，尤其是有批量插入数据（包含的语句类型是 insert … select、replace … select 和 load data 语句）的场景时，从并发插入数据性能的角度考虑，建议设置：innodb_autoinc_lock_mode=2 ，并且 binlog_format=row
+20. insert … select 是很常见的在两个表之间拷贝数据的方法。你需要注意，在可重复读隔离级别下，这个语句会给 select 的表里扫描到的记录和间隙加读锁。
+21. 如果 insert 和 select 的对象是同一个表，则有可能会造成循环写入。
+22. insert 语句如果出现唯一键冲突，会在冲突的唯一值上加共享的 next-key lock(S 锁)。因此，碰到由于唯一键约束导致报错后，要尽快提交或回滚事务，避免加锁时间过长。
+23. 主备间事务同步过程：备库 B 跟主库 A 之间维持了一个长连接。主库 A 内部有一个线程，专门用于服务备库 B 的这个长连接。
+    - 在备库 B 上通过 change master 命令，设置主库 A 的 IP、端口、用户名、密码，以及要从哪个位置开始请求 binlog，这个位置包含文件名和日志偏移量。
+    - 在备库 B 上执行 start slave 命令，这时候备库会启动两个线程。其中 io_thread 负责与主库建立连接。主库 A 校验完用户名、密码后，开始按照备库 B 传过来的位置，从本地读取 binlog，发给 B。
+    - 备库 B 拿到 binlog 后，写到本地文件，称为中转日志（relay log）。
+    - sql_thread 读取中转日志，解析出日志里的命令，并执行。
+24. 主备延迟原因：
+    - 备库所在机器的性能要比主库所在的机器性能差
+    - 备库的压力大
+    - 大事务
+    - 备库的并行复制能力
+25. 备库并行复制策略（v_5.7.22）：
+    - COMMIT_ORDER，根据同时进入 prepare 和 commit 来判断是否可以并行的策略。
+    - WRITESET，表示的是对于事务涉及更新的每一行，计算出这一行的 hash 值，组成集合 writeset。如果两个事务没有操作相同的行，也就是说它们的 writeset 没有交集，就可以并行。
+    - WRITESET_SESSION，是在 WRITESET 的基础上多了一个约束，即在主库上同一个线程先后执行的两个事务，在备库执行的时候，要保证相同的先后顺序。
+26. 检测数据库是否正常：
+    - health_check表
+    - 检测performance_schema信息
+27. grant 语句会同时修改数据表和内存，判断权限的时候使用的是内存数据。因此，规范地使用 grant 和 revoke 语句，是不需要随后加上 flush privileges 语句的。flush privileges 语句本身会用数据表的数据重建一份内存权限数据，所以在权限数据可能存在不一致的情况下再使用。
 
+
+# 日志
+1. MySQL 的“双 1”配置，指的就是 sync_binlog 和 innodb_flush_log_at_trx_commit 都设置成 1。也就是说，一个事务完整提交前，需要等待两次刷盘，一次是 redo log（prepare 阶段），一次是 binlog。
+2. binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。而 redo log 并没有这个要求。
+   {% asset_img 4.png%}
+3. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
+    - 执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。
+    - 执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。
+    - 引擎将这行新数据更新到内存中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。
+    - 执行器生成这个操作的 binlog，并把 binlog 写入磁盘。
+    - 执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。
+## redo log
+1. redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开头循环写。
+￼   {% asset_img 1.png%}
+2. write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。
+3. InnoDB 用redo log保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为 crash-safe。
+4. innodb_flush_log_at_trx_commit 设置为 0 的时候，表示每次事务提交时都只是把 redo log 留在 redo log buffer 中 ;设置为 1 的时候，表示每次事务提交时都将 redo log 直接持久化到磁盘；设置为 2 的时候，表示每次事务提交时都只是把 redo log 写到 page cache。
+5. InnoDB 有一个后台线程，每隔 1 秒，就会把 redo log buffer 中的日志，调用 write 写到文件系统的 page cache，然后调用 fsync 持久化到磁盘。
+6. redo log buffer 占用的空间即将达到 innodb_log_buffer_size 一半的时候，后台线程会主动写盘。
+7. 并行的事务提交的时候，顺带将这个事务的 redo log buffer 持久化到磁盘。
+8. 如果把 innodb_flush_log_at_trx_commit 设置成 1，那么 redo log 在 prepare 阶段就要持久化一次
+9. 每秒一次后台轮询刷盘，再加上崩溃恢复这个逻辑，InnoDB 就认为 redo log 在 commit 的时候就不需要 fsync 了，只会 write 到文件系统的 page cache 中就够了。
+
+## binlog
+1.  binlog（归档日志）：Server层日志。逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。binlog 是可以追加写入的，写完一个文件新增一个文件。sync_binlog 这个参数设置成 1 的时候，表示每次事务的 binlog 都持久化到磁盘。
+2. sync_binlog=0 的时候，表示每次提交事务都只 write，不 fsync；sync_binlog=1 的时候，表示每次提交事务都会执行 fsync；sync_binlog=N(N>1) 的时候，表示每次提交事务都 write，但累积 N 个事务后才 fsync。
+3. binlog格式：
+    - statement：SQL 语句的原文
+    - row：记录操作的完整内容，容易恢复数据。
+    - mixed：MySQL 自己会判断这条 SQL 语句是否可能引起主备不一致，如果有可能，就用 row 格式，否则就用 statement 格式。
+4. 用 binlog 来恢复数据的标准做法是：用 mysqlbinlog 工具解析出来，然后把解析结果整个发给 MySQL 执行。
+5. 把参数 log_slave_updates 设置为 on，表示备库执行 relay log 后生成 binlog。
+6. MySQL 在 binlog 中记录了这个命令第一次执行时所在实例的 server id。每个库在收到从自己的主库发过来的日志后，先判断 server id，如果跟自己的相同，表示这个日志是自己生成的，就直接丢弃这个日志。
 
 # 事务
 1. 事务支持是在引擎层实现的。数据表中的一行记录，其实可能有多个版本 (row)，每个版本有自己的 row trx_id。
