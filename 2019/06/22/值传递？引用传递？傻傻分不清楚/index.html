@@ -79,13 +79,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Code war of Angel">
-<meta property="og:url" content="https://angelteng.github.io/blog/tags/Three-js/index.html">
+<meta name="description" content="＃ 不可变对象基本类型的不可变对象，对它进行运算操作其实就是创建新的对象，然后将原先的变量名绑定到新的对象上  值传递 引用传递  ＃ 可变对象  值传递：将实参的值完全复制一份给形参，改变形参的值并不会影响外部实参的值。这种方式对于可变对象比较少见，因为对复杂类型的参数进行完全复制，会付出额外的空间与时间代价。php中数组，会将数组完全复制一份进行传递。  引用传递：将实参的引用给形参，两个变量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="值传递？引用传递？傻傻分不清楚">
+<meta property="og:url" content="https://angelteng.github.io/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/index.html">
 <meta property="og:site_name" content="Code war of Angel">
+<meta property="og:description" content="＃ 不可变对象基本类型的不可变对象，对它进行运算操作其实就是创建新的对象，然后将原先的变量名绑定到新的对象上  值传递 引用传递  ＃ 可变对象  值传递：将实参的值完全复制一份给形参，改变形参的值并不会影响外部实参的值。这种方式对于可变对象比较少见，因为对复杂类型的参数进行完全复制，会付出额外的空间与时间代价。php中数组，会将数组完全复制一份进行传递。  引用传递：将实参的引用给形参，两个变量">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-04-08T03:12:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Code war of Angel">
+<meta name="twitter:title" content="值传递？引用传递？傻傻分不清楚">
+<meta name="twitter:description" content="＃ 不可变对象基本类型的不可变对象，对它进行运算操作其实就是创建新的对象，然后将原先的变量名绑定到新的对象上  值传递 引用传递  ＃ 可变对象  值传递：将实参的值完全复制一份给形参，改变形参的值并不会影响外部实参的值。这种方式对于可变对象比较少见，因为对复杂类型的参数进行完全复制，会付出额外的空间与时间代价。php中数组，会将数组完全复制一份进行传递。  引用传递：将实参的引用给形参，两个变量">
 
 
 
@@ -115,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://angelteng.github.io/blog/tags/Three-js/">
+  <link rel="canonical" href="https://angelteng.github.io/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/">
 
 
 
 
 
-  <title>Tag: Three.js | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>值传递？引用传递？傻傻分不清楚 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -140,7 +144,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -214,52 +218,164 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Three.js<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/blog/2019/01/03/Three三维世界初体验/" itemprop="url">
-              
-                <span itemprop="name">Three三维世界初体验</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">值传递？引用传递？傻傻分不清楚</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-03T15:26:03+08:00" content="2019-01-03">
-          01-03
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-22T22:26:27+08:00">
+                2019-06-22
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>＃ 不可变对象<br>基本类型的不可变对象，对它进行运算操作其实就是创建新的对象，然后将原先的变量名绑定到新的对象上</p>
+<ol>
+<li>值传递</li>
+<li>引用传递</li>
+</ol>
+<p>＃ 可变对象</p>
+<ol>
+<li><p>值传递：将实参的值完全复制一份给形参，改变形参的值并不会影响外部实参的值。<br>这种方式对于可变对象比较少见，因为对复杂类型的参数进行完全复制，会付出额外的空间与时间代价。<br>php中数组，会将数组完全复制一份进行传递。</p>
+</li>
+<li><p>引用传递：将实参的引用给形参，两个变量指向同一个对象，即引用传递<br>特征：对于变量的成员进行修改时，会直接影响原变量；而如果对传递过来的变量进行重新赋值，则不会影响原变量，并且此后再修改变量的成员，也不会影响原变量。<br>大多数编程语言都采用这种方式传递复杂类型的参数。</p>
+</li>
+<li><p>指针传递（实际上也是值传递）：此时指针的值是另一个变量的地址<br>特征：无论是对于变量成员的修改，还是对变量重新赋值，都会影响到原对象。<br>php／JAVA 中的 &amp; ，使两个变量实际上使用了同一个变量容器（又名： zval ）</p>
+</li>
+</ol>
+<h1 id="不同语言"><a href="#不同语言" class="headerlink" title="不同语言"></a>不同语言</h1><ol>
+<li>Python中只有引用传递</li>
+<li>PHP有如上面所说的特点</li>
+<li>javascript</li>
+<li>JAVA中只有值传递</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/06/21/Python描述符/" rel="next" title="Python描述符">
+                <i class="fa fa-chevron-left"></i> Python描述符
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/06/24/《Head-First-Java》笔记/" rel="prev" title="《Head First Java》笔记">
+                《Head First Java》笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -267,6 +383,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -287,8 +407,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -350,6 +479,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#不同语言"><span class="nav-number">1.</span> <span class="nav-text">不同语言</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -483,6 +628,10 @@
   
 
   
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

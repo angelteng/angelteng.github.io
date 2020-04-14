@@ -2211,7 +2211,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/21/Python描述符/">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Angel Teng">
@@ -2230,7 +2230,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/2019/06/21/Python描述符/" itemprop="url">Python描述符</a></h1>
+                <a class="post-title-link" href="/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/" itemprop="url">值传递？引用传递？傻傻分不清楚</a></h1>
         
 
         <div class="post-meta">
@@ -2242,8 +2242,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-21T16:13:40+08:00">
-                2019-06-21
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-22T22:26:27+08:00">
+                2019-06-22
               </time>
             
 
@@ -2252,28 +2252,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -2304,23 +2282,26 @@
       
         
           
-            <h1 id="描述符"><a href="#描述符" class="headerlink" title="描述符"></a>描述符</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ol>
-<li>一个描述符是一个有“绑定行为”的对象属性(object attribute)，它的访问控制会被描述器协议方法重写。</li>
-<li>任何定义了 __get__, __set__ 或者 __delete__ 任一方法的类称为描述符类，其实例对象便是一个描述符，这些方法称为描述符协议。<ul>
-<li>同时定义了 __get__ 和 __set__ 的描述符称为 数据描述符(data descriptor)；仅定义了 __get__ 的称为 非数据描述符(non-data descriptor) 。</li>
-<li>两者区别在于：如果 obj.__dict__ 中有与描述符同名的属性，若描述符是数据描述符，则优先调用描述符，若是非数据描述符，则优先使用 obj.__dict__ 中属性。</li>
-</ul>
-</li>
-<li>当对一个实例属性进行访问时，Python 1、类属性，2、数据描述符，3、实例属性，4、非数据描述符，5、__getattr__()顺序进行查找，如果查找到目标属性并发现是一个描述符，Python 会调用描述符协议来改变默认的控制行为。</li>
-<li>描述符是 @property，@classmethod，@staticmethod 和 super 的底层实现机制。</li>
+            <p>＃ 不可变对象<br>基本类型的不可变对象，对它进行运算操作其实就是创建新的对象，然后将原先的变量名绑定到新的对象上</p>
+<ol>
+<li>值传递</li>
+<li>引用传递</li>
 </ol>
-<h2 id="描述符方法"><a href="#描述符方法" class="headerlink" title="描述符方法"></a>描述符方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">__get__(self, instance, owner)</span><br><span class="line">__set__(self, instance, value)</span><br><span class="line">__delete__(self, instance)</span><br></pre></td></tr></table></figure>
-<h3 id="1-使用类方法创建描述符"><a href="#1-使用类方法创建描述符" class="headerlink" title="1. 使用类方法创建描述符"></a>1. 使用类方法创建描述符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Descriptor(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self._name = &apos;&apos;</span><br><span class="line"></span><br><span class="line">    def __get__(self, instance, owner):</span><br><span class="line">        print(&quot;Getting: %s&quot; % self._name)</span><br><span class="line">        return self._name</span><br><span class="line"></span><br><span class="line">    def __set__(self, instance, name):</span><br><span class="line">        print(&quot;Setting: %s&quot; % name)</span><br><span class="line">        self._name = name.title()</span><br><span class="line"></span><br><span class="line">    def __delete__(self, instance):</span><br><span class="line">        print(&quot;Deleting: %s&quot; %self._name)</span><br><span class="line">        del self._name</span><br><span class="line"> </span><br><span class="line">class Person(object):</span><br><span class="line">    name = Descriptor()</span><br></pre></td></tr></table></figure>
-<h3 id="2-使用属性类型创建描述符"><a href="#2-使用属性类型创建描述符" class="headerlink" title="2. 使用属性类型创建描述符"></a>2. 使用属性类型创建描述符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Person(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self._name = &apos;&apos;</span><br><span class="line"></span><br><span class="line">    def fget(self):</span><br><span class="line">        print(&quot;Getting: %s&quot; % self._name)</span><br><span class="line">        return self._name</span><br><span class="line"></span><br><span class="line">    def fset(self, value):</span><br><span class="line">        print(&quot;Setting: %s&quot; % value)</span><br><span class="line">        self._name = value.title()</span><br><span class="line"></span><br><span class="line">    def fdel(self):</span><br><span class="line">        print(&quot;Deleting: %s&quot; %self._name)</span><br><span class="line">        del self._name</span><br><span class="line"></span><br><span class="line">    # property() 的语法是 property(fget=None, fset=None, fdel=None, doc=None)</span><br><span class="line">    name = property(fget, fset, fdel, &quot;I&apos;m the property.&quot;)</span><br></pre></td></tr></table></figure>
-<h3 id="3-使用属性修饰符（proprty）创建描述符"><a href="#3-使用属性修饰符（proprty）创建描述符" class="headerlink" title="3. 使用属性修饰符（proprty）创建描述符"></a>3. 使用属性修饰符（proprty）创建描述符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Person(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self._name = &apos;&apos;</span><br><span class="line"></span><br><span class="line">    @property</span><br><span class="line">    def name(self):</span><br><span class="line">        print &quot;Getting: %s&quot; % self._name</span><br><span class="line">        return self._name</span><br><span class="line"></span><br><span class="line">    @name.setter</span><br><span class="line">    def name(self, value):</span><br><span class="line">        print &quot;Setting: %s&quot; % value</span><br><span class="line">        self._name = value.title()</span><br><span class="line"></span><br><span class="line">    @name.deleter</span><br><span class="line">    def name(self):</span><br><span class="line">        print &quot;&gt;Deleting: %s&quot; % self._name</span><br><span class="line">        del self._name</span><br></pre></td></tr></table></figure>
-<h2 id="staticMethod-原理"><a href="#staticMethod-原理" class="headerlink" title="staticMethod 原理"></a>staticMethod 原理</h2><p>@staticmethod : when this method is called, we don’t pass an instance of the class to it (as we normally do with methods). This means you can put a function inside a class but you can’t access the instance of that class (this is useful when your method does not use the instance).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class StaticMethod(object):</span><br><span class="line">    def __init__(self, f):</span><br><span class="line">        self.f = f</span><br><span class="line">    </span><br><span class="line">    def __get__(self, obj, objtype=None):</span><br><span class="line">        return self.f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class E(object):</span><br><span class="line">    @StaticMethod</span><br><span class="line">    def f( x):</span><br><span class="line">        return x</span><br><span class="line">        </span><br><span class="line">print(E.f(&apos;staticMethod Test&apos;))</span><br><span class="line">ee = E()</span><br><span class="line">print(ee.f(&apos;ee static&apos;))</span><br></pre></td></tr></table></figure></p>
-<h2 id="classmethod-原理"><a href="#classmethod-原理" class="headerlink" title="classmethod 原理"></a>classmethod 原理</h2><p>A class method receives the class as implicit first argument, just like an instance method receives the instance. To declare a class method, use this idiom.<br>A class method can be called either on the class (such as C.f()) or on an instance (such as C().f()). The instance is ignored except for its class. If a class method is called for a derived class, the derived class object is passed as the implied first argument.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class ClassMethod(object):</span><br><span class="line">    def __init__(self, f):</span><br><span class="line">        self.f = f</span><br><span class="line">    </span><br><span class="line">    def __get__(self, obj, owner=None):</span><br><span class="line">        if owner is None:</span><br><span class="line">            owner = type(obj)</span><br><span class="line">        </span><br><span class="line">        def newfunc(*args):</span><br><span class="line">            return self.f(owner, *args)</span><br><span class="line">        </span><br><span class="line">        return newfunc</span><br><span class="line"></span><br><span class="line">class E(object):</span><br><span class="line">    name = &apos;name&apos;</span><br><span class="line">    @ClassMethod</span><br><span class="line">    def f(cls,x):</span><br><span class="line">        return x + cls.name</span><br><span class="line"></span><br><span class="line">print(E.f(&apos;classMethod Test&apos;))</span><br></pre></td></tr></table></figure></p>
-<p>参考:<br><a href="https://www.ibm.com/developerworks/cn/opensource/os-pythondescriptors/index.html" target="_blank" rel="noopener">Python 描述符简介</a><br><a href="https://zhuanlan.zhihu.com/p/42485483" target="_blank" rel="noopener">Python 描述符(Descriptor) 附实例</a><br><a href="https://juejin.im/post/5cc4fbc0f265da0380437706" target="_blank" rel="noopener">【案例讲解】Python为什么要使用描述符？</a><br><a href="https://www.cnblogs.com/chenyangyao/p/python_descriptor.html" target="_blank" rel="noopener">python描述符(descriptor)、属性(property)、函数（类）装饰器(decorator )原理实例详解</a><br><a href="https://segmentfault.com/a/1190000013425128" target="_blank" rel="noopener">python装饰器、描述符模拟源码实现</a></p>
+<p>＃ 可变对象</p>
+<ol>
+<li><p>值传递：将实参的值完全复制一份给形参，改变形参的值并不会影响外部实参的值。<br>这种方式对于可变对象比较少见，因为对复杂类型的参数进行完全复制，会付出额外的空间与时间代价。<br>php中数组，会将数组完全复制一份进行传递。</p>
+</li>
+<li><p>引用传递：将实参的引用给形参，两个变量指向同一个对象，即引用传递<br>特征：对于变量的成员进行修改时，会直接影响原变量；而如果对传递过来的变量进行重新赋值，则不会影响原变量，并且此后再修改变量的成员，也不会影响原变量。<br>大多数编程语言都采用这种方式传递复杂类型的参数。</p>
+</li>
+<li><p>指针传递（实际上也是值传递）：此时指针的值是另一个变量的地址<br>特征：无论是对于变量成员的修改，还是对变量重新赋值，都会影响到原对象。<br>php／JAVA 中的 &amp; ，使两个变量实际上使用了同一个变量容器（又名： zval ）</p>
+</li>
+</ol>
+<h1 id="不同语言"><a href="#不同语言" class="headerlink" title="不同语言"></a>不同语言</h1><ol>
+<li>Python中只有引用传递</li>
+<li>PHP有如上面所说的特点</li>
+<li>javascript</li>
+<li>JAVA中只有值传递</li>
+</ol>
 
           
         
@@ -2408,7 +2389,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-count">89</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
