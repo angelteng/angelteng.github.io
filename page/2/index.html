@@ -229,6 +229,215 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/30/Spring-Boot初探/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/07/30/Spring-Boot初探/" itemprop="url">Spring Boot初探</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-30T15:54:58+08:00">
+                2019-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ol>
+<li>Spring是一个生态体系（也可以说是技术体系），是集大成者，它包含了Spring Framework、Spring Boot、Spring Cloud等（还包括Spring Cloud data flow、spring data、spring integration、spring batch、spring security、spring hateoas）。</li>
+<li>Spring Framework是整个Spring生态的基石。Spring官方对Spring Framework简短描述：为依赖注入、事务管理、WEB应用、数据访问等提供了核心的支持。</li>
+<li>SpringMVC是基于Spring的一个MVC框架，用以替代初期的SSH框架。 Spring Framework本身没有Web功能，Spring MVC使用了WebApplicationContext类扩展ApplicationContext，使得拥有Web功能。</li>
+<li>Spring Boot是基于Spring全家桶的一套快速开发整合包。以前的Java Web开发模式：Tomcat + WAR包。WEB项目基于Spring framework，项目目录一定要是标准的WEB-INF + classes + lib，而且大量的xml配置。Spring Boot为快速启动且最小化配置的spring应用而设计，并且它具有用于构建生产级别应用的一套固化的视图（约定）。</li>
+<li>Spring Cloud事实上是一整套基于Spring Boot的微服务解决方案。它为开发者提供了很多工具，用于快速构建分布式系统的一些通用模式，例如：配置管理、注册中心、服务发现、限流、网关、链路追踪等。</li>
+</ol>
+<h1 id="跟着文档开始"><a href="#跟着文档开始" class="headerlink" title="跟着文档开始"></a>跟着文档开始</h1><p>基于Maven进行依赖包管理</p>
+<ol>
+<li><p>创建一个pom.xml，用于管理项目的依赖<br>spring-boot-starter-parent是一个特殊的启动器，提供有用的Maven默认值。<br>使用 mvn dependency:tree 可以打印项目的依赖项树形结构</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>myproject<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    // 配置依赖性   </span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    // 打包配置</span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>来一个Hello World</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.boot.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Example</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/"</span>)</span><br><span class="line">    <span class="function">String <span class="title">home</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello World!"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SpringApplication.run(Example.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>@RestController 是一个构造性注释，代表这是一个Controller类</li>
+<li>@RequestMapping 是一个路由注释</li>
+<li>上面这两个注释都是基于Spring MVC</li>
+<li>@EnableAutoConfiguration 注释告诉Spring Boot根据你添加的jar依赖关系“猜测”你想要如何配置Spring。由于spring-boot-starter-web添加了Tomcat和Spring MVC，因此自动配置假定您正在开发Web应用程序并相应地设置Spring。</li>
+</ul>
+<ol start="3">
+<li>运行<br>利用IDE 的 “RUN”， 活着 mvn spring-boot:run，可以看到启动了嵌入了Tomcat服务器在8080端口。</li>
+<li>打包<br>在pom.xml配置了build配置项后，运行mvn package会在target目录打包出一个可执行文件myproject-0.0.1-SNAPSHOT.jar跟一个myproject-0.0.1-SNAPSHOT.jar.original小文件。通过以下命令可以直接运行这个jar包。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar target/myproject-0.0.1-SNAPSHOT.jar</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="Spring-Boot的使用"><a href="#Spring-Boot的使用" class="headerlink" title="Spring Boot的使用"></a>Spring Boot的使用</h1><ol>
+<li>Starters是一组方便的依赖描述符，您可以在应用程序中包含这些描述符。您可以获得所需的所有Spring和相关技术的一站式服务。通常以 spring-boot-starter-* 命名。Starters列表可以参考文档。</li>
+<li><p>构建代码</p>
+<ul>
+<li>package命名</li>
+<li>@SpringBootApplication 放在主类</li>
+</ul>
+</li>
+<li><p>使用@SpringBootApplication Annotation</p>
+<ul>
+<li>@EnableAutoConfiguration：启用Spring Boot的自动配置机制</li>
+<li>@ComponentScan：对应用程序所在的软件包启用@Component扫描</li>
+<li>@Configuration：允许在上下文中注册额外的beans或导入其他配置类</li>
+</ul>
+</li>
+<li>@SpringBootApplication注释等效于使用@Configuration、@EnableAutoConfiguration、@ComponentScan及其默认属性。</li>
+</ol>
+<h1 id="Spring-Boot注解"><a href="#Spring-Boot注解" class="headerlink" title="Spring Boot注解"></a>Spring Boot注解</h1><ol>
+<li>@Configuration 等同于spring的XML配置文件；使用Java代码可以检查类型安全。</li>
+<li>@EnableAutoConfiguration 自动配置。</li>
+<li>@ComponentScan 组件扫描，可自动发现和装配一些Bean。</li>
+<li>@Component可配合CommandLineRunner使用，在程序启动后执行一些基础任务。</li>
+<li>@RestController注解是@Controller和@ResponseBody的合集,表示这是个控制器bean,并且是将函数的返回值直 接填入HTTP响应体中,是REST风格的控制器。</li>
+<li>@Autowired自动导入。</li>
+<li>@PathVariable获取参数。</li>
+<li>@JsonBackReference解决嵌套外链问题。</li>
+<li>@RepositoryRestResourcepublic配合spring-boot-starter-data-rest使用。</li>
+<li>@Import：用来导入其他配置类。</li>
+<li>@ImportResource：用来加载xml配置文件。</li>
+<li>@Service：一般用于修饰service层的组件。</li>
+<li>@Repository：使用@Repository注解可以确保DAO或者repositories提供异常转译，这个注解修饰的DAO或者repositories类会被ComponetScan发现并配置，同时也不需要为它们提供XML配置项。</li>
+<li>@Bean：用@Bean标注方法等价于XML中配置的bean。</li>
+<li>@Value：注入Spring boot application.properties配置的属性的值</li>
+<li>@Inject：等价于默认的@Autowired，只是没有required属性；</li>
+<li>@Qualifier：当有多个同一类型的Bean时，可以用@Qualifier(“name”)来指定。与@Autowired配合使用。@Qualifier限定描述符除了能根据名字进行注入，但能进行更细粒度的控制如何选择候选者。</li>
+<li>@Resource(name=”name”,type=”type”)：没有括号内内容的话，默认byName。与@Autowired干类似的事。</li>
+</ol>
+<h2 id="JPA注解"><a href="#JPA注解" class="headerlink" title="JPA注解"></a>JPA注解</h2><ol>
+<li>@Entity：@Table(name=”“)：表明这是一个实体类。一般用于jpa这两个注解一般一块使用，但是如果表名和实体类名相同的话，@Table可以省略</li>
+<li>@MappedSuperClass:用在确定是父类的entity上。父类的属性子类可以继承。</li>
+<li>@NoRepositoryBean:一般用作父类的repository，有这个注解，spring不会去实例化该repository。</li>
+<li>@Column：如果字段名与列名相同，则可以省略。</li>
+<li>@Id：表示该属性为主键。</li>
+<li>@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = “repair_seq”)：表示主键生成策略是sequence（可以为Auto、IDENTITY、native等，Auto表示可在多个数据库间切换），指定sequence的名字是repair_seq。</li>
+<li>@SequenceGeneretor(name = “repair_seq”, sequenceName = “seq_repair”, allocationSize = 1)：name为sequence的名称，以便使用，sequenceName为数据库的sequence名称，两个名称可以一致。</li>
+<li>@Transient：表示该属性并非一个到数据库表的字段的映射,ORM框架将忽略该属性。如果一个属性并非数据库表的字段映射,就务必将其标示为@Transient,否则,ORM框架默认其注解为@Basic。@Basic(fetch=FetchType.LAZY)：标记可以指定实体属性的加载方式</li>
+<li>@JsonIgnore：作用是json序列化时将Java bean中的一些属性忽略掉,序列化和反序列化都受影响。</li>
+<li>@JoinColumn（name=”loginId”）:一对一：本表中指向另一个表的外键。一对多：另一个表指向本表的外键。</li>
+<li>@OneToOne、@OneToMany、@ManyToOne：对应hibernate配置文件中的一对一，一对多，多对一。</li>
+</ol>
+<h2 id="SpringMVC注解"><a href="#SpringMVC注解" class="headerlink" title="SpringMVC注解"></a>SpringMVC注解</h2><ol>
+<li>@RequestMapping：@RequestMapping(“/path”)表示该控制器处理所有“/path”的UR L请求。RequestMapping是一个用来处理请求地址映射的注解，可用于类或方法上。 </li>
+<li><p>@RequestParam：用在方法的参数前面。 </p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestParam</span> </span><br><span class="line">String a =request.getParameter(“a”)。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>@PathVariable:路径变量。</p>
+</li>
+</ol>
+<h2 id="异常注解"><a href="#异常注解" class="headerlink" title="异常注解"></a>异常注解</h2><ol>
+<li>@ControllerAdvice：包含@Component。可以被扫描到。统一处理异常。</li>
+<li>@ExceptionHandler（Exception.class）：用在方法上面表示遇到这个异常就执行以下方法。</li>
+</ol>
+<p>参考：<br><a href="https://springcloud.cc/spring-boot.html#using-boot-structuring-your-code" target="_blank" rel="noopener">Spring Boot 中文文档</a><br><a href="https://blog.csdn.net/weixin_44175121/article/details/90297426" target="_blank" rel="noopener">面试官问我：spring、springboot、springcloud的区别，我笑了</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/25/Flask源码学习/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2198,145 +2407,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/" itemprop="url">值传递？引用传递？傻傻分不清楚</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-22T22:26:27+08:00">
-                2019-06-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>＃ 不可变对象<br>基本类型的不可变对象，对它进行运算操作其实就是创建新的对象，然后将原先的变量名绑定到新的对象上</p>
-<ol>
-<li>值传递</li>
-<li>引用传递</li>
-</ol>
-<p>＃ 可变对象</p>
-<ol>
-<li><p>值传递：将实参的值完全复制一份给形参，改变形参的值并不会影响外部实参的值。<br>这种方式对于可变对象比较少见，因为对复杂类型的参数进行完全复制，会付出额外的空间与时间代价。<br>php中数组，会将数组完全复制一份进行传递。</p>
-</li>
-<li><p>引用传递：将实参的引用给形参，两个变量指向同一个对象，即引用传递<br>特征：对于变量的成员进行修改时，会直接影响原变量；而如果对传递过来的变量进行重新赋值，则不会影响原变量，并且此后再修改变量的成员，也不会影响原变量。<br>大多数编程语言都采用这种方式传递复杂类型的参数。</p>
-</li>
-<li><p>指针传递（实际上也是值传递）：此时指针的值是另一个变量的地址<br>特征：无论是对于变量成员的修改，还是对变量重新赋值，都会影响到原对象。<br>php／JAVA 中的 &amp; ，使两个变量实际上使用了同一个变量容器（又名： zval ）</p>
-</li>
-</ol>
-<h1 id="不同语言"><a href="#不同语言" class="headerlink" title="不同语言"></a>不同语言</h1><ol>
-<li>Python中只有引用传递</li>
-<li>PHP有如上面所说的特点</li>
-<li>javascript</li>
-<li>JAVA中只有值传递</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2389,7 +2459,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">89</span>
+                  <span class="site-state-item-count">90</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

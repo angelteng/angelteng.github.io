@@ -229,6 +229,167 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/Nginx-工作原理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/04/24/Nginx-工作原理/" itemprop="url">Nginx 工作原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T15:49:01+08:00">
+                2019-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/服务器/" itemprop="url" rel="index">
+                    <span itemprop="name">服务器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Nginx-模块结构"><a href="#Nginx-模块结构" class="headerlink" title="Nginx 模块结构"></a>Nginx 模块结构</h1><p><img src="0.png" alt="image.png"></p>
+<h1 id="Nginx-工作流程"><a href="#Nginx-工作流程" class="headerlink" title="Nginx 工作流程"></a>Nginx 工作流程</h1><p>Nginx的IO通常使用epoll，epoll函数使用了I/O复用模型。</p>
+<ol>
+<li>master进程一开始根据配置，来建立需要listen的网络socket fd，然后fork出多个worker进程。根据进程的特性，新建立的worker进程，也会和master进程一样，具有相同的设置。因此，其也会去监听相同ip端口的套接字socket fd。</li>
+<li>当一个请求进来的时候，所有的worker都会感知到。这样就会产生所谓的“惊群现象”。为了保证只会有一个进程成功注册到listenfd的读事件，nginx中实现了一个“accept_mutex”类似互斥锁，只有获取到这个锁的进程，才可以去注册读事件。其他进程全部accept 失败。</li>
+<li>监听成功的worker进程，读取请求，解析处理，响应数据返回给客户端，断开连接。即nginx用一个独立的worker进程来处理一个请求，一个worker进程可以处理多个请求。<br>因此，一个请求，完全由worker进程来处理，而且只在一个worker进程中处理。采用这种方式的好处：<ul>
+<li>节省锁带来的开销。对于每个worker进程来说，独立的进程，不需要加锁，所以省掉了锁带来的开销，同时在编程以及问题查上时，也会方便很多。</li>
+<li>独立进程，减少风险。</li>
+<li>采用独立的进程，可以让互相之间不会影响，一个进程退出后，其它进程还在工作，服务不会中断，master进程则很快重新启动新的worker进程。</li>
+<li>在一次请求里无需进程切换。</li>
+</ul>
+</li>
+</ol>
+<h1 id="Nginx的配置"><a href="#Nginx的配置" class="headerlink" title="Nginx的配置"></a>Nginx的配置</h1><ul>
+<li>worker_processes：worker角色的进程个数</li>
+<li>worker_connections：每一个worker进程能并发处理（发起）的最大连接数（包含所有连接数）</li>
+<li>Nginx作为http服务器的时候：max_clients（最大连接数） = worker_processes * worker_connections</li>
+<li>Nginx作为反向代理服务器的时候：max_clients（最大连接数） = worker_processes * worker_connections/4 （/4原因：因为浏览器默认会开启2个连接到nginx server，而且nginx还会为每个连接使用fds（file descriptor）从连接池建立connection到upstream后端。）</li>
+</ul>
+<p>参考：<br><a href="https://zhuanlan.zhihu.com/p/31196264" target="_blank" rel="noopener">nginx快速入门之基本原理篇</a><br><a href="https://www.jianshu.com/p/6215e5d24553" target="_blank" rel="noopener">理解Nginx工作原理</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/04/24/I-O操作模式/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1710,165 +1871,6 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/29/Nginx通讯机制/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/29/Nginx通讯机制/" itemprop="url">Nginx通讯机制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-29T10:24:13+08:00">
-                2019-01-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/服务器/" itemprop="url" rel="index">
-                    <span itemprop="name">服务器</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="PHP-FPM与Nginx通讯机制"><a href="#PHP-FPM与Nginx通讯机制" class="headerlink" title="PHP-FPM与Nginx通讯机制"></a>PHP-FPM与Nginx通讯机制</h1><h2 id="CGI协议"><a href="#CGI协议" class="headerlink" title="CGI协议"></a>CGI协议</h2><ol>
-<li>通用网关接口（Common Gateway Interface/CGI），CGI描述了服务器和请求处理程序之间传输数据的一种标准。</li>
-<li>Common：比如Java的Servlet，Python的WSGI，理论上来说，所有支持标准输出，支持获取环境变量的编程语言都能用来编写CGI程序。</li>
-<li>Gateway：“协议翻译机”，通常与网关输入输出两端通信使用的是不同的协议。即一方是HTTP协议，另一方可能是其他协议，比如企业内部的自定义协议。CGI程序既是如此。</li>
-<li>Interface：CGI其实是构架在HTTP协议之上的。它描述的是另一个维度的共识标准。<br><img src="0.png" alt="CGI协议"></li>
-</ol>
-<h2 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h2><p>由于 CGI 的机制是每处理一个请求需要 fork 一个 CGI 进程，请求结束再kill掉这个进程，在实际应用上比较浪费资源，于是就出现了CGI 的改良版本 FastCGI，FastCGI 在请求处理完后，不会 kill 掉进程，而是继续处理多个请求，这样就大大提高了效率。</p>
-<h2 id="PHP-FPM"><a href="#PHP-FPM" class="headerlink" title="PHP-FPM"></a>PHP-FPM</h2><p>PHP-FPM 即 PHP-FastCGI Process Manager， 它是 FastCGI 的实现，并提供了进程管理的功能。进程包含 master 进程和 worker 进程两种；master 进程只有一个，负责监听端口，接收来自服务器的请求，而 worker 进程则一般有多个（具体数量根据实际需要进行配置），每个进程内部都会嵌入一个 PHP 解释器，是代码真正执行的地方。<br><img src="1.png" alt="PHP-FPM"></p>
-<p><a href="https://segmentfault.com/a/1190000018048956" target="_blank" rel="noopener">参考</a></p>
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p><img src="2.png" alt="uwsgi"></p>
-<ol>
-<li>WSGI: 它是用在 python web 框架编写的应用程序与web服务器之间的规范。它使得Web App可以与Web Server顺利通信。所有使用 WSGI 的服务器都可以运行使用 WSGI 规范的web 框架。它规定WSGI application应该实现为一个可调用对象。</li>
-<li>uWSGI: uWSGI: 是一个Web服务器(WSGI容器），它实现了WSGI协议、uwsgi、http等协议。用于接收前端服务器转发的动态请求并处理后发给 web 应用程序。</li>
-<li>uwsgi: uwsgi是uWSGI服务器实现的独有的协议。</li>
-</ol>
-<h2 id="FLASK"><a href="#FLASK" class="headerlink" title="FLASK"></a>FLASK</h2><p>Flask是一个web框架，而且Flask是基于werkzeug开发的，那werkzeug是什么呢？</p>
-<p>Werkzeug是一个WSGI工具包，他可以作为一个Web框架的底层库。werkzeug 不是一个web服务器，也不是一个web框架，而是一个工具包，官方的介绍说是一个 WSGI 工具包，它可以作为一个 Web 框架的底层库，因为它封装好了很多 Web 框架的东西，例如 Request，Response 等等。使用它可以减轻web框架开发工作量。我看过werkzeug的源码后发现，werkzeug也实现了WSGI容器的功能，而且利用python/http/server.py库实现了一个简易的http服务器。因此在调试的时候可以直接使用app.run()把服务器给运行起来。</p>
-<p><a href="https://blog.csdn.net/sodawaterer/article/details/71497086" target="_blank" rel="noopener">参考</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1921,7 +1923,7 @@ Note that socketio.send() and socketio.emit() are not the same functions as the 
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">89</span>
+                  <span class="site-state-item-count">90</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

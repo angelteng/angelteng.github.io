@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/1.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png">
-<meta property="og:updated_time" content="2020-04-14T08:57:31.000Z">
+<meta property="og:updated_time" content="2020-04-14T09:16:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《MYSQL实战45讲》笔记">
 <meta name="twitter:description" content="基本 基本架构  ￼ Mysql长链接使内存使用涨得快： 定期断开长连接。 如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。     WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序">
@@ -314,7 +314,7 @@
 </ul>
 </li>
 </ol>
-<ol start="9">
+<ol start="3">
 <li><p>WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。</p>
 </li>
 <li><p>change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。</p>
@@ -577,6 +577,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/blog/2020/04/16/asyncore实现异步rpc/" rel="prev" title="asyncore实现异步rpc">
+                asyncore实现异步rpc <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -654,7 +658,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">89</span>
+                  <span class="site-state-item-count">90</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
