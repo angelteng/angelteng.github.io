@@ -229,6 +229,285 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2020/04/21/《趣谈网路协议》笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2020/04/21/《趣谈网路协议》笔记/" itemprop="url">《趣谈网路协议》笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-21T11:33:16+08:00">
+                2020-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><ol>
+<li>概览<img src="/blog/2020/04/21/《趣谈网路协议》笔记/0.jpg"></li>
+<li>只要是在网络上跑的包，都是完整的。可以有下层没上层，绝对不可能有上层没下层。</li>
+<li>IP 是地址，有定位功能；MAC 是身份证，无定位功能，从硬件角度，保证不同的网卡有不同的标识，通信范围局限在一个子网。</li>
+<li>在 IP 地址的后面有个 scope，对于 eth0 这张网卡来讲，是 global，说明这张网卡是可以对外的，可以接收来自各个地方的包。对于 lo 来讲，是 host，说明这张网卡仅仅可以供本机相互通信。</li>
+<li>DHCP 协议主要是用来给客户租用 IP 地址，和房产中介很像，要商谈、签约、续租，广播还不能“抢单”；DHCP 协议能给客户推荐“装修队”PXE，能够安装操作系统，这个在云计算领域大有用处。</li>
+</ol>
+<h1 id="底层网络协议"><a href="#底层网络协议" class="headerlink" title="底层网络协议"></a>底层网络协议</h1><ol>
+<li>MAC 层是用来解决多路访问的堵车问题的；</li>
+<li>ARP 是通过广播的方式来寻找目标 MAC 地址的，广播完之后记住一段时间，这个叫作缓存；</li>
+<li>交换机是有 MAC 地址学习能力的，结果记录在转发表。</li>
+<li>如果 MAC 层定义了本地局域网的传输行为，IP 层定义了整个网络端到端的传输行为，这两层基本定义了这样的基因：网络传输是以包为单位的，二层叫帧，网络层叫包，传输层叫段。我们笼统地称为包。包单独传输，自行选路，在不同的设备封装解封装，不保证到达。基于这个基因，生下来的孩子 UDP 完全继承了这些特性，几乎没有自己的思想。<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2></li>
+<li>三次握手<img src="/blog/2020/04/21/《趣谈网路协议》笔记/1.jpg"></li>
+<li>四次挥手<img src="/blog/2020/04/21/《趣谈网路协议》笔记/2.jpg">
+等待的时间设为 2MSL，MSL 是 Maximum Segment Lifetime，报文最大生存时间</li>
+<li>TCP 协议使用的也是同样的模式。为了保证顺序性，每一个包都有一个 ID。在建立连接的时候，会商定起始的 ID 是什么，然后按照 ID 一个个发送。为了保证不丢包，对于发送的包都要进行应答，但是这个应答也不是一个一个来的，而是会应答某个之前的 ID，表示都收到了，这种模式称为累计确认或者累计应答（cumulative acknowledgment）。</li>
+<li>发送端缓存：<img src="/blog/2020/04/21/《趣谈网路协议》笔记/3.jpg"></li>
+<li>接收端缓存<img src="/blog/2020/04/21/《趣谈网路协议》笔记/4.jpg"></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2020/04/20/如何实现一个异步io框架/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2020/04/20/如何实现一个异步io框架/" itemprop="url">如何实现一个异步io框架</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-20T11:42:34+08:00">
+                2020-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="网卡接收到数据以后"><a href="#网卡接收到数据以后" class="headerlink" title="网卡接收到数据以后"></a>网卡接收到数据以后</h1><h2 id="网卡的基础知识"><a href="#网卡的基础知识" class="headerlink" title="网卡的基础知识"></a>网卡的基础知识</h2><p>网卡本身是有内存的，每个网卡一般都有4k以上的内存，用来发送、接受数据。数据从主内存搬到网卡之后，不是立即就能被发送出去的，而是要先在网卡自身的内存中排队，再按先后顺序发送，同样的，数据从以太网传递到网卡时，网卡也是先把数据存储到自身的内存中，等到收到一帧数据了，再经过中断的方式，告诉CPU把网卡内存的数据读走（现在网卡大都支持DMA方式直接从网卡内存拷贝被内核内存），而读走后的内存，又被清空，再次被用来接收新的数据。</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>数据包从外面的网络进入物理网卡。如果目的地址不是该网卡，且该网卡没有开启混杂模式，该包会被网卡丢弃。</li>
+<li>网卡将数据包通过DMA的方式写入到指定的内存地址，该地址由网卡驱动分配并初始化。</li>
+<li>网卡通过硬件中断（IRQ）通知CPU，告诉它有数据来了</li>
+<li>CPU根据中断表，调用已经注册的中断函数，这个中断函数会调到驱动程序（NIC Driver）中相应的函数</li>
+<li>驱动先禁用网卡的中断，表示驱动程序已经知道内存中有数据了，告诉网卡下次再收到数据包直接写内存就可以了，不要再通知CPU了，这样可以提高效率，避免CPU不停的被中断。</li>
+<li>启动软中断。这步结束后，硬件中断处理函数就结束返回了。由于硬中断处理程序执行的过程中不能被中断，所以如果它执行时间过长，会导致CPU没法响应其它硬件的中断，于是内核引入软中断，这样可以将硬中断处理函数中耗时的部分移到软中断处理函数里面来慢慢处理。</li>
+<li>经过TCP/IP协议逐层处理。</li>
+<li>应用程序通过read()从socket buffer读取数据。</li>
+</ol>
+<h1 id="socket详细流程"><a href="#socket详细流程" class="headerlink" title="socket详细流程"></a>socket详细流程</h1><h2 id="tcp三次握手"><a href="#tcp三次握手" class="headerlink" title="tcp三次握手"></a>tcp三次握手</h2><h2 id="setblocking"><a href="#setblocking" class="headerlink" title="setblocking"></a>setblocking</h2><h2 id="backlog"><a href="#backlog" class="headerlink" title="backlog"></a>backlog</h2><h2 id="syn，accept队列"><a href="#syn，accept队列" class="headerlink" title="syn，accept队列"></a>syn，accept队列</h2><h2 id="accept（）创建新套接字"><a href="#accept（）创建新套接字" class="headerlink" title="accept（）创建新套接字"></a>accept（）创建新套接字</h2><h2 id="协议栈是什么"><a href="#协议栈是什么" class="headerlink" title="协议栈是什么"></a>协议栈是什么</h2><h2 id="粘包是个伪命题"><a href="#粘包是个伪命题" class="headerlink" title="粘包是个伪命题"></a>粘包是个伪命题</h2><h2 id="buffer缓冲区大小"><a href="#buffer缓冲区大小" class="headerlink" title="buffer缓冲区大小"></a>buffer缓冲区大小</h2><h1 id="IO阻塞本质"><a href="#IO阻塞本质" class="headerlink" title="IO阻塞本质"></a>IO阻塞本质</h1><h2 id="读缓存，写缓冲区"><a href="#读缓存，写缓冲区" class="headerlink" title="读缓存，写缓冲区"></a>读缓存，写缓冲区</h2><h2 id="send，recv原理"><a href="#send，recv原理" class="headerlink" title="send，recv原理"></a>send，recv原理</h2><h2 id="满加锁，空解锁"><a href="#满加锁，空解锁" class="headerlink" title="满加锁，空解锁"></a>满加锁，空解锁</h2><h2 id="tcp-ack滑动窗口"><a href="#tcp-ack滑动窗口" class="headerlink" title="tcp ack滑动窗口"></a>tcp ack滑动窗口</h2><h2 id="如何确定recv结构是完整的"><a href="#如何确定recv结构是完整的" class="headerlink" title="如何确定recv结构是完整的"></a>如何确定recv结构是完整的</h2><h2 id="长链接、短连接区别"><a href="#长链接、短连接区别" class="headerlink" title="长链接、短连接区别"></a>长链接、短连接区别</h2><h2 id="socket维护长短连接手段"><a href="#socket维护长短连接手段" class="headerlink" title="socket维护长短连接手段"></a>socket维护长短连接手段</h2><h2 id="keepalive心跳包谁维护"><a href="#keepalive心跳包谁维护" class="headerlink" title="keepalive心跳包谁维护"></a>keepalive心跳包谁维护</h2><h1 id="高并发模型"><a href="#高并发模型" class="headerlink" title="高并发模型"></a>高并发模型</h1><h2 id="fork模型"><a href="#fork模型" class="headerlink" title="fork模型"></a>fork模型</h2><h2 id="进程池-线程池模型"><a href="#进程池-线程池模型" class="headerlink" title="进程池/线程池模型"></a>进程池/线程池模型</h2><h2 id="io复用模型"><a href="#io复用模型" class="headerlink" title="io复用模型"></a>io复用模型</h2><h2 id="惊群、饥饿"><a href="#惊群、饥饿" class="headerlink" title="惊群、饥饿"></a>惊群、饥饿</h2><h1 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h1><h2 id="什么是上下文"><a href="#什么是上下文" class="headerlink" title="什么是上下文"></a>什么是上下文</h2><h2 id="什么是上下文切换"><a href="#什么是上下文切换" class="headerlink" title="什么是上下文切换"></a>什么是上下文切换</h2><h2 id="为什么要上下文切换"><a href="#为什么要上下文切换" class="headerlink" title="为什么要上下文切换"></a>为什么要上下文切换</h2><h2 id="什么时候会上下文切换"><a href="#什么时候会上下文切换" class="headerlink" title="什么时候会上下文切换"></a>什么时候会上下文切换</h2><h1 id="执行单元"><a href="#执行单元" class="headerlink" title="执行单元"></a>执行单元</h1><h2 id="进程、线程、协程"><a href="#进程、线程、协程" class="headerlink" title="进程、线程、协程"></a>进程、线程、协程</h2><h2 id="堆、栈"><a href="#堆、栈" class="headerlink" title="堆、栈"></a>堆、栈</h2><h2 id="抢占、协作"><a href="#抢占、协作" class="headerlink" title="抢占、协作"></a>抢占、协作</h2><h1 id="io"><a href="#io" class="headerlink" title="io"></a>io</h1><h2 id="同步、异步、阻塞、非阻塞"><a href="#同步、异步、阻塞、非阻塞" class="headerlink" title="同步、异步、阻塞、非阻塞"></a>同步、异步、阻塞、非阻塞</h2><h1 id="fd"><a href="#fd" class="headerlink" title="fd"></a>fd</h1><h2 id="一个线程如何管理多个fd"><a href="#一个线程如何管理多个fd" class="headerlink" title="一个线程如何管理多个fd"></a>一个线程如何管理多个fd</h2><h1 id="io多路复用"><a href="#io多路复用" class="headerlink" title="io多路复用"></a>io多路复用</h1><h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><h3 id="水平触发、边缘触发"><a href="#水平触发、边缘触发" class="headerlink" title="水平触发、边缘触发"></a>水平触发、边缘触发</h3><h1 id="跨平台"><a href="#跨平台" class="headerlink" title="跨平台"></a>跨平台</h1><h2 id="libevnet"><a href="#libevnet" class="headerlink" title="libevnet"></a>libevnet</h2><h2 id="libev"><a href="#libev" class="headerlink" title="libev"></a>libev</h2><h2 id="libuv"><a href="#libuv" class="headerlink" title="libuv"></a>libuv</h2><h1 id="调度器组成"><a href="#调度器组成" class="headerlink" title="调度器组成"></a>调度器组成</h1><ol>
+<li>eventLoop</li>
+<li>类生成器</li>
+<li>Fd生成器的关系</li>
+<li>信号处理</li>
+<li>文件属性变化</li>
+<li>Io可读可写</li>
+<li>定时器</li>
+<li>periodic</li>
+<li>timeout</li>
+</ol>
+<h1 id="prefork-epoll"><a href="#prefork-epoll" class="headerlink" title="prefork + epoll"></a>prefork + epoll</h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2020/04/16/asyncore实现异步rpc/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -302,6 +581,7 @@
           
             <p>SERVER 端<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> asyncore</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RPCHandler</span><span class="params">(asyncore.dispatcher_with_send)</span>:</span>  <span class="comment"># 客户套接字处理器必须继承 dispatcher_with_send</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, sock, addr)</span>:</span></span><br><span class="line">        asyncore.dispatcher_with_send.__init__(self, sock=sock)</span><br><span class="line">        self.addr = addr</span><br><span class="line">        self.handlers = &#123;</span><br><span class="line">            <span class="string">"ping"</span>: self.ping</span><br><span class="line">        &#125;</span><br><span class="line">        self.rbuf = BytesIO()  <span class="comment"># 读缓冲区由用户代码维护，写缓冲区由 asyncore 内部提供</span></span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_connect</span><span class="params">(self)</span>:</span>  <span class="comment"># 新的连接被 accept 后回调方法</span></span><br><span class="line">        print(self.addr, <span class="string">'comes'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_close</span><span class="params">(self)</span>:</span>  <span class="comment"># 连接关闭之前回调方法</span></span><br><span class="line">        print(self.addr, <span class="string">'bye'</span>)</span><br><span class="line">        self.close()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_read</span><span class="params">(self)</span>:</span>  <span class="comment"># 有读事件到来时回调方法</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            content = self.recv(<span class="number">2</span>)</span><br><span class="line">            <span class="comment"># print('read 2', content)</span></span><br><span class="line">            <span class="keyword">if</span> content:</span><br><span class="line">                self.rbuf.write(content)</span><br><span class="line">            <span class="keyword">if</span> len(content) &lt; <span class="number">1024</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        self.handle_rpc()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_rpc</span><span class="params">(self)</span>:</span>  <span class="comment"># 将读到的消息解包并处理</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:  <span class="comment"># 可能一次性收到了多个请求消息，所以需要循环处理</span></span><br><span class="line">            self.rbuf.seek(<span class="number">0</span>)</span><br><span class="line">            length_prefix = self.rbuf.read(<span class="number">4</span>)</span><br><span class="line">            <span class="keyword">if</span> len(length_prefix) &lt; <span class="number">4</span>:  <span class="comment"># 不足一个消息</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            length = int.from_bytes(length_prefix, byteorder=<span class="string">'big'</span>) </span><br><span class="line">            body = self.rbuf.read(length)</span><br><span class="line">            <span class="keyword">if</span> len(body) &lt; length:  <span class="comment"># 不足一个消息</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                request = json.loads(body.decode(<span class="string">"utf-8"</span>))</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            in_ = request[<span class="string">'in'</span>]</span><br><span class="line">            params = request[<span class="string">'params'</span>]</span><br><span class="line">            handler = self.handlers[in_]</span><br><span class="line">            handler(params)  <span class="comment"># 处理消息</span></span><br><span class="line">            left = self.rbuf.getvalue()[length + <span class="number">4</span>:]  <span class="comment"># 消息处理完了，缓冲区要截断</span></span><br><span class="line">            self.rbuf = BytesIO()</span><br><span class="line">            self.rbuf.write(left)</span><br><span class="line">        self.rbuf.seek(<span class="number">0</span>, <span class="number">2</span>)  <span class="comment"># 将游标挪到文件结尾，以便后续读到的内容直接追加</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ping</span><span class="params">(self, params)</span>:</span></span><br><span class="line">        self.send_result(<span class="string">"pong"</span>, params)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_result</span><span class="params">(self, out, result)</span>:</span></span><br><span class="line">        response = &#123;<span class="string">"out"</span>: out, <span class="string">"result"</span>: result&#125;</span><br><span class="line">        print(<span class="string">"out"</span>,response)</span><br><span class="line">        body = json.dumps(response).encode(<span class="string">"utf-8"</span>)</span><br><span class="line">        length_prefix = len(body).to_bytes(<span class="number">4</span>, byteorder=<span class="string">'big'</span>)</span><br><span class="line">        self.send(length_prefix)  <span class="comment"># 写入缓冲区</span></span><br><span class="line">        self.send(body)  <span class="comment"># 写入缓冲区</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RPCServer</span><span class="params">(asyncore.dispatcher)</span>:</span>  <span class="comment"># 服务器套接字处理器必须继承 dispatcher</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host, port)</span>:</span></span><br><span class="line">        asyncore.dispatcher.__init__(self)</span><br><span class="line">        self.create_socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        self.set_reuse_addr()</span><br><span class="line">        self.bind((host, port))</span><br><span class="line">        self.listen(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_accept</span><span class="params">(self)</span>:</span></span><br><span class="line">        pair = self.accept()</span><br><span class="line">        <span class="keyword">if</span> pair <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            sock, addr = pair</span><br><span class="line">            RPCHandler(sock, addr)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    RPCServer(<span class="string">"localhost"</span>, <span class="number">8080</span>)</span><br><span class="line">    asyncore.loop()</span><br></pre></td></tr></table></figure></p>
 <p>CLIENT 端<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys </span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clientSocket</span><span class="params">()</span>:</span></span><br><span class="line">        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        <span class="comment"># if sock &lt; 0:</span></span><br><span class="line">        <span class="comment">#         print('socket error')</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">                sock.connect((<span class="string">"127.0.0.1"</span>,<span class="number">8080</span>))</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">                print(<span class="string">"exception"</span>)</span><br><span class="line">                sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        message = &#123;<span class="string">"in"</span>:<span class="string">"ping"</span>,<span class="string">"params"</span>:<span class="string">"sha params"</span>&#125;</span><br><span class="line">        message = json.dumps(message).encode(<span class="string">'utf-8'</span>)</span><br><span class="line">        encode_bytes = len(message).to_bytes(<span class="number">4</span>, byteorder=<span class="string">'big'</span>) + message</span><br><span class="line">        sock.sendall(encode_bytes)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            data = sock.recv(<span class="number">100</span>)</span><br><span class="line">            print(<span class="string">'received "%s"'</span> %data)</span><br><span class="line"></span><br><span class="line">        sock.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">        clientSocket()</span><br></pre></td></tr></table></figure></p>
+<p>使用epoll实现<br>SERVER端<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> select</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建socket对象</span></span><br><span class="line">serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"><span class="comment">#设置IP地址复用</span></span><br><span class="line">serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</span><br><span class="line"><span class="comment">#ip地址和端口号</span></span><br><span class="line">server_address = (<span class="string">"127.0.0.1"</span>, <span class="number">8080</span>)</span><br><span class="line"><span class="comment">#绑定IP地址</span></span><br><span class="line">serversocket.bind(server_address)</span><br><span class="line"><span class="comment">#监听，并设置最大连接数</span></span><br><span class="line">serversocket.listen(<span class="number">10</span>)</span><br><span class="line">print(<span class="string">"服务器启动成功，监听IP："</span> , server_address)</span><br><span class="line"><span class="comment">#服务端设置非阻塞</span></span><br><span class="line">serversocket.setblocking(<span class="keyword">False</span>)  </span><br><span class="line"><span class="comment">#超时时间</span></span><br><span class="line">timeout = <span class="number">10</span></span><br><span class="line"><span class="comment">#创建epoll事件对象，后续要监控的事件添加到其中</span></span><br><span class="line">epoll = select.epoll()</span><br><span class="line"><span class="comment">#注册服务器监听fd到等待读事件集合</span></span><br><span class="line">epoll.register(serversocket.fileno(), select.EPOLLIN)</span><br><span class="line"><span class="comment">#保存连接客户端消息的字典，格式为&#123;&#125;</span></span><br><span class="line">message_queues = &#123;&#125;</span><br><span class="line"><span class="comment">#文件句柄到所对应对象的字典，格式为&#123;句柄：对象&#125;</span></span><br><span class="line">fd_to_socket = &#123;serversocket.fileno():serversocket,&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        print(<span class="string">"等待活动连接......"</span>)</span><br><span class="line">        <span class="comment">#轮询注册的事件集合，返回值为[(文件句柄，对应的事件)，(...),....]</span></span><br><span class="line">        events = epoll.poll(timeout)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> events:</span><br><span class="line">            print(<span class="string">"epoll超时无活动连接，重新轮询......"</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        print(<span class="string">"有"</span> , len(events), <span class="string">"个新事件，开始处理......"</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> fd, event <span class="keyword">in</span> events:</span><br><span class="line">            socket = fd_to_socket[fd]</span><br><span class="line">            <span class="comment">#如果活动socket为当前服务器socket，表示有新连接</span></span><br><span class="line">            <span class="keyword">if</span> socket == serversocket:</span><br><span class="line">                connection, address = serversocket.accept()</span><br><span class="line">                print(<span class="string">"新连接："</span> , address)</span><br><span class="line">                <span class="comment">#新连接socket设置为非阻塞</span></span><br><span class="line">                connection.setblocking(<span class="keyword">False</span>)</span><br><span class="line">                <span class="comment">#注册新连接fd到待读事件集合</span></span><br><span class="line">                epoll.register(connection.fileno(), select.EPOLLIN)</span><br><span class="line">                <span class="comment">#把新连接的文件句柄以及对象保存到字典</span></span><br><span class="line">                fd_to_socket[connection.fileno()] = connection</span><br><span class="line">                <span class="comment">#以新连接的对象为键值，值存储在队列中，保存每个连接的信息</span></span><br><span class="line">                message_queues[connection]  = queue.Queue()</span><br><span class="line">            <span class="comment">#关闭事件</span></span><br><span class="line">            <span class="keyword">elif</span> event &amp; select.EPOLLHUP:</span><br><span class="line">                print(<span class="string">'client close'</span>)</span><br><span class="line">                <span class="comment">#在epoll中注销客户端的文件句柄</span></span><br><span class="line">                epoll.unregister(fd)</span><br><span class="line">                <span class="comment">#关闭客户端的文件句柄</span></span><br><span class="line">                fd_to_socket[fd].close()</span><br><span class="line">                <span class="comment">#在字典中删除与已关闭客户端相关的信息</span></span><br><span class="line">                <span class="keyword">del</span> fd_to_socket[fd]</span><br><span class="line">            <span class="comment">#可读事件</span></span><br><span class="line">            <span class="keyword">elif</span> event &amp; select.EPOLLIN:</span><br><span class="line">                print(<span class="string">'client in'</span>)</span><br><span class="line">                <span class="comment">#接收数据</span></span><br><span class="line">                data = socket.recv(<span class="number">1024</span>)</span><br><span class="line">                <span class="keyword">if</span> data:</span><br><span class="line">                    print(<span class="string">"收到数据："</span> , data , <span class="string">"客户端："</span> , socket.getpeername())</span><br><span class="line">                    <span class="comment">#将数据放入对应客户端的字典</span></span><br><span class="line">                    message_queues[socket].put(data)</span><br><span class="line">                    <span class="comment">#修改读取到消息的连接到等待写事件集合(即对应客户端收到消息后，再将其fd修改并加入写事件集合)</span></span><br><span class="line">                    data_handler(fd)</span><br><span class="line">                    <span class="comment"># g1.join()</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="comment">#在epoll中注销客户端的文件句柄</span></span><br><span class="line">                    epoll.unregister(fd)</span><br><span class="line">                    <span class="comment">#关闭客户端的文件句柄</span></span><br><span class="line">                    fd_to_socket[fd].close()</span><br><span class="line">                    <span class="comment">#在字典中删除与已关闭客户端相关的信息</span></span><br><span class="line">                    <span class="keyword">del</span> fd_to_socket[fd]</span><br><span class="line">            <span class="comment">#可写事件</span></span><br><span class="line">            <span class="keyword">elif</span> event &amp; select.EPOLLOUT:</span><br><span class="line">                print(<span class="string">'client out'</span>)</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="comment">#从字典中获取对应客户端的信息</span></span><br><span class="line">                    msg = message_queues[socket].get_nowait()</span><br><span class="line">                <span class="keyword">except</span> queue.Empty:</span><br><span class="line">                    print(socket.getpeername() , <span class="string">" queue empty"</span>)</span><br><span class="line">                    <span class="comment">#修改文件句柄为读事件</span></span><br><span class="line">                    epoll.modify(fd, select.EPOLLIN)</span><br><span class="line">                <span class="keyword">else</span> :</span><br><span class="line">                    print(<span class="string">"发送数据："</span> , data , <span class="string">"客户端："</span> , socket.getpeername())</span><br><span class="line">                    <span class="comment">#发送数据</span></span><br><span class="line">                    socket.send(msg)</span><br><span class="line">    <span class="comment">#在epoll中注销服务端文件句柄</span></span><br><span class="line">    epoll.unregister(serversocket.fileno())</span><br><span class="line">    <span class="comment">#关闭epoll</span></span><br><span class="line">    epoll.close()</span><br><span class="line">    <span class="comment">#关闭服务器socket</span></span><br><span class="line">    serversocket.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">data_handler</span><span class="params">(fd)</span>:</span></span><br><span class="line">    socket = fd_to_socket[fd]</span><br><span class="line">    msg = message_queues[socket].get_nowait()</span><br><span class="line">    <span class="keyword">if</span> msg == <span class="string">b"ping"</span>:</span><br><span class="line">        message_queues[socket].put(<span class="string">"ok.......pong!"</span>.encode())</span><br><span class="line">        epoll.modify(fd, select.EPOLLOUT)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    run()</span><br></pre></td></tr></table></figure></p>
 <p>参考：</p>
 <ul>
 <li><a href="https://blog.csdn.net/gx864102252/article/details/82155834" target="_blank" rel="noopener">【RPC-Python】单进程异步模型</a></li>
@@ -1561,368 +1841,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/02/Spring-boot集成Mysql与Redis/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/08/02/Spring-boot集成Mysql与Redis/" itemprop="url">Spring boot集成Mysql与Redis</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-02T14:01:09+08:00">
-                2019-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/JAVA/" itemprop="url" rel="index">
-                    <span itemprop="name">JAVA</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h1><p>pom.xml添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>application.properties 添加mysql连接配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Mysql配置</span><br><span class="line">spring.jpa.hibernate.ddl-auto=update</span><br><span class="line">spring.datasource.url=jdbc:mysql://localhost:3306/dbname</span><br><span class="line">spring.datasource.username=username</span><br><span class="line">spring.datasource.password=pwd</span><br></pre></td></tr></table></figure></p>
-<p>添加一个model<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.persistence.Entity;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GeneratedValue;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GenerationType;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Id;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Entity</span> <span class="comment">// This tells Hibernate to make a table out of this class</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Users</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span>(strategy=GenerationType.AUTO)</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUsername</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUsername</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.username = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPassword</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPassword</span><span class="params">(String pwd)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.password = pwd;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用Spring boot JPA，集成CRUD接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.example.demo.model.Users;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.repository.CrudRepository;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository</span></span><br><span class="line"><span class="comment">// CRUD refers Create, Read, Update, Delete</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UsersRepository</span> <span class="keyword">extends</span> <span class="title">CrudRepository</span>&lt;<span class="title">Users</span>, <span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">List&lt;Users&gt; <span class="title">findByUsername</span><span class="params">(String username)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在controller中使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/find-by-username/&#123;username&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> List <span class="title">findByUsername</span><span class="params">(@PathVariable(<span class="string">"username"</span>)</span> String username) </span>&#123;</span><br><span class="line">    List&lt;Users&gt; userList = usersRepository.findByUsername(username);</span><br><span class="line">    <span class="keyword">return</span> userList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>pom.xml中添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>application.properties中添加Redis连接配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># Redis数据库索引（默认为0）</span><br><span class="line">spring.redis.database=0</span><br><span class="line"># Redis服务器地址</span><br><span class="line">spring.redis.host=192.168.33.10</span><br><span class="line"># Redis服务器连接端口</span><br><span class="line">spring.redis.port=6379</span><br><span class="line"># Redis服务器连接密码（默认为空）</span><br><span class="line">spring.redis.password=</span><br><span class="line"># 连接池最大连接数（使用负值表示没有限制）</span><br><span class="line">spring.redis.jedis.pool.max-active=8</span><br><span class="line"># 连接池最大阻塞等待时间（使用负值表示没有限制）</span><br><span class="line">spring.redis.jedis.pool.max-wait=-1</span><br><span class="line"># 连接池中的最大空闲连接</span><br><span class="line">spring.redis.jedis.pool.max-idle=8</span><br><span class="line"># 连接池中的最小空闲连接</span><br><span class="line">spring.redis.jedis.pool.min-idle=0</span><br><span class="line"># 连接超时时间（毫秒）</span><br><span class="line">spring.redis.timeout=3000</span><br></pre></td></tr></table></figure></p>
-<p>controller中使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> RedisTemplate&lt;String, String&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/setredis"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">setRedis</span><span class="params">()</span></span>&#123;</span><br><span class="line">    redisTemplate.opsForValue().set(<span class="string">"javaset"</span>,<span class="string">"1"</span>);</span><br><span class="line">    String ans = redisTemplate.opsForValue().get(<span class="string">"javaset"</span>);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/01/Spring入门/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/08/01/Spring入门/" itemprop="url">Spring入门</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-01T10:42:26+08:00">
-                2019-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="Spring-IOC"><a href="#Spring-IOC" class="headerlink" title="Spring IOC"></a>Spring IOC</h2><p>Spring 容器是 Spring 框架的核心。容器将创建对象，把它们连接在一起，配置它们，并管理他们的整个生命周期从创建到销毁。Spring 容器使用依赖注入（DI）来管理组成一个应用程序的组件。这些对象被称为 Spring Beans。<br>IOC 容器具有依赖注入功能的容器，它可以创建对象，IOC 容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。通常new一个实例，控制权由程序员控制，而”控制反转”是指new实例工作不由程序员来做而是交给Spring容器来做。<br>Spring的容器：</p>
-<ol>
-<li>Spring BeanFactory 容器</li>
-<li>Spring ApplicationContext 容器</li>
-</ol>
-<h3 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h3><p>这个容器从一个 XML 文件中读取配置元数据，由这些元数据来生成一个被配置化的系统或者应用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.BeanFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.support.BeanDefinitionReader;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.support.BeanDefinitionRegistry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.support.DefaultListableBeanFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.xml.XmlBeanDefinitionReader;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.io.ClassPathResource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.io.Resource;</span><br><span class="line"><span class="comment">// 注册</span></span><br><span class="line">BeanFactory factory=<span class="keyword">new</span> DefaultListableBeanFactory();</span><br><span class="line">BeanDefinitionReader reader=<span class="keyword">new</span> XmlBeanDefinitionReader((BeanDefinitionRegistry) factory);</span><br><span class="line">reader.loadBeanDefinitions(<span class="keyword">new</span> ClassPathResource(<span class="string">"beans.xml"</span>));</span><br><span class="line"><span class="comment">// getbean</span></span><br><span class="line">ServiceBean service = (ServiceBean)factory.getBean(<span class="string">"service"</span>);</span><br></pre></td></tr></table></figure></p>
-<h3 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h3><p>Application Context 是BeanFactory的子接口，也被成为Spring上下文。与BeanFactory类似，但是它增加了企业所需要的功能，比如，从属性文件中解析文本信息和将事件传递给所指定的监听器。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.FileSystemXmlApplicationContext;</span><br><span class="line">   </span><br><span class="line">ApplicationContext context = <span class="keyword">new</span> FileSystemXmlApplicationContext(<span class="string">"Beans.xml"</span>);</span><br><span class="line">HelloWorld obj = (HelloWorld) context.getBean(<span class="string">"helloWorld"</span>);</span><br><span class="line">obj.getMessage();</span><br><span class="line">  </span><br><span class="line">....</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessage</span><span class="params">(String message)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.message  = message;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getMessage</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Your Message : "</span> + message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h3><p>被称作 bean 的对象是构成应用程序的支柱也是由 Spring IoC 容器管理的。bean 是一个被实例化，组装，并通过 Spring IoC 容器所管理的对象。<br>bean的配置需要元数据信息。包括<br><img src="/blog/2019/08/01/Spring入门/0.jpg"></p>
-<ol>
-<li>作用域：<ul>
-<li>singleton：在spring IoC容器仅存在一个Bean实例，Bean以单例方式存在，默认值</li>
-<li>prototype：每次从容器中调用Bean时，都返回一个新的实例，即每次调用getBean()时，相当于执行newXxxBean() </li>
-<li>request：每次HTTP请求都会创建一个新的Bean，该作用域仅适用于WebApplicationContext环境</li>
-<li>session：同一个HTTP Session共享一个Bean，不同Session使用不同的Bean，仅适用于WebApplicationContext环境</li>
-<li>global session：一般用于Portlet应用环境，该运用域仅适用于WebApplicationContext环境</li>
-</ul>
-</li>
-<li><p>生命周期</p>
-<ol>
-<li><p>初始化回调</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.InitializingBean</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExampleBean</span> <span class="keyword">implements</span> <span class="title">InitializingBean</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// do some initialization work</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 或者在xml定义</span></span><br><span class="line">&lt;bean id=<span class="string">"exampleBean"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"examples.ExampleBean"</span> init-method=<span class="string">"afterPropertiesSet"</span>/&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>销毁回调</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.DisposableBean</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExampleBean</span> <span class="keyword">implements</span> <span class="title">DisposableBean</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// do some destruction work</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 或者在xml定义</span></span><br><span class="line">&lt;bean id=<span class="string">"exampleBean"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"examples.ExampleBean"</span> destroy-method=<span class="string">"destroy"</span>/&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>后置处理器：<br>BeanPostProcessor</p>
-</li>
-<li>继承<br>Spring Bean 定义的继承与 Java 类的继承无关，但是继承的概念是一样的。你可以定义一个父 bean 的定义作为模板和其他子 bean 就可以从父 bean 中继承所需的配置。<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"helloIndia"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.HelloIndia"</span> <span class="attr">parent</span>=<span class="string">"helloWorld"</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="Spring-依赖注入"><a href="#Spring-依赖注入" class="headerlink" title="Spring 依赖注入"></a>Spring 依赖注入</h2><h3 id="基于构造函数的依赖注入"><a href="#基于构造函数的依赖注入" class="headerlink" title="基于构造函数的依赖注入"></a>基于构造函数的依赖注入</h3><p>当容器调用带有一组参数的类构造函数时，基于构造函数的 DI 就完成了，其中每个参数代表一个对其他类的依赖。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> x.y;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Foo</span><span class="params">(Bar bar, Baz baz)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>beans.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"foo"</span> <span class="attr">class</span>=<span class="string">"x.y.Foo"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"bar"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"baz"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"bar"</span> <span class="attr">class</span>=<span class="string">"x.y.Bar"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"baz"</span> <span class="attr">class</span>=<span class="string">"x.y.Baz"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>main.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainApp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"Beans.xml"</span>);</span><br><span class="line">        Foo te = (Foo) context.getBean(<span class="string">"foo"</span>);</span><br><span class="line">        te.xxxx();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="基于设值函数的依赖注入"><a href="#基于设值函数的依赖注入" class="headerlink" title="基于设值函数的依赖注入"></a>基于设值函数的依赖注入</h3><p>当容器调用一个无参的构造函数或一个无参的静态 factory 方法来初始化你的 bean 后，通过容器在你的 bean 上调用设值函数，基于设值函数的 DI 就完成了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.tutorialspoint;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextEditor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SpellChecker spellChecker;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSpellChecker</span><span class="params">(SpellChecker spellChecker)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Inside setSpellChecker."</span> );</span><br><span class="line">        <span class="keyword">this</span>.spellChecker = spellChecker;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpellChecker <span class="title">getSpellChecker</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> spellChecker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">spellCheck</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        spellChecker.checkSpelling();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>beans.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"textEditor"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.TextEditor"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"spellChecker"</span> <span class="attr">ref</span>=<span class="string">"spellChecker"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"spellChecker"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.SpellChecker"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>main.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainApp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"Beans.xml"</span>);</span><br><span class="line">        TextEditor te = (TextEditor) context.getBean(<span class="string">"textEditor"</span>);</span><br><span class="line">        te.spellCheck();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="内部bean"><a href="#内部bean" class="headerlink" title="内部bean"></a>内部bean</h3><p>Java 内部类是在其他类的范围内被定义的，同理，inner beans 是在其他 bean 的范围内定义的 bean。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"outerBean"</span> <span class="attr">class</span>=<span class="string">"..."</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"target"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"innerBean"</span> <span class="attr">class</span>=<span class="string">"..."</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="注入集合"><a href="#注入集合" class="headerlink" title="注入集合"></a>注入集合</h3><p>包括 Java Collection 类型 List、Set、Map 和 Properties<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"javaCollection"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.JavaCollection"</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!-- results in a setAddressList(java.util.List) call --&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"addressList"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">value</span>&gt;</span>INDIA<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">value</span>&gt;</span>Pakistan<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">value</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">value</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Spring-Bean-的自动装配"><a href="#Spring-Bean-的自动装配" class="headerlink" title="Spring Bean 的自动装配"></a>Spring Bean 的自动装配</h2><p>在上面说明了通过\<constructor-arg>和\<property>元素来注入 。<br>也可以使用\<bean>元素的 autowire 属性为一个 bean 定义指定自动装配模式以减少配置代码。</bean></property></constructor-arg></p>
-<p>模式：</p>
-<ol>
-<li>no： 这是默认的设置，它意味着没有自动装配，你应该使用显式的bean引用来连线。</li>
-<li><p>byName： 由属性名自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byName。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"textEditor"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.TextEditor"</span> <span class="attr">autowire</span>=<span class="string">"byName"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"Generic Text Editor"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"spellChecker"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.SpellChecker"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>byType： 由属性数据类型自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byType。</p>
-</li>
-<li>constructor： 类似于 byType，但该类型适用于构造函数参数类型。</li>
-<li>autodetect： Spring首先尝试通过 constructor 使用自动装配来连接，如果它不执行，Spring 尝试通过 byType 来自动装配。</li>
-</ol>
-<h2 id="基于注解的配置"><a href="#基于注解的配置" class="headerlink" title="基于注解的配置"></a>基于注解的配置</h2><p>从 Spring 2.5 开始就可以使用注解来配置依赖注入。而不是采用 XML 来描述一个 bean 连线，你可以使用相关类，方法或字段声明的注解，将 bean 配置移动到组件类本身。<br>打开注解配置需要在bean.xml中配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:annotation-config</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="Required"><a href="#Required" class="headerlink" title="@Required"></a>@Required</h3><p>@Required 注释应用于 bean 属性的 setter 方法，它表明受影响的 bean 属性在配置时必须放在 XML 配置文件中，否则容器就会抛出一个 BeanInitializationException 异常。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Required;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Required</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Required</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>beans.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"student"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.Student"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span>  <span class="attr">value</span>=<span class="string">"Zara"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"age"</span>  <span class="attr">value</span>=<span class="string">"11"</span>/&gt;</span> // 如果没有写这个属性会报错</span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a>@Autowired</h3><p>@Autowired 注释对在哪里和如何完成自动连接提供了更多的细微的控制。</p>
-<p>可以在beans.xml文件中配置autowired。当Spring遇到一个在 setter方法中使用的 @Autowired 注释，它会在方法中视图执行 byType 自动连接。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextEditor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> SpellChecker spellChecker;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TextEditor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Inside TextEditor constructor."</span> );</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpellChecker <span class="title">getSpellChecker</span><span class="params">( )</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> spellChecker;</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">spellCheck</span><span class="params">()</span></span>&#123;</span><br><span class="line">        spellChecker.checkSpelling();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>beans.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"textEditor"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.TextEditor"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"spellChecker"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.SpellChecker"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="Qualifier-注释"><a href="#Qualifier-注释" class="headerlink" title="@Qualifier 注释"></a>@Qualifier 注释</h3><p>当你创建多个具有相同类型的 bean 时，并且想要用一个属性只为它们其中的一个进行装配，在这种情况下，你可以使用 @Qualifier 注释和 @Autowired 注释通过指定哪一个真正的 bean 将会被装配来消除混乱。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Qualifier;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Profile</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"student1"</span>)</span><br><span class="line">    <span class="keyword">private</span> Student student;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Profile</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Inside Profile constructor."</span> );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Age : "</span> + student.getAge() );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Name : "</span> + student.getName() );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>beans.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"profile"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.Profile"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"student1"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.Student"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span>  <span class="attr">value</span>=<span class="string">"Zara"</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"age"</span>  <span class="attr">value</span>=<span class="string">"11"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"student2"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.Student"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span>  <span class="attr">value</span>=<span class="string">"Nuha"</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"age"</span>  <span class="attr">value</span>=<span class="string">"2"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="JSR-250-注释"><a href="#JSR-250-注释" class="headerlink" title="JSR-250 注释"></a>JSR-250 注释</h3><ol>
-<li>@PostConstruct: 初始化回调函数的一个替代</li>
-<li>@PreDestroy: 销毁回调函数的一个替代  </li>
-<li>@Resource: 使用一个 ‘name’ 属性，该属性以一个 bean 名称的形式被注入。你可以说，它遵循 by-name 自动连接语义<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextEditor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SpellChecker spellChecker;</span><br><span class="line">    <span class="meta">@Resource</span>(name= <span class="string">"spellChecker"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSpellChecker</span><span class="params">( SpellChecker spellChecker )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.spellChecker = spellChecker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpellChecker <span class="title">getSpellChecker</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> spellChecker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">spellCheck</span><span class="params">()</span></span>&#123;</span><br><span class="line">        spellChecker.checkSpelling();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="基于JAVA的配置"><a href="#基于JAVA的配置" class="headerlink" title="基于JAVA的配置"></a>基于JAVA的配置</h3><ol>
-<li><p>@Configuration 和 @Bean 注解</p>
-<ul>
-<li>@Configuration 的注解类表示这个类可以使用 Spring IoC 容器作为 bean 定义的来源。</li>
-<li><p>@Bean 注解告诉 Spring，一个带有 @Bean 的注解方法将返回一个对象，该对象应该被注册为在 Spring 应用程序上下文中的 bean。</p>
-<p>一个例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.*;</span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> HelloWorld <span class="title">helloWorld</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HelloWorld();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>等同于xml中</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"helloWorld"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.HelloWorld"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>带有 @Bean 注解的方法名称作为 bean 的 ID，它创建并返回实际的 bean。你的配置类可以声明多个 @Bean。</p>
-</li>
-</ul>
-</li>
-<li>@import 注解允许从另一个配置类中加载 @Bean 定义。</li>
-</ol>
-<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p>Spring 的核心是 ApplicationContext，它负责管理 beans 的完整生命周期。当加载 beans 时，ApplicationContext 发布某些类型的事件。</p>
-<p>由于 Spring 的事件处理是单线程的，所以如果一个事件被发布，直至并且除非所有的接收者得到的该消息，该进程被阻塞并且流程将不会继续。</p>
-<img src="/blog/2019/08/01/Spring入门/1.jpg">
-<h2 id="Spring-AOP"><a href="#Spring-AOP" class="headerlink" title="Spring AOP"></a>Spring AOP</h2><p>Spring 框架的一个关键组件是面向方面的编程(AOP)框架。</p>
-<p>AOP中的术语<br><img src="/blog/2019/08/01/Spring入门/2.jpg"></p>
-<h2 id="Spring-JDBC"><a href="#Spring-JDBC" class="headerlink" title="Spring JDBC"></a>Spring JDBC</h2><p>Spring JDBC 框架负责所有数据库的低层细节，从开始打开连接，准备和执行 SQL 语句，处理异常，处理事务，到最后关闭连接。</p>
-<h2 id="Spring-事务管理"><a href="#Spring-事务管理" class="headerlink" title="Spring 事务管理"></a>Spring 事务管理</h2><p>Spring 事务抽象的关键是由 org.springframework.transaction.PlatformTransactionManager 接口定义。</p>
-<h2 id="Spring-MVC"><a href="#Spring-MVC" class="headerlink" title="Spring MVC"></a>Spring MVC</h2><p>参考:<br><a href="https://www.w3cschool.cn/wkspring/omps1mm6.html" target="_blank" rel="noopener">W3C School</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/10/">10</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1970,388 +1893,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">90</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">14</span>
-                  <span class="site-state-item-name">categories</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">35</span>
-                  <span class="site-state-item-name">tags</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-
-          
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
-
-  
-</div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-  
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
-
-
-  
-
-  
-
-</body>
-</html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"age"</span>  <span class="attr">value</span>=<span class="string">"11"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"student2"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.Student"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span>  <span class="attr">value</span>=<span class="string">"Nuha"</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"age"</span>  <span class="attr">value</span>=<span class="string">"2"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="JSR-250-注释"><a href="#JSR-250-注释" class="headerlink" title="JSR-250 注释"></a>JSR-250 注释</h3><ol>
-<li>@PostConstruct: 初始化回调函数的一个替代</li>
-<li>@PreDestroy: 销毁回调函数的一个替代  </li>
-<li>@Resource: 使用一个 ‘name’ 属性，该属性以一个 bean 名称的形式被注入。你可以说，它遵循 by-name 自动连接语义<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextEditor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SpellChecker spellChecker;</span><br><span class="line">    <span class="meta">@Resource</span>(name= <span class="string">"spellChecker"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSpellChecker</span><span class="params">( SpellChecker spellChecker )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.spellChecker = spellChecker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpellChecker <span class="title">getSpellChecker</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> spellChecker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">spellCheck</span><span class="params">()</span></span>&#123;</span><br><span class="line">        spellChecker.checkSpelling();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="基于JAVA的配置"><a href="#基于JAVA的配置" class="headerlink" title="基于JAVA的配置"></a>基于JAVA的配置</h3><ol>
-<li><p>@Configuration 和 @Bean 注解</p>
-<ul>
-<li>@Configuration 的注解类表示这个类可以使用 Spring IoC 容器作为 bean 定义的来源。</li>
-<li><p>@Bean 注解告诉 Spring，一个带有 @Bean 的注解方法将返回一个对象，该对象应该被注册为在 Spring 应用程序上下文中的 bean。</p>
-<p>一个例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.*;</span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> HelloWorld <span class="title">helloWorld</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HelloWorld();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>等同于xml中</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"helloWorld"</span> <span class="attr">class</span>=<span class="string">"com.tutorialspoint.HelloWorld"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>带有 @Bean 注解的方法名称作为 bean 的 ID，它创建并返回实际的 bean。你的配置类可以声明多个 @Bean。</p>
-</li>
-</ul>
-</li>
-<li>@import 注解允许从另一个配置类中加载 @Bean 定义。</li>
-</ol>
-<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p>Spring 的核心是 ApplicationContext，它负责管理 beans 的完整生命周期。当加载 beans 时，ApplicationContext 发布某些类型的事件。</p>
-<p>由于 Spring 的事件处理是单线程的，所以如果一个事件被发布，直至并且除非所有的接收者得到的该消息，该进程被阻塞并且流程将不会继续。</p>
-<img src="/blog/2019/08/01/Spring入门/1.jpg">
-<h2 id="Spring-AOP"><a href="#Spring-AOP" class="headerlink" title="Spring AOP"></a>Spring AOP</h2><p>Spring 框架的一个关键组件是面向方面的编程(AOP)框架。</p>
-<p>AOP中的术语<br><img src="/blog/2019/08/01/Spring入门/2.jpg"></p>
-<h2 id="Spring-JDBC"><a href="#Spring-JDBC" class="headerlink" title="Spring JDBC"></a>Spring JDBC</h2><p>Spring JDBC 框架负责所有数据库的低层细节，从开始打开连接，准备和执行 SQL 语句，处理异常，处理事务，到最后关闭连接。</p>
-<h2 id="Spring-事务管理"><a href="#Spring-事务管理" class="headerlink" title="Spring 事务管理"></a>Spring 事务管理</h2><p>Spring 事务抽象的关键是由 org.springframework.transaction.PlatformTransactionManager 接口定义。</p>
-<h2 id="Spring-MVC"><a href="#Spring-MVC" class="headerlink" title="Spring MVC"></a>Spring MVC</h2><p>参考:<br><a href="https://www.w3cschool.cn/wkspring/omps1mm6.html" target="_blank" rel="noopener">W3C School</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
-
-
-          </div>
-          
-
-
-          
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="https://angelteng.github.io/blog/images/angel.jpg" alt="Angel Teng">
-            
-              <p class="site-author-name" itemprop="name">Angel Teng</p>
-              <p class="site-description motion-element" itemprop="description"></p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/blog/archives/">
-              
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

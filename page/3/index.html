@@ -229,6 +229,388 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/25/Python-Requests库中Max-retries问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/06/25/Python-Requests库中Max-retries问题/" itemprop="url">Python Requests库中Max retries问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-25T15:22:14+08:00">
+                2019-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>查日志的时候发现如下报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">File &quot;./app/business_api/business_api.py&quot;, line 87, in callback_function</span><br><span class="line">    response = requests.post(&apos;xxx&apos;+json.dumps(results), timeout=self.timeout)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 116, in post</span><br><span class="line">    return request(&apos;post&apos;, url, data=data, json=json, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/api.py&quot;, line 60, in request</span><br><span class="line">    return session.request(method=method, url=url, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 524, in request</span><br><span class="line">    resp = self.send(prep, **send_kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/sessions.py&quot;, line 637, in send</span><br><span class="line">    r = adapter.send(request, **kwargs)</span><br><span class="line">File &quot;/usr/lib/python3.6/site-packages/requests/adapters.py&quot;, line 516, in send</span><br><span class="line">    raise ConnectionError(e, request=request)</span><br><span class="line">requests.exceptions.ConnectionError: HTTPSConnectionPool(host=&apos;xxx&apos;, port=8094): Max retries exceeded with url: xxx (Caused by NewConnectionError(&apos;&lt;urllib3.connection.VerifiedHTTPSConnection object at 0x7f882011f390&gt;: Failed to establish a new connection: [Errno -3] Try again&apos;,))</span><br></pre></td></tr></table></figure></p>
+<p>网上查了一下“Max retries” ，一般出现在爬虫的场景，http连接数过多，因为requests默认使用了keep-alive，所以要在header增加{“Connect”:”close”}，但是出现问题的场景是后台服务，从阿里云监控上看该时段的tcp连接数也没有很大的波峰。<br>参考了<a href="https://fanchao01.github.io/blog/2016/07/30/pythonlib-request3/" target="_blank" rel="noopener">requests的高级功能-重试机制</a>这篇文章所说，requests是有重试机制的，使用重试会导致返回的错误为MaxRetriesError，而不是确切的异常。<br>网上暂时没查到[Errno -3] Try again 这个错误具体原因。</p>
+<p>其他参考：<br><a href="https://www.jwlchina.cn/2016/10/29/关于python爬虫的深坑：requests抛出异常Max%20retries%20exceeded%20with%20url/" target="_blank" rel="noopener">关于python爬虫的深坑：requests抛出异常Max retries exceeded with url</a><br><a href="https://eclipsesv.com/2017/01/29/requests库error/" target="_blank" rel="noopener">requests库的Failed to establish a new connection</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/24/《Head-First-Java》笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/06/24/《Head-First-Java》笔记/" itemprop="url">《Head First Java》笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-24T10:35:24+08:00">
+                2019-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ol>
+<li>实例变量有默认值，局部变量没有默认值。</li>
+<li>JAVA中都是值的（拷贝）传递。</li>
+<li>引用到对象的变量并不是对象的容器，而是类似指向对象的指针／地址。所有引用的大小都一样。</li>
+</ol>
+<h1 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h1><ol>
+<li>ArrayList&amp;一般数组区别：<ul>
+<li>一般数组创建时确定大小、以索引存放、使用特殊语法［］</li>
+<li>ArrayList是参数化的 ArrayList<string></string></li>
+</ul>
+</li>
+<li>final：<ul>
+<li>final的变量代表你不能改变它的值。</li>
+<li>final的Method代表你不能覆盖这个方法</li>
+<li>final的类代表你不能继承它</li>
+</ul>
+</li>
+<li>方法的重载与多态无关，两个方法名称相同但参数不同。</li>
+<li>抽象类代表类必须要被extent，抽象方法代表方法必须要被覆盖。抽象方法没有实体。必须实现所有的抽象方法。</li>
+<li>编译器是根据引用类型（定义变量时指定的类型）判断哪个方法可以调用，而不是根据对象的实际类型。</li>
+<li>extent只能有1个，implement（接口）可以有多个。</li>
+<li>一个类可以有多个构造函数，但参数必须不一样。</li>
+<li>函数构造链：创建新对象时，所有继承下来的构造函数都会执行。</li>
+<li>调用父类构造函数super().使用this()调用对象本身的其他构造函数。两者不能同时使用。</li>
+<li>静态变量：所有实例都共享的，且只会在类第一次载入的时候初始化。<ul>
+<li>静态变量 == Python类变量， 非静态变量即实例变量。</li>
+<li>静态变量会在该类的任何对象创建之前就完成初始化</li>
+<li>静态变量会在该类的任何静态方法执行之前就初始化</li>
+<li>常量：静态的final变量 （常量名应全大写）</li>
+</ul>
+</li>
+</ol>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><ol>
+<li>所有对象存活于可垃圾回收的堆（heap）中。</li>
+<li>变量存活空间：<ul>
+<li>如果在方法体内定义的，这时候就是在栈上分配的</li>
+<li>如果是类的成员变量，这时候就是在堆上分配的</li>
+<li>如果是类的静态成员变量，在<a href="https://blog.csdn.net/top_code/article/details/51288529" target="_blank" rel="noopener">方法区</a>(堆，各个线程共享的内存区域)上分配的</li>
+</ul>
+</li>
+</ol>
+<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><ol>
+<li>JAVA虚拟机只会从头开始往下找到第一个符合范围的异常处理块</li>
+<li>可以抛出多重异常 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void function name () throw PantException, LionException&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h1><ol>
+<li><p>序列化保存对象的状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileOutputStream fileStream = new FileOutputStream (“TEST.ser”);</span><br><span class="line">ObjectOutputStream os = new ObjectOutputStream(fileStream);</span><br><span class="line">os.writeObject(characterOne);</span><br><span class="line">os.close();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>反序列化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileInputStream fileStream = new FileInputStream(“TEST.ser”);</span><br><span class="line">ObjectInputStream os = new ObjectInputStream(fileStream);</span><br><span class="line">Object one = os.readObject();</span><br><span class="line">GameChara one = (GameChara) one;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>类如果可序列化，必须implements Serializable。如果某实例变量不应该被序列化，定义为transient。</p>
+</li>
+</ol>
+<h1 id="网络编程"><a href="#网络编程" class="headerlink" title="网络编程"></a>网络编程</h1><ol>
+<li>网络 java.net</li>
+<li><p>建立socket</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Socket s = new Socket(’127.0.0.0’,8888);</span><br><span class="line">InputStream steam = new InputStream(s.getInputStream());</span><br><span class="line">BufferReader reader = new BufferReader(stream);</span><br><span class="line">String msg = reader.readLine();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>建立socket Server</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket ser = new ServerSocket(8888)</span><br><span class="line">Socket s = ser.accept()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>线程Thread 需要一个实现Runnable接口的类，类需要实现run()方法</p>
+</li>
+<li>线程命名 setName()</li>
+<li>synchronized修饰方法使其每次只能被一个线程存取。锁是在对象上。没有处理死锁机制。</li>
+</ol>
+<h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><ol>
+<li>集合<ul>
+<li>TreeSet:有序防重复 </li>
+<li>HashMap </li>
+<li>LinkedList：针对经常插入删除 </li>
+<li>HashSet </li>
+<li>LinkedHaskMap:记住元素插入顺序</li>
+</ul>
+</li>
+</ol>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><ol>
+<li><p>泛型的类代表类的声明用到类型函数，泛型的方法代表方法的声明特征用到类型函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class GenericTest &#123;</span><br><span class="line">    // 这个类是个泛型类</span><br><span class="line">    public class Generic&lt;T&gt;&#123;     </span><br><span class="line">        private T key;</span><br><span class="line"></span><br><span class="line">        public Generic(T key) &#123;</span><br><span class="line">            this.key = key;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // 这是一个泛型方法。</span><br><span class="line">    // 首先在public与返回值之间的&lt;T&gt;必不可少，这表明这是一个泛型方法，并且声明了一个泛型T</span><br><span class="line">    // 这个T可以出现在这个泛型方法的任意位置.</span><br><span class="line">    // 泛型的数量也可以为任意多个 </span><br><span class="line">    public &lt;T,K&gt; K showKeyName(Generic&lt;T&gt; container)&#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <a href="https://www.runoob.com/java/java-generics.html" target="_blank" rel="noopener">Java 泛型</a></p>
+</li>
+<li>相等<ul>
+<li>引用的相等性 ＝＝</li>
+<li>对象的相等性 equals() ，必须要覆盖hashCode()方法保证两个对象有相同的hashcode</li>
+</ul>
+</li>
+<li>TreeSet集合中的元素必须实现comparable类型，或者使用重载，取用comparator参数构造函数创建TreeSet</li>
+<li><p>万用字符 &lt;?&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void takeThing(ArrayList&lt;? extent Animal&gt; list)</span><br><span class="line">// 相当于</span><br><span class="line">public &lt;T extent Animal&gt; void takeThing (ArrayList&lt;T&gt; list)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&lt;&gt; 使编译器验证类型安全，不用到运行时才去验证</p>
+</li>
+</ol>
+<p>参考：<br>《Head First JAVA》<br><a href="https://juejin.im/post/5d0fa403f265da1bb67a2335" target="_blank" rel="noopener">重学Java-一个Java对象到底占多少内存</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/22/值传递？引用传递？傻傻分不清楚/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1557,365 +1939,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/28/线性回归/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/28/线性回归/" itemprop="url">线性回归</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-28T17:13:30+08:00">
-                2019-05-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>回归是一种应用广泛的预测建模技术，这种技术的核心在于预测的结果是连续型变量。</li>
-<li><p>线性回归是机器学习中最简单的回归算法，多元线性回归指的就是一个样本有多个特征的线性回归问题。对于一个 有 个特征的样本 而言，它的回归结果可以写作一个几乎人人熟悉的方程: y = w0+w1x1+w2x2+w3x3…..+wnxn<br>预测函数的本质就是我们需要构建的模型，而构造预测函数的核心就是找出模型的参数向量。通过最小化损失函数或损失函数的某种变化来将求解参数向量，以此将单纯的求解问题转化为一个最优化问题。在多元线性回归中，我们的损失函数如下定义:<br><img src="0.png" alt="image.png"><br>在这个平方结果下，我们的y和y^分别是我们的真实标签和预测值，也就是说，这个损失函数实在计算我们的真实标 签和预测值之间的距离。因此，我们认为这个损失函数衡量了我们构造的模型的预测结果和真实标签的差异，因此我们固然希望我们的预测结果和真实值差异越小越好。所以我们的求解目标就可以转化成RSS残差平方和:<br><img src="1.png" alt="image.png"></p>
-</li>
-<li><p>最小二乘法：通过最小化真实值和预测值之间的RSS来求解参数的方法。<br><img src="2.png" alt="image.png"></p>
-</li>
-<li><p>linear_model.LinearRegression (fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)<br>参数：</p>
-<ul>
-<li>fit_intercept：是否计算此模型的截距，默认True</li>
-<li>normalize： 当fit_intercept设置为False时，将忽略此参数。如果为True，则特征矩阵X在进入回归之前 将会被减去均值(中心化)并除以L2范式(缩放)。如果你希望进行标准化，请在fit数据 之前使用preprocessing模块中的标准化专用类StandardScaler。默认False</li>
-<li>copy_X： 默认为True 如果为真，将在X.copy()上进行操作，否则的话原本的特征矩阵X可能被线性回归影响并覆盖。</li>
-<li>n_jobs： 整数或者None，默认为None 用于计算的作业数。只在多标签的回归和数据量足够大的时候才生效。<br>属性：</li>
-<li>coef_：线性回归方程中估计出的系数</li>
-<li>intercept_： 线性回归中的截距<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LinearRegression as LR</span><br><span class="line">reg = LR().fit(Xtrain, Ytrain)</span><br><span class="line">yhat = reg.predict(Xtest)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>评估</p>
-<ol>
-<li><p>是否预测了正确的值<br> 均方误差MSE：均方误差，本质是在RSS的基础上除以了样本总量，得到了每个样本量上的平均误差。<br> <img src="3.png" alt="image.png"></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import mean_squared_error as MSE</span><br><span class="line">MSE(y_true,y_predict)</span><br></pre></td></tr></table></figure>
-<p> 再sklearn中，均方误差是个负数，代表一种损失。</p>
-</li>
-<li><p>是否拟合到了足够的信息</p>
-<ul>
-<li>R^2和</li>
-<li><p>可解释性方差分数(explained_variance_score，EVS)<br><img src="4.png" alt="image.png"><br>两者都衡量 1 - 我们的模型没有捕获到的信息 量占真实标签中所带的信息量的比例，所以，两者都是越接近1越好。<br>注意方法参数传入的顺序。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import r2_score r2_score(yhat,Ytest)</span><br><span class="line">r2 = reg.score(Xtest,Ytest)</span><br><span class="line"></span><br><span class="line">from sklearn.metrics import explained_variance_score as EVS </span><br><span class="line">EVS(Ytest,yhat)</span><br></pre></td></tr></table></figure>
-<p>R^2的值可能是个负数。证明模型拟合得非常糟糕</p>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/27/逻辑回归/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/27/逻辑回归/" itemprop="url">逻辑回归</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T17:22:39+08:00">
-                2019-05-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>逻辑回归，是一种名为“回归”的线性分类器，其本质是由线性回 归变化而来的，一种广泛使用于分类问题中的广义回归算法。</li>
-<li>线性回归的任务，就是构造一个预测函数 来映射输入的特征矩阵x和标签值y的线性关系，而构造预测函数的核心 就是找出模型的参数<br><img src="0.png" alt="image.png"><br>通过引入联系函数(link function)，将线性回归方程z变换为g(z)，并且令g(z)的值 分布在(0,1)之间，且当g(z)接近0时样本的标签为类别0，当g(z)接近1时样本的标签为类别1，这样就得到了一个分 类模型。而这个联系函数对于逻辑回归来说，就是Sigmoid函数:<br><img src="1.png" alt="image.png"></li>
-</ol>
-<p>Sigmoid函数是一个S型的函数，当自变量z趋近正无穷时，因变量g(z)趋近于1，而当z趋近负无穷时，g(z)趋近于0，它能够将任何实数映射到(0,1)区间，使其可用于将任意值函数转换为更适合二分类的函数。 因为这个性质，Sigmoid函数也被当作是归一化的一种方法，是属于数据预处理中的“缩放”功能，可以将数据压缩到[0,1]之内。区别在于，MinMaxScaler归一化之后，是可以取到0和1的(最大值归一化后就是1，最小值归一化后就是0)，但Sigmoid函数只是无限趋近于0和1。</p>
-<p>g(z)的形似几率取对数的本质其实就是我们的线性回归z，我们实际上是在对线性回归模型的预测结果取 对数几率来让其的结果无限逼近0和1。因此，其对应的模型被称为”对数几率回归“(logistic Regression)，也就是逻辑回归。</p>
-<ol start="3">
-<li><p>优点：</p>
-<ul>
-<li>逻辑回归对线性关系的拟合效果好。</li>
-<li>逻辑回归计算快</li>
-<li>逻辑回归返回的分类结果不是固定的0，1，而是以小数形式呈现的类概率数字</li>
-</ul>
-</li>
-<li><p><img src="2.png" alt="image.png"></p>
-</li>
-</ol>
-<p>linear_model.LogisticRegression (penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’warn’, max_iter=100, multi_class=’warn’, verbose=0, warm_start=False, n_jobs=None)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LogisticRegression as LR</span><br><span class="line">lrl1 = LR(penalty=&quot;l1&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br><span class="line">lrl2 = LR(penalty=&quot;l2&quot;,solver=&quot;liblinear&quot;,C=0.5,max_iter=1000)</span><br></pre></td></tr></table></figure></p>
-<p>参数：</p>
-<pre><code>- penalty: &quot;l1&quot;/&quot;l2&quot;,指定使用哪一种正则化方式，不填写默认&quot;l2&quot;。 注意,若选择&quot;l1&quot;正则化，参数solver仅能够使用”liblinear&quot;，若使用“l2”正则化，参数solver中 所有的求解方式都可以使用。
-- C: C正则化强度的倒数，必须是一个大于0的浮点数，不填写默认1.0，即默认一倍正则项。 C越小，对损失函数的惩罚越重，正则化的效力越强，参数会逐渐被压缩得越来越小。
-- max_iter: 算法收敛最大迭代次数，int类型，默认为10。仅在正则化优化算法为newton-cg, sag和lbfgs才有用，算法收敛的最大迭代次数。
-- solver: 优化算法选择参数，只有五个可选参数，即newton-cg,lbfgs,liblinear,sag,saga。默认为liblinear。solver参数决定了我们对逻辑回归损失函数的优化方法，有四种算法可以选择，分别是： 
-    - liblinear：使用了开源的liblinear库实现，内部使用了坐标轴下降法来迭代优化损失函数。
-    - lbfgs：拟牛顿法的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。
-    - newton-cg：也是牛顿法家族的一种，利用损失函数二阶导数矩阵即海森矩阵来迭代优化损失函数。
-    - sag：即随机平均梯度下降，是梯度下降法的变种，和普通梯度下降法的区别是每次迭代仅仅用一部分的样本来计算梯度，适合于样本数据多的时候。
-    - saga：线性收敛的随机优化算法的的变重。
-</code></pre><ol start="5">
-<li><p>”损失函数“作为评估指标，来衡量参数的优劣，即这一组参数能否使模型在训练集上表现优异。即是说，我们在求解参数时，追求损失函数最小，让模型在训练数据上的拟合效果最优，即预测准确率尽量靠近100%。对逻辑回归中过拟合的控制，通过正则化实现。</p>
-</li>
-<li><p>正则化是用来防止模型过拟合的过程，常用的有L1正则化和L2正则化两种选项，分别通过在损失函数后加上参数向 量 的L1范式和L2范式的倍数来实现。这个增加的范式，被称为“正则项”，也被称为”惩罚项”。损失函数改变，基 于损失函数的最优化来求解的参数取值必然改变，我们以此来调节模型拟合的程度。其中L1范数表现为参数向量中 的每个参数的绝对值之和，L2范数表现为参数向量中的每个参数的平方和的开方值。</p>
-</li>
-</ol>
-<p><img src="3.png" alt="image.png"></p>
-<p>L1正则化和L2正则化虽然都可以控制过拟合，但它们的效果并不相同。当正则化强度逐渐增大(即C逐渐变小)， 参数 的取值会逐渐变小，但L1正则化会将参数压缩为0，L2正则化只会让参数尽量小，不会取到0。</p>
-<p>参考：<br><a href="https://blog.csdn.net/jark_/article/details/78342644" target="_blank" rel="noopener">LogisticRegression - 参数说明</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/10/">10</a><a class="extend next" rel="next" href="/blog/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1963,7 +1991,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
