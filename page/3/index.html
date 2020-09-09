@@ -229,6 +229,238 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/" itemprop="url">《Head first Servlet & JSP》笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-02T14:10:15+08:00">
+                2019-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Web应用体系结构"><a href="#Web应用体系结构" class="headerlink" title="Web应用体系结构"></a>Web应用体系结构</h1><ol>
+<li><p>Servlet 生命周期：</p>
+<ol>
+<li>servlet类加载</li>
+<li>servlet实例化</li>
+<li>调用init方法</li>
+<li>调用service方法</li>
+<li>调用destory方法</li>
+</ol>
+</li>
+<li><p>Servlet没有main方法，他们受控于另一个JAVA容器应用，如Tomcat。<br> Web服务器应用（ng、Apache）-&gt; Web容器应用(Tomcat) -&gt; Servlet</p>
+</li>
+<li><p>容器的作用：</p>
+<ol>
+<li>通信支持：管理与web服务器的通信。</li>
+<li>生命周期管理：控制Servlet的生命周期、垃圾回收。</li>
+<li>多线程支持：管理一个线程池，为每个Servlet请求创建一个新/分配的Java线程。</li>
+<li>声明方式实现安全：XML描述文件。</li>
+<li>JSP支持：将JSP翻译成JAVA。</li>
+</ol>
+</li>
+<li>MVC<img src="/blog/2019/07/02/《Head-first-Servlet-JSP》笔记/0.png" title="mvc"></li>
+<li>J2EE 包含了Servlet规范、JSP规范、EJB规范，Web容器用于Web组件（Servlet、JSP），EJB容器用于业务组件。<ul>
+<li>独立的Web容器：Tomcat、Resin</li>
+<li>J2EE服务器：WebLogic、WebSphere</li>
+</ul>
+</li>
+</ol>
+<h1 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h1><ol>
+<li>容器调用流程<ul>
+<li>容器 –&gt; servlet.init() </li>
+<li>容器的线程 –&gt; service() –&gt; doGet()/doPost()…</li>
+</ul>
+</li>
+<li>service方法总是在自己的栈中调用</li>
+</ol>
+<h1 id="Request-and-Response"><a href="#Request-and-Response" class="headerlink" title="Request and Response"></a>Request and Response</h1><ol>
+<li>ServletRequest<ul>
+<li>getAttribute(String)</li>
+<li>genContentLength()</li>
+<li>getInputStream() 输入流</li>
+<li>getLocalPort()  请求最后发送到到端口（每个线程有不同到本地端口）</li>
+<li>getRemotePort() 客户端的端口</li>
+<li>getServerPort() 请求原来发送到的端口</li>
+<li>getParameter(String)</li>
+<li>getParameterValues(String)</li>
+<li>getParameterName</li>
+</ul>
+</li>
+<li><p>HttpServletRequest extends ServletRequest</p>
+<ul>
+<li>getContextPath()</li>
+<li>getCookies()</li>
+<li>getHeader()</li>
+<li>getMethod()</li>
+<li>getQueryString()</li>
+<li>getSession()</li>
+</ul>
+</li>
+<li><p>ServletResponse</p>
+<ul>
+<li>getBufferSize()</li>
+<li>setContentType()</li>
+<li>getOutputStream(): 输出字节 ServletOutputStream s = response.getOutputStream(); out.write(Byte);</li>
+<li>getWriter(): 输出字符 PrintWriter w = response.getWriter(); w.println(String);</li>
+<li>setContentLength()</li>
+</ul>
+</li>
+<li><p>HttpServletResponse extends ServletResponse</p>
+<ul>
+<li>addCookie()</li>
+<li>addHeader()</li>
+<li>encodeURL()</li>
+<li>sendError()</li>
+<li>setStatus()</li>
+<li>setRedirect()</li>
+</ul>
+</li>
+<li><p>HttpServletResponse常用setContentType()和getWrite()/getOutputStream()</p>
+</li>
+</ol>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><ol>
+<li><p>getServletContext().getInitParameter(“email”) ,对应用中所有的servlet跟jsp都可用 ,非线程安全。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>email<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>sdfsd<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web_app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>getServletConfig().getInitParamter(“email”)，只对该servlet可用</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>email<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>sdfsd<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web_app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>监听Webapp，ServletContextListener</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/25/Python-Requests库中Max-retries问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1773,172 +2005,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/29/聚类算法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/29/聚类算法/" itemprop="url">聚类算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-29T14:23:16+08:00">
-                2019-05-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>聚类算法又叫做“无监督分类”，其目的是将数据划分成有意义或有用的组(或簇)。这种划分可以基于我们的业务 需求或建模需求来完成，也可以单纯地帮助我们探索数据的自然结构和分布。</li>
-<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
-</li>
-<li><p>KMeans聚类算法<br> KMeans算法将一组N个样本的特征矩阵X划分为K个无交集的簇，直观上来看是簇是一组一组聚集在一起的数据，在一个簇中的数据就认为是同一类。簇就是聚类的结果表现。<br> 簇中所有数据的均值通常被称为这个簇的“质心”(centroids)。在一个二维平面中，一簇数据点的质心的 横坐标就是这一簇数据点的横坐标的均值，质心的纵坐标就是这一簇数据点的纵坐标的均值。同理可推广至高维空间。<br> 流程：</p>
-<pre><code>- 随机抽取K个样本作为最初的质心
-- 开始循环:
-- 将每个样本点分配到离他们最近的质心，生成K个簇
-- 对于每个簇，计算所有被分到该簇的样本点的平均值作为新的质心
-- 当质心的位置不再发生变化，迭代停止，聚类完成
-</code></pre></li>
-<li><p>簇内平方和（Inertia）：<br> Total Inertia越小，代表每个簇内样本越相似，聚类的效果就越好。因此 KMeans追求的是，求解能够让Inertia最小化的质心。<br> Inertia是基于欧几里得距离的计算公式得到的。<br> 簇内平方和/整体平方和是KMeans的损失函数。</p>
-</li>
-<li><p>cluster.KMeans (n_clusters=8, init=’k-means++’, n_init=10, max_iter=300, tol=0.0001, precompute_distances=’auto’, verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm=’auto’)</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.cluster import KMeans</span><br><span class="line">n_clusters = 3</span><br><span class="line"># kmean不需要建立模型或者预测数据，因此只要fit就可以查看结果</span><br><span class="line">cluster = KMeans(n_clusters=n_clusters, random_state=0).fit(X)</span><br><span class="line"># 查看聚好的类别，每个样本对应的类</span><br><span class="line">y_pred = cluster.labels_</span><br><span class="line"># 查看质心</span><br><span class="line">centroid = cluster.cluster_centers_</span><br><span class="line"># 查看总距离平方和</span><br><span class="line">inertia = cluster.inertia_</span><br></pre></td></tr></table></figure>
-<p> 参数：</p>
-<pre><code>- n_clusters：分的类数
-</code></pre></li>
-<li><p>模型评估指标<br> 通过衡量簇内差异来衡量聚类的效果，可以通过轮廓系数来判断。</p>
-<ul>
-<li>样本与其自身所在的簇中的其他样本的相似度a，等于样本与同一簇中所有其他点之间的平均距离</li>
-<li>样本与其他簇中的样本的相似度b，等于样本与下一个最近的簇中得所有点之间的平均距离<br>单个样本的轮廓系统为：s = (b-a) / max(b,a)<br>轮廓系数范围是(-1,1)，其中值越接近1表示样本与自己所在的簇中的样本很相似，并且与其他簇中的样本不相似，当样本点与簇外的样本更相似的时候，轮廓系数就为负。当轮廓系数为0时，则代表两个簇中的样本相 似度一致，两个簇本应该是一个簇。<br>缺点：再凸型函数表现虚高<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import silhouette_score</span><br><span class="line">from sklearn.metrics import silhouette_samples</span><br><span class="line">silhouette_score(X,cluster_.labels_) #总数</span><br><span class="line">silhouette_samples(X,y_pred) #每个样本</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1991,7 +2057,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-count">93</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2013,7 +2079,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
