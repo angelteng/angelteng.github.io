@@ -229,6 +229,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/07/Spring-boot集成Websocket/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/08/07/Spring-boot集成Websocket/" itemprop="url">Spring boot集成Websocket</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-07T11:36:19+08:00">
+                2019-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>pom.xml配置依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-websocket<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加Websocket配置类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.messaging.simp.config.MessageBrokerRegistry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.socket.config.annotation.StompEndpointRegistry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebSocketMessageBroker</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketConfig</span> <span class="keyword">implements</span> <span class="title">WebSocketMessageBrokerConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configureMessageBroker</span><span class="params">(MessageBrokerRegistry config)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 配置消息代理</span></span><br><span class="line"><span class="comment">        * 启动简单Broker，消息的发送的地址符合配置的前缀来的消息才发送到这个broker</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        config.enableSimpleBroker(<span class="string">"/topic"</span>);</span><br><span class="line">        config.setApplicationDestinationPrefixes(<span class="string">"/app"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerStompEndpoints</span><span class="params">(StompEndpointRegistry registry)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 注册 Stomp的端点</span></span><br><span class="line"><span class="comment">        * addEndpoint：添加STOMP协议的端点。这个HTTP URL是供WebSocket或SockJS客户端访问的地址</span></span><br><span class="line"><span class="comment">        * withSockJS：指定端点使用SockJS协议</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        registry.addEndpoint(<span class="string">"/websocket-demo"</span>)</span><br><span class="line">                .setAllowedOrigins(<span class="string">"*"</span>)</span><br><span class="line">                .withSockJS();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加Controller</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.example.demo.service.RequestMessage;</span><br><span class="line"><span class="keyword">import</span> com.example.demo.service.ResponseMessage;</span><br><span class="line"><span class="keyword">import</span> org.springframework.messaging.handler.annotation.MessageMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.messaging.handler.annotation.SendTo;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BroadcastController</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 收到消息记数</span></span><br><span class="line">    <span class="keyword">private</span> AtomicInteger count = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@MessageMapping</span> 指定要接收消息的地址，类似<span class="doctag">@RequestMapping</span>。除了注解到方法上，也可以注解到类上</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@SendTo</span>默认 消息将被发送到与传入消息相同的目的地</span></span><br><span class="line"><span class="comment">    * 消息的返回值是通过&#123;<span class="doctag">@link</span> org.springframework.messaging.converter.MessageConverter&#125;进行转换</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> requestMessage</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@MessageMapping</span>(<span class="string">"/receive"</span>)</span><br><span class="line">    <span class="meta">@SendTo</span>(<span class="string">"/topic/getResponse"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseMessage <span class="title">broadcast</span><span class="params">(RequestMessage requestMessage)</span></span>&#123;</span><br><span class="line">        ResponseMessage responseMessage = <span class="keyword">new</span> ResponseMessage();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span>(InterruptedException e) &#123;</span><br><span class="line">            System.out.println(<span class="string">"got interrupted!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        responseMessage.setResponseMessage(<span class="string">"Server receive ["</span> + count.incrementAndGet() + <span class="string">"] records"</span>);</span><br><span class="line">        <span class="keyword">return</span> responseMessage;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>前端</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- jquery  --&gt;</span><br><span class="line">&lt;script src=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;!-- stomp协议的客户端脚本 --&gt;</span><br><span class="line">&lt;script src=<span class="string">"http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;!-- SockJS的客户端脚本 --&gt;</span><br><span class="line">&lt;script src=<span class="string">"http://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    <span class="keyword">var</span> stompClient = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// websocket的连接地址，此值等于WebSocketMessageBrokerConfigurer中registry.addEndpoint("/websocket-simple").withSockJS()配置的地址</span></span><br><span class="line">        <span class="keyword">var</span> socket = <span class="keyword">new</span> SockJS(<span class="string">'http://127.0.0.1:8080/websocket-demo'</span>);</span><br><span class="line">        stompClient = Stomp.over(socket);</span><br><span class="line">        stompClient.connect(&#123;&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">frame</span>) </span>&#123;</span><br><span class="line">            setConnected(<span class="literal">true</span>);</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'Connected: '</span> + frame);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 客户端订阅消息的目的地址：此值BroadcastCtl中被@SendTo("/topic/getResponse")注解的里配置的值</span></span><br><span class="line">            stompClient.subscribe(<span class="string">'/topic/getResponse'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">respnose</span>)</span>&#123;</span><br><span class="line">                showResponse(<span class="built_in">JSON</span>.parse(respnose.body).responseMessage);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">disconnect</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (stompClient != <span class="literal">null</span>) &#123;</span><br><span class="line">            stompClient.disconnect();</span><br><span class="line">        &#125;</span><br><span class="line">        setConnected(<span class="literal">false</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Disconnected"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">sendName</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> name = $(<span class="string">'#name'</span>).val();</span><br><span class="line">        <span class="comment">// 客户端消息发送的目的：服务端使用BroadcastCtl中@MessageMapping("/receive")注解的方法来处理发送过来的消息</span></span><br><span class="line">        stompClient.send(<span class="string">"/app/receive"</span>, &#123;&#125;, <span class="built_in">JSON</span>.stringify(&#123; <span class="string">'name'</span>: name &#125;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">showResponse</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> response = $(<span class="string">"#response"</span>);</span><br><span class="line">        response.html(message + <span class="string">"\r\n"</span> + response.html());</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>参考：<br><a href="https://spring.io/guides/gs/messaging-stomp-websocket/" target="_blank" rel="noopener">Using WebSocket to build an interactive web application</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/05/Spring-boot-整合Kafka/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2132,182 +2288,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/09/OAuth2授权/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/07/09/OAuth2授权/" itemprop="url">基于OAuth2 + jwt授权系统设计</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-09T14:06:19+08:00">
-                2019-07-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Oauth2是什么"><a href="#Oauth2是什么" class="headerlink" title="Oauth2是什么"></a>Oauth2是什么</h1><h2 id="OAuth是一个标准"><a href="#OAuth是一个标准" class="headerlink" title="OAuth是一个标准"></a>OAuth是一个标准</h2><p>开放授权（OAuth）是一个开放标准，允许用户让第三方应用访问该用户在某一网站上存储的私密的资源（如照片，视频，联系人列表），而无需将用户名和密码提供给第三方应用。<br>OAuth是OpenID的一个补充，但是完全不同的服务。</p>
-<h2 id="OAuth功能"><a href="#OAuth功能" class="headerlink" title="OAuth功能"></a>OAuth功能</h2><p>OAuth允许用户提供一个令牌，而不是用户名和密码来访问他们存放在特定服务提供者的数据。每一个令牌授权一个特定的网站（例如，视频编辑网站)在特定的时段（例如，接下来的2小时内）内访问特定的资源（例如仅仅是某一相册中的视频）。这样，OAuth让用户可以授权第三方网站访问他们存储在另外服务提供者的某些特定信息，而非所有内容。</p>
-<h2 id="OAuth四种授权方式"><a href="#OAuth四种授权方式" class="headerlink" title="OAuth四种授权方式"></a>OAuth四种授权方式</h2><ol>
-<li><p>Authorization Code</p>
- <img src="/blog/2019/07/09/OAuth2授权/0.jpg">
-<ul>
-<li>（A）Client使用浏览器（用户代理）访问Authorization server。也就是用浏览器访问一个URL，这个URL是Authorization server提供的，访问的收Client需要提供（客户端标识，请求范围，本地状态和重定向URL）这些参数。</li>
-<li>（B）Authorization server验证Client在（A）中传递的参数信息，如果无误则提供一个页面供Resource owner登陆，登陆成功后选择Client可以访问Resource server的哪些资源以及读写权限。</li>
-<li>（C）在（B）无误后返回一个授权码（Authorization Code）给Client。</li>
-<li>（D）Client拿着（C）中获得的授权码（Authorization Code）和（客户端标识、重定向URL等信息）作为参数，请求Authorization server提供的获取访问令牌的URL。</li>
-<li><p>（E）Authorization server返回访问令牌和可选的刷新令牌以及令牌有效时间等信息给Client。</p>
-<p>当采用jwt/传统cookie session登录模式下，可以有两种不同的流程，上面为传统登录模式，下面为jwt登录模式。</p>
-<img src="/blog/2019/07/09/OAuth2授权/4.jpg">
-</li>
-</ul>
-</li>
-<li><p>Implicit</p>
- <img src="/blog/2019/07/09/OAuth2授权/1.jpg">
-<p> 和Authorzation Code类型下重要的区分就是省略了Authorization Response和Access Token Request。</p>
-</li>
-<li>Resource Owner Password Credentials Grant <img src="/blog/2019/07/09/OAuth2授权/2.jpg">
- Client直接使用Resource owner提供的username和password来直接请求access_token（直接发起Access Token Request然后返回Access Token Response信息）。这种模式一般适用于Resource server高度信任第三方Client的情况下。</li>
-<li>Client Credentials Grant <img src="/blog/2019/07/09/OAuth2授权/3.jpg">
- Client直接已自己的名义而不是Resource owner的名义去要求访问Resource server的一些受保护资源。</li>
-</ol>
-<h2 id="安全性问题"><a href="#安全性问题" class="headerlink" title="安全性问题"></a>安全性问题</h2><ol>
-<li>要求Authorization server进行有效的Client验证；<br> 包括client是否注册、client所属权限。</li>
-<li>client_serect,access_token,refresh_token,code等敏感信息的安全存储（不得泄露给第三方）、传输通道的安全性（TSL的要求）；<br> 必须使用HTTPS。</li>
-<li>维持refresh_token和第三方应用的绑定，刷新失效机制；</li>
-<li>维持Authorization Code和第三方应用的绑定，这也是state参数为什么是推荐的一点，以防止CSRF；<br> 同3，要求验证请求来源域名、重定向域名是否合法。<br> 必须使用state：客户端发出去, 授权服务器原样返回(对于授权服务器来说state是黑盒的东西,说也是可有可无的存在)，所以这个参数如何运用，全靠客户端。比如如果“李四”在客户端已经登录，那么客户端在发送state的时候就可以把“李四”的标识信息和随机数等其他信息加密后作为state。同时存入自己的cookie中。在接收到回调后先对比验证cookie，然后从里面取出“李四”。</li>
-</ol>
-<h1 id="jwt是什么"><a href="#jwt是什么" class="headerlink" title="jwt是什么"></a>jwt是什么</h1><h2 id="传统登录模式"><a href="#传统登录模式" class="headerlink" title="传统登录模式"></a>传统登录模式</h2><p>一般流程如下：</p>
-<ol>
-<li>用户向服务器发送用户名和密码。</li>
-<li>服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色、登录时间等等。</li>
-<li>服务器向用户返回一个 session_id，写入用户的 Cookie。</li>
-<li>用户随后的每一次请求，都会通过 Cookie，将 session_id 传回服务器。</li>
-<li>服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。<br>问题：</li>
-<li>集群部署下数据共享问题。</li>
-<li>如果用户直接点击了攻击者发的链接，因为用户浏览器带了登录cookie，使得攻击能成功。</li>
-</ol>
-<h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>JWT 的原理是，服务器认证以后，生成一个 JSON 对象，发回给用户。用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名。服务器就不保存任何 session 数据了，也就是说，服务器变成无状态了。</p>
-<h2 id="jwt特点"><a href="#jwt特点" class="headerlink" title="jwt特点"></a>jwt特点</h2><ol>
-<li>JWT 默认是不加密，但也是可以加密的。生成原始 Token 以后，可以用密钥再加密一次。</li>
-<li>JWT 不加密的情况下，不能将秘密数据写入 JWT。</li>
-<li>JWT 不仅可以用于认证，也可以用于交换信息。有效使用 JWT，可以降低服务器查询数据库的次数。</li>
-<li>JWT 的最大缺点是，由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。</li>
-<li>JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限。为了减少盗用，JWT 的有效期应该设置得比较短。对于一些比较重要的权限，使用时应该再次对用户进行认证。</li>
-<li>为了减少盗用，JWT 不应该使用 HTTP 协议明码传输，要使用 HTTPS 协议传输。</li>
-</ol>
-<h2 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h2><p>针对4.提到的缺点。增加：</p>
-<ol>
-<li>生成的token存入redis或持久层，实现集群下数据共享，及中途废止token，更改权限等功能，服务器进行验证时先验证redis/持久层的token，再进行解密验证。</li>
-<li>客户端、服务端不存储token进cookie，服务端返回给客户端时存储进localstorage，验证时在header 增加Authorize 参数传输。</li>
-</ol>
-<h1 id="设计流程"><a href="#设计流程" class="headerlink" title="设计流程"></a>设计流程</h1><img src="/blog/2019/07/09/OAuth2授权/5.jpg">
-<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>主要参考：<br><a href="https://www.cnblogs.com/linianhui/p/oauth2-authorization.html#auto_id_0" target="_blank" rel="noopener">[认证 &amp; 授权] 1. OAuth2授权</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2360,7 +2340,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2382,7 +2362,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

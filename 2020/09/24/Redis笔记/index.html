@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="redis,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] Redis模块组成 Redis数据结构  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。 Red">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis笔记">
+<meta property="og:url" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/index.html">
+<meta property="og:site_name" content="Code war of Angel">
+<meta property="og:description" content="[TOC] Redis模块组成 Redis数据结构  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。 Red">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600873329328.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600873417868.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600876246493.png">
+<meta property="og:updated_time" content="2020-09-24T02:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis笔记">
+<meta name="twitter:description" content="[TOC] Redis模块组成 Redis数据结构  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。 Red">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600873329328.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://angelteng.github.io/blog/2020/09/24/Redis笔记/">
+
+
+
+
+
+  <title>Redis笔记 | Code war of Angel</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Code war of Angel</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2020/09/24/Redis笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-24T09:59:52+08:00">
+                2020-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h2 id="Redis模块组成"><a href="#Redis模块组成" class="headerlink" title="Redis模块组成"></a>Redis模块组成</h2><img src="/blog/2020/09/24/Redis笔记/1600873329328.png">
+<h2 id="Redis数据结构"><a href="#Redis数据结构" class="headerlink" title="Redis数据结构"></a>Redis数据结构</h2><img src="/blog/2020/09/24/Redis笔记/1600873417868.png">
+<ol>
+<li>Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。<img src="/blog/2020/09/24/Redis笔记/1.png"></li>
+<li>Redis 解决哈希冲突的方式，就是链式哈希。</li>
+<li>渐进式 rehash：<ol>
+<li>给哈希表 2 分配更大的空间，例如是当前哈希表 1 大小的两倍；</li>
+<li>把哈希表 1 中的数据重新映射并拷贝到哈希表 2 中；</li>
+<li>释放哈希表 1 的空间</li>
+</ol>
+</li>
+<li>压缩列表和双向链表都会记录表头和表尾的偏移量。这样一来，对于 List 类型的 LPOP、RPOP、LPUSH、RPUSH 这四个操作来说，它们是在列表的头尾增删元素，这就可以通过偏移量直接定位，所以它们的复杂度也只有 O(1)</li>
+<li>String类型以SDS结构体存储，包括三部分：buf–字节数组，保存实际数据。len：占 4 个字节，表示 buf 的已用长度。alloc：也占个 4 字节，表示 buf 的实际分配长度。</li>
+<li>内存分配上：jemalloc 在分配内存时，会根据我们申请的字节数 N，找一个比 N 大，但是最接近 N 的 2 的幂次数作为分配的空间，这样可以减少频繁分配的次数。</li>
+<li>hash类型使用压缩列表还是哈希表作为低层数据结构，主要取决与：<ol>
+<li>hash-max-ziplist-entries：表示用压缩列表保存时哈希集合中的最大元素个数。</li>
+<li>hash-max-ziplist-value：表示用压缩列表保存时哈希集合中单个元素的最大长度。</li>
+</ol>
+</li>
+</ol>
+<h2 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h2><ol>
+<li>Linux 中的 IO 多路复用机制是指一个线程处理多个 IO 流，在 Redis 只运行单线程的情况下，该机制允许内核中，同时存在多个监听套接字和已连接套接字。内核会一直监听这些套接字上的连接请求或数据请求。一旦有请求到达，就会交给 Redis 线程处理，这就实现了一个 Redis 线程处理多个 IO 流的效果</li>
+<li>select/epoll 一旦监测到 FD 上有请求到达时，就会触发相应的事件。这些事件会被放进一个事件队列，Redis 单线程对该事件队列不断进行处理。</li>
+<li>性能瓶颈主要包括2个方面：<ol>
+<li>任意一个请求在server中一旦发生耗时，都会影响整个server的性能，也就是说后面的请求都要等前面这个耗时请求处理完成，自己才能被处理到。耗时的操作包括以下几种：<ul>
+<li>操作bigkey：写入一个bigkey在分配内存时需要消耗更多的时间，同样，删除bigkey释放内存同样会产生耗时；</li>
+<li>使用复杂度过高的命令：例如SORT/SUNION/ZUNIONSTORE，或者O(N)命令，但是N很大，例如lrange key 0 -1一次查询全量数据；</li>
+<li>大量key集中过期：Redis的过期机制也是在主线程中执行的，大量key集中过期会导致处理一个请求时，耗时都在删除过期key，耗时变长；</li>
+<li>淘汰策略：淘汰策略也是在主线程执行的，当内存超过Redis内存上限后，每次写入都需要淘汰一些key，也会造成耗时变长；</li>
+<li>AOF刷盘开启always机制：每次写入都需要把这个操作刷到磁盘，写磁盘的速度远比写内存慢，会拖慢Redis的性能；</li>
+<li>主从全量同步生成RDB：虽然采用fork子进程生成数据快照，但fork这一瞬间也是会阻塞整个线程的，实例越大，阻塞时间越久；</li>
+</ul>
+</li>
+<li>并发量非常大时，单线程读写客户端IO数据存在性能瓶颈，虽然采用IO多路复用机制，但是读写客户端数据依旧是同步IO，只能单线程依次读取客户端的数据，无法利用到CPU多核。</li>
+</ol>
+</li>
+</ol>
+<h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h3><ol>
+<li>Redis 是先执行命令，把数据写入内存，然后才记录日志。</li>
+<li>AOF 日志也是在主线程中执行的。策略<pre><code>1. Always，同步写回：每个写命令执行完，立马同步地将日志写回磁盘
+2. Everysec，每秒写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，每隔一秒把缓冲区中的内容写入磁盘；
+3. No，操作系统控制的写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，由操作系统决定何时将缓冲区内容写回磁盘。
+</code></pre></li>
+<li>AOF 重写机制就是在重写时，Redis 根据数据库的现状创建一个新的 AOF 文件。重写过程是由后台线程 bgrewriteaof 来完成的。</li>
+<li>重写的过程总结为“一个拷贝，两处日志”：主线程 fork 出后台的 bgrewriteaof 子进程。此时，fork 会把主线程的内存拷贝一份给 bgrewriteaof 子进程，这里面就包含了数据库的最新数据。然后，bgrewriteaof 子进程就可以在不影响主线程的情况下，逐一把拷贝的数据写成操作，记入重写日志。</li>
+</ol>
+<h3 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h3><ol>
+<li>Redis 的数据都在内存中，为了提供所有数据的可靠性保证，它执行的是全量快照。策略：<ol>
+<li>save：在主线程中执行，会导致阻塞；</li>
+<li>bgsave：创建一个子进程，专门用于写入 RDB 文件，避免了主线程的阻塞，这也是 Redis RDB 文件生成的默认配置。</li>
+</ol>
+</li>
+<li>Redis 就会借助操作系统提供的写时复制技术（Copy-On-Write, COW），在执行快照的同时，正常处理写操作。如果主线程要修改一块数据（例如图中的键值对 C），那么，这块数据就会被复制一份，生成该数据的副本。然后，bgsave 子进程会把这个副本数据写入 RDB 文件，而在这个过程中，主线程仍然可以直接修改原来的数据。</li>
+</ol>
+<p>##主从模式</p>
+<ol>
+<li>步骤：<ol>
+<li>从库给主库发送 psync 命令，表示要进行数据同步。psync 命令包含了主库的 runID 和复制进度 offset。</li>
+<li>主库收到 psync 命令后，会用 FULLRESYNC 响应命令带上两个参数：主库 runID 和主库目前的复制进度 offset。</li>
+<li>主库执行 bgsave 命令，生成 RDB 文件，接着将文件发给从库。从库接收到 RDB 文件后，会先清空当前数据库，然后加载 RDB 文件。</li>
+<li>只要有从库存在，主库会记录 RDB 文件生成后收到的所有写操作到环形缓存区repl_backlog_buffer, 如果主库与从库建立了连接，写入client buffer：replication buffer中。当主库完成 RDB 文件发送后，就会把此时 replication buffer 中的修改操作发给从库。</li>
+</ol>
+</li>
+<li>通过“主 - 从 - 从”模式将主库生成 RDB 和传输 RDB 的压力，以级联的方式分散到从库上。</li>
+<li>长连接复制是主从库正常运行后的常规同步阶段。在这个阶段中，主从库之间通过命令传播实现同步。</li>
+<li>主从库的连接恢复之后，从库首先会给主库发送 psync 命令，并把自己当前对于环形缓存区real_backlog_buffer的 slave_repl_offset 发给主库，主库会判断自己的 master_repl_offset 和 slave_repl_offset 之间的差距。<ol>
+<li>如果从库的读取速度比较慢，就有可能导致从库还未读取的操作被主库新写的操作覆盖了，这会导致主从库间的数据不一致。</li>
+<li>可以调整repl_backlog_size 这个参数。这个参数和所需的缓冲空间大小有关。缓冲空间的计算公式是：缓冲空间大小 = 主库写入命令速度 <em> 操作大小 - 主从库间网络传输命令速度 </em> 操作大小。</li>
+</ol>
+</li>
+</ol>
+<h3 id="哨兵机制"><a href="#哨兵机制" class="headerlink" title="哨兵机制"></a>哨兵机制</h3><ol>
+<li>流程<ol>
+<li>监控：监控是指哨兵进程在运行时，周期性地给所有的主从库发送 PING 命令，检测它们是否仍然在线运行。</li>
+<li>选主：主库挂了以后，哨兵就需要从很多个从库里，按照一定的规则选择一个从库实例，把它作为新的主库。哨兵集群在判断了主库“客观下线”后，经过投票仲裁，选举一个 Leader 出来，由它负责实际的主从切换。</li>
+<li>通知：在执行通知任务时，哨兵会把新主库的连接信息发给其他从库，让它们执行 replicaof 命令，和新主库建立连接，并进行数据复制。</li>
+</ol>
+</li>
+<li>主观下线：哨兵进程会使用 PING 命令检测它自己和主、从库的网络连接情况，用来判断实例的状态。</li>
+<li>客观下线：当有 N 个哨兵实例时，最好要有 N/2 + 1 个实例判断主库为“主观下线”，才能最终判定主库为“客观下线”。</li>
+<li>选主方法：<ol>
+<li>筛选：1. 检查从库的当前在线状态；2. 在 down-after-milliseconds 毫秒内，主从节点都没有通过网络联系上，我们就可以认为主从节点断连了。如果发生断连的次数超过了 10 次，就说明这个从库的网络状况不好。</li>
+<li>打分：进行三轮打分，这三个规则分别是从库优先级（slave-priority）、从库复制进度（slave_repl_offset）以及从库 ID 号（ID 号小的从库得分高）。只要在某一轮中，有从库得分最高，那么它就是主库了。</li>
+</ol>
+</li>
+<li>哨兵集群发现：哨兵和主库建立起了连接，就可以在主库上PUB/SUB，当多个哨兵实例都在主库上做了发布和订阅操作后，它们之间就能知道彼此的 IP 地址和端口。</li>
+<li>哨兵与从库建立连接：哨兵向主库发送 INFO 命令，主库把从库列表返回给哨兵。接着，哨兵就可以根据从库列表中的连接信息，和每个从库建立连接。</li>
+<li>哨兵与客户端通讯：<img src="/blog/2020/09/24/Redis笔记/1600876246493.png"></li>
+<li>要保证所有哨兵实例的配置是一致的，尤其是主观下线的判断值 down-after-milliseconds</li>
+</ol>
+<h3 id="切片集群"><a href="#切片集群" class="headerlink" title="切片集群"></a>切片集群</h3><ol>
+<li>部署 Redis Cluster 方案时，可以使用 cluster create 命令创建集群，此时，Redis 会自动把这些槽平均分布在集群实例上。例如，如果集群中有 N 个实例，那么，每个实例上的槽个数为 16384/N 个。</li>
+<li>在手动分配哈希槽时，需要把 16384 个槽都分配完，否则 Redis 集群无法正常工作。</li>
+<li>Redis 实例会把自己的哈希槽信息发给和它相连接的其它实例。客户端收到哈希槽信息后，会把哈希槽信息缓存在本地。</li>
+<li>重定向<ol>
+<li>原因：实例数量变动；负载均衡</li>
+<li>步骤：当客户端把一个键值对的操作请求发给一个实例时，如果这个实例上并没有这个键值对映射的哈希槽，那么，这个实例就会给客户端返回下面的 MOVED 命令响应结果，这个结果中就包含了新实例的访问地址。客户端更新缓存。</li>
+<li>迁移部分完成：客户端就会收到一条 ASK 报错信息，返回最新实例地址，客户端需要给新实例发送 ASKING 命令，然后再发送操作命令。ASK 命令并不会更新客户端缓存的哈希槽分配信息。</li>
+</ol>
+</li>
+</ol>
+<h3 id="聚合计算"><a href="#聚合计算" class="headerlink" title="聚合计算"></a>聚合计算</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2020/09/09/golang中实现np-frombuffer/" rel="next" title="golang中实现np.frombuffer">
+                <i class="fa fa-chevron-left"></i> golang中实现np.frombuffer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://angelteng.github.io/blog/images/angel.jpg" alt="Angel Teng">
+            
+              <p class="site-author-name" itemprop="name">Angel Teng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/category/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis模块组成"><span class="nav-number">1.</span> <span class="nav-text">Redis模块组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis数据结构"><span class="nav-number">2.</span> <span class="nav-text">Redis数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO模型"><span class="nav-number">3.</span> <span class="nav-text">IO模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志"><span class="nav-number">4.</span> <span class="nav-text">日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF"><span class="nav-number">4.1.</span> <span class="nav-text">AOF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB"><span class="nav-number">4.2.</span> <span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哨兵机制"><span class="nav-number">4.3.</span> <span class="nav-text">哨兵机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#切片集群"><span class="nav-number">4.4.</span> <span class="nav-text">切片集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合计算"><span class="nav-number">4.5.</span> <span class="nav-text">聚合计算</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -229,6 +229,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/16/Flask项目组织/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/11/16/Flask项目组织/" itemprop="url">Flask项目组织</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-16T16:42:57+08:00">
+                2018-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>一个基于 WSGI 的 Python web 应用必须有一个实现实际的应用的中心调用对象。在 Flask 中，中心调用对象是一个 Flask类的实例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>保证实例的唯一性 </li>
+<li>当进行单元测试的时候，创建一个最小应用用于测试特定的功能，会用到多应用</li>
+<li>使用显式对象时，可以继承基类Flask， 以便于修改特定的功能</li>
+<li>Flask 需要包的名称。当你创建一个 Flask 实例时， 通常会传递 ___name___ 作为包的名称。 Flask 根据包的名称来载入也模块相关的正确资源。</li>
+<li>“显式比隐式更好”<br>[Flask设计思路]（<a href="https://dormousehole.readthedocs.io/en/latest/design.html）" target="_blank" rel="noopener">https://dormousehole.readthedocs.io/en/latest/design.html）</a></li>
+</ul>
+<ol start="2">
+<li>使用<a href="http://docs.jinkan.org/docs/flask/blueprints.html" target="_blank" rel="noopener">蓝图</a>进行模块化组织<br>Flask 用 蓝图（blueprints） 的概念来在一个应用中或跨应用制作应用组件和支持通用的模式。蓝图很好地简化了大型应用工作的方式，并提供给 Flask 扩展在应用上注册操作的核心方法。<br>例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># routes/identify.py</span><br><span class="line">from flask import Blueprint</span><br><span class="line"></span><br><span class="line">identify = Blueprint(&apos;identify&apos;, __name__)</span><br><span class="line"></span><br><span class="line">@identify.route(&apos;/check-pics-quality&apos;,methods=[&apos;POST&apos;, &apos;GET&apos;])</span><br><span class="line">def check_pics_quality():</span><br><span class="line">    pass;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># routes/__init__.py</span><br><span class="line">from .identify import identify</span><br><span class="line">def init_app(app):</span><br><span class="line">    app.register_blueprint(identify, url_prefix=&apos;/identify&apos;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/15/Flask中并发优化jMeter测试/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1620,187 +1776,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/07/Python的模块与包/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/07/Python的模块与包/" itemprop="url">Python的模块与包</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T10:18:29+08:00">
-                2018-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Python模块</p>
-<ol>
-<li><p>引入模块</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 方式一</span><br><span class="line">import module</span><br><span class="line">module.function(&apos;xxx&apos;)</span><br><span class="line"># 方式二</span><br><span class="line">from module import *  #导入所有除了以下划线( _ )开头的命名</span><br><span class="line"># from module import function,function1,function2</span><br><span class="line">function(&apos;xxx&apos;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>以脚本方式运行模块，<strong>name</strong> 被设置为 “<strong>main</strong>“</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; python module.py</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>模块搜索路径</p>
-</li>
-</ol>
-<ul>
-<li>当前目录</li>
-<li>sys.path 变量中给出的目录列表<ul>
-<li>输入脚本的目录（当前目录）</li>
-<li>环境变量 PYTHONPATH表示的目录列表中搜索</li>
-<li>Python 默认安装路径中搜索</li>
-</ul>
-</li>
-</ul>
-<ol start="4">
-<li>模块编译：</li>
-</ol>
-<ul>
-<li>为加快加载模块的速度，Python 会在 __pycache__ 目录下以 module.version.pyc 名字缓存每个模块编译后的版本</li>
-<li>Python 会检查源文件与编译版的修改日期以确定它是否过期并需要重新编译</li>
-<li>Python会永远重新编译而且不会存储直接从命令行加载的模块</li>
-<li>如果没有源模块它不会检查缓存</li>
-</ul>
-<ol start="5">
-<li>标准模块库，是一个依赖于底层平台的配置选项集合</li>
-<li>包<br><img src="0.png" alt="包结构"></li>
-</ol>
-<ul>
-<li>必须包含___init___.py</li>
-<li>___all___ = [“echo”, “surround”, “reverse”]  指定*导入的子模块集合</li>
-<li>如果没有定义 ___all_<strong> ， from sound.effects import * 语句</strong>不会__从 sound.effects 包中导入所有的子模块</li>
-<li>导入方式<br><code>`</code><br>import sound.effects.echo<br>sound.effects.echo.echofilter(input, output, delay=0.7, atten=4)</li>
-</ul>
-<p>from sound.effects import echo<br>echo.echofilter(input, output, delay=0.7, atten=4)</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1853,7 +1828,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1875,7 +1850,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

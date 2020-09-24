@@ -229,6 +229,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/10/Python灰度图转伪彩色图/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/01/10/Python灰度图转伪彩色图/" itemprop="url">Python灰度图转伪彩色图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T10:02:47+08:00">
+                2019-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>因项目中算法给出分割图是灰度图，而前端需要展示彩色图，搜了下网上资料，参考了opencv写的<a href="http://blog.sina.com.cn/s/blog_8924265b0101ext1.html" target="_blank" rel="noopener">这篇</a>，改成了Python代码<br>效果：<br>原灰度图<br><img src="0.png" alt="灰度图"><br>伪彩色图<br><img src="1.png" alt="彩色图"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line">import requests</span><br><span class="line">from io import BytesIO</span><br><span class="line">import numpy as np</span><br><span class="line">def grayImageTrans(url):</span><br><span class="line">    # url</span><br><span class="line">    # 如果是本地图片</span><br><span class="line">    # img = Image.open(&apos;/tmp/test.jpg&apos;)</span><br><span class="line">    file = requests.get(url)</span><br><span class="line">    tmpIm = BytesIO(file.content)</span><br><span class="line">    img = Image.open(tmpIm)</span><br><span class="line">    # 图片转矩阵</span><br><span class="line">    img = np.array(img)</span><br><span class="line">    # nparray转list</span><br><span class="line">    imgAry = img.tolist()</span><br><span class="line">    tmp=0</span><br><span class="line">    # 加颜色</span><br><span class="line">    for x in range(img.shape[0]):</span><br><span class="line">        for y in range(img.shape[1]):</span><br><span class="line">            tmp = imgAry[x][y]</span><br><span class="line">            imgAry[x][y] = __grayColorTrans(tmp)</span><br><span class="line">    newImgAry = np.array(imgAry)</span><br><span class="line">    # 矩阵转图片</span><br><span class="line">    newImg = Image.fromarray(np.uint8(newImgAry))</span><br><span class="line">    # newImg.save(&apos;/vagrant/test.png&apos;)</span><br><span class="line">    # 转base64</span><br><span class="line">    output_buffer = BytesIO()</span><br><span class="line">    newImg.save(output_buffer, format=&apos;PNG&apos;)</span><br><span class="line">    byte_data = output_buffer.getvalue()</span><br><span class="line">    base64_str = base64.b64encode(byte_data)</span><br><span class="line">    return base64_str</span><br></pre></td></tr></table></figure>
+<p>参考：<br>关于Image与Base64转换可以看<a href="https://www.jianshu.com/p/2ff8e6f98257" target="_blank" rel="noopener">这里</a><br><a href="https://my.oschina.net/112612/blog/1594140" target="_blank" rel="noopener">Image图像的convert</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/01/03/Three三维世界初体验/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2222,148 +2366,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2018/11/28/numpy的使用/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2018/11/28/numpy的使用/" itemprop="url">numpy的使用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-28T16:27:06+08:00">
-                2018-11-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>向量、矩阵<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"># 创建矩阵</span><br><span class="line">matrix = np.array([[1, 4],</span><br><span class="line">                   [2, 5]])</span><br><span class="line"># 矩阵变形</span><br><span class="line">matrix.reshape(1,4)   </span><br><span class="line"># 矩阵的逆</span><br><span class="line">np.linalg.inv(matrix)</span><br><span class="line"># 返回对角线元素</span><br><span class="line">matrix.diagonal()</span><br><span class="line"># 创建矩阵的迹</span><br><span class="line">matrix.diagonal().sum()</span><br><span class="line"># 展开矩阵</span><br><span class="line">matrix.flatten()</span><br><span class="line"># 返回矩阵的秩</span><br><span class="line">np.linalg.matrix_rank(matrix)</span><br><span class="line"># 返回最大元素</span><br><span class="line">np.max(matrix)</span><br><span class="line"># 返回最小元素</span><br><span class="line">np.min(matrix)</span><br><span class="line"># 寻找每列的最大元素</span><br><span class="line">np.max(matrix, axis=0)</span><br><span class="line"># 查看行和列数</span><br><span class="line">matrix.shape</span><br><span class="line"># 查看元素数（行乘列）</span><br><span class="line">matrix.size</span><br><span class="line"># 查看维数</span><br><span class="line">matrix.ndim</span><br><span class="line"># 返回均值</span><br><span class="line">np.mean(matrix)</span><br><span class="line"># 返回方差</span><br><span class="line">np.var(matrix)</span><br><span class="line"># 返回标准差</span><br><span class="line">np.std(matrix)</span><br><span class="line"></span><br><span class="line">#将字典转换为矩阵</span><br><span class="line">from sklearn.feature_extraction import DictVectorizer</span><br><span class="line">data_dict = [&#123;&apos;Red&apos;: 2, &apos;Blue&apos;: 4&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 4, &apos;Blue&apos;: 3&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 1, &apos;Yellow&apos;: 2&#125;,</span><br><span class="line">             &#123;&apos;Red&apos;: 2, &apos;Yellow&apos;: 2&#125;]</span><br><span class="line"></span><br><span class="line"># 创建 DictVectorizer 对象</span><br><span class="line">dictvectorizer = DictVectorizer(sparse=False)</span><br><span class="line"># 将字典转换为特征矩阵</span><br><span class="line">features = dictvectorizer.fit_transform(data_dict)</span><br><span class="line"># 查看特征矩阵的列名</span><br><span class="line">dictvectorizer.get_feature_names()</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2416,7 +2418,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2438,7 +2440,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

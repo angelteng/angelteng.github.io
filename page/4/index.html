@@ -229,6 +229,193 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/29/支持向量机SVM/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/05/29/支持向量机SVM/" itemprop="url">支持向量机SVM</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-29T14:46:23+08:00">
+                2019-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>支持向量机算法功能</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">有监督学习</td>
+<td style="text-align:left">线性二分类与多分类(Linear Support Vector Classification) <br> 非线性二分类与多分类(Support Vector Classification, SVC)  <br> 普通连续型变量的回归(Support Vector Regression) 概率型连续变量的回归(Bayesian SVM)</td>
+</tr>
+<tr>
+<td style="text-align:left">无监督学习</td>
+<td style="text-align:left">支持向量聚类(Support Vector Clustering，SVC) 异常值检测(One-class SVM)</td>
+</tr>
+<tr>
+<td style="text-align:left">半监督学习</td>
+<td style="text-align:left">转导支持向量机(Transductive Support Vector Machines，TSVM)</td>
+</tr>
+</tbody>
+</table>
+<p>从分类效力来讲，SVM在无论线性还是非线性分类中，都是明星般的存在。</p>
+<ol start="2">
+<li><p>支持向量机的分类方法，是在这组分布中找出一个超平面作为决策边界，使模型在数据上的分类误差尽量接近于小，尤其是在未知数据集上的分类误差(泛化误差)尽量小。决策边界一侧的所有点在分类为属于一个类，而另一侧的所有点分类属于另一个类。如果我们能够找出决策边界， 分类问题就可以变成探讨每个样本对于决策边界而言的相对位置，因此，支持向量机，就是通过找出边际最大的决策边界，来对数据进行分类的分类器。</p>
+</li>
+<li><p>in sklearn<br><img src="0.png" alt="image.png"></p>
+</li>
+</ol>
+<p>svm.SVC(C=1.0,kernel=’rbf’,degree=3,gamma=’auto_deprecated’,coef0=0.0,shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape=’ovr’, random_state=None)</p>
+<p>参数</p>
+<pre><code>- kernel
+    - linear
+    - poly
+    - sigmoid
+    - rbf (good)
+- degree
+- gamma
+</code></pre><p><img src="1.png" alt="image.png"><br><img src="2.png" alt="image.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.svm import SVC</span><br><span class="line">clf = SVC(kernel = &quot;linear&quot;).fit(X,y)</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>核函数<br>也叫做“核技巧”(Kernel Trick)，是一种能够使用数据原始空间中的向量计算来表示 升维后的空间中的点积结果的数学方式。 这个原始空间中的点积函数就被叫做“核函数”(Kernel Function)。<br>第一，有了核函数之后，我们无需去担心函数究竟应该是什么样，因为非线性SVM中的核函数都是正定核函数 (positive definite kernel functions)，他们都满足美世定律(Mercer’s theorem)，确保了高维空间中任意两个向量 的点积一定可以被低维空间中的这两个向量的某种计算来表示(多数时候是点积的某种变换)。<br>第二，使用核函数计算低维度中的向量关系比计算原本的要简单太多了。<br>第三，因为计算是在原始空间中进行，所以避免了维度诅咒的问题。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/29/聚类算法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1995,157 +2182,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/05/23/机器学习链接/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/05/23/机器学习链接/" itemprop="url">机器学习链接</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-23T15:43:22+08:00">
-                2019-05-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>持续更新中….</p>
-<ol>
-<li>courea上吴恩达的机器学习课程，<a href="https://angelteng.github.io/blog/2019/01/10/机器学习基石学习笔记（一）/">笔记</a></li>
-<li><a href="https://wizardforcel.gitbooks.io/pyda-2e/content/14.html" target="_blank" rel="noopener">《利用python进行数据分析》</a>，包含pandas、numpy、matplotlib的使用</li>
-<li>sklearn 的使用：<ul>
-<li><a href="https://morvanzhou.github.io/tutorials/machine-learning/sklearn/" target="_blank" rel="noopener">通用机器学习 Scikit-learn</a></li>
-<li><a href="https://www.bilibili.com/video/av35523476" target="_blank" rel="noopener">菜菜的sklearn课堂</a></li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2198,7 +2234,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2220,7 +2256,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

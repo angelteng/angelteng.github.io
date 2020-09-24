@@ -229,6 +229,227 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2020/09/24/Redis笔记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2020/09/24/Redis笔记/" itemprop="url">Redis笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-24T09:59:52+08:00">
+                2020-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>[TOC]</p>
+<h2 id="Redis模块组成"><a href="#Redis模块组成" class="headerlink" title="Redis模块组成"></a>Redis模块组成</h2><img src="/blog/2020/09/24/Redis笔记/1600873329328.png">
+<h2 id="Redis数据结构"><a href="#Redis数据结构" class="headerlink" title="Redis数据结构"></a>Redis数据结构</h2><img src="/blog/2020/09/24/Redis笔记/1600873417868.png">
+<ol>
+<li>Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。<img src="/blog/2020/09/24/Redis笔记/1.png"></li>
+<li>Redis 解决哈希冲突的方式，就是链式哈希。</li>
+<li>渐进式 rehash：<ol>
+<li>给哈希表 2 分配更大的空间，例如是当前哈希表 1 大小的两倍；</li>
+<li>把哈希表 1 中的数据重新映射并拷贝到哈希表 2 中；</li>
+<li>释放哈希表 1 的空间</li>
+</ol>
+</li>
+<li>压缩列表和双向链表都会记录表头和表尾的偏移量。这样一来，对于 List 类型的 LPOP、RPOP、LPUSH、RPUSH 这四个操作来说，它们是在列表的头尾增删元素，这就可以通过偏移量直接定位，所以它们的复杂度也只有 O(1)</li>
+<li>String类型以SDS结构体存储，包括三部分：buf–字节数组，保存实际数据。len：占 4 个字节，表示 buf 的已用长度。alloc：也占个 4 字节，表示 buf 的实际分配长度。</li>
+<li>内存分配上：jemalloc 在分配内存时，会根据我们申请的字节数 N，找一个比 N 大，但是最接近 N 的 2 的幂次数作为分配的空间，这样可以减少频繁分配的次数。</li>
+<li>hash类型使用压缩列表还是哈希表作为低层数据结构，主要取决与：<ol>
+<li>hash-max-ziplist-entries：表示用压缩列表保存时哈希集合中的最大元素个数。</li>
+<li>hash-max-ziplist-value：表示用压缩列表保存时哈希集合中单个元素的最大长度。</li>
+</ol>
+</li>
+</ol>
+<h2 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h2><ol>
+<li>Linux 中的 IO 多路复用机制是指一个线程处理多个 IO 流，在 Redis 只运行单线程的情况下，该机制允许内核中，同时存在多个监听套接字和已连接套接字。内核会一直监听这些套接字上的连接请求或数据请求。一旦有请求到达，就会交给 Redis 线程处理，这就实现了一个 Redis 线程处理多个 IO 流的效果</li>
+<li>select/epoll 一旦监测到 FD 上有请求到达时，就会触发相应的事件。这些事件会被放进一个事件队列，Redis 单线程对该事件队列不断进行处理。</li>
+<li>性能瓶颈主要包括2个方面：<ol>
+<li>任意一个请求在server中一旦发生耗时，都会影响整个server的性能，也就是说后面的请求都要等前面这个耗时请求处理完成，自己才能被处理到。耗时的操作包括以下几种：<ul>
+<li>操作bigkey：写入一个bigkey在分配内存时需要消耗更多的时间，同样，删除bigkey释放内存同样会产生耗时；</li>
+<li>使用复杂度过高的命令：例如SORT/SUNION/ZUNIONSTORE，或者O(N)命令，但是N很大，例如lrange key 0 -1一次查询全量数据；</li>
+<li>大量key集中过期：Redis的过期机制也是在主线程中执行的，大量key集中过期会导致处理一个请求时，耗时都在删除过期key，耗时变长；</li>
+<li>淘汰策略：淘汰策略也是在主线程执行的，当内存超过Redis内存上限后，每次写入都需要淘汰一些key，也会造成耗时变长；</li>
+<li>AOF刷盘开启always机制：每次写入都需要把这个操作刷到磁盘，写磁盘的速度远比写内存慢，会拖慢Redis的性能；</li>
+<li>主从全量同步生成RDB：虽然采用fork子进程生成数据快照，但fork这一瞬间也是会阻塞整个线程的，实例越大，阻塞时间越久；</li>
+</ul>
+</li>
+<li>并发量非常大时，单线程读写客户端IO数据存在性能瓶颈，虽然采用IO多路复用机制，但是读写客户端数据依旧是同步IO，只能单线程依次读取客户端的数据，无法利用到CPU多核。</li>
+</ol>
+</li>
+</ol>
+<h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h3><ol>
+<li>Redis 是先执行命令，把数据写入内存，然后才记录日志。</li>
+<li>AOF 日志也是在主线程中执行的。策略<pre><code>1. Always，同步写回：每个写命令执行完，立马同步地将日志写回磁盘
+2. Everysec，每秒写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，每隔一秒把缓冲区中的内容写入磁盘；
+3. No，操作系统控制的写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，由操作系统决定何时将缓冲区内容写回磁盘。
+</code></pre></li>
+<li>AOF 重写机制就是在重写时，Redis 根据数据库的现状创建一个新的 AOF 文件。重写过程是由后台线程 bgrewriteaof 来完成的。</li>
+<li>重写的过程总结为“一个拷贝，两处日志”：主线程 fork 出后台的 bgrewriteaof 子进程。此时，fork 会把主线程的内存拷贝一份给 bgrewriteaof 子进程，这里面就包含了数据库的最新数据。然后，bgrewriteaof 子进程就可以在不影响主线程的情况下，逐一把拷贝的数据写成操作，记入重写日志。</li>
+</ol>
+<h3 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h3><ol>
+<li>Redis 的数据都在内存中，为了提供所有数据的可靠性保证，它执行的是全量快照。策略：<ol>
+<li>save：在主线程中执行，会导致阻塞；</li>
+<li>bgsave：创建一个子进程，专门用于写入 RDB 文件，避免了主线程的阻塞，这也是 Redis RDB 文件生成的默认配置。</li>
+</ol>
+</li>
+<li>Redis 就会借助操作系统提供的写时复制技术（Copy-On-Write, COW），在执行快照的同时，正常处理写操作。如果主线程要修改一块数据（例如图中的键值对 C），那么，这块数据就会被复制一份，生成该数据的副本。然后，bgsave 子进程会把这个副本数据写入 RDB 文件，而在这个过程中，主线程仍然可以直接修改原来的数据。</li>
+</ol>
+<p>##主从模式</p>
+<ol>
+<li>步骤：<ol>
+<li>从库给主库发送 psync 命令，表示要进行数据同步。psync 命令包含了主库的 runID 和复制进度 offset。</li>
+<li>主库收到 psync 命令后，会用 FULLRESYNC 响应命令带上两个参数：主库 runID 和主库目前的复制进度 offset。</li>
+<li>主库执行 bgsave 命令，生成 RDB 文件，接着将文件发给从库。从库接收到 RDB 文件后，会先清空当前数据库，然后加载 RDB 文件。</li>
+<li>只要有从库存在，主库会记录 RDB 文件生成后收到的所有写操作到环形缓存区repl_backlog_buffer, 如果主库与从库建立了连接，写入client buffer：replication buffer中。当主库完成 RDB 文件发送后，就会把此时 replication buffer 中的修改操作发给从库。</li>
+</ol>
+</li>
+<li>通过“主 - 从 - 从”模式将主库生成 RDB 和传输 RDB 的压力，以级联的方式分散到从库上。</li>
+<li>长连接复制是主从库正常运行后的常规同步阶段。在这个阶段中，主从库之间通过命令传播实现同步。</li>
+<li>主从库的连接恢复之后，从库首先会给主库发送 psync 命令，并把自己当前对于环形缓存区real_backlog_buffer的 slave_repl_offset 发给主库，主库会判断自己的 master_repl_offset 和 slave_repl_offset 之间的差距。<ol>
+<li>如果从库的读取速度比较慢，就有可能导致从库还未读取的操作被主库新写的操作覆盖了，这会导致主从库间的数据不一致。</li>
+<li>可以调整repl_backlog_size 这个参数。这个参数和所需的缓冲空间大小有关。缓冲空间的计算公式是：缓冲空间大小 = 主库写入命令速度 <em> 操作大小 - 主从库间网络传输命令速度 </em> 操作大小。</li>
+</ol>
+</li>
+</ol>
+<h3 id="哨兵机制"><a href="#哨兵机制" class="headerlink" title="哨兵机制"></a>哨兵机制</h3><ol>
+<li>流程<ol>
+<li>监控：监控是指哨兵进程在运行时，周期性地给所有的主从库发送 PING 命令，检测它们是否仍然在线运行。</li>
+<li>选主：主库挂了以后，哨兵就需要从很多个从库里，按照一定的规则选择一个从库实例，把它作为新的主库。哨兵集群在判断了主库“客观下线”后，经过投票仲裁，选举一个 Leader 出来，由它负责实际的主从切换。</li>
+<li>通知：在执行通知任务时，哨兵会把新主库的连接信息发给其他从库，让它们执行 replicaof 命令，和新主库建立连接，并进行数据复制。</li>
+</ol>
+</li>
+<li>主观下线：哨兵进程会使用 PING 命令检测它自己和主、从库的网络连接情况，用来判断实例的状态。</li>
+<li>客观下线：当有 N 个哨兵实例时，最好要有 N/2 + 1 个实例判断主库为“主观下线”，才能最终判定主库为“客观下线”。</li>
+<li>选主方法：<ol>
+<li>筛选：1. 检查从库的当前在线状态；2. 在 down-after-milliseconds 毫秒内，主从节点都没有通过网络联系上，我们就可以认为主从节点断连了。如果发生断连的次数超过了 10 次，就说明这个从库的网络状况不好。</li>
+<li>打分：进行三轮打分，这三个规则分别是从库优先级（slave-priority）、从库复制进度（slave_repl_offset）以及从库 ID 号（ID 号小的从库得分高）。只要在某一轮中，有从库得分最高，那么它就是主库了。</li>
+</ol>
+</li>
+<li>哨兵集群发现：哨兵和主库建立起了连接，就可以在主库上PUB/SUB，当多个哨兵实例都在主库上做了发布和订阅操作后，它们之间就能知道彼此的 IP 地址和端口。</li>
+<li>哨兵与从库建立连接：哨兵向主库发送 INFO 命令，主库把从库列表返回给哨兵。接着，哨兵就可以根据从库列表中的连接信息，和每个从库建立连接。</li>
+<li>哨兵与客户端通讯：<img src="/blog/2020/09/24/Redis笔记/1600876246493.png"></li>
+<li>要保证所有哨兵实例的配置是一致的，尤其是主观下线的判断值 down-after-milliseconds</li>
+</ol>
+<h3 id="切片集群"><a href="#切片集群" class="headerlink" title="切片集群"></a>切片集群</h3><ol>
+<li>部署 Redis Cluster 方案时，可以使用 cluster create 命令创建集群，此时，Redis 会自动把这些槽平均分布在集群实例上。例如，如果集群中有 N 个实例，那么，每个实例上的槽个数为 16384/N 个。</li>
+<li>在手动分配哈希槽时，需要把 16384 个槽都分配完，否则 Redis 集群无法正常工作。</li>
+<li>Redis 实例会把自己的哈希槽信息发给和它相连接的其它实例。客户端收到哈希槽信息后，会把哈希槽信息缓存在本地。</li>
+<li>重定向<ol>
+<li>原因：实例数量变动；负载均衡</li>
+<li>步骤：当客户端把一个键值对的操作请求发给一个实例时，如果这个实例上并没有这个键值对映射的哈希槽，那么，这个实例就会给客户端返回下面的 MOVED 命令响应结果，这个结果中就包含了新实例的访问地址。客户端更新缓存。</li>
+<li>迁移部分完成：客户端就会收到一条 ASK 报错信息，返回最新实例地址，客户端需要给新实例发送 ASKING 命令，然后再发送操作命令。ASK 命令并不会更新客户端缓存的哈希槽分配信息。</li>
+</ol>
+</li>
+</ol>
+<h3 id="聚合计算"><a href="#聚合计算" class="headerlink" title="聚合计算"></a>聚合计算</h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2020/09/09/golang中实现np-frombuffer/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1649,162 +1870,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/07/Spring-boot集成Websocket/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/08/07/Spring-boot集成Websocket/" itemprop="url">Spring boot集成Websocket</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-07T11:36:19+08:00">
-                2019-08-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/JAVA/" itemprop="url" rel="index">
-                    <span itemprop="name">JAVA</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>pom.xml配置依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-websocket<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加Websocket配置类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.messaging.simp.config.MessageBrokerRegistry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.socket.config.annotation.StompEndpointRegistry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebSocketMessageBroker</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketConfig</span> <span class="keyword">implements</span> <span class="title">WebSocketMessageBrokerConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configureMessageBroker</span><span class="params">(MessageBrokerRegistry config)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 配置消息代理</span></span><br><span class="line"><span class="comment">        * 启动简单Broker，消息的发送的地址符合配置的前缀来的消息才发送到这个broker</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        config.enableSimpleBroker(<span class="string">"/topic"</span>);</span><br><span class="line">        config.setApplicationDestinationPrefixes(<span class="string">"/app"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerStompEndpoints</span><span class="params">(StompEndpointRegistry registry)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 注册 Stomp的端点</span></span><br><span class="line"><span class="comment">        * addEndpoint：添加STOMP协议的端点。这个HTTP URL是供WebSocket或SockJS客户端访问的地址</span></span><br><span class="line"><span class="comment">        * withSockJS：指定端点使用SockJS协议</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        registry.addEndpoint(<span class="string">"/websocket-demo"</span>)</span><br><span class="line">                .setAllowedOrigins(<span class="string">"*"</span>)</span><br><span class="line">                .withSockJS();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加Controller</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.example.demo.service.RequestMessage;</span><br><span class="line"><span class="keyword">import</span> com.example.demo.service.ResponseMessage;</span><br><span class="line"><span class="keyword">import</span> org.springframework.messaging.handler.annotation.MessageMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.messaging.handler.annotation.SendTo;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BroadcastController</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 收到消息记数</span></span><br><span class="line">    <span class="keyword">private</span> AtomicInteger count = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@MessageMapping</span> 指定要接收消息的地址，类似<span class="doctag">@RequestMapping</span>。除了注解到方法上，也可以注解到类上</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@SendTo</span>默认 消息将被发送到与传入消息相同的目的地</span></span><br><span class="line"><span class="comment">    * 消息的返回值是通过&#123;<span class="doctag">@link</span> org.springframework.messaging.converter.MessageConverter&#125;进行转换</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> requestMessage</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@MessageMapping</span>(<span class="string">"/receive"</span>)</span><br><span class="line">    <span class="meta">@SendTo</span>(<span class="string">"/topic/getResponse"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseMessage <span class="title">broadcast</span><span class="params">(RequestMessage requestMessage)</span></span>&#123;</span><br><span class="line">        ResponseMessage responseMessage = <span class="keyword">new</span> ResponseMessage();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span>(InterruptedException e) &#123;</span><br><span class="line">            System.out.println(<span class="string">"got interrupted!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        responseMessage.setResponseMessage(<span class="string">"Server receive ["</span> + count.incrementAndGet() + <span class="string">"] records"</span>);</span><br><span class="line">        <span class="keyword">return</span> responseMessage;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>前端</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- jquery  --&gt;</span><br><span class="line">&lt;script src=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;!-- stomp协议的客户端脚本 --&gt;</span><br><span class="line">&lt;script src=<span class="string">"http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;!-- SockJS的客户端脚本 --&gt;</span><br><span class="line">&lt;script src=<span class="string">"http://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    <span class="keyword">var</span> stompClient = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// websocket的连接地址，此值等于WebSocketMessageBrokerConfigurer中registry.addEndpoint("/websocket-simple").withSockJS()配置的地址</span></span><br><span class="line">        <span class="keyword">var</span> socket = <span class="keyword">new</span> SockJS(<span class="string">'http://127.0.0.1:8080/websocket-demo'</span>);</span><br><span class="line">        stompClient = Stomp.over(socket);</span><br><span class="line">        stompClient.connect(&#123;&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">frame</span>) </span>&#123;</span><br><span class="line">            setConnected(<span class="literal">true</span>);</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'Connected: '</span> + frame);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 客户端订阅消息的目的地址：此值BroadcastCtl中被@SendTo("/topic/getResponse")注解的里配置的值</span></span><br><span class="line">            stompClient.subscribe(<span class="string">'/topic/getResponse'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">respnose</span>)</span>&#123;</span><br><span class="line">                showResponse(<span class="built_in">JSON</span>.parse(respnose.body).responseMessage);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">disconnect</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (stompClient != <span class="literal">null</span>) &#123;</span><br><span class="line">            stompClient.disconnect();</span><br><span class="line">        &#125;</span><br><span class="line">        setConnected(<span class="literal">false</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Disconnected"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">sendName</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> name = $(<span class="string">'#name'</span>).val();</span><br><span class="line">        <span class="comment">// 客户端消息发送的目的：服务端使用BroadcastCtl中@MessageMapping("/receive")注解的方法来处理发送过来的消息</span></span><br><span class="line">        stompClient.send(<span class="string">"/app/receive"</span>, &#123;&#125;, <span class="built_in">JSON</span>.stringify(&#123; <span class="string">'name'</span>: name &#125;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">showResponse</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> response = $(<span class="string">"#response"</span>);</span><br><span class="line">        response.html(message + <span class="string">"\r\n"</span> + response.html());</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>参考：<br><a href="https://spring.io/guides/gs/messaging-stomp-websocket/" target="_blank" rel="noopener">Using WebSocket to build an interactive web application</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1857,7 +1922,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1879,7 +1944,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
