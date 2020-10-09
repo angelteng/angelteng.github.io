@@ -79,22 +79,24 @@
 
 
 
-<meta name="description" content="[TOC] Redis模块组成 Redis数据结构  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。 Red">
+<meta name="description" content="[TOC] Redis模块组成 Redis数据结构（String，List,Hash,Set,SortSet,BitMap,HyperLogLog,GEO)  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key">
 <meta name="keywords" content="redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis笔记">
 <meta property="og:url" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="[TOC] Redis模块组成 Redis数据结构  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。 Red">
+<meta property="og:description" content="[TOC] Redis模块组成 Redis数据结构（String，List,Hash,Set,SortSet,BitMap,HyperLogLog,GEO)  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600873329328.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600873417868.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1.png">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/2.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600876246493.png">
-<meta property="og:updated_time" content="2020-09-24T02:48:48.000Z">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/3.jpg">
+<meta property="og:updated_time" content="2020-09-24T07:10:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis笔记">
-<meta name="twitter:description" content="[TOC] Redis模块组成 Redis数据结构  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。 Red">
+<meta name="twitter:description" content="[TOC] Redis模块组成 Redis数据结构（String，List,Hash,Set,SortSet,BitMap,HyperLogLog,GEO)  Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key">
 <meta name="twitter:image" content="https://angelteng.github.io/blog/2020/09/24/Redis笔记/1600873329328.png">
 
 
@@ -307,7 +309,7 @@
       
         <p>[TOC]</p>
 <h2 id="Redis模块组成"><a href="#Redis模块组成" class="headerlink" title="Redis模块组成"></a>Redis模块组成</h2><img src="/blog/2020/09/24/Redis笔记/1600873329328.png">
-<h2 id="Redis数据结构"><a href="#Redis数据结构" class="headerlink" title="Redis数据结构"></a>Redis数据结构</h2><img src="/blog/2020/09/24/Redis笔记/1600873417868.png">
+<h2 id="Redis数据结构（String，List-Hash-Set-SortSet-BitMap-HyperLogLog-GEO"><a href="#Redis数据结构（String，List-Hash-Set-SortSet-BitMap-HyperLogLog-GEO" class="headerlink" title="Redis数据结构（String，List,Hash,Set,SortSet,BitMap,HyperLogLog,GEO)"></a>Redis数据结构（String，List,Hash,Set,SortSet,BitMap,HyperLogLog,GEO)</h2><img src="/blog/2020/09/24/Redis笔记/1600873417868.png">
 <ol>
 <li>Redis 使用了一个哈希表来保存所有键值对。哈希表的每一项是一个 dictEntry 的结构体。dictEntry 结构中有三个 8 字节的指针，分别指向 key、value 以及下一个 dictEntry，三个指针共 24 字节。key、value都是用一个 RedisObject 结构体来统一记录这些元数据，同时指向实际数据指针。<img src="/blog/2020/09/24/Redis笔记/1.png"></li>
 <li>Redis 解决哈希冲突的方式，就是链式哈希。</li>
@@ -325,13 +327,16 @@
 <li>hash-max-ziplist-value：表示用压缩列表保存时哈希集合中单个元素的最大长度。</li>
 </ol>
 </li>
+<li>集合计算<img src="/blog/2020/09/24/Redis笔记/2.png"></li>
+<li>时序序列：hash、sortset、 RedisTimeSeries</li>
+<li>事务：使用MULTI和EXEC命令时，建议客户端使用pipeline，当使用pipeline时，客户端会把命令一次性批量发送给服务端。</li>
 </ol>
 <h2 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h2><ol>
 <li>Linux 中的 IO 多路复用机制是指一个线程处理多个 IO 流，在 Redis 只运行单线程的情况下，该机制允许内核中，同时存在多个监听套接字和已连接套接字。内核会一直监听这些套接字上的连接请求或数据请求。一旦有请求到达，就会交给 Redis 线程处理，这就实现了一个 Redis 线程处理多个 IO 流的效果</li>
 <li>select/epoll 一旦监测到 FD 上有请求到达时，就会触发相应的事件。这些事件会被放进一个事件队列，Redis 单线程对该事件队列不断进行处理。</li>
 <li>性能瓶颈主要包括2个方面：<ol>
 <li>任意一个请求在server中一旦发生耗时，都会影响整个server的性能，也就是说后面的请求都要等前面这个耗时请求处理完成，自己才能被处理到。耗时的操作包括以下几种：<ul>
-<li>操作bigkey：写入一个bigkey在分配内存时需要消耗更多的时间，同样，删除bigkey释放内存同样会产生耗时；</li>
+<li>操作bigkey：写入一个bigkey在分配内存时需要消耗更多的时间，同样，删除bigkey、过期释放内存同样会产生耗时；</li>
 <li>使用复杂度过高的命令：例如SORT/SUNION/ZUNIONSTORE，或者O(N)命令，但是N很大，例如lrange key 0 -1一次查询全量数据；</li>
 <li>大量key集中过期：Redis的过期机制也是在主线程中执行的，大量key集中过期会导致处理一个请求时，耗时都在删除过期key，耗时变长；</li>
 <li>淘汰策略：淘汰策略也是在主线程执行的，当内存超过Redis内存上限后，每次写入都需要淘汰一些key，也会造成耗时变长；</li>
@@ -345,12 +350,13 @@
 </ol>
 <h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h3><ol>
 <li>Redis 是先执行命令，把数据写入内存，然后才记录日志。</li>
-<li>AOF 日志也是在主线程中执行的。策略<pre><code>1. Always，同步写回：每个写命令执行完，立马同步地将日志写回磁盘
-2. Everysec，每秒写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，每隔一秒把缓冲区中的内容写入磁盘；
+<li>AOF 日志也是在主线程中执行的。策略<pre><code>1. Always，同步写回：每个写命令执行完，立马同步地将日志写回磁盘，主线程调用fsync操作完成。
+2. Everysec，每秒写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，每隔一秒把缓冲区中的内容写入磁盘；使用后台的子线程异步完成 fsync 的操作。
 3. No，操作系统控制的写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，由操作系统决定何时将缓冲区内容写回磁盘。
 </code></pre></li>
-<li>AOF 重写机制就是在重写时，Redis 根据数据库的现状创建一个新的 AOF 文件。重写过程是由后台线程 bgrewriteaof 来完成的。</li>
+<li>AOF 重写机制就是在重写时，Redis 根据数据库的现状创建一个新的 AOF 文件。重写过程是由子进程 bgrewriteaof 来完成的。</li>
 <li>重写的过程总结为“一个拷贝，两处日志”：主线程 fork 出后台的 bgrewriteaof 子进程。此时，fork 会把主线程的内存拷贝一份给 bgrewriteaof 子进程，这里面就包含了数据库的最新数据。然后，bgrewriteaof 子进程就可以在不影响主线程的情况下，逐一把拷贝的数据写成操作，记入重写日志。</li>
+<li>AOF重写子进程写入量大-&gt;fsync线程阻塞-&gt;主线程阻塞</li>
 </ol>
 <h3 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h3><ol>
 <li>Redis 的数据都在内存中，为了提供所有数据的可靠性保证，它执行的是全量快照。策略：<ol>
@@ -407,7 +413,61 @@
 </ol>
 </li>
 </ol>
-<h3 id="聚合计算"><a href="#聚合计算" class="headerlink" title="聚合计算"></a>聚合计算</h3>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><img src="/blog/2020/09/24/Redis笔记/3.jpg">
+<ol>
+<li>List用作队列时，为了保证消息可靠性，使用BRPOPLPUSH命令把消息取出的同时，还把消息插入到备份队列中，从而防止消费者故障导致消息丢失。每次执行BRPOPLPUSH命令后，当消费者成功消费取出的消息后，最好把备份队列中的消息删除，防止备份队列存储过多无用的数据。</li>
+<li>丢消息情况及处理：<ol>
+<li>生产者在发布消息时异常：<br> a) 网络故障或其他问题导致发布失败（直接返回错误，消息根本没发出去）<br> b) 网络抖动导致发布超时（可能发送数据包成功，但读取响应结果超时了，不知道结果如何）<br>消费者需要保证在收到重复消息时，依旧能保证业务的正确性（设计幂等逻辑）。</li>
+<li>消费者在处理消息时异常：Streams则是采用ack的方式，消费成功后告知中间件。</li>
+<li>消息队列中间件丢失消息: 在用Redis当作队列或存储数据时，是有可能丢失数据的：一个场景是，如果打开AOF并且是每秒写盘，因为这个写盘过程是异步的，Redis宕机时会丢失1秒的数据。而如果AOF改为同步写盘，那么写入性能会下降。另一个场景是，如果采用主从集群，如果写入量比较大，从库同步存在延迟，此时进行主从切换，也存在丢失数据的可能。总的来说，Redis不保证严格的数据完整性和主从切换时的一致性。我们在使用Redis时需要注意。</li>
+</ol>
+</li>
+</ol>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><ol>
+<li>影响因素：<ul>
+<li>Redis 内部的阻塞式操作；</li>
+<li>CPU 核和 NUMA 架构的影响；</li>
+<li>Redis 关键系统配置；</li>
+<li>Redis 内存碎片；</li>
+<li>Redis 缓冲区。</li>
+</ul>
+</li>
+<li>阻塞点：<ul>
+<li>集合全量查询和聚合操作；</li>
+<li>bigkey 删除；删除操作的本质是要释放键值对占用的内存空间，为了更加高效地管理内存空间，在应用程序释放内存时，操作系统需要把释放掉的内存块插入一个空闲内存块的链表，如果一下子释放了大量内存，空闲内存块链表操作时间就会增加。</li>
+<li>清空数据库；</li>
+<li>AOF 日志同步写；</li>
+<li>从库加载 RDB 文件。</li>
+</ul>
+</li>
+<li>Redis4.0以后，Redis 主线程启动后，会使用操作系统提供的 pthread_create 函数创建 3 个子线程，分别由它们负责 AOF 日志写操作、键值对删除（lazy free）以及文件关闭的异步执行。</li>
+<li>bigkey 删除时，建议：先使用集合类型提供的 SCAN 命令读取数据，然后再进行删除。</li>
+<li>在多核 CPU 架构下，Redis 如果在不同的核上运行，就需要频繁地进行上下文切换，这个过程会增加 Redis 的执行时间，客户端也会观察到较高的尾延迟了。所以，建议在 Redis 运行时，把实例和某个核绑定。为了提升 Redis 的网络性能，我们有时还会把网络中断处理程序和 CPU 核绑定。</li>
+<li>过期删除规则：默认情况下，Redis 每 100 毫秒会删除一些过期 key，具体的算法如下：<ol>
+<li>采样 ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP 个数的 key，并将其中过期的 key 全部删除；</li>
+<li>如果超过 25% 的 key 过期了，则重复删除的过程，直到过期 key 的比例降至 25% 以下。</li>
+</ol>
+</li>
+<li>Redis基线性能：redis-cli 命令提供了–intrinsic-latency 选项，可以用来监测和统计测试期间内的最大延迟。</li>
+<li>AOF重写子进程写入量大-&gt;fsync线程阻塞-&gt;主线程阻塞</li>
+<li>操作系统的内存 swap（物理机器内存不足）</li>
+<li>内存大页（支持 2MB 大小的内存页分配，而常规的内存页分配是按 4KB 的粒度来执行）：Redis在写时复制时，如果采用了内存大页，那么，即使客户端请求只修改 100B 的数据，Redis 也需要拷贝 2MB 的大页。</li>
+<li>内存碎片：<ol>
+<li>内因：内存分配器的分配策略就决定了操作系统无法做到“按需分配”。这是因为，内存分配器一般是按固定大小来分配内存，而不是完全按照应用程序申请的内存空间大小给程序分配。</li>
+<li>外因：键值对大小不一样和删改操作</li>
+<li>查看：mem_fragmentation_ratio 的指标表示的就是 Redis 当前的内存碎片率。大于 1 但小于 1.5是合理的，过高表示碎片过高，过低表示wu里内存不足，导致swap。</li>
+<li>碎片清理：Redis 需要启用自动内存碎片清理，可以把 activedefrag 配置项设置为 yes。</li>
+</ol>
+</li>
+</ol>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ol>
+<li>缓存穿透：位运算的布隆过滤器</li>
+<li>缓存雪崩：在同一秒内有大量的 key 同时过期，触发了Redis删除规则的第二条，Redis 就会一直删除以释放内存空间。注意，删除操作是阻塞的。解决：过期时间加上一个一定大小范围内的随机数，这样，既保证了 key 在一个邻近时间范围内被删除，又避免了同时过期造成的压力。</li>
+<li>数据库和 Redis 缓存的数据一致性</li>
+<li>bigkey</li>
+<li>hotkey</li>
+</ol>
+
       
     </div>
     
@@ -518,297 +578,6 @@
           </div>
 
           <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/blog/archives/">
-              
-                  <span class="site-state-item-count">94</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                <a href="/blog/category/index.html">
-                  <span class="site-state-item-count">14</span>
-                  <span class="site-state-item-name">categories</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">37</span>
-                  <span class="site-state-item-name">tags</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-
-          
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis模块组成"><span class="nav-number">1.</span> <span class="nav-text">Redis模块组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis数据结构"><span class="nav-number">2.</span> <span class="nav-text">Redis数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO模型"><span class="nav-number">3.</span> <span class="nav-text">IO模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志"><span class="nav-number">4.</span> <span class="nav-text">日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF"><span class="nav-number">4.1.</span> <span class="nav-text">AOF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB"><span class="nav-number">4.2.</span> <span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哨兵机制"><span class="nav-number">4.3.</span> <span class="nav-text">哨兵机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#切片集群"><span class="nav-number">4.4.</span> <span class="nav-text">切片集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合计算"><span class="nav-number">4.5.</span> <span class="nav-text">聚合计算</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Angel Teng</span>
-
-  
-</div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
-
-
-  
-
-  
-
-</body>
-</html>
-                                                                                                                                            lass="site-state motion-element">
 
             
               <div class="site-state-item site-state-posts">
