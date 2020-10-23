@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/1.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png">
-<meta property="og:updated_time" content="2020-04-14T09:16:03.000Z">
+<meta property="og:updated_time" content="2020-10-23T03:51:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《MYSQL实战45讲》笔记">
 <meta name="twitter:description" content="基本 基本架构  ￼ Mysql长链接使内存使用涨得快： 定期断开长连接。 如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。     WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序">
@@ -401,13 +401,21 @@
 <h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><ol>
 <li>MySQL 的“双 1”配置，指的就是 sync_binlog 和 innodb_flush_log_at_trx_commit 都设置成 1。也就是说，一个事务完整提交前，需要等待两次刷盘，一次是 redo log（prepare 阶段），一次是 binlog。</li>
 <li>binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。而 redo log 并没有这个要求。</li>
-<li>两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。<ul>
+<li>两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。<ol>
+<li>流程<ul>
 <li>执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。</li>
 <li>执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。</li>
 <li>引擎将这行新数据更新到内存中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。</li>
 <li>执行器生成这个操作的 binlog，并把 binlog 写入磁盘。</li>
-<li>执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。<h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2></li>
+<li>执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。</li>
 </ul>
+</li>
+<li>crash：<ul>
+<li>当prepare log 写入成功且binglog写入成功后发生crash，在mysql启动时候，会自动commit这个事物； </li>
+<li>当prepare log写入成功，binlog写入失败，此时发生crash，mysql启动会自动回滚掉这个事务。<h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2></li>
+</ul>
+</li>
+</ol>
 </li>
 <li>redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开头循环写。<br>￼   <img src="/blog/2020/03/31/《MYSQL实战45讲》笔记/1.png"></li>
 <li>write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。</li>
@@ -431,6 +439,11 @@
 <li>用 binlog 来恢复数据的标准做法是：用 mysqlbinlog 工具解析出来，然后把解析结果整个发给 MySQL 执行。</li>
 <li>把参数 log_slave_updates 设置为 on，表示备库执行 relay log 后生成 binlog。</li>
 <li>MySQL 在 binlog 中记录了这个命令第一次执行时所在实例的 server id。每个库在收到从自己的主库发过来的日志后，先判断 server id，如果跟自己的相同，表示这个日志是自己生成的，就直接丢弃这个日志。</li>
+</ol>
+<h2 id="redo-log-与-binlog区别"><a href="#redo-log-与-binlog区别" class="headerlink" title="redo log 与 binlog区别"></a>redo log 与 binlog区别</h2><ol>
+<li>redo log 是 InnoDB 引擎特有的；binlog 是 MySQL 的 Server 层实现的，所有引擎都可以使用。</li>
+<li>redo log 是物理日志，记录的是“在某个数据页上做了什么修改”；binlog 是逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。</li>
+<li>redo log 是循环写的，空间固定会用完；binlog 是可以追加写入的。“追加写”是指 binlog 文件写到一定大小后会切换到下一个，并不会覆盖以前的日志。</li>
 </ol>
 <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><ol>
 <li>事务支持是在引擎层实现的。数据表中的一行记录，其实可能有多个版本 (row)，每个版本有自己的 row trx_id。 <img src="/blog/2020/03/31/《MYSQL实战45讲》笔记/2.png"></li>
@@ -495,7 +508,11 @@
 </li>
 <li>order by rand() 使用了内存临时表，内存临时表排序的时候使用了 rowid 排序方法。</li>
 <li>如果临时表大小超过了 tmp_table_size，那么内存临时表就会转成磁盘临时表。</li>
-<li>对索引字段做函数操作，可能会破坏索引值的有序性，因此优化器就决定放弃走树搜索功能。可能导致全索引扫描。比如隐式类型转换、字符编码转换。</li>
+<li>对索引字段做函数操作，可能会破坏索引值的有序性，因此优化器就决定放弃走树搜索功能。可能导致全索引扫描。比如隐式类型转换、字符编码转换。<ul>
+<li>隐式类型转换：当字符串与数字比较时，是字符串转成数字。</li>
+<li>字符集 utf8mb4 是 utf8 的超集，所以当这两个类型的字符串在做比较的时候，MySQL 内部的操作是，先把 utf8 字符串转成 utf8mb4 字符集，再做比较。</li>
+</ul>
+</li>
 </ol>
 <h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><ol>
 <li>全局锁：<ul>
@@ -713,7 +730,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本"><span class="nav-number">1.</span> <span class="nav-text">基本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#日志"><span class="nav-number">2.</span> <span class="nav-text">日志</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#redo-log"><span class="nav-number">2.1.</span> <span class="nav-text">redo log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#binlog"><span class="nav-number">2.2.</span> <span class="nav-text">binlog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务"><span class="nav-number">3.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引与排序"><span class="nav-number">4.</span> <span class="nav-text">索引与排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁"><span class="nav-number">5.</span> <span class="nav-text">锁</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本"><span class="nav-number">1.</span> <span class="nav-text">基本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#日志"><span class="nav-number">2.</span> <span class="nav-text">日志</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#redo-log"><span class="nav-number">2.1.</span> <span class="nav-text">redo log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#binlog"><span class="nav-number">2.2.</span> <span class="nav-text">binlog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redo-log-与-binlog区别"><span class="nav-number">2.3.</span> <span class="nav-text">redo log 与 binlog区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务"><span class="nav-number">3.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引与排序"><span class="nav-number">4.</span> <span class="nav-text">索引与排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁"><span class="nav-number">5.</span> <span class="nav-text">锁</span></a></li></ol></div>
             
 
           </div>
