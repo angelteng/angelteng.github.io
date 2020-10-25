@@ -14,6 +14,9 @@ tags: MYSQL
 
 
 3. WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。redo log 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 change buffer 主要节省的则是随机读磁盘的 IO 消耗。
+   - 得益于：
+     - redo log 和 binlog 都是顺序写，磁盘的顺序写比随机写速度要快；
+     - 组提交机制，可以大幅度降低磁盘的 IOPS 消耗。
 
 4. change buffer：当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存。
     - 何时触发merge：访问这个数据页会；系统有后台线程会定期 merge；在数据库正常关闭（shutdown）的过程中。
@@ -38,7 +41,7 @@ tags: MYSQL
     4. 如果可以使用 Index Nested-Loop Join 算法，也就是说可以用上被驱动表上的索引，其实是没问题的；如果使用 Block Nested-Loop Join 算法，扫描行数就会过多。尤其是在大表上的 join 操作，这样可能要扫描被驱动表很多次，会占用大量的系统资源。所以这种 join 尽量不要用。
     5. 在决定哪个表做驱动表的时候，应该是两个表按照各自的条件过滤，过滤完成之后，计算参与 join 的各个字段的总数据量，数据量小的那个表，就是“小表”，应该作为驱动表。
     6. 大表 join 操作虽然对 IO 有影响，但是在语句执行结束后，对 IO 的影响也就结束了。但是，对 Buffer Pool 的影响就是持续性的，需要依靠后续的查询请求慢慢恢复内存命中率。
-9. MySQL 是“边读边发的”，取数据发数据流程：
+9.  MySQL 是“边读边发的”，取数据发数据流程：
     1.  获取一行，写到 net_buffer 中。这块内存的大小是由参数 net_buffer_length 定义的，默认是 16k。
     2.  重复获取行，直到 net_buffer 写满，调用网络接口发出去。
     3.  如果发送成功，就清空 net_buffer，然后继续取下一行，并写入 net_buffer。
@@ -78,7 +81,8 @@ tags: MYSQL
 1. MySQL 的“双 1”配置，指的就是 sync_binlog 和 innodb_flush_log_at_trx_commit 都设置成 1。也就是说，一个事务完整提交前，需要等待两次刷盘，一次是 redo log（prepare 阶段），一次是 binlog。
 2. binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。而 redo log 并没有这个要求。
    {% asset_img 4.png%}
-3. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
+3. 日志逻辑序号LSN，LSN 是单调递增的，用来对应 redo log 的一个个写入点。每次写入长度为 length 的 redo log， LSN 的值就会加上 length。组提交：当其中一个事务redo log写盘的时候，其他小于该lsn的其他事务在redo log buffer 也会顺带写盘。
+4. 两阶段提交：数据库备份恢复/扩容一般用全量备份加上应用 binlog 来实现的，数据库奔溃后状态恢复使用redo log，因为两个是独立的逻辑，如果不是两阶段提交，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。
     1. 流程
         - 执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。
         - 执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。
@@ -88,6 +92,8 @@ tags: MYSQL
     2. crash：
         - 当prepare log 写入成功且binglog写入成功后发生crash，在mysql启动时候，会自动commit这个事物； 
         - 当prepare log写入成功，binlog写入失败，此时发生crash，mysql启动会自动回滚掉这个事务。
+    {% asset_img 5.png%}
+
 ## redo log
 1. redo log（重做日志）：保证crash-safe，InnoDB的物理日志，记录的是“在某个数据页上做了什么修改”。固定大小，从头开始写，写到末尾就又回到开头循环写。
 ￼   {% asset_img 1.png%}
@@ -95,10 +101,11 @@ tags: MYSQL
 3. InnoDB 用redo log保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为 crash-safe。
 4. innodb_flush_log_at_trx_commit 设置为 0 的时候，表示每次事务提交时都只是把 redo log 留在 redo log buffer 中 ;设置为 1 的时候，表示每次事务提交时都将 redo log 直接持久化到磁盘；设置为 2 的时候，表示每次事务提交时都只是把 redo log 写到 page cache。
 5. InnoDB 有一个后台线程，每隔 1 秒，就会把 redo log buffer 中的日志，调用 write 写到文件系统的 page cache，然后调用 fsync 持久化到磁盘。
-6. redo log buffer 占用的空间即将达到 innodb_log_buffer_size 一半的时候，后台线程会主动写盘。
-7. 并行的事务提交的时候，顺带将这个事务的 redo log buffer 持久化到磁盘。
-8. 如果把 innodb_flush_log_at_trx_commit 设置成 1，那么 redo log 在 prepare 阶段就要持久化一次
-9. 每秒一次后台轮询刷盘，再加上崩溃恢复这个逻辑，InnoDB 就认为 redo log 在 commit 的时候就不需要 fsync 了，只会 write 到文件系统的 page cache 中就够了。
+6. redo log buffer何时写盘：
+   1. 占用的空间即将达到 innodb_log_buffer_size 一半的时候，后台线程会主动写盘。
+   2. 并行的事务提交的时候，顺带将这个事务的 redo log buffer 持久化到磁盘。
+7. 如果把 innodb_flush_log_at_trx_commit 设置成 1，那么 redo log 在 prepare 阶段就要持久化一次
+8.  每秒一次后台轮询刷盘，再加上崩溃恢复这个逻辑，InnoDB 就认为 redo log 在 commit 的时候就不需要 fsync 了，只会 write 到文件系统的 page cache 中就够了。
 
 ## binlog
 1.  binlog（归档日志）：Server层日志。逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。binlog 是可以追加写入的，写完一个文件新增一个文件。sync_binlog 这个参数设置成 1 的时候，表示每次事务的 binlog 都持久化到磁盘。
@@ -115,6 +122,7 @@ tags: MYSQL
 1. redo log 是 InnoDB 引擎特有的；binlog 是 MySQL 的 Server 层实现的，所有引擎都可以使用。
 2. redo log 是物理日志，记录的是“在某个数据页上做了什么修改”；binlog 是逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。
 3. redo log 是循环写的，空间固定会用完；binlog 是可以追加写入的。“追加写”是指 binlog 文件写到一定大小后会切换到下一个，并不会覆盖以前的日志。
+4. redo log buffer 是所有线程共用的， binlog buffer是每个线程独有的。因为binlog 是不能“被打断的”。一个事务的 binlog 必须连续写，因此要整个事务完成后，再一起写到文件里。
 
 # 事务
 1. 事务支持是在引擎层实现的。数据表中的一行记录，其实可能有多个版本 (row)，每个版本有自己的 row trx_id。
@@ -190,7 +198,7 @@ tags: MYSQL
     - 跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作。间隙锁之间都不存在冲突关系。
     - 间隙锁和行锁合称 next-key lock，每个 next-key lock 是前开后闭区间。
     - 间隙锁的引入，可能会导致同样的语句锁住更大的范围，这其实是影响了并发度的。
-    - 你如果把隔离级别设置为读提交的话，就没有间隙锁了。需要把 binlog 格式设置为 binlog_format=row。
+    - 间隙锁是在可重复读隔离级别下才会生效，需要把 binlog 格式设置为 binlog_format=row。
 6. 加锁规则：
     - 原则 1：加锁的基本单位是 next-key lock。next-key lock 是前开后闭区间。
     - 原则 2：查找过程中访问到的对象才会加锁。
@@ -198,4 +206,12 @@ tags: MYSQL
     - 优化 2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock 退化为间隙锁。
     - 一个 bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止。
 7. 锁是加在索引上的。
-8. lock in share mode 只锁覆盖索引。for update 系统会认为你接下来要更新数据，因此会顺便给主键索引上满足条件的行加上行锁。
+8. 以覆盖索引查找时，lock in share mode 只锁覆盖索引。for update 系统会认为你接下来要更新数据，因此会顺便给主键索引上满足条件的行加上行锁。
+
+
+# 常见问题：
+1. 崩溃后如何恢复：
+2. 为什么会突然慢
+3. 如何调优
+4. 主从怎么实现的
+5. 
