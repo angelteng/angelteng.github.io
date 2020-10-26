@@ -88,7 +88,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/2.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/1.png">
-<meta property="og:updated_time" content="2020-10-26T08:15:23.000Z">
+<meta property="og:updated_time" content="2020-10-26T08:54:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从一次kswapd0占用cpu过高问题讲起">
 <meta name="twitter:description" content="最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。   问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？查看free -m 命令。   Buffers 是对原始磁盘块的临时存储，也就是用来缓存磁盘的数据，通常不会特别大（20MB 左右）。这样，内核就可以把分散的写">
@@ -324,13 +324,30 @@
 <li>kswapd0进程的作用：它是虚拟内存管理中，负责换页的，操作系统每过一定时间就会唤醒kswapd ，看看内存是否紧张，如果不紧张，则睡眠，在 kswapd 中，有2 个阀值，pages_hige 和 pages_low，当空闲内存页的数量低于 pages_low 的时候，kswapd进程就会扫描内存并且每次释放出32 个free pages，直到 free page 的数量到达pages_high。通过阻止kswapd0进程过渡活跃地消耗CPU的方法是设置大页内存。</li>
 </ul>
 </li>
-<li><p>目前如何解决  </p>
+<li><p>第一次尝试  </p>
 <ul>
 <li>调整/proc/sys/vm/swappiness 参数，默认60，调整为10，表示内存剩下10%的时候才触发swap。</li>
+<li>但是遗留了一个问题：为什么kswapd0进程一直驻留，但从vmstat看si so 为0？为什么这个进程的cpu是user使用不是sys？</li>
 </ul>
 </li>
-<li>遗留问题<ul>
-<li>kswapd0进程一直驻留，但从vmstat看si so 为0.</li>
+<li><p>继续查找：</p>
+<ul>
+<li>后来找到了一篇文章《kswapd0挖矿病毒查杀过程》，通过netstat -antlp 发现了一个同样荷兰的ip 45.9.148.99通过rsync在/root/.configrc/a 植入了kswapd0文件。初步判断是这个假装swap的进程其实值挖矿病毒。</li>
+</ul>
+</li>
+<li><p>解决：</p>
+<ul>
+<li>kill调病毒进程。</li>
+<li>删除可疑文件。</li>
+<li>删除病毒创建的计划任务。</li>
+</ul>
+</li>
+</ol>
+<ol start="7">
+<li>参考连接：<ul>
+<li><a href="https://codenie.github.io/post/kswapd0-wa-kuang-bing-du-cha-sha-guo-cheng/" target="_blank" rel="noopener">kswapd0挖矿病毒查杀过程</a></li>
+<li><a href="https://segmentfault.com/a/1190000008125116" target="_blank" rel="noopener">Linux交换空间（swap space）</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/146877464" target="_blank" rel="noopener">内存篇 | 02 | 怎么理解内存中的Buffer和Cache？</a></li>
 </ul>
 </li>
 </ol>
