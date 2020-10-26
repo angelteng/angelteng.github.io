@@ -79,19 +79,20 @@
 
 
 
-<meta name="description" content="最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。  问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？查看free -m 命令。   Buffers 是对原始磁盘块的临时存储，也就是用来缓存磁盘的数据，通常不会特别大（20MB 左右）。这样，内核就可以把分散的写集">
+<meta name="description" content="最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。   问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？查看free -m 命令。   Buffers 是对原始磁盘块的临时存储，也就是用来缓存磁盘的数据，通常不会特别大（20MB 左右）。这样，内核就可以把分散的写">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从一次kswapd0占用cpu过高问题讲起">
 <meta property="og:url" content="https://angelteng.github.io/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/index.html">
 <meta property="og:site_name" content="Code war of Angel">
-<meta property="og:description" content="最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。  问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？查看free -m 命令。   Buffers 是对原始磁盘块的临时存储，也就是用来缓存磁盘的数据，通常不会特别大（20MB 左右）。这样，内核就可以把分散的写集">
+<meta property="og:description" content="最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。   问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？查看free -m 命令。   Buffers 是对原始磁盘块的临时存储，也就是用来缓存磁盘的数据，通常不会特别大（20MB 左右）。这样，内核就可以把分散的写">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://angelteng.github.io/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/2.png">
 <meta property="og:image" content="https://angelteng.github.io/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/1.png">
-<meta property="og:updated_time" content="2020-10-26T08:10:44.000Z">
+<meta property="og:updated_time" content="2020-10-26T08:15:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从一次kswapd0占用cpu过高问题讲起">
-<meta name="twitter:description" content="最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。  问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？查看free -m 命令。   Buffers 是对原始磁盘块的临时存储，也就是用来缓存磁盘的数据，通常不会特别大（20MB 左右）。这样，内核就可以把分散的写集">
-<meta name="twitter:image" content="https://angelteng.github.io/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/1.png">
+<meta name="twitter:description" content="最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。   问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？查看free -m 命令。   Buffers 是对原始磁盘块的临时存储，也就是用来缓存磁盘的数据，通常不会特别大（20MB 左右）。这样，内核就可以把分散的写">
+<meta name="twitter:image" content="https://angelteng.github.io/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/2.png">
 
 
 
@@ -302,7 +303,8 @@
 
       
         <pre><code>最近在线上机器碰到kswapd0占用cpu过高（1100%），几乎吃满的所有cpu，所以这台机器其他服务都异常退出了。借此机会学习一下。
-</code></pre><ol>
+</code></pre><img src="/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/2.png">
+<ol>
 <li><p>问题1: free -m 查看mem free是真的内存耗完了吗？buffer/cache是什么？<br>查看free -m 命令。</p>
 <img src="/blog/2020/10/26/从一次kswapd0占用cpu过高问题讲起/1.png">
 <ul>
