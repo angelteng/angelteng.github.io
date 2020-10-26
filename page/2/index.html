@@ -229,6 +229,164 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/09/03/编码器信号类型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/09/03/编码器信号类型/" itemprop="url">编码器信号类型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-03T14:27:27+08:00">
+                2019-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在做一些跟嵌入式相关的工作，涉及增量编码器跟PLC的通讯。</p>
+<h1 id="增量编码器的方波脉冲数字信号"><a href="#增量编码器的方波脉冲数字信号" class="headerlink" title="增量编码器的方波脉冲数字信号"></a>增量编码器的方波脉冲数字信号</h1><p>增量编码器的方波脉冲数字信号。增量方波脉冲数字信号也许很简单，但是还是有很多人难以定义并区分清楚，在这么个简单的问题上犯的错误却比比皆是。它实际上决定了编码器信号接收能否很好匹配，并高质量地传输与读取以及信号抗干扰能力。</p>
+<p>增量脉冲信号的方波，以电压的高低（开关）电平脉冲式变化，与正余弦模拟量信号不同，方波脉冲信号是数字式开关逻辑信号。在高电平的时候逻辑为1，低电平的时候逻辑为0，这种编码方式称为编码的正逻辑。反之以高电平为“0”低电平为“1”的编码方式为负逻辑。绝大部分编码器默认正逻辑，部分日系编码器（NPN）为负逻辑。</p>
+<h1 id="编码器信号类型"><a href="#编码器信号类型" class="headerlink" title="编码器信号类型"></a>编码器信号类型</h1><ol>
+<li><p>TTL（transistor transistor logic），TTL信号是数字信号的基础，通常我们采用二进制来表示数据。TTL电平信号规定，+5V等价于逻辑“1”，0V等价于逻辑“0”。这样的数据通信及电平规定方式，被称做TTL（晶体管-晶体管逻辑电平）信号系统。这是计算机处理器控制的设备内部各部分之间通信的标准技术。TTL更多的是用于电路设计，各种芯片单片机的输入输出是TTL信号，它是相对于外部电缆传输的较高电平HTL信号的低电平（5V），定义的数据1（5V）和0（0V）的逻辑电平信号。   </p>
+</li>
+<li><p>5V差分信号：差分是以两个信号之间的电压差经数学比较处理的概念，在增量脉冲信号中，它表明有每两个信号一组，各自为反相（180度相位差）。5V差分信号是TTL信号每两个信号一组，例如A+对A-，当A+在5V=1的时候，A-在0V=0，逻辑等价与“1”；当180度反相时A+在0V的时候，A-在5V，逻辑等价与“0”。<br>仅仅是在差分信号的定义上，两个信号是平等的可以互换的，互换后逻辑反相。例如编码器的5V差分信号A+与A-是可以互换接线的，互换后相位反180度，也即是信号增量方向与编码器旋转方向反向了，可以用这个方法改变编码器输出方向。<br>差分信号的目的是接收端可以通过差分信号处理消除传输线上的共模干扰。<br>差分信号在双绞线上的传输，抗干扰能力较强。差分的两个信号交替高低电平信号变化，在一对双绞线上配对传输，对外界的电磁场贡献平均为无变化的，外界干扰变化的电磁场对其作用也就达到最小。双绞的“绞”起来的作用，一是同时对于信号电流流向所产生的旋转磁场的反旋，以抵消因电流流向的法拉底原理产生的磁场；另一个是在双绞线配对的两个信号之间的电磁场平衡，防止这两个信号之间串音，尤其是信号频率较高的时候的串音。因此双绞绞起来的节据与设计的需要传输信号的主要频段有关。<br>差分信号以及配对的使用双绞屏蔽线传输，是信号输出与传递的较佳的具有电磁兼容性EMI和抗干扰特性。<br>差分信号的形式不仅仅是5V，不仅仅是方波信号。例如也可以是较高电平的5—30V的HTL信号的含反相差分，HTL-6；或者也可以是正余弦模拟量SINCOS信号，也是差分式的。<br>在5V差分信号的定义上，比TTL多了一点内容，就是两个互为反相信号一组的TTL信号。</p>
+</li>
+<li><p>长线驱动信号（line driver）：是指发送端与接收端有一对配对的长线驱动器，它们各自有正负两个管脚，当发送端正管脚为高电平往外推送信号电流时，接收端的正管脚为低电平往里拉信号电流（推拉式）。此时电流的方向与信号流的方向一致，视为逻辑1。<br>当发送端正管脚为低电平时，接收端的正管脚为高电平，发送端相当于往里拉电流，电流方向与信号流方向是反的，此时视为逻辑0。在发送端前面送入5VTTL信号，在接收端经过差分后再送出5VTTL的信号。<br>长线驱动信号是有发送端与接收端各有一个长线驱动器配对，在逻辑1和逻辑0时都有信号放大推拉，并也是差分式的。信号走输入单极性TTL~长线驱动（配对的推拉驱动）~接收端差分~单极性TTL输出（进计数器等）。由于有接收端配对的推拉驱动，长线驱动信号传输距离更“长线”。<br>典型的长线驱动器26LS31与26LS32配成一对。为5V 的差分式的。<br>长线驱动是基于一对配对的长线驱动器的偏向于对电子器件的描述，这种传输方式抗干扰强，驱动传输距离远，一般对于编码器的5V差分长线驱动的描述可以传400米（用专业的编码器双绞屏蔽电缆）。<br>长线驱动信号的定义往往取决于配对的长线驱动器件。不局限于5V。<br>长线驱动与5V差分的不同：5V差分有两种可能性：三线制 ，电流回路对0V；长线驱动只有第二种二线制的，电流回路不对0V。</p>
+</li>
+<li><p>RS422信号：Electronic Industries Association (EIA ) 国际电工协会(EIA) 定义的一个更广泛的信号标准。RS-422标准全称是“平衡电压数字接口电路的电气特性”。接收器采用高输入阻抗和发送驱动器采用差模传输，双绞线。<br>RS422与TTL区别：不一定是5V，可以是5到24V；RS422定义了A+与A-的差模传输方式。<br>RS422与5V差分的区别：信号电压范围更广，对于差分的数学与物理界面、传输的电缆与接口接插头等都有定义。在三线制模式，A+或A-即使在低电平，也可以大于0V。RS422信号的这种基点电压大于0V，可以在传输线上允许有因阻抗而有电压衰减，但差模后仍然能保持大于等于5V的差模电压，因此传输距离可能比长线驱动的更远。其传输距离长度与信号频率有关，在较低的信号频率下最远可传输1000米。</p>
+</li>
+</ol>
+<h1 id="增量编码器中输出电路"><a href="#增量编码器中输出电路" class="headerlink" title="增量编码器中输出电路"></a>增量编码器中输出电路</h1><ol>
+<li>集电极开路输出是以输出电路的晶体管发射极作为公共端，并且集电极悬空的输出电路。一般分为NPN集电极开路输出和PNP集电极开路输出</li>
+<li>电压输出是在集电极开路输出的电路基础上，在电源间和集电极之间接了一个上拉电阻，使得集电极和电源之间能有一个稳定的电压状态</li>
+<li>互补输出是输出上具备NPN和PNP两种输出晶体管的输出电路。根据输出信号的[H]、[L]，2个输出晶体管交互进行[ON]、[OFF]动作，比集电极开路输出的电路传输距离能稍远，也可与集电极开路输入机器（NPN、PNP）连接。</li>
+<li>线性驱动输出是采用RS-422标准，用AM26LS31芯片应用于高速、长距离数据传输的输出模式。信号以差分形式输出，因此抗干扰能力更强。输出信号需专门能接收线性驱动输出的设备才能接收。</li>
+</ol>
+<h1 id="欧系、日系编码器在描述上的不一致不统一"><a href="#欧系、日系编码器在描述上的不一致不统一" class="headerlink" title="欧系、日系编码器在描述上的不一致不统一"></a>欧系、日系编码器在描述上的不一致不统一</h1><p>由于历史原因，先有欧系编码器的TTL信号，然后再有双极性的5V差分，以及基于长线驱动器件配对的长线驱动信号。欧系编码器厂家为原有老客户仍然保持了用TTL信号来表述5V差分信号（长线驱动）。需要注意的是，欧系的TTL目前大部分是默认为5V差分的长线驱动的，但是欧系的TTL也有少部分是5V差分是可以对0V的三线的，也可以是两线的长线驱动。如果是三线的也可以是单独接A+,而可以不接A-(A-悬空)，作为单极性的TTL使用。一些简单设计的设备中，5VTTL电平的ABZ即为这种三线制差分的简化接线方式（只接AB信号），例如我参加的对欧洲塔式积热式太阳能跟踪反射板上供应的增量编码器，就是这种5VTTL的只接AB两根线的，设计要求一样要达到较远距离的传输与抗干扰能力。<br>如果是二线制的，不仅仅必须A+A-都要接上，而且需查产品手册对应寻找到匹配的接收单元与之配对。</p>
+<h2 id="欧系编码器的TTL描述有三种可能："><a href="#欧系编码器的TTL描述有三种可能：" class="headerlink" title="欧系编码器的TTL描述有三种可能："></a>欧系编码器的TTL描述有三种可能：</h2><ol>
+<li>双极性的5V TTL，接收端封闭配对，接收端单元选型需与发送端查找配对使用（查产品手册），A+A-都必须接。这是最多可能性，或者目前编码器类以TTL表示的几乎默认的模式，目前主要为设备配套提供，较多的是运动控制器与伺服电机编码器匹配。</li>
+<li>单极性的5VTTL，，直接的电路板计算机处理器接口，可以只接AB信号。主要为设备电路设计者提供，可直接进入计算机处理器CPU或者计数器芯片。</li>
+<li>双极性的5V TTL，三线式对0V的5V电平，接收端开放；它也可以是只接AB单极***，直接连接计算机处理器而省去信号接收芯片，与上述2兼容使用。但是原有差分输出的模式在双绞线上传输一样用差分信号配对使用双绞，同样有部分双绞传输抗干扰的作用。</li>
+<li>目前5V差分（欧系仍以TTL表示）大部分用于运动控制器伺服电机编码器，而自动化PLC上用更高电平的HTL信号（非差分式）。在变频器的信号选用上，较佳的应该是HTL-6,即含反相的HTL信号，较高电平的差分信号具有更好的抗变频器干扰特性。</li>
+</ol>
+<h2 id="日系编码器通常直接以5V-line-driver描述，需查手册与发送端芯片配对使用。"><a href="#日系编码器通常直接以5V-line-driver描述，需查手册与发送端芯片配对使用。" class="headerlink" title="日系编码器通常直接以5V line driver描述，需查手册与发送端芯片配对使用。"></a>日系编码器通常直接以5V line driver描述，需查手册与发送端芯片配对使用。</h2><p>日系编码器更有NPN单极性反逻辑的信号输出，接收端也必须是NPN极性的，它的信号电压公共端在电源的高电平上，信号流开关是在0V上的“有”或“无”的“漏性”电流，信号的“1”和“0”是反的，在逻辑处理时需反向。不建议用上拉电阻临时取电压的不规范接法。</p>
+<p>HTL含反相信号-(High Threshold Logic的缩写)是“高阈值逻辑电路”，它的电压阈值9–30V，大于5V TTL，目前较多的是以一对NPN+PNP三极管做成推挽式开关放大电路，兼容集电极开路放大器NPN和PNP。其中PNP接法为正逻辑，以电源0V为公共端；NPN接法为负逻辑，以电源高电平为公共端。HTL信号更多地用于PLC接口，尤其是欧系PLC为编码器标准接口。</p>
+<p>HTL信号可以用三线制差分模式（电流回路对0V,取电压差比较差分接收）。同样可以有HTL-6的含反相通道做成差分式接收（A+A-B+B-Z+Z-6通道HTL）。HTL-6可用在变频器接收，因其电平阈值高、差分式可消除变频器及电机的共模干扰，用于变频器接收上抗干扰能力更强。</p>
+<h1 id="编码器信号不匹配可能引起的错误："><a href="#编码器信号不匹配可能引起的错误：" class="headerlink" title="编码器信号不匹配可能引起的错误："></a>编码器信号不匹配可能引起的错误：</h1><p>编码器信号不仅仅是有电压差对应，A+A-反相差分也有多种不同，所以并不是看见电压是对的，或者看到是A+A-B+B-含反相的，还是只有ABZ没有反相，就可以判断是不是匹配的可以连接上去了。电压对了ABZ接上去了，哪怕有信号能够读取到，并不代表就是有很好匹配的可以用了，这其中还有多种不匹配引起不良结果的可能性：</p>
+<ol>
+<li>对0V的关系不同，三线的差分信号电流回路对0V，取电压差比较；二线的差分信号电流回路与0V无关，仅为两个互为差分信号自己构成电流回路的正反电流回路。当设备启动时0V会有波动，如果信号不匹配极易被干扰甚至烧器件。对于有较大型电机在现场，或者有大型设备中的电磁线圈，在启动瞬间的三相绕线不平衡，很有可能会在0V瞬间的波动而发生这种不预期状况。</li>
+<li>阻抗匹配的不同，针对于有封闭性配对要求的接收端，编码器脉冲信号的阻抗与信号频率有关，发送与接收阻抗匹配是有预先定义的，尤其是在高频段阻抗的不匹配，将导致在编码器脉冲频率高时的信号丢失的“丢脉”，例如高分辨率编码器或者高速旋转中编码器的频率较高。针对长线驱动有接收端匹配要求的，需查手册配对接收单元。</li>
+<li>信号流与电流方向的一致性，如果不匹配将导致读不到信号，甚至烧了器件。编码器如果没有反极性保护和短路保护，这种上去就烧器件的事情常有发生。</li>
+<li>抗干扰性能的不同，只有匹配的信号，以及使用双绞屏蔽电缆线，具有更好的抗干扰特性，并信号传输距离能达到标称的长度。双绞电缆仅对差分的匹配的信号有利。单极性的信号或者不匹配的信号没有形成配对，双绞线失去了其设计使用的目的。</li>
+<li>日系编码器还有NPN集电极开路式的信号，这类信号接收端也必须是NPN，而且“1”和“0”的逻辑是反的，而不是用上拉电阻临时救急用上去。我不推荐使用这类信号。对于编码器信号输出类别中，NPN信号可以被淘汰了。</li>
+<li>目前国内最典型的编码器信号接口不匹配，是欧系PLC（例如西门子PLC）连日系编码器（例如欧姆龙编码器），看似电压与ABZ都对，连上去也能读取信号，但实际上是不匹配的，在频率较高时抗干扰差，容易丢脉冲，甚至容易上电烧器件，应避免这样的连接。其次，是变频器的信号接收应选用差分式含反相的信号，HTL-6含反相6通道因为有更高的电压阈值而更适合在变频器中使用。而目前国内变频器接收的信号很多并不匹配，尤其是选用NPN集电极开路输出信号，因其公共端不在0V，而电机接地是0V的，NPN接法是冲突的不匹配的。</li>
+</ol>
+<p>参考：<br><a href="http://wap.siemens.com.cn/club/bbs/post/1554368.html" target="_blank" rel="noopener">增量编码器各种输出信号详解（TTL电平、5V差分、长线驱动、RS422等）</a><br><a href="https://zhuanlan.zhihu.com/p/30509923" target="_blank" rel="noopener">回答10个问题，轻松做旋转编码器专家！</a><br><a href="https://zhuanlan.zhihu.com/p/31163840" target="_blank" rel="noopener">谈谈增量型编码器的信号电路输出方式</a><br><a href="https://www.cn.cui.com/blog/comparison-of-common-encoder-output-signals" target="_blank" rel="noopener">常见编码器输出信号比较</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/08/07/Spring-boot集成Websocket/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1797,497 +1955,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/11/《流畅的Python》－序列构成的数组/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/07/11/《流畅的Python》－序列构成的数组/" itemprop="url">《流畅的Python》笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-11T21:35:29+08:00">
-                2019-07-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="序列构成的数组"><a href="#序列构成的数组" class="headerlink" title="序列构成的数组"></a>序列构成的数组</h1><ol>
-<li><p>序列类型</p>
-<ul>
-<li>容器序列（可以存放不同数据类型）：list、tuple、collection.deque</li>
-<li>扁平序列： str、bytes、bytearray、memeryview、array.array</li>
-</ul>
-</li>
-<li><p>按是否能被修改</p>
-<ul>
-<li>可变序列： list、bytearray、array.array、collection.deque 、memoryview</li>
-<li>不可变序列: tuple、str、bytes</li>
-</ul>
-</li>
-<li><p>具名元组 collections.nametuple</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">City = nametuple(&apos;City&apos;,&apos;name size population&apos;)</span><br><span class="line">tokyo = City(&apos;Tokyo&apos;,&apos;199999&apos;,&apos;36.9&apos;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>切片</p>
-<ul>
-<li>切片总是忽略最后一个元素</li>
-<li>s[a:b:c] c是间隔<br>－ 切片时调用<strong>getitem</strong>(slice(start,end,step))</li>
-</ul>
-</li>
-<li>+ *<ul>
-<li>都不修改原有对象</li>
-<li>＊是个浅复制，因此如果序列里含有对象的话，复制出来的是同一个对象的引用，比如[[]]*3</li>
-</ul>
-</li>
-<li>+= 使用<strong>iadd</strong>（不改变原有对象） 如果不存在，则会调用<strong>add</strong>（创建了新对象）。*= 对应 <strong>imul</strong>同理。</li>
-<li>如果元组含有可变对象（eg. (1,2,[1,2]) ），改变了可变对象会抛出错误但是仍会执行。</li>
-<li>排序<ul>
-<li>list.sort 就地排序</li>
-<li>sorted 创建一个新列表</li>
-</ul>
-</li>
-<li><p>bisect 管理已排序的列表</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 搜索</span></span><br><span class="line">bisect(hystack,needle)</span><br><span class="line"><span class="comment"># 插入</span></span><br><span class="line">bisect.insert</span><br><span class="line">bisect.insort</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>数组 array.array</p>
-</li>
-<li>内存视图 memoryview：不复制内容的情况下操作同一个数组的不同切片</li>
-<li>双向队列 collection.deque</li>
-</ol>
-<h1 id="字典和集合"><a href="#字典和集合" class="headerlink" title="字典和集合"></a>字典和集合</h1><ol>
-<li>标准库所有的映射类型都是利用dict，dict要求键必须是可散列的数据类型。</li>
-<li>update 批量更新</li>
-<li><p>setdefault处理找不到的值</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_dict.setdefault(key,[]).append(new_value)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>collection.defaultdict 为找不到的键创建默认值</p>
-</li>
-<li>所有映射类型在处理找不到的键时，会涉及<strong>missing</strong>方法，该方法只会被<strong>getitem</strong>调用</li>
-<li>创建自定义映射类型的时候，继承collections.UserDict比继承dict更好。</li>
-<li>不可变映射类型 types.MappingProxyType,创建了一个只读的映射视图.</li>
-<li>集合实现了很多中缀运算</li>
-<li>散列表是个稀疏数组，里面的单元叫说表元，每个表元包含键的引用、值的引用，表元大小一致，可以通过偏移量读取某个表元。</li>
-<li>计算键的散列值－&gt; 利用散列值的一部分定位散列表中的一个表元，如果散列冲突，再使用另一个部分定位表元。<br> 因此：<ul>
-<li>键必须是可散列的</li>
-<li>字典在内存上开销巨大</li>
-<li>键查询很快</li>
-<li>键的次序是乱的</li>
-<li>新增键有可能导致扩容，从而改变键的顺序</li>
-</ul>
-</li>
-<li>set、frozenset也依赖散列表</li>
-<li>PHP的数组其实是个有序的映射</li>
-<li>Python3.6之后字典的底层数据结构发生了变化，<a href="https://juejin.im/post/5d296e2af265da1bb31c6609" target="_blank" rel="noopener">参考</a></li>
-</ol>
-<h1 id="文本和字节序列"><a href="#文本和字节序列" class="headerlink" title="文本和字节序列"></a>文本和字节序列</h1><ol>
-<li>Python3中的str对象获取的元素是Unicode字符</li>
-<li>Unicode标准中，字符的标志（码位），字符的具体表述取决于所用的编码。把码位转换成字节序列的过程是编码，反之则为解码。</li>
-<li>二进制序列的切片始终是同一类型的二进制序列。</li>
-<li>二进制的方法与str的方法类似，特别的有 fromhex()</li>
-<li>struct模块，把打包的字节序列转换程不同类型字段组成的元组。</li>
-<li>memoryview用于共享内存，memory对象的切片是一个新的memoryview对象，不会复制字节序列。</li>
-<li>错误<ul>
-<li>UnicodeEncodeError：目标编码没有定义某个字符</li>
-<li>UnicodeDecodeError：无法转换字节序列</li>
-<li>SyntaxError：加载的.py模块中含有UTF－8之外的数据，而且没有声明编码。</li>
-</ul>
-</li>
-<li>BOM：字节序标记，指明编码时使用Intel CPU的小字节序。</li>
-<li>unicodedata.normalize：规范化Unicode. NFC是最好的规范。</li>
-<li>大小写折叠：str.casefold() str.lower()</li>
-</ol>
-<h1 id="一等函数"><a href="#一等函数" class="headerlink" title="一等函数"></a>一等函数</h1><ol>
-<li>高阶函数：接受函数作为参数，或者把函数作为结果返回。</li>
-<li>匿名函数Lambda</li>
-<li>实现<strong>call</strong>实例方法，可以使任何对象表现得像函数。</li>
-<li>函数使用<strong>dict</strong>属性存储赋予它的用户属性。__defaults__保存定位参数和关键字参数的默认值，__kwdefaults__保存关键字参数默认值。__code__保存参数的名称。__annotation__保存注释。</li>
-<li><p>定义函数时，如果想指定仅限关键字参数，要把它们放在前面有＊的参数后面.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(a,*,b)</span></span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>提取函数的信息：inspect.signature</p>
-</li>
-<li>冻结参数: functools.partial</li>
-<li>设计模式：<ul>
-<li>对接口编程，而不是对实现编程</li>
-<li>优先使用对象组合，而不是类继承</li>
-</ul>
-</li>
-</ol>
-<h1 id="装饰器与闭包"><a href="#装饰器与闭包" class="headerlink" title="装饰器与闭包"></a>装饰器与闭包</h1><ol>
-<li>装饰器的特点：<ul>
-<li>能把被装饰的函数替换成别的函数</li>
-<li>装饰器在加载模块时立即执行</li>
-</ul>
-</li>
-<li><p>变量作用域</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">b=<span class="number">6</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> b</span><br><span class="line">    print(a)</span><br><span class="line">    print(b)</span><br><span class="line">    b = <span class="number">9</span> <span class="comment"># Python在编译函数时，发现b被赋值了，如果没有定义global，会判断b时局部变量而报错</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>自由变量：未在本地作用域中绑定的变量。闭包会保留定义函数时存在的自由变量的绑定。只有嵌套在其他函数中的函数才可能需要处理不在全局作用域中的外部变量。</p>
-</li>
-<li><p>nonlocal：把变量标记为自由变量</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_averager</span><span class="params">()</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">averager</span><span class="params">(new_value)</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> count,total</span><br><span class="line">        count = count +<span class="number">1</span></span><br><span class="line">        total = total + new_value</span><br><span class="line">        <span class="keyword">return</span> total / count</span><br><span class="line">    <span class="keyword">return</span> averager</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>functools.wraps，把相关属性从真实被装饰函数复制到装饰后返回的函数中，从而保持<strong>name</strong>和<strong>doc</strong>等不变。</p>
-</li>
-<li>functools.lru_cache: 实现LRU缓存，把耗时的函数结果保存起来。</li>
-<li>functools.singledispatch 实现单分派泛函数 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@singledispatch</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">htmlize</span><span class="params">(obj)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="meta">@htmlize.register(str):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_</span><span class="params">(text)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="meta">@htmlize.register(tuple):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_</span><span class="params">(tup)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="对象引用、可变性、垃圾回收"><a href="#对象引用、可变性、垃圾回收" class="headerlink" title="对象引用、可变性、垃圾回收"></a>对象引用、可变性、垃圾回收</h1><ol>
-<li>Python中的变量类似JAVA引用变量。是一个标识。</li>
-<li>is比较对象的标识，＝＝比较对象的值。is更快因为不能重载。</li>
-<li>默认做浅复制，比如构造方法或[:]，深复制用deepcopy</li>
-<li>Python中唯一支持的参数传递模式是共享传参(call by share)，各个形式参数获得实参中各个引用的副本。因此，函数可能会改变参数传入的可变对象。</li>
-<li>不要使用可变类型作为参数的默认值，因为默认值在定义时计算，因此默认值成为了函数的属性，会被后续的函数调用中共享。</li>
-<li>del删除名称，而不是对象。</li>
-<li>CPython中垃圾回收使用引用计算算法。</li>
-<li>弱引用(weakref WeakValueDictionary)不会增加对象的引用数量</li>
-<li>对于不可变类型（比如元组），使用t[:]，不创建副本，而是返回同一个对象的引用。</li>
-<li>对于字符串字面量，会有“驻留”去共享字符串字面量。即字符串值相同的两个变量，共享了一个对象引用。</li>
-<li>对于*= +=，如果左边的变量绑定了不可变对象，会创建新对象，如果是可变对象，就就地修改。</li>
-</ol>
-<h1 id="符合Python风格的对象"><a href="#符合Python风格的对象" class="headerlink" title="符合Python风格的对象"></a>符合Python风格的对象</h1><ol>
-<li>classmethod常用于定义备选构造方法。</li>
-<li>staticmethod可有可无。</li>
-<li>私有属性 <strong>mood，实际做了名称改写，变成了 _Dog</strong>mood</li>
-<li><strong>slots</strong>类属性让解释器以元组存储实例而不用字典，以节省内存。<ul>
-<li>每个子类都要定义<strong>slots</strong>属性</li>
-<li>实例只能拥有<strong>slots</strong>定义了的属性，除非把<strong>dict</strong>加入<strong>slots</strong></li>
-<li>如果不把<strong>weakref</strong>加入<strong>slots</strong>，无法被弱引用</li>
-</ul>
-</li>
-<li>类属性可以为实例属性提供默认值</li>
-<li>类属性是公开，会被继承，经常用于创建一个子类，定制类的数据属性。</li>
-</ol>
-<h1 id="序列的修改、散列、切片"><a href="#序列的修改、散列、切片" class="headerlink" title="序列的修改、散列、切片"></a>序列的修改、散列、切片</h1><ol>
-<li>使类表现得像序列：实现<strong>getitem</strong>和<strong>len</strong>方法。</li>
-<li>动态存取属性：<strong>getattr</strong>和<strong>setattr</strong></li>
-<li>zip拆包元组并重新组合</li>
-</ol>
-<h1 id="接口：从协议到抽象基类"><a href="#接口：从协议到抽象基类" class="headerlink" title="接口：从协议到抽象基类"></a>接口：从协议到抽象基类</h1><ol>
-<li>从鸭子类型代表动态协议。－－让动态类型语言实现多态</li>
-<li>虽然没有interface关键字，每个类都有接口，类的实现或继承公开的属性（方法／数据属性），包括特殊方法。</li>
-<li><p>使用猴子补丁在运行时实现协议：</p>
-<ul>
-<li>猴子补丁：在运行时修改类／模块，而不改动源码。</li>
-<li>内置类型不能打猴子补丁。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_cart</span><span class="params">(deck,position,card)</span>:</span></span><br><span class="line">    deck._cards[position]=card</span><br><span class="line">FrenchDeck.__setitem = set_card  <span class="comment">#Monkey Patch</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>协议是动态的，只要对象部分实现了协议，就可以当成是该类型那样使用。</p>
-</li>
-<li>白鹅类型：只要cls是抽象基类，即cls的元类是abc.ABCMeta，就可以使用isinstance(obj,cls)<ul>
-<li>即便不继承，也有办法把一个类注册为抽象基类的虚拟子类。只要实现了抽象基类定义的接口。</li>
-<li>注册虚拟子类的方式实在抽象基类上调用register方法。但是注册的类不会从抽象基类中继承任何方法或属性。</li>
-</ul>
-</li>
-<li>大部分标准库中的抽象基类在collection.abc模块中国年定义。</li>
-<li>抽象基类可以有实现代码，即使实现了，子类也必须覆盖抽象方法，但可以通过super()调用抽象方法。</li>
-<li><p>声明抽象基类最简单的方式是继承abc.ABC或其他抽象基类。</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tombola</span><span class="params">(metaclass=abc.ABCMeta)</span>:</span></span><br><span class="line"><span class="meta">    @abstractmentd</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">methoss</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>动态识别子类<strong>subclasshook</strong></p>
-</li>
-</ol>
-<h1 id="继承的优缺点"><a href="#继承的优缺点" class="headerlink" title="继承的优缺点"></a>继承的优缺点</h1><ol>
-<li>子类化内置类型时，内置类型不会调用用户定义的类覆盖的特殊方法。这种行为违背了面向对象编程的其中一个原则：始终应该从实例所属的类开始搜索方法。</li>
-<li>内置类型的方法调用的其他类的方法，如果被覆盖，也不会被调用。</li>
-<li><p>多重继承中，确定使用哪个类的方法，必须使用类名限定方法调用来避免歧义。</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span><span class="params">(B,C)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">function</span><span class="params">(self)</span>:</span></span><br><span class="line">        B.method1(self)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解析顺序<strong>mro</strong>，该顺序即考虑继承图也考虑子类声明时列出的超类的顺序。</p>
-</li>
-<li>处理继承建议：<ul>
-<li>区分接口继承、实现继承。<ul>
-<li>继承接口，创建子类型，实现“是什么”关系</li>
-<li>继承实现，通过重用避免代码重复。</li>
-</ul>
-</li>
-<li>使用抽象基类显式表示接口</li>
-<li>通过混入重用代码，混入类mixin class</li>
-<li>在名称中明确指明混入 XViewMixin</li>
-<li>抽象基类可以作为混入，反过来不成立</li>
-<li>不要子类化多个具体类</li>
-<li>为用户提供聚合类</li>
-<li>优先使用对象组合，而不是继承</li>
-</ul>
-</li>
-</ol>
-<h1 id="正确重载运算符"><a href="#正确重载运算符" class="headerlink" title="正确重载运算符"></a>正确重载运算符</h1><ol>
-<li>规定：<ol>
-<li>不能重载内置类型运算符</li>
-<li>不能新建运算符</li>
-<li>某些运算符不能重载，包括is and or not</li>
-</ol>
-</li>
-<li>一元运算符<ol>
-<li>－ __neg__</li>
-<li>+ __pos__</li>
-<li>~ __invert__</li>
-<li>* __mul__和<strong>rmul</strong></li>
-<li>+= __iadd__(就地计算）或<strong>add</strong></li>
-</ol>
-</li>
-<li>反向方法:__add__和<strong>radd</strong> </li>
-<li>如果由于类型不兼容倒是运算符特殊方法无法返回有效结果，应该返回NotImplemented，这样Python会尝试使用反向方法。</li>
-<li><strong>eq</strong>正向反向都一样，只是参数顺序对调</li>
-</ol>
-<h1 id="可迭代的对象、迭代器、生成器"><a href="#可迭代的对象、迭代器、生成器" class="headerlink" title="可迭代的对象、迭代器、生成器"></a>可迭代的对象、迭代器、生成器</h1><ol>
-<li>对比：迭代器用于从集合取出元素。生成器用于凭空生成元素，所有的生成器都是迭代器。</li>
-<li>序列可以迭代的原因：实现iter函数。如果没有<strong>iter</strong>，则会调用<strong>getitem</strong>方法。</li>
-<li>检查对象x能否迭代：iter(x,stop),stop是哨符，当可调用对象返回这个值时，触发迭代器抛出StopInteration异常。</li>
-<li>Python从可迭代对象获取迭代器。标准迭代器有<strong>iter</strong>和<strong>next</strong>方法。</li>
-<li>迭代器：实现了无参数的<strong>next</strong>方法，返回序列中下一个元素，如果没有元素了，抛出StopIteration异常。</li>
-<li>可迭代对象的<strong>iter</strong>方法，每次都实例化一个新的迭代器，迭代器本身实现<strong>next</strong>方法返回单个元素，<strong>iter</strong>方法返回自身。</li>
-<li>生成器，只要函数定义体中有yield关键字</li>
-<li>re.finditer时re.findall惰性版本，返回了一个生成器。</li>
-<li>yield from创建了通道，把内层生成器直接与外层生成器的客户端联系起来。</li>
-</ol>
-<h1 id="上下文管理器和else"><a href="#上下文管理器和else" class="headerlink" title="上下文管理器和else"></a>上下文管理器和else</h1><ol>
-<li>with：设置一个临时上下文，交给上下文管理器对象控制，并负责清理上下文。上下文管理器对象协议包括<strong>enter</strong>和<strong>exit</strong></li>
-<li>for/else, while/else, try/else，这里的else类似于then的用法。</li>
-<li>如果<strong>exit</strong>返回None，True以外的值，with中任何异常会向上冒泡。</li>
-<li>模块contextlib中，@contextmanager把简单的生成器函数变成上下文管理器，yield前所有的代码在with开始时调用，yield后代码在with结束时调用。此时yield与迭代无关。</li>
-</ol>
-<h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><ol>
-<li><p>yield作为控制流程的方法。</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">x</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="number">1</span>)</span><br><span class="line">    x = <span class="keyword">yield</span></span><br><span class="line">    print(x)</span><br><span class="line">y = X() </span><br><span class="line">next(y) <span class="comment"># 预激协程</span></span><br><span class="line">y.send(<span class="number">42</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>异常处理：generator.throw 终止协程generator.close</p>
-</li>
-<li>协程的返回值捕捉需要被except中获取err.value</li>
-<li>yield from 主要功能是打开双向通道<ol>
-<li>子生成器产出的值都直接传给委派生成器的调用方</li>
-<li>使用send（）方法发给委派生成器的值都直接传给子生成器。如果值时None，会调用子生成器的<strong>next</strong>方法，如果不是None，会调用子生成器的send（）</li>
-<li>生成器退出时，生成器／子生成器中的return expr表达式触发StopInteration(expr)异常抛出</li>
-<li>yield from表达式的值时子生成器终止时传给StopIteration异常的第一个参数</li>
-</ol>
-</li>
-</ol>
-<h1 id="使用future处理并发"><a href="#使用future处理并发" class="headerlink" title="使用future处理并发"></a>使用future处理并发</h1><ol>
-<li>concurrent.future模块主要有ThreadPoolExcutor、ProcessPoolExcutor类。</li>
-<li>future类有concurrent.future.Future和asyncio.Future。两者都有<ol>
-<li>.done() </li>
-<li>.add_done_callback() </li>
-<li>.result(),但 concurrent.future.Future会阻塞直到有返回值，asyncio.Future则会抛出异常。</li>
-</ol>
-</li>
-<li>concurrent.future。as_completed返回迭代器，在future运行结束后产出future</li>
-<li>CPython本身不是线程安全，因此有全局解释锁GIL，一次只允许使用一个线程执行Python字节码</li>
-<li>Excutor.map可以并发运行多个可调用对象</li>
-</ol>
-<h1 id="使用asyncio处理并发"><a href="#使用asyncio处理并发" class="headerlink" title="使用asyncio处理并发"></a>使用asyncio处理并发</h1><ol>
-<li>asyncio API协程在定义体必须使用yield from</li>
-<li>@asyncio.coroutine装饰器定义协程函数</li>
-<li>Task对象可以取消，取消后在协程当前yield处抛出asyncio.CancelledError，协程可以捕获异常，延迟取消，拒绝取消。</li>
-<li><p>Task对象用于驱动协程 </p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task = asyncio.<span class="keyword">async</span>(methos(<span class="string">'think'</span>))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>线程与协程区别：调度程序在任何时候都可能中断线程，但协程默认做好全方位保护。</p>
-</li>
-<li>asycio只支持TCP、UDP，HTTP使用aiohttp</li>
-<li>避免阻塞的方法：<ol>
-<li>在单独线程中运行各个阻塞操作 －－ 内存问题</li>
-<li>把每个阻塞型操作转换成非阻塞的异步调用<ol>
-<li>callback</li>
-<li>协程：必须使用事件循环显式排定协程的执行时间，或者在其他排定了执行时间的协程中使用yield from把它激活。</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>访问本地文件会阻塞，调用asyncio.run_in_excutor，底层时用线程处理了。</li>
-<li>异步框架：tornado</li>
-</ol>
-<h1 id="元编程"><a href="#元编程" class="headerlink" title="元编程"></a>元编程</h1><ol>
-<li>特性：在不改变类接口的前提下，使用存取方法修改数据属性。管理实例属性的类属性。</li>
-<li>是否有效标识符：s.isidentifier()</li>
-<li>构造实例的特殊方法<strong>new</strong>，该方法返回一个实例，作为第一个参数传给<strong>init</strong>。</li>
-<li>使用装饰器 @property, @[prop_name].setter, @[prop_name].getter</li>
-<li><p>property构造方法，可以使用函数调用而不是装饰器。</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">property(fget=<span class="keyword">None</span>, fset=<span class="keyword">None</span>, fdel=<span class="keyword">None</span>, doc=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>特例都是类属性，但是特例管理的是实例属性的存取，</p>
-<ol>
-<li>实例和类有同名属性，实例会覆盖类属性。</li>
-<li>实例属性不会覆盖类特性</li>
-<li>新添的类特性会覆盖实例属性</li>
-</ol>
-</li>
-<li><p>特性工厂</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">factory</span><span class="params">(prop_name)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prop_getter</span><span class="params">(instance)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> instance.__dict__[prop_name]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prop_setter</span><span class="params">(instance)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> property(prop_getter,prop_setter)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>属性的内置函数</p>
-<ol>
-<li>dir</li>
-<li>getattr</li>
-<li>setattr</li>
-<li>hasattr</li>
-<li>vars:返回<strong>dict</strong>属性</li>
-</ol>
-</li>
-<li>直接通过<strong>dict</strong>属性读写的属性不会触发这些特殊方法。</li>
-</ol>
-<h1 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h1><ol>
-<li>描述符是实现类特定协议的类，包括<strong>get</strong>,__set__,__delete__</li>
-<li><p>描述符的作用：创建一个实例，作为另一个类的类属性。</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Factory</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,prop_name)</span>:</span></span><br><span class="line">        self.prop_name = prop_name</span><br><span class="line">    <span class="comment"># self是描述符实例，instance是托管实例</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self,instance,values)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># owner是托管类的引用</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self,instance,owner)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>描述符与特性工厂</p>
-<ol>
-<li>描述符可以用子类扩展</li>
-<li>相比于闭包，类属性、实例属性保持状态更容易理解</li>
-</ol>
-</li>
-<li>实现<strong>set</strong>方法的描述符是覆盖性描述符，会覆盖实例属性的复制操作。</li>
-<li>没有<strong>get</strong>方法的覆盖性描述符，只有读操作时，实例属性会覆盖描述符。</li>
-<li>没有实现<strong>set</strong>方法的描述符是非覆盖性描述符。</li>
-<li>读类属性可以由依附在托管类上定义的<strong>get</strong>方法的描述符处理，但是写操作不会。</li>
-<li>描述符使用<ol>
-<li>使用特性以保持简单</li>
-<li>只读描述符必须有<strong>set</strong></li>
-<li>用于验证的描述符可以只有<strong>set</strong></li>
-<li>仅用<strong>get</strong>方法的描述符实现高效缓存</li>
-<li>非特殊方法可以被实例属性遮盖</li>
-</ol>
-</li>
-</ol>
-<h1 id="类元编程"><a href="#类元编程" class="headerlink" title="类元编程"></a>类元编程</h1><ol>
-<li>类元编程是指在运行时创建或定制类的操作。</li>
-<li><p>type是一个类，传入三个参数可以创建一个类，type的实例也是类。</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyClass= type(<span class="string">'MyClass'</span>,(MySuperClass,MyMin),&#123;<span class="string">'x'</span>:<span class="number">42</span>,<span class="string">'y'</span>:<span class="number">50</span>&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>类装饰器与函数装饰器类似，但子类不会继承类装饰器</p>
-</li>
-<li>类的定义体属于“顶层代码”在导入时运行。包括嵌套类。</li>
-<li>object是type的实例，type是object的子类。</li>
-<li>元类的特殊方法<strong>prepare</strong>，在<strong>new</strong>前被调用，使用类定义体中的属性创建映射。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2340,7 +2007,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">95</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
