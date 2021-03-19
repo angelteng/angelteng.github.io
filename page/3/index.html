@@ -229,6 +229,181 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/22/Hadoop安装使用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/07/22/Hadoop安装使用/" itemprop="url">Hadoop安装使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-22T16:21:49+08:00">
+                2019-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ol>
+<li>安装配置JAVA及其环境变量<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/java/jdk-12.0.1</span><br><span class="line">export PATH=$PATH:$&#123;JAVA_HOME&#125;/bin</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果是ubuntu，需要将JAVA_HOME变量配置到~/.bashrc，<a href="https://thinkinginsoftware.blogspot.com/2012/06/hadoop-pob-and-error-javahome-is-not.html" target="_blank" rel="noopener">这篇文章所说</a>，因为hadoop运行的时候是无登录的。</p>
+<ol start="2">
+<li><p>配置ssh登录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压hadoop，~/.bashrc 添加环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export HADOOP_HOME=/etc/hadoop-3.1.2/hadoop-3.1.2</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br><span class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>etc/hadoop/hadoop-env.sh添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export HDFS_NAMENODE_USER=&quot;root&quot;</span><br><span class="line">export HDFS_DATANODE_USER=&quot;root&quot;</span><br><span class="line">export HDFS_SECONDARYNAMENODE_USER=&quot;root&quot;</span><br><span class="line">export YARN_RESOURCEMANAGER_USER=&quot;root&quot;</span><br><span class="line">export YARN_NODEMANAGER_USER=&quot;root&quot;</span><br><span class="line">export HADOOP_OPTS=&quot;$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib/native&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>etc/hadoop/core-site.xml添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://localhost:8020&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/tmp/hadoop/&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>etc/hadoop/hdfs-site.xml添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>格式化hdfs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hdfs namenode -format</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sbin/start-dfs.sh </span><br><span class="line">sbin/stop-dfs.sh <span class="comment">#关闭</span></span><br><span class="line">jps <span class="comment">#检查是否启动正常</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开 <a href="http://localhost:9870" target="_blank" rel="noopener">http://localhost:9870</a> 可以看见Hadoop的管理页面</p>
+</li>
+</ol>
+<h1 id="Hadoop的组成"><a href="#Hadoop的组成" class="headerlink" title="Hadoop的组成"></a>Hadoop的组成</h1><p>Hadoop 生态是一个庞大的、功能齐全的生态，但是围绕的还是名为 Hadoop 的分布式系统基础架构，其核心组件由四个部分组成，分别是：Common、HDFS、MapReduce 以及 YARN。</p>
+<ul>
+<li>Common 是 Hadoop 架构的通用组件；</li>
+<li>HDFS 是 Hadoop 的分布式文件存储系统；</li>
+<li>MapReduce 是Hadoop 提供的一种编程模型，可用于大规模数据集的并行运算；</li>
+<li>YARN 是 Hadoop 架构升级后，目前广泛使用的资源管理器。<img src="/blog/2019/07/22/Hadoop安装使用/0.jpg">
+</li>
+</ul>
+<h2 id="NameNode"><a href="#NameNode" class="headerlink" title="NameNode"></a>NameNode</h2><ul>
+<li>NameNode 是管理文件系统命名空间的主服务器，用于管理客户端对文件的访问，执行文件系统命名空间操作，如打开，关闭和重命名文件和目录。它还确定了Block 到 DataNode 的映射。</li>
+<li>NameNode 做着有关块复制的所有决定，它定期从群集中的每个 DataNode 接收 Heartbeat 和 Blockreport。收到 Heartbeat 意味着 DataNode正常运行，Blockreport 包含 DataNode 上所有块的列表。</li>
+<li>文件系统的元数据（MetaData）也存储在 NameNode 中，NameNode 使用名为 EditLog 的事务日志来持久记录文件系统元数据发生的每个更改。</li>
+<li>整个文件系统命名空间（包括块到文件和文件系统属性的映射）存储在名为 FsImage 的文件中。 FsImage 也作为文件存储在 NameNode 的本地文件系统中。<h2 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h2>DataNode 通常是群集中每个节点一个，用于存储数据，负责提供来自文件系统客户端的读写请求。并且还会根据 NameNode 的指令执行块创建，删除和复制。</li>
+</ul>
+<h1 id="Hadoop生态圈"><a href="#Hadoop生态圈" class="headerlink" title="Hadoop生态圈"></a>Hadoop生态圈</h1><img src="/blog/2019/07/22/Hadoop安装使用/1.jpg">
+<img src="/blog/2019/07/22/Hadoop安装使用/2.jpg">
+<ul>
+<li>HBase：来源于Google的BigTable；是一个高可靠性、高性能、面向列、可伸缩的分布式数据库。</li>
+<li>Hive：是一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，通过类SQL语句快速实现简单的MapReduce统计，不必开发专门的MapReduce应用，十分适合数据仓库的统计分析。</li>
+<li>Pig：是一个基于Hadoop的大规模数据分析工具，它提供的SQL-LIKE语言叫Pig Latin，该语言的编译器会把类SQL的数据分析请求转换为一系列经过优化处理的MapReduce运算。</li>
+<li>ZooKeeper：来源于Google的Chubby；它主要是用来解决分布式应用中经常遇到的一些数据管理问题，简化分布式应用协调及其管理的难度。</li>
+<li>Ambari：Hadoop管理工具，可以快捷地监控、部署、管理集群。</li>
+<li>Sqoop：用于在Hadoop与传统的数据库间进行数据的传递。</li>
+<li>Mahout：一个可扩展的机器学习和数据挖掘库。</li>
+</ul>
+<p>参考:<br><a href="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Pseudo-Distributed_Operation" target="_blank" rel="noopener">Hadoop: Setting up a Single Node Cluster.</a><br><a href="https://zhuanlan.zhihu.com/p/50224788" target="_blank" rel="noopener">Hadoop – 1. 从零搭建HDFS</a><br><a href="https://juejin.im/post/5b8e94c1e51d451a447a97ae" target="_blank" rel="noopener">Hadoop入门（一）之Hadoop伪分布式环境搭建</a><br><a href="https://www.zhihu.com/question/23036370" target="_blank" rel="noopener">hadoop和大数据的关系？和spark的关系？</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/11/《流畅的Python》－序列构成的数组/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2140,166 +2315,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/06/17/项目流程规范/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/06/17/项目流程规范/" itemprop="url">项目流程规范</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-17T16:14:36+08:00">
-                2019-06-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/项目管理/" itemprop="url" rel="index">
-                    <span itemprop="name">项目管理</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="项目管理流程"><a href="#项目管理流程" class="headerlink" title="项目管理流程"></a>项目管理流程</h1><img src="/blog/2019/06/17/项目流程规范/main.jpg">
-<h1 id="代码管理规范："><a href="#代码管理规范：" class="headerlink" title="代码管理规范："></a>代码管理规范：</h1><ol>
-<li>从master拉开发分支，上线后合并开发分支进master。</li>
-<li>功能迭代分支在features/下，修复分支在bugfix/下</li>
-<li>分支命名 branch_[功能描述]_[版本号]_[开发名字]</li>
-<li>Commit 内容尽量描述该次修改内容。</li>
-<li>合并master时，先把master合并进开发分支，解决冲突后，使用merge request提交合并。</li>
-</ol>
-<h1 id="上线规范："><a href="#上线规范：" class="headerlink" title="上线规范："></a>上线规范：</h1><ol>
-<li>上线前应通知所有须知人员（包括leader、测试、pm），确认上线风险后进行。</li>
-<li>所有上线代码禁止未经测试自行上线，如确认不需要测试部门介入，应有充分自测、pm自测、leader同意后上线。</li>
-<li>禁止删除线上数据（无论你是否有权限）。</li>
-<li>所有线上变更必须邮件通知所有须知人员。内容包括但不限于：变更内容、影响范围、变更时间。</li>
-</ol>
-<h1 id="测试规范："><a href="#测试规范：" class="headerlink" title="测试规范："></a>测试规范：</h1><ol>
-<li>进行测试前，开发应认真审阅测试用例，确保测试覆盖所有功能点。</li>
-<li>测试时使用开发分支（自行合并master分支），上线完毕后才能合并进master分支。禁止使用master分支测试。</li>
-<li>测试过程中，所有问题应记录bugzila，修复后进行确认。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2352,7 +2367,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">95</span>
+                  <span class="site-state-item-count">96</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2411,7 +2426,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
