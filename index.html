@@ -229,6 +229,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2021/06/25/GMP调度模型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2021/06/25/GMP调度模型/" itemprop="url">GMP调度模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-06-25T17:40:22+08:00">
+                2021-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ul>
+<li>G：goroutine</li>
+<li>P：它代表了 M 所需的上下文环境，也是处理用户级代码逻辑的处理器。它负责衔接 M 和 G 的调度上下文，将等待执行的 G 与 M 对接。</li>
+<li>M：工作线程</li>
+</ul>
+<h1 id="调度模型"><a href="#调度模型" class="headerlink" title="调度模型"></a>调度模型</h1><h2 id="1-创建idle-p-GOMAXPROCS"><a href="#1-创建idle-p-GOMAXPROCS" class="headerlink" title="1. 创建idle p(GOMAXPROCS)"></a>1. 创建idle p(GOMAXPROCS)</h2><img src="/blog/2021/06/25/GMP调度模型/0.png">
+<h2 id="2-主线程运行-创建P，绑定P0与M0"><a href="#2-主线程运行-创建P，绑定P0与M0" class="headerlink" title="2. 主线程运行: 创建P，绑定P0与M0"></a>2. 主线程运行: 创建P，绑定P0与M0</h2><img src="/blog/2021/06/25/GMP调度模型/1.png">
+<h2 id="3-创建一个goroutine"><a href="#3-创建一个goroutine" class="headerlink" title="3. 创建一个goroutine"></a>3. 创建一个goroutine</h2><ul>
+<li>Wakeup 唤醒机制：有空闲的 P 而没有在 spinning 状态的 M 时候, 需要去唤醒一个空闲(睡眠)的 M 或者新建一个。当线程首次创建时，会执行一个特殊的 G，即 g0，它负责管理和调度 G。</li>
+<li>goroutine创建完后，会尝试放在当前P的local queue，如果local queue已满（256），将本地队列的前半部分及新建的goroutine迁移到全局队列。</li>
+</ul>
+<h2 id="4-抢占任务"><a href="#4-抢占任务" class="headerlink" title="4. 抢占任务"></a>4. 抢占任务</h2><ul>
+<li>由于3 创建的goroutine可能在本地队列或全局队列，此时新创建的P本地队列为空，这次新的M对执行g0代码，企图去找任务。</li>
+<li>当一个 P 执行完本地所有的 G 之后，会尝试挑选一个受害者 P，从它的 G 队列中窃取一半的 G。当尝试若干次窃取都失败之后，会从全局队列中获取(当前个数/GOMAXPROCS)个 G。 为避免全局队列饥饿，P 的调度算法中还会每个 N 轮调度之后就去全局队列拿一个 G。<img src="/blog/2021/06/25/GMP调度模型/2.png">
+</li>
+</ul>
+<h2 id="5-发生syscall"><a href="#5-发生syscall" class="headerlink" title="5. 发生syscall"></a>5. 发生syscall</h2><ul>
+<li>调用 syscall 后会解绑 P，然后 M 和 G 进入阻塞。</li>
+<li>系统监视器 (system monitor)，称为 sysmon，会定时扫描。在执行 syscall 时, 如果某个 P 的 G 执行超过一个 sysmon tick(10ms)，就会把他设为 idle，重新调度给需要的 M，强制解绑。 </li>
+<li>syscall结束后。如果在短时间内阻塞的 M 就唤醒了，那么 M 会优先来重新获取这个 P，能获取到就继续绑回去，这样有利于数据的局部性。找不到就找其他空闲的P，否则放回全局队列。</li>
+<li>PS：使用 syscall 写程序要认真考虑 pthread exhaust 问题。</li>
+</ul>
+<h2 id="6-自旋的M"><a href="#6-自旋的M" class="headerlink" title="6. 自旋的M"></a>6. 自旋的M</h2><ul>
+<li>类型1:M 不带 P 的找 P 挂载（一有 P 释放就结合）</li>
+<li>类型2:M 带 P 的找 G 运行（一有 runable 的 G 就执行）</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>单一全局互斥锁(Sched.Lock)和集中状态存储<ul>
+<li>G 被分成全局队列和 P 的本地队列，全局队列依旧是全局锁，但是使用场景明显很少，P 本地队列使用无锁队列，使用原子操作来面对可能的并发场景。</li>
+</ul>
+</li>
+<li>Goroutine 传递问题<ul>
+<li>G 创建时就在 P 的本地队列，可以避免在 G 之间传递（窃取除外），G 对 P 的数据局部性好; 当 G 开始执行了，系统调用返回后 M 会尝试获取可用 P，获取到了的话可以避免在 M 之间传递。而且优先获取调用阻塞前的 P，所以 G 对 M 数据局部性好，G 对 P 的数据局部性也好。</li>
+</ul>
+</li>
+<li>Per-M 持有内存缓存 (M.mcache)<ul>
+<li>内存 mcache 只存在 P 结构中，P 最多只有 GOMAXPROCS 个，远小于 M 的个数，所以内存没有过多的消耗。</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2021/03/19/计算机组成原理笔记/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -359,7 +518,7 @@
 <li>字符集（Unicode / ASCII）、字符编码（UTF-8、UTF-16、UTF-32）</li>
 <li>门电路：创建 CPU 和内存的基本逻辑单元。我们的各种对于计算机二进制的“0”和“1”的操作，其实就是来自于门电路，叫作组合逻辑电路。</li>
 <li>浮点数:随着指数位 e 的值的不同，小数点的位置也在变动<ul>
-<li>精度丢失：先对齐、再计算，其中指数位较小的数，需要在有效位进行右移，在右移的过程中，最右侧的有效位就被丢弃掉了。
+<li>精度丢失：先对齐、再计算，其中指数位较小的数，需要在有效位进行右移，在右移的过程中，最右侧的有效位就被丢弃掉了。<img src="/blog/2021/03/19/计算机组成原理笔记/0.png">
 </li>
 </ul>
 </li>
@@ -2131,143 +2290,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/10/10/JavaScript中并行语言特性/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/10/10/JavaScript中并行语言特性/" itemprop="url">JavaScript中并行语言特性</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-10T10:59:31+08:00">
-                2019-10-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本文整理周爱民在Qcon中《在JavaScript中的并行语言特性》演讲。</p>
-<h1 id="JavaScritp中的执行栈"><a href="#JavaScritp中的执行栈" class="headerlink" title="JavaScritp中的执行栈"></a>JavaScritp中的执行栈</h1><p>执行栈，也就是在其它编程语言中所说的“调用栈”，是一种拥有 LIFO（后进先出）数据结构的栈，被用来存储代码运行时创建的所有执行上下文。<br>引擎会执行那些执行上下文位于栈顶的函数。当该函数执行结束时，执行上下文从栈中弹出，控制流程到达当前栈中的下一个上下文。<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/0.png"><br><img src="/blog/2019/10/10/JavaScript中并行语言特性/1.png"><br>Event Loop：当执行栈为空时，从任务队列（RUN JOB）取一个任务执行。再次为空时，再从队列取一个任务，如此循环往复。<br>当一个函数上下文被从执行栈移走时，相当于函数被挂起了。</p>
-<h1 id="Promise是如何处理的"><a href="#Promise是如何处理的" class="headerlink" title="Promise是如何处理的"></a>Promise是如何处理的</h1><p>Promise的数据结构：<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/2.png"><br>先看一个hello world例子<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数据就绪，然后做点什么</span></span><br><span class="line"><span class="comment">// Hello world字符串就绪后，然后执行console.log</span></span><br><span class="line"><span class="built_in">Promise</span>.resolve(<span class="string">"Hello world"</span>).then(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure></p>
-<p>当then函数，如:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aPromise.then(func1,func2)</span><br></pre></td></tr></table></figure></p>
-<p>func1、func2 会传入上图 Reaction列表里，两个fun产生的结果值将会产生新的Promise对象，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bPromise = aPromise.then(func1,func2)</span><br></pre></td></tr></table></figure></p>
-<p>bPromise与func1 func2无关，只与它们产生的结果有关系。<br>然后Promise.resolve(x) 约等于<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>();</span><br><span class="line"><span class="comment">// 创建新的置值器</span></span><br><span class="line"><span class="keyword">var</span> [resolve, reject] = ... of p;</span><br><span class="line">resolve(x); <span class="comment">// 相当于 p[[result]] = x;</span></span><br><span class="line"><span class="keyword">return</span> p;</span><br></pre></td></tr></table></figure></p>
-<p>如果x不是一个简单的值，而是一个promise本身,假设 p2 = Promise.resolve(p)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p2 = <span class="keyword">new</span> <span class="built_in">Promise</span>()</span><br><span class="line"><span class="keyword">var</span> [resolve, reject] = ... of p2;</span><br><span class="line">p.then(resolve, reject);  <span class="comment">// resolve(p);</span></span><br><span class="line"><span class="keyword">return</span> p2;</span><br></pre></td></tr></table></figure></p>
-<p>上面提到，当函数被走执行栈移走时，函数会被挂起，Promise就是其中一个例子，会导致函数被挂起。Promise在执行栈被初始化后，被扔会任务队列，所以Promise时并行执行的。当数据就绪后，执行栈再次从任务队列调用回来，Promise就被唤起了。</p>
-<h1 id="await是如何处理的"><a href="#await是如何处理的" class="headerlink" title="await是如何处理的"></a>await是如何处理的</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="keyword">await</span> p;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">p2 = foo();</span><br></pre></td></tr></table></figure>
-<p>await与Promise相似，也会导致函数被挂起。<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/4.png"></p>
-<ol>
-<li>创建一个新的Promise px， 其resolve，reject函数对将用作参数调用p.then(),即Promise.resolve(p)</li>
-<li>为px创建一对onFullfilled, onRejected响应函数，使指向当前栈顶上下文。</li>
-<li>将响应函数onXXX作为参数调用px.then(),使onXXX函数添加到任务队列。</li>
-<li>将当前执行上下文从栈顶移除。<br>至于为什么要创建px，我觉得是为了在onFullfilled函数绑定上下文，参考<a href="https://blog.gcl666.com/2019/06/16/ecma_262_2020_6231_completion_await/" target="_blank" rel="noopener">这里</a></li>
-</ol>
-<h1 id="语言特性与架构"><a href="#语言特性与架构" class="headerlink" title="语言特性与架构"></a>语言特性与架构</h1><img src="/blog/2019/10/10/JavaScript中并行语言特性/5.png">
-<p>在顶层第一行代码使用await会导致主线程被挂起，在ECMA2017创建了工作线程。NodeJs中也有工作线程的概念。主线程与工作线程通过有消息通讯，通过sab共享内存<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/6.png"><br>这种解决方案与分布式环境下并发解决问题是一致的。集群中消息通讯、任务调度、资源管理模型也是语言中底层线程设计思想、解决的问题也是一样的。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2320,7 +2342,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-count">97</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2584,4 +2606,3 @@
 
 </body>
 </html>
-                                                              

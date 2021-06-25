@@ -229,6 +229,143 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/10/10/JavaScript中并行语言特性/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Angel Teng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code war of Angel">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2019/10/10/JavaScript中并行语言特性/" itemprop="url">JavaScript中并行语言特性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-10T10:59:31+08:00">
+                2019-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文整理周爱民在Qcon中《在JavaScript中的并行语言特性》演讲。</p>
+<h1 id="JavaScritp中的执行栈"><a href="#JavaScritp中的执行栈" class="headerlink" title="JavaScritp中的执行栈"></a>JavaScritp中的执行栈</h1><p>执行栈，也就是在其它编程语言中所说的“调用栈”，是一种拥有 LIFO（后进先出）数据结构的栈，被用来存储代码运行时创建的所有执行上下文。<br>引擎会执行那些执行上下文位于栈顶的函数。当该函数执行结束时，执行上下文从栈中弹出，控制流程到达当前栈中的下一个上下文。<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/0.png"><br><img src="/blog/2019/10/10/JavaScript中并行语言特性/1.png"><br>Event Loop：当执行栈为空时，从任务队列（RUN JOB）取一个任务执行。再次为空时，再从队列取一个任务，如此循环往复。<br>当一个函数上下文被从执行栈移走时，相当于函数被挂起了。</p>
+<h1 id="Promise是如何处理的"><a href="#Promise是如何处理的" class="headerlink" title="Promise是如何处理的"></a>Promise是如何处理的</h1><p>Promise的数据结构：<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/2.png"><br>先看一个hello world例子<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数据就绪，然后做点什么</span></span><br><span class="line"><span class="comment">// Hello world字符串就绪后，然后执行console.log</span></span><br><span class="line"><span class="built_in">Promise</span>.resolve(<span class="string">"Hello world"</span>).then(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure></p>
+<p>当then函数，如:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aPromise.then(func1,func2)</span><br></pre></td></tr></table></figure></p>
+<p>func1、func2 会传入上图 Reaction列表里，两个fun产生的结果值将会产生新的Promise对象，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bPromise = aPromise.then(func1,func2)</span><br></pre></td></tr></table></figure></p>
+<p>bPromise与func1 func2无关，只与它们产生的结果有关系。<br>然后Promise.resolve(x) 约等于<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>();</span><br><span class="line"><span class="comment">// 创建新的置值器</span></span><br><span class="line"><span class="keyword">var</span> [resolve, reject] = ... of p;</span><br><span class="line">resolve(x); <span class="comment">// 相当于 p[[result]] = x;</span></span><br><span class="line"><span class="keyword">return</span> p;</span><br></pre></td></tr></table></figure></p>
+<p>如果x不是一个简单的值，而是一个promise本身,假设 p2 = Promise.resolve(p)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p2 = <span class="keyword">new</span> <span class="built_in">Promise</span>()</span><br><span class="line"><span class="keyword">var</span> [resolve, reject] = ... of p2;</span><br><span class="line">p.then(resolve, reject);  <span class="comment">// resolve(p);</span></span><br><span class="line"><span class="keyword">return</span> p2;</span><br></pre></td></tr></table></figure></p>
+<p>上面提到，当函数被走执行栈移走时，函数会被挂起，Promise就是其中一个例子，会导致函数被挂起。Promise在执行栈被初始化后，被扔会任务队列，所以Promise时并行执行的。当数据就绪后，执行栈再次从任务队列调用回来，Promise就被唤起了。</p>
+<h1 id="await是如何处理的"><a href="#await是如何处理的" class="headerlink" title="await是如何处理的"></a>await是如何处理的</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="keyword">await</span> p;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">p2 = foo();</span><br></pre></td></tr></table></figure>
+<p>await与Promise相似，也会导致函数被挂起。<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/4.png"></p>
+<ol>
+<li>创建一个新的Promise px， 其resolve，reject函数对将用作参数调用p.then(),即Promise.resolve(p)</li>
+<li>为px创建一对onFullfilled, onRejected响应函数，使指向当前栈顶上下文。</li>
+<li>将响应函数onXXX作为参数调用px.then(),使onXXX函数添加到任务队列。</li>
+<li>将当前执行上下文从栈顶移除。<br>至于为什么要创建px，我觉得是为了在onFullfilled函数绑定上下文，参考<a href="https://blog.gcl666.com/2019/06/16/ecma_262_2020_6231_completion_await/" target="_blank" rel="noopener">这里</a></li>
+</ol>
+<h1 id="语言特性与架构"><a href="#语言特性与架构" class="headerlink" title="语言特性与架构"></a>语言特性与架构</h1><img src="/blog/2019/10/10/JavaScript中并行语言特性/5.png">
+<p>在顶层第一行代码使用await会导致主线程被挂起，在ECMA2017创建了工作线程。NodeJs中也有工作线程的概念。主线程与工作线程通过有消息通讯，通过sab共享内存<br><img src="/blog/2019/10/10/JavaScript中并行语言特性/6.png"><br>这种解决方案与分布式环境下并发解决问题是一致的。集群中消息通讯、任务调度、资源管理模型也是语言中底层线程设计思想、解决的问题也是一样的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/09/24/在eventlet的猴子补丁下sslsocket链接失败的问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1678,230 +1815,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://angelteng.github.io/blog/blog/2019/07/23/《Python高性能编程》/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Angel Teng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://angelteng.github.io/blog/images/angel.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code war of Angel">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/07/23/《Python高性能编程》/" itemprop="url">《Python高性能编程》笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-23T10:53:39+08:00">
-                2019-07-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h1><ol>
-<li>基本技术如 IPython 的 timeit 魔法函数、time.time()、以及一个计时修饰器，使用这些技术来了解语句和函数的行为。</li>
-<li>内置工具如 cProfile，了解代码中哪些函数耗时最长，并用 runsnake 进行可视化。</li>
-<li>line_profiler 工具，对选定的函数进行逐行分析，其结果包含每行被调用的次数以及每行花费的时间百分比。</li>
-<li>memory_profiler 工具，以图的形式展示RAM的使用情况随时间的变化，解释为什么某个函数占用了比预期更多的 RAM。</li>
-<li>Guppy 项目的 heapy 工具，查看 Python 堆中对象的数量以及每个对象的大小，这对于消灭奇怪的内存泄漏特别有用。</li>
-<li>dowser 工具，通过Web浏览器界面审查一个持续运行的进程中的实时对象。</li>
-<li>dis 模块，查看 CPython 的字节码，了解基于栈的 Python 虚拟机如何运行。</li>
-<li>单元测试，在性能分析时要避免由优化手段带来的破坏性后果。</li>
-</ol>
-<h1 id="数据结构影响"><a href="#数据结构影响" class="headerlink" title="数据结构影响"></a>数据结构影响</h1><ol>
-<li><p>列表和元组就类似于其它编程语言的数组，主要用于存储具有内在次序的数据；</p>
-<ol>
-<li>高效搜索必需的两大要素是排序算法和搜索算法。Python 列表有一个内建的排序算法使用了Tim排序。</li>
-<li>动态数组支持 resize 操作，可以增加数组的容量。当一个大小为N的列表第一次需要添加数据时，Python会创建一个新的列表，足够存放原来的N个元素以及额外需要添加的元素。</li>
-<li>元组固定且不可变。这意味着一旦元组被创建，和列表不同，它的内容无法被修改或它的大小也无法被改变。</li>
-</ol>
-</li>
-<li><p>字典和集合就类似其它编程语言的哈希表/散列集，主要用于存储无序的数据。</p>
-<ol>
-<li>新插入数据的位置取决于数据的两个属性:键的散列值以及该值如何跟其他对象比较。这是因为当我们插入数据时，首先需要计算键的散列值并掩码来得到一个有效的数组索引。</li>
-<li>如果被占用，那么要找到新的索引，我们用一个简单的线性函数计算出一个新的索引，这一方法称为嗅探。Python的嗅探机制使用了原始散列值的高位比特。使用这些高位比特使得每一个散列值生成的下一可用散列序列都是不同的，这样就能帮助防止未来的碰撞。</li>
-<li>当一个值从散列表中被删除时，我们不能简单地写一个NULL到内存的那个桶里。这是因为我们已经用NULL来作为嗅探散列碰撞的终止值。所以，我们必须写一个特殊的值来表示该桶虽空，但其后可能还有别的因散列碰撞而插入的值。</li>
-<li>不超过三分之二满的表在具有最佳空间节约的同时依然具有不错的散列碰撞避免率。改大散列表的代价非常昂贵，但因为我们只在表太小时而不是在每一次插入时进行这一操作。</li>
-<li>Python 对象通常以散列表实现，因为它们已经有内建的<strong>hash</strong>和<strong>cmp</strong>函数。</li>
-<li>每当 Python 访问一个变量、函数或模块时，都有一个体系来决定它去哪里查找这些对象。<ol>
-<li>locals()数组</li>
-<li>globals()字典</li>
-<li>__builtin__对象（<strong>builtin</strong>中的一个 属性时，我们其实是在搜索它的 locals()字典）</li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
-<h1 id="迭代器、生成器"><a href="#迭代器、生成器" class="headerlink" title="迭代器、生成器"></a>迭代器、生成器</h1><ol>
-<li>节约内存</li>
-<li>延迟估值</li>
-</ol>
-<h1 id="矩阵与矢量计算"><a href="#矩阵与矢量计算" class="headerlink" title="矩阵与矢量计算"></a>矩阵与矢量计算</h1><p>原生 Python 并不支持矢量操作，因为 Python 列表存储的不是实际的数据，而是对实际数据的引用。在矢量和矩阵操作时，这种存储结构会造成极大的性能下降。<br>Numpy 能够将数据连续存储在内存中并支持数据的矢量操作，在数据处理方面，它是高性能编程的最佳解决方案之一。<br>Numpy 带来性能提升的关键在于，它使用了高度优化且特殊构建的对象，取代了通用的列表结构来处理数组，由此减少了内存碎片；此外，自动矢量化的数学操作使得矩阵计算非常高效。<br>Numpy 在矢量操作上的缺陷是一次只能处理一个操作。例如，当我们做 A B + C 这样的矢量操作时，先要等待 A B 操作完成，并保存数据在一个临时矢量中，然后再将这个新的矢量和 C 相加。</p>
-<h1 id="编译器"><a href="#编译器" class="headerlink" title="编译器"></a>编译器</h1><p>让你的代码运行更快的最简单的办法就是让它做更少的工作。编译器把代码编译成机器码，是提高性能的关键组成部分。</p>
-<ul>
-<li>Cython ——这是编译成C最通用的工具，覆盖了Numpy和普通的Python代码（需要一些C语言的知识）。</li>
-<li>Shed Skin —— 一个用于非Numpy代码的，自动把Python转换成C的转换器。</li>
-<li>Numba —— 一个专用于Numpy代码的新编译器。</li>
-<li>Pythran —— 一个用于Numpy和非numpy代码的新编译器。</li>
-<li>PyPy —— 一个用于非Numpy代码的，取代常规Python可执行程序的稳定的即时编译器。</li>
-</ul>
-<h1 id="密集型任务"><a href="#密集型任务" class="headerlink" title="密集型任务"></a>密集型任务</h1><ol>
-<li>I/O 密集型：异步编程 <ul>
-<li>Gevent</li>
-<li>Tornado</li>
-<li>Asyncio</li>
-</ul>
-</li>
-<li>CPU 密集型：多核 CPU 进行多进程<ul>
-<li>Multiprocessing<ul>
-<li>multiprocessing.Pool</li>
-<li>内存共享<ul>
-<li>multiprocessing.Manager()</li>
-<li>redis等中间件</li>
-<li>mmap</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h1 id="集群与现场教训"><a href="#集群与现场教训" class="headerlink" title="集群与现场教训"></a>集群与现场教训</h1><ol>
-<li>集群带来的问题：<ol>
-<li>机器间信息同步的延迟</li>
-<li>机器间配置与性能的差异</li>
-<li>机器的损耗与维护</li>
-<li>其它难以预料的问题</li>
-</ol>
-</li>
-<li>集群化解决方案：<ol>
-<li>Parallel Python</li>
-<li>IPython Parallel </li>
-<li>NSQ</li>
-</ol>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1954,7 +1867,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-count">97</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
